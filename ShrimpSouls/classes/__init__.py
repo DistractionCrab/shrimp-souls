@@ -1,21 +1,20 @@
 import ShrimpSouls as ss
 import random
+import math
 import enum
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 
+SOULMASS_THRESHOLD = 10
 
 class ClassSpec:
 	def compute_hit(self, a, d):
-		check = max(min(d.eva - a.acc + 10, 20), 1)
-		roll = ss.roll_dice(1)[0]
-
-		return (roll != 1 and roll > check) or roll == 20
+		return utils.compute_hit(a,d)
 
 
 	def compute_dmg(self, a, d):
-		m = min(max(d.dfn - a.att + 10, 1), 20)
+		return utils.compute_dmg(a, d)
 
-		return ss.roll_dice(max_r=m)[0]
 
 	def score_eva(self, p):
 		return p.level + 10
@@ -32,7 +31,7 @@ class ClassSpec:
 	def basic_action(self, u, players, opponents):
 		print("Milquetoast has no class action.")
 
-	def medium_action(self, u, target, players, opponents):
+	def targeted_action(self, u, target, env):
 		print("Milquetoast has no class action.")
 
 	def ultimate_action(self, u, target, players, opponents):
@@ -44,6 +43,9 @@ class ClassSpec:
 	def find_valid_target(self, op):
 		op = list(filter(lambda x: x.invis == 0, op))
 		return random.choices(op)[0]
+
+	def soulmass_count(self, p):
+		return math.ceil(p.intelligence/SOULMASS_THRESHOLD)
 
 
 import ShrimpSouls.classes.knight as knight

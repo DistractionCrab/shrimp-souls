@@ -41,7 +41,7 @@ class NullCampaign:
 		self.__npcs = list(v)
 
 	def step(self):
-		pass
+		print("No campaign active to step.")
 
 	def restore_encounter(self, npcs, statedata, finished):
 		self.__npcs = list(npcs)
@@ -73,3 +73,21 @@ class NullCampaign:
 		lists = [f"{k.__name__}[{', '.join(str(v.npcid) for v in l)}]" for (k, l) in ftypes.items()]
 
 		return ', '.join(lists)
+
+	def get_user(self, name):
+		try:
+			return next(x for x in self.players if x.name == name)
+		except StopIteration:
+			raise ValueError(f"No such target as {name}.")
+
+	def get_npc(self, name):
+		try:
+			return next(x for x in self.__npcs if x.is_named(name))
+		except StopIteration:
+			raise ValueError(f"No such target as {name}.")
+
+	def get_labeled(self, label):
+		try:
+			return next(x for x in list(self.__npcs) + list(self.__players) if x.is_named(label))
+		except StopIteration:
+			raise ValueError(f"No such target as {name}.")

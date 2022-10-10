@@ -7,5 +7,5 @@ try:
 		ss.GAME_MANAGER.main(sys.argv[1:])
 			
 except Exception as ex:
-	#raise ex
+	raise ex
 	print("ERROR: " + str(ex))

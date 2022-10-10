@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 import random
 import math
 
@@ -20,22 +21,21 @@ class Swordsman(ClassSpec):
 		targets = random.choices(npcs, k=2*(1 + len(npcs)//10))
 
 		for t in targets:
-			t.stack_defdown(amt=2)
+			t.stack_evadown(amt=2)
 
-		print(f"{u.name} hamstrings some of their foes, decreasing their defense.")
+		print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+		if utils.compute_hit(u, target):
+			target.stack_bleed(amt=random.randint(1, 2))
+			print(f"{u.name}'s sharp blades slice into {target.label}.")
+		else:
+			print(f"{u.name}'s blades miss {target.label}.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

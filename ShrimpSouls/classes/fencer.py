@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 import random
 import math
 
@@ -20,18 +21,19 @@ class Fencer(ClassSpec):
 		u.stack_ripstance()
 		print(f"{u.name} has entered a riposting stance.")
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+
+		if utils.compute_hit(u, target):
+			target.taunt_target(u)
+			print(f"{u.name} has taunted {target.label} into attacking them.")
+		else:
+			print(f"{u.name} has failed to taunt {target.label}.")
+
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

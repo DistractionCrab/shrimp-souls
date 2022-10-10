@@ -21,37 +21,41 @@ class Priest(ClassSpec):
 		return math.ceil(p.level*1.25)
 
 	def basic_action(self, u, players, npcs):
+		targets = list(filter(lambda x: not x.dead, players))
 		targets = set(random.choices(
-			players, 
-			k=3*(1 + len(players)//10),
-			weights=[1/(1 + p.health) for p in players]))
+			targets, 
+			k=3*(1 + len(targets)//10),
+			weights=[1/(1 + p.health) for p in targets]))
+		targets = list(filter(lambda x: not x.dead, targets))
 
 		for t in targets:
-			t.damage(-(random.randint(1, 4)*(1 + u.faith/HEAL_DICE_THRESHOLD)))
+			t.damage(-(random.randint(1, 4)*(1 + u.faith//HEAL_DICE_THRESHOLD)))
 
 		print(f"{u.name} has healed {', '.join(t.name for t in targets)}.")
 
 		
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+
+		if target.dead:
+			target.damage(-target.max_health)
+			print(f"{u.name} has revived {target.label} from the dead.")
+		else:
+			amt = random.randint(10, 20)*(1 + u.faith//HEAL_DICE_THRESHOLD)
+			target.damage(-amt)
+
+			print(f"{u.name} has healed {target.label} for {amt} hp.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		
-
-		if super().compute_hit(actor, target):
-			if sum(p.health/p.max_health for p in party)/len(party) < 0.5:
-				party = filter(lambda x: not p.dead, party)
-				heal = sum(random.randint(1, 4)  for _ in range((1 + actor.faith//HEAL_DICE_THRESHOLD)))
-				target = min(party, key=lambda p: p.health)
-				return [actions.HealTarget(attacker=actor, defender=target, dmg=heal)]
-			else:
-				target = self.find_valid_target(opponents)
-				dmg = super().compute_dmg(actor, target)
-
-				return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		if sum(p.health/p.max_health for p in party)/len(party) < 0.5:
+			party = filter(lambda x: not x.dead, party)
+			heal = sum(random.randint(1, 4)  for _ in range((1 + actor.faith//HEAL_DICE_THRESHOLD)))
+			target = min(party, key=lambda p: p.health)
+			return [actions.HealTarget(attacker=actor, defender=target, dmg=heal)]
+		else:			
+			target = self.find_valid_target(opponents)
+			return [actions.DamageTarget(attacker=actor, defender=target)]

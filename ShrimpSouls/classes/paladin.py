@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 import random
 import math
 
@@ -20,18 +21,22 @@ class Paladin(ClassSpec):
 		u.stack_sealing(amt=3)
 		print(f"{u.name} casts a prayer on their blade to seal their foes.")
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+
+		if utils.compute_hit(u, target):
+			target.stack_attdown(amt=2)
+			target.stack_evadown(amt=2)
+			target.stack_defdown(amt=2)
+			target.stack_accdown(amt=2)
+
+			print(f"{u.name} has weakened {target.label} with a holy censure.")
+		else:
+			print(f"{target.label} maintains their conviction against {u.name}'s censure.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls as ss
+import ShrimpSouls.utils as utils
 import random
 
 @dataclass
@@ -22,6 +23,9 @@ class Statuses:
 	soulmass: int = 0
 	ripstance: int = 0
 	sealing: int = 0
+	charm: int = 0
+	taunt: str = None
+	bleed: int = 0
 
 @dataclass
 class BaseNPC:
@@ -30,10 +34,10 @@ class BaseNPC:
 	xp:  int = 1
 	hp:  int = 1
 	max_hp: int = 1
-	acc: int = 1
-	eva: int = 1
-	att: int = 1
-	dfn: int = 1
+	_acc: int = 1
+	_eva: int = 1
+	_att: int = 1
+	_dfn: int = 1
 	status: Statuses = Statuses()
 
 
@@ -45,29 +49,108 @@ class BaseNPC:
 		if self.burn > 0:
 			self.use_burn()
 			self.damage(random.randint(1, 4))
-		if self.stun > 0:
-			self.use_stun()
-		if self.invis > 0:
-			self.use_invis()
+		if self.poison > 0:
+			self.use_poison()
+			self.damage(random.randint(1, 2))
+		self.damage(self.bleed)
+		if self.bleed >= 10:
+			self.damage(random.rand(1,10) * (1 + self.max_health//20))
+			self.use_bleed(amt=10)
+		else:
+			self.use_bleed()
 
+		self.use_stun()
+		self.use_invis()
+		self.use_attup()
+		self.use_attdown()
+		self.use_accup()
+		self.use_accdown()
+		self.use_evadown()
+		self.use_evaup()
+		self.use_defdown()
+		self.use_defup()
+		self.use_ripstance()
+		self.use_sealing()
+		self.use_encourage()
+		self.use_charm()
+
+
+	@property
+	def acc(self):
+		bonus = 0
+		if self.accup > 0:
+			bonus += 2
+		if self.accdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+		if self.point > 0:
+			acc -= 3
+		return self._acc + bonus
+	
+	@property
+	def att(self):
+		bonus = 0
+		if self.attup > 0:
+			bonus += 2
+		if self.attdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+		if self.poison > 0:
+			bonus -= 3
+
+		return self._att + bonus
+
+	@property
+	def eva(self):
+		bonus = 0
+		if self.evaup > 0:
+			bonus += 2
+		if self.evadown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+
+		return self._eva + bonus
+
+	@property
+	def dfn(self):
+		bonus = 0
+
+		if self.defup > 0:
+			bonus += 2
+		if self.defdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+
+		return self._dfn + bonus
+
+	def is_named(self, name):
+		if "[" in name:
+			(n, v) = name.split("[")
+
+			return self.name == n and self.npcid == int(v[:-1])
+		else:
+			return False
+
+	@property
+	def label(self):
+		return f"{self.name}[{self.npcid}]"
 
 	def duel_action(self, actor, party, opponents):
 		return actions.DoNothing(player=actor)
 
 	def compute_hit(self, a, d):
-		check = max(min(d.eva - a.acc + 10, 20), 1)
-		roll = ss.roll_dice(1)[0]
-
-		return (roll != 1 and roll > check) or roll == 20
+		return utils.compute_hit(a,d)
 
 
 	def compute_dmg(self, a, d):
-		m = min(max(d.dfn - a.att + 10, 1), 20)
-
-		return ss.roll_dice(max_r=m)[0]
+		return utils.compute_dmg(a, d)
 
 	def damage(self, v):
-		self.hp -= v
+		self.hp = max(self.hp - v, 0)
 
 
 	@property
@@ -202,6 +285,16 @@ class BaseNPC:
 		self.status.poison = max(0, self.status.poison - amt)
 
 	@property
+	def bleed(self):
+		return self.status.bleed
+
+	def stack_bleed(self, amt=1):
+		self.status.bleed += 1
+
+	def use_bleed(self, amt=1):
+		self.status.bleed = max(0, self.status.bleed - amt)
+
+	@property
 	def sealing(self):
 		return self.status.sealing
 
@@ -243,6 +336,26 @@ class BaseNPC:
 		self.status.encourage = max(0, self.status.encourage - amt)
 
 	@property
+	def charm(self):
+		return self.status.charm
+
+	def stack_charm(self, amt=1):
+		self.status.charm += 1
+
+	def use_charm(self, amt=1):
+		self.status.charm = max(0, self.status.charm - amt)
+
+	def get_taunt_target(self):
+
+		return self.status.taunt
+
+	def taunt_target(self, target):
+		self.status.taunt = target.label
+
+	def end_taunt(self):
+		self.status.taunt = None
+
+	@property
 	def xp(self):
 		return 0
 	
@@ -252,19 +365,19 @@ class BaseNPC:
 
 	@property
 	def acc(self):
-		return self.myclass.value.score_acc(self)
+		return self._acc
 	
 	@property
 	def att(self):
-		return self.myclass.value.score_att(self)
+		return self._att
 
 	@property
 	def eva(self):
-		return self.myclass.value.score_eva(self)
+		return self._eva
 
 	@property
 	def dfn(self):
-		return self.myclass.value.score_def(self)
+		return self._dfn
 
 	def duel_action(self, actor, party, opponents):
 		return [actions.DoNothing(player=actor)]
@@ -273,30 +386,52 @@ class BaseNPC:
 		op = list(filter(lambda x: x.invis == 0, op))
 		return random.choices(op)[0]
 
+	def soulmass_count(self):
+		return 0
+
+	@property
+	def is_player(self):
+		return False
+
+	@property
+	def is_npc(self):
+		return True
+
 	def __hash__(self):
 		return hash((self.name, self.npcid))
+
 	
 
 @dataclass
 class Goblin(BaseNPC):
 	name: str = "Goblin"
 	xp:  int = 1
-	hp:  int = 5
-	max_hp: int = 5
-	acc: int = 3
-	eva: int = 5
-	att: int = 4
-	dfn: int = 2
+	hp:  int = 10
+	max_hp: int = 10
+	_acc: int = 8
+	_eva: int = 9
+	_att: int = 4
+	_dfn: int = 4
 
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]
 
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
 
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of the club.")]
+@dataclass
+class Wolf(BaseNPC):
+	name: str = "Wolf"
+	xp:  int = 3
+	hp:  int = 25
+	max_hp: int = 25
+	_acc: int = 12
+	_eva: int = 14
+	_att: int = 9
+	_dfn: int = 7
+
+	def duel_action(self, actor, party, opponents):
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]
 
 
 def string_to_npcs(s):

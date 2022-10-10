@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 import random
 import math
 
@@ -41,18 +42,24 @@ class Thief(ClassSpec):
 
 		print(msg)
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_npc(target)
+
+		if (target.hp//target.max_hp) < 0.2:
+			if utils.compute_hit(u, target):
+				target.damage(-target.hp)
+				u.add_shrimp(2*target.xp)
+				print(f"{u.name} managed to poach {target.label} and earned {2*target.xp} shrimp.")
+			else:
+				print(f"{u.name} failed to poach {target.label}.")
+
+		else:
+			print(f"{target.label} is not weak enough for {u.name} to poach.")
+		
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

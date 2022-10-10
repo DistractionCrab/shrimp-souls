@@ -11,7 +11,7 @@ import sys
 import sqlite3 as sql
 from datetime import date
 
-from ShrimpSouls.classes import Classes
+
 
 STATS_FILE = os.path.join(os.path.split(__file__)[0], "../stats.db")
 CAMPAIGN_FILE = os.path.join(os.path.split(__file__)[0], "../campaign.db")
@@ -60,7 +60,10 @@ def init_stats_database():
 			sealing       int default 0 not null check (sealing >= 0),
 			stun          int default 0 not null check (stun >= 0),
 			invis    int default 0 not null check (invis >= 0),
-			encourage     int default 0 not null check (encourage >= 0))
+			encourage     int default 0 not null check (encourage >= 0),
+			charm         int default 0 not null check (charm >= 0),
+			bleed         int default 0 not null check (bleed >= 0),
+			taunt         text)
 	""")
 	conn.commit()
 
@@ -81,8 +84,7 @@ def init_game_database():
 	""")
 	conn.execute("""
 		create table if not exists players (
-			username text primary key not null,
-			lastid   int)
+			username text primary key not null)
 	""")
 	conn.execute("""
 		create table if not exists encounterdata (
@@ -133,6 +135,35 @@ class Stats(enum.Enum):
 	Faith = "faith"
 	Perception = "perception"
 	Luck = "luck"
+
+class Statuses(enum.Enum):
+	Block = "block"
+	Attup = "attup"
+	Attdown = "attdown"
+	Defup = "defup"
+	Defdown = "defdown"
+	Accup = "accup"
+	Accdown = "accdown"
+	Evaup = "evaup"
+	Evadown = "evadown"
+	Ripstance = "ripstance"
+	Soulmass = "soulmass"
+	Burn = "burn"
+	Poison = "poison"
+	Sealing = "sealing"
+	Stun = "stun"
+	Invis = "invis"
+	Encourage = "encourage"
+	Charm = "charm"
+	Bleed = "bleed"
+	Taunt = "taunt"
+
+
+class Scores(enum.Enum):
+	Eva = lambda x: x.eva
+	Def = lambda x: x.dfn
+	Att = lambda x: x.att
+	Acc = lambda x: x.acc
 
 
 class User:
@@ -269,7 +300,7 @@ class User:
 
 	def stat_string(self):
 		s_vec = self.get_stat_vec()
-		s = "{name} (Level {level} {cl}): [HP: {hp}, XP: {xp}], Vigor: {vig}, Endurance: {end}, Strength {st}, Dexterity {dex}, Intelligence: {int}, Faith: {fth}, Perception: {perc}, Luck: {luck}"
+		s = "{name} (Level {level} {cl}): [HP: {hp}, XP: {xp}], Vigor : {vig}, Endurance : {end}, Strength : {st}, Dexterity : {dex}, Intelligence : {int}, Faith : {fth}, Perception : {perc}, Luck : {luck}"
 		return s.format(			
 			name=self.__name,
 			cl=self.myclass.name,
@@ -346,15 +377,24 @@ class User:
 		self.__decrement_stat("health", d)
 
 
+	def get_status(self, stat):
+		return self.__get_status(state.value)
+
+	def stack_status(self, stat, amt=1):
+		self.__decrement_stat(stat.value, amt)
+
+	def use_status(self, stat, amt=1):
+		self.__decrement_stat(stat.value, amt)
+
 	@property
 	def block(self):
 		return self.__get_status("block")
 
 	def stack_block(self, amt=1):
-		self.__decrement_stat("block", -3)
+		self.__decrement_stat("block", -amt)
 
 	def use_block(self, amt=1):
-		self.__decrement_stat("block", 1)
+		self.__decrement_stat("block", amt)
 
 	@property
 	def accup(self):
@@ -470,6 +510,16 @@ class User:
 		self.__decrement_stat("burn", amt)
 
 	@property
+	def bleed(self):
+		return self.__get_status("bleed")
+
+	def stack_bleed(self, amt=1):
+		self.__decrement_stat("bleed", -amt)
+
+	def use_bleed(self, amt=1):
+		self.__decrement_stat("bleed", amt)
+
+	@property
 	def poison(self):
 		return self.__get_status("poison")
 
@@ -523,6 +573,44 @@ class User:
 		self.__decrement_stat("encourage", amt)
 
 	@property
+	def charm(self):
+		return self.__get_status("charm")
+
+	def stack_charm(self, amt=1):
+		self.__decrement_stat("charm", -amt)
+
+	def use_charm(self, amt=1):
+		self.__decrement_stat("charm", amt)
+
+	def get_taunt_target(self):
+		v = self.__conn.execute(f"""
+			select taunt from status where username="{self.__name}"
+		""").fetchone()
+
+		return v if v is None else v[0]
+
+	def taunt_target(self, target):
+		self.__conn.execute(f"""
+			UPDATE status
+			SET taunt="{target.label}"
+			WHERE username="{self.__name}"
+		""")
+		self.__conn.commit()
+
+	def end_taunt(self):
+		self.__conn.execute(f"""
+			UPDATE status
+			SET taunt=null
+			WHERE username="{self.__name}"
+		""")
+		self.__conn.commit()
+
+	@property
+	def label(self):
+		return self.name
+		
+
+	@property
 	def xp(self):
 		return 0
 	
@@ -531,32 +619,114 @@ class User:
 		return self.health
 
 	@property
+	def max_hp(self):
+		return self.max_health
+
+	@property
 	def acc(self):
-		return self.myclass.value.score_acc(self)
+		bonus = 0
+		if self.accup > 0:
+			bonus += 2
+		if self.accdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+		if self.poison > 0:
+			acc -= 3
+		return self.myclass.value.score_acc(self) + bonus
 	
 	@property
 	def att(self):
-		return self.myclass.value.score_att(self)
+		bonus = 0
+		if self.attup > 0:
+			bonus += 2
+		if self.attdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+		if self.poison >= 0:
+			bonus -= 3
+
+		return self.myclass.value.score_att(self) + bonus
 
 	@property
 	def eva(self):
-		return self.myclass.value.score_eva(self)
+		bonus = 0
+		if self.evaup > 0:
+			bonus += 2
+		if self.evadown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+
+		return self.myclass.value.score_eva(self) + bonus
 
 	@property
 	def dfn(self):
-		return self.myclass.value.score_def(self)
+		bonus = 0
+
+		if self.defup > 0:
+			bonus += 2
+		if self.defdown > 0:
+			bonus -= 2
+		if self.encourage > 0:
+			bonus += 1
+
+		return self.myclass.value.score_def(self) + bonus
 
 	def tick(self):
 		if self.burn > 0:
 			self.use_burn()
 			self.damage(random.randint(1, 4))
-		if self.stun > 0:
-			self.use_stun()
-		if self.invis > 0:
-			self.use_invis()
+		if self.poison > 0:
+			self.use_poison()
+			self.damage(random.randint(1, 2))
+		self.damage(self.bleed)
+		if self.bleed >= 10:
+			self.damage(random.rand(1,10) * (1 + self.max_health//20))
+			self.use_bleed(amt=10)
+		else:
+			self.use_bleed()
+
+		self.use_stun()
+		self.use_invis()
+		self.use_attup()
+		self.use_attdown()
+		self.use_accup()
+		self.use_accdown()
+		self.use_evadown()
+		self.use_evaup()
+		self.use_defdown()
+		self.use_defup()
+		self.use_ripstance()
+		self.use_sealing()
+		self.use_encourage()
+		self.use_charm()
 
 	def duel_action(self, actor, party, opponents):
 		return self.myclass.value.duel_action(actor, party, opponents)
+
+	def compute_hit(self, a, d):
+		return self.myclass.value.compute_hit(a, d)
+
+
+	def compute_dmg(self, a, d):
+		return self.myclass.value.compute_hit(a, d)
+
+	def soulmass_count(self):
+		return self.myclass.value.soulmass_count(self)
+
+	def is_named(self, name):
+		return self.name == name
+
+	@property
+	def is_player(self):
+		return True
+
+	@property
+	def is_npc(self):
+		return False
+	
 
 
 
@@ -567,12 +737,6 @@ def roll_dice(amt=1, max_r=20):
 		raise ValueError(f"Amount of dice rolls must be greater than 0 (given {amt})")
 	max_r = max(max_r, 1)
 	return [random.randint(1, max_r) for _ in range(amt)]	
-	#r = requests.get(RNG_REQUEST.format(amt)).text
-	#return list(map(int, (x for x in r.split("\n") if len(x.strip()) > 0)))
-
-
-#from ShrimpSouls.npcs import BaseNPC
-#from ShrimpSouls.npcs import Goblin
 
 
 class GameManager:
@@ -652,6 +816,11 @@ class GameManager:
 				WHERE step={step}
 			""").fetchone()[0]]
 
+	def clear_players(self):
+		self.__conn.execute("""
+				DELETE FROM players
+			""")
+
 
 	def get_available_players(self, filter=[]):
 		#d = json.loads(requests.get(f"http://localhost:8911/api/chat/users").text)
@@ -664,7 +833,6 @@ class GameManager:
 		avail = set(self.__conn.execute(f"""
 				SELECT username
 				FROM players
-				WHERE lastid={step}
 			""").fetchall())
 
 		#return active.intersection(avail)
@@ -678,24 +846,21 @@ class GameManager:
 			""").fetchone()[0]
 
 	def is_joined(self, user):
-		step = self.get_campaign_id()
 		val = self.__conn.execute(f"""
-				SELECT lastid
+				SELECT username
 				FROM players
 				WHERE username="{user}"
 			""").fetchone()
 
-		if val is None:
-			return False
-		else:
-			return val[0] == step
+		return val is not None
+		
 
 
 	def join_user(self, user):
 		if not isinstance(user, str):
 			user = user.name
 		self.__conn.execute(f"""
-			INSERT OR REPLACE INTO players (username, lastid) VALUES ("{user}", {self.get_campaign_id()})
+			INSERT OR REPLACE INTO players (username) VALUES ("{user}")
 		""")
 		self.__conn.commit()
 
@@ -736,7 +901,7 @@ class GameManager:
 				print(f"User {argv[1]} is already part of the campaign!")
 			else:
 				self.join_user(argv[1])
-				print(f"User {argv[1]} has joined the campaign!")
+				print(f"User {argv[1]} has joined the campaign! Make sure to choose a class and level up!")
 		elif argv[0] == "startcampaign":
 			ctype = Campaigns[argv[1].lower().capitalize()]
 			ctype_check = self.campaign_type()
@@ -760,7 +925,21 @@ class GameManager:
 		elif argv[0] == "basicclassaction":
 			names = map_names(argv[1:])
 			u = User(names[0])
+			if u.dead:
+				print(f"Cannot perform a class action while dead, {u.name}")
+				return
+			self.join_user(names[0])
 			u.myclass.value.basic_action(u, self.__campaign.players, self.__campaign.npcs)
+			self.__campaign.update_interface()
+		elif argv[0] == "targetclassaction":
+			names = map_names(argv[1:])
+			u = User(names[0])
+			if u.dead:
+				print(f"Cannot perform a class action while dead, {u.name}")
+				return
+			self.join_user(names[0])
+			u.myclass.value.targeted_action(u, argv[2], self.__campaign)
+			self.__campaign.update_interface()
 		elif argv[0] == "foelist":
 			print(f"The current remaining foes are: {self.__campaign.foe_list()}")
 
@@ -778,7 +957,7 @@ def map_names(args):
 
 	return names
 
-
+from ShrimpSouls.classes import Classes
 from ShrimpSouls.campaigns import NullCampaign
 from ShrimpSouls.campaigns.arena import Arena
 class Campaigns(enum.Enum):

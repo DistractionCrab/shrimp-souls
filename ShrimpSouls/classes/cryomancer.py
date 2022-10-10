@@ -2,6 +2,7 @@ from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
 import random
 import math
+import ShrimpSouls.utils as utils
 
 class Cryomancer(ClassSpec):
 	def score_acc(self, p):
@@ -25,18 +26,18 @@ class Cryomancer(ClassSpec):
 
 		print(f"{u.name} conjures a frozen fog that chills their foes, lowering their defense and attack.")
 
-	def medium_action(self, u):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+
+		if utils.compute_hit(u, target):
+			target.stack_stun(amt=random.randint(1, 4))
+			print(f"{u.name} has frozen {target.label} solid.")
+		else:
+			print(f"{u.name} has failed to freeze {target.label}")
 
 	def ultimate_action(self, u):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

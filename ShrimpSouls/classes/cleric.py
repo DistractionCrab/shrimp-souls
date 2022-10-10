@@ -5,10 +5,10 @@ import math
 
 class Cleric(ClassSpec):
 	def score_acc(self, p):
-		return super().score_acc() + 1
+		return super().score_acc(p) + 1
 
 	def score_eva(self, p):
-		return super().score_eva() - 1
+		return super().score_eva(p) - 1
 
 	def score_att(self, p):
 		return 3*p.strength+3*p.faith
@@ -24,18 +24,21 @@ class Cleric(ClassSpec):
 
 		print(f"{u.name} utters a short prayer, bolstering some of their party's defense.")
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+		target.use_burn(target.burn)
+		target.use_attdown(target.attdown)
+		target.use_evadown(target.evadown)
+		target.use_accdown(target.accdown)
+		target.use_defdown(target.defdown)
+		target.use_poison(target.poison)
+		target.use_stun(target.stun)
+
+		print(f"{u.name} has cleansed {target.label} of their debuffs.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]

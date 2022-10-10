@@ -24,19 +24,24 @@ class Pyromancer(ClassSpec):
 
 		print(f"{u.name} unleashes a small pyroclasm to burn some foes.")
 
-	def medium_action(self, u, players, npcs):
-		pass
+	def targeted_action(self, u, target, env):
+		target = env.get_labeled(target)
+
+		act = actions.DamageTarget(
+			attacker=u, 
+			defender=target,
+			dmgoverride=random.randint(1, 10)*(1 + (u.faith + u.intelligence)//10),
+			dmgtype=actions.DamageType.Fire,
+			abilityrange=actions.AbilityRange.Medium)
+
+		act.apply()
+		print(act.msg)
+
 
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = random.choices(opponents)[0]
-
-		if super().compute_hit(actor, target):
-			dmg = super().compute_dmg(actor, target)
-
-			return [actions.DamageTarget(attacker=actor, defender=target, dmg=dmg)]
-		else:
-			return [actions.Miss(attacker=actor, defender=target, ability="a swing of their sword.")]
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]
 
