@@ -1,0 +1,21 @@
+---distractioncrab attacks GoblinBrute[1] for 10 damage. (21 vs 15 and 25 vs 18) 
+GoblinBrute[1] missed distractioncrab. (22 vs 20) 
+GoblinBrute[0] attacks chaddytone for 1 damage. (22 vs 17 and 13 vs 32) 
+---chaddytone attacks GoblinBrute[0] for 12 damage. (19 vs 15 and 20 vs 18) 
+------------------------------------------------------------
+---chaddytone missed GoblinBrute[0]. (19 vs 15) 
+---distractioncrab attacks GoblinBrute[0] for 8 damage. (21 vs 15 and 25 vs 18) 
+GoblinBrute[0] attacks distractioncrab for 1 damage. (22 vs 20 and 13 vs 28) 
+GoblinBrute[1] attacks chaddytone for 1 damage. (22 vs 17 and 13 vs 32) 
+------------------------------------------------------------
+---chaddytone attacks GoblinBrute[0] for 11 damage. (19 vs 15 and 28 vs 18) GoblinBrute[0] has died.
+GoblinBrute[1] attacks chaddytone for 1 damage. (22 vs 17 and 18 vs 32) 
+GoblinBrute[0] cannot attack while dead.
+---distractioncrab missed GoblinBrute[1]. (21 vs 15) 
+------------------------------------------------------------
+GoblinBrute[1] missed chaddytone. (22 vs 17) 
+---distractioncrab attacks GoblinBrute[1] for 16 damage. (21 vs 15 and 35 vs 18) 
+---chaddytone missed GoblinBrute[1]. (19 vs 15) 
+------------------------------------------------------------
+---distractioncrab attacks GoblinBrute[1] for 6 damage. (21 vs 15 and 35 vs 18) GoblinBrute[1] has died.
+------------------------------------------------------------

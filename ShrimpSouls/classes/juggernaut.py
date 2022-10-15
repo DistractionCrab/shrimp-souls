@@ -14,12 +14,14 @@ class Juggernaut(ClassSpec):
 		return super().score_acc(p)
 
 	def score_att(self, p):
-		return 4*p.strength 
+		return 4*p.attributes.strength 
 
-	def score_def(self, p):
-		return 4*p.strength + 4
+	def score_dfn(self, p):
+		return 4*p.attributes.strength + 4
 
-	def basic_action(self, u, players, npcs):
+	def basic_action(self, u, env):
+		players = env.players
+		npcs = env.npcs
 		targets = random.choices(players, k=3*(1 + len(players)//10))
 
 		for t in targets:
@@ -28,11 +30,11 @@ class Juggernaut(ClassSpec):
 		print(f"{u.name} emits a powerful warcry, bolstering some of their party.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_labeled(target)
+		target = env.get_target(target)
 
 		if utils.compute_hit(u, target):
 			target.stack_defdown(random.randint(1, 6))
-			print(f"{u.name} has shattered {target.label}'s armor. ")
+			print(f"{u.name} has shattered {target.name}'s armor. ")
 			act = actions.DamageTarget(
 				attacker=u, 
 				defender=target,
@@ -52,3 +54,7 @@ class Juggernaut(ClassSpec):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Juggernaut"

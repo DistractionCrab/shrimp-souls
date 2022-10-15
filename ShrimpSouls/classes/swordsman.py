@@ -6,18 +6,20 @@ import math
 
 class Swordsman(ClassSpec):
 	def score_acc(self, p):
-		return 10 + math.ceil(p.level/2) + math.ceil(p.dexterity/2)
+		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
 
 	def score_eva(self, p):
-		return 10 + math.ceil(p.level*0.35) + math.ceil(p.dexterity*0.65)
+		return 10 + math.ceil(p.level*0.35) + math.ceil(p.attributes.dexterity*0.65)
 
 	def score_att(self, p):
-		return math.ceil(2.5*p.strength + 3.5*p.dexterity)
+		return math.ceil(2.5*p.attributes.strength + 3.5*p.attributes.dexterity)
 
-	def score_def(self, p):
-		return 2*p.level + p.strength + p.dexterity
+	def score_dfn(self, p):
+		return 2*p.level + p.attributes.strength + p.attributes.dexterity
 
-	def basic_action(self, u, players, npcs):
+	def basic_action(self, u, env):
+		players = env.players
+		npcs = env.npcs
 		targets = random.choices(npcs, k=2*(1 + len(npcs)//10))
 
 		for t in targets:
@@ -26,12 +28,12 @@ class Swordsman(ClassSpec):
 		print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_labeled(target)
+		target = env.get_target(target)
 		if utils.compute_hit(u, target):
 			target.stack_bleed(amt=random.randint(1, 2))
-			print(f"{u.name}'s sharp blades slice into {target.label}.")
+			print(f"{u.name}'s sharp blades slice into {target.name}.")
 		else:
-			print(f"{u.name}'s blades miss {target.label}.")
+			print(f"{u.name}'s blades miss {target.name}.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -39,3 +41,7 @@ class Swordsman(ClassSpec):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Swordsman"

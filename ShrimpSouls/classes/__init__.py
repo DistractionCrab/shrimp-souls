@@ -25,27 +25,29 @@ class ClassSpec:
 	def score_att(self, p):
 		return 1
 
-	def score_def(self, p):
+	def score_dfn(self, p):
 		return 1
 
-	def basic_action(self, u, players, opponents):
+	def basic_action(self, u, env):
 		print("Milquetoast has no class action.")
 
 	def targeted_action(self, u, target, env):
 		print("Milquetoast has no class action.")
 
-	def ultimate_action(self, u, target, players, opponents):
-		print("Milquetoast has no class action.")
 
 	def duel_action(self, actor, party, opponents):
 		return [actions.DoNothing(player=actor)]
 
 	def find_valid_target(self, op):
-		op = list(filter(lambda x: x.invis == 0, op))
+		op = list(filter(lambda x: x.invis == 0 and not x.dead, op))
 		return random.choices(op)[0]
 
 	def soulmass_count(self, p):
-		return math.ceil(p.intelligence/SOULMASS_THRESHOLD)
+		return math.ceil(p.attributes.intelligence/SOULMASS_THRESHOLD)
+
+	@property
+	def cl_string(self):
+		return "Milquetoast"
 
 
 import ShrimpSouls.classes.knight as knight
@@ -85,8 +87,8 @@ class Classes(enum.Enum):
 	def score_att(self, u):
 		return self.value.score_att(u)
 
-	def score_def(self, u):
-		return self.value.score_def(u)
+	def score_dfn(self, u):
+		return self.value.score_dfn(u)
 
 	def score_acc(self, u):
 		return self.value.score_acc(u)

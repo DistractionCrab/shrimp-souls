@@ -11,12 +11,14 @@ class Cleric(ClassSpec):
 		return super().score_eva(p) - 1
 
 	def score_att(self, p):
-		return 3*p.strength+3*p.faith
+		return 3*p.attributes.strength+3*p.attributes.faith
 
-	def score_def(self, p):
-		return 2*p.strength + 3*p.faith
+	def score_dfn(self, p):
+		return 2*p.attributes.strength + 3*p.attributes.faith
 
-	def basic_action(self, u, players, npcs):
+	def basic_action(self, u, env):
+		players = env.players
+		npcs = env.npcs
 		targets = random.choices(players, k=3*(1 + len(players)//10))
 
 		for t in targets:
@@ -25,7 +27,7 @@ class Cleric(ClassSpec):
 		print(f"{u.name} utters a short prayer, bolstering some of their party's defense.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_labeled(target)
+		target = env.get_target(target)
 		target.use_burn(target.burn)
 		target.use_attdown(target.attdown)
 		target.use_evadown(target.evadown)
@@ -34,7 +36,7 @@ class Cleric(ClassSpec):
 		target.use_poison(target.poison)
 		target.use_stun(target.stun)
 
-		print(f"{u.name} has cleansed {target.label} of their debuffs.")
+		print(f"{u.name} has cleansed {target.name} of their debuffs.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -42,3 +44,7 @@ class Cleric(ClassSpec):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Cleric"

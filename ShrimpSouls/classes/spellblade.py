@@ -11,18 +11,18 @@ class SpellBlade(ClassSpec):
 		return super().score_eva(p) - 1
 
 	def score_att(self, p):
-		return 3*p.strength+3*p.intelligence
+		return 3*p.attributes.strength+3*p.attributes.intelligence
 
-	def score_def(self, p):
-		return 2*p.strength + 3*p.intelligence
+	def score_dfn(self, p):
+		return 2*p.attributes.strength + 3*p.attributes.intelligence
 
-	def basic_action(self, u, party, opponents):
+	def basic_action(self, u, env):
 		u.stack_attup()
 		u.stack_defup()
 		print(f"{u.name} enchants their sword and shield enhancing their attack and defense.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_labeled(target)
+		target = env.get_target(target)
 
 		target.stack_block()
 		target.stack_soulmass()
@@ -30,7 +30,7 @@ class SpellBlade(ClassSpec):
 		u.stack_evadown()
 		u.stack_accdown()
 
-		print(f"{u.name} is covering {target.label} with a magical defense.")
+		print(f"{u.name} is covering {target.name} with a magical defense.")
 
 	def ultimate_action(self, u):
 		pass
@@ -38,3 +38,7 @@ class SpellBlade(ClassSpec):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Spellblade"

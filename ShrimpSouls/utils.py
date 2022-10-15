@@ -1,28 +1,63 @@
 import ShrimpSouls as ss
+import random
+import functools as ftools
+import atexit
+import os
 
 def compute_bool(a, d, s1, s2):
 	s1 = s1.value(a)
 	s2 = s2.value(d)
 
-	check = max(min(s2 - s1 + 10, 20), 1)
-	roll = ss.roll_dice(1)[0]
+	check = max(min(s1 - s2 + 10, 20), 1)
+	roll = random.randint(1, 20)
 
-	return (roll != 1 and roll > check) or roll == 20
+	return (roll <= check)
+
+def compute_bool_many(a, d, s1, s2):
+	s1 = s1.value(a)
+	s2 = s2.value(d)
+
+	diff = max(s2 - s1 + 10, 1)
+	rolls = []
+
+	while diff > 0:
+		check = max(min(s1 - s2 + 10, 20), 1)
+		roll = random.randint(1, 20)
+		rolls.append(roll <= check)
+		diff -= 20	
 
 
 def compute_dmg(a, d):
 	dfn = d.dfn
 	att = a.att
 
-	m = min(max(d.dfn - a.att + 10, 1), 20)
+	m = min(max(a.att - d.dfn  + 10, 1), 20)
 
-	return ss.roll_dice(max_r=m)[0]
+	return (random.randint(1, m), att, dfn)
 
 def compute_hit(a, d):
 	eva = d.eva
 	acc = a.acc
 
-	check = max(min(eva - acc + 10, 20), 1)
-	roll = ss.roll_dice(1)[0]
+	check = max(min(acc - eva + 10, 20), 1)
+	roll = random.randint(1, 20)
 
-	return (roll != 1 and roll > check) or roll == 20
+	return (roll <= check or d.stun > 0, acc, eva)
+
+RNG_FILE = os.path.join(os.path.split(__file__)[0], "RNG.state")
+
+def write_rng():
+	with open(RNG_FILE, 'w') as out:
+		out.write(repr(random.getstate()))
+
+def read_rng():
+	try:
+		with open(RNG_FILE, 'r') as out:
+			state = eval(out.read())
+			random.setstate(state)
+	except FileNotFoundError:
+		write_rng()
+
+read_rng()
+
+atexit.register(write_rng)

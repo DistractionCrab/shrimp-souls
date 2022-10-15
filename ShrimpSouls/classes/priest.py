@@ -9,18 +9,20 @@ HEAL_DICE_THRESHOLD = 10
 
 class Priest(ClassSpec):
 	def score_acc(self, p):
-		return  10 + math.ceil(1.25*p.intelligence) + math.ceil(0.25*p.dexterity)
+		return  10 + math.ceil(1.25*p.attributes.intelligence) + math.ceil(0.25*p.attributes.dexterity)
 
 	def score_eva(self, p):
 		return 12 + p.level
 
 	def score_att(self, p):
-		return 2*p.faith
+		return 2*p.attributes.faith
 
-	def score_def(self, p):
-		return math.ceil(p.level*1.25)
+	def score_dfn(self, p):
+		return math.ceil(p.level*1.25) + math.ceil(p.attributes.faith*2.25)
 
-	def basic_action(self, u, players, npcs):
+	def basic_action(self, u, env):
+		players = env.players
+		npcs = env.npcs
 		targets = list(filter(lambda x: not x.dead, players))
 		targets = set(random.choices(
 			targets, 
@@ -39,13 +41,13 @@ class Priest(ClassSpec):
 		target = env.get_labeled(target)
 
 		if target.dead:
-			target.damage(-target.max_health)
-			print(f"{u.name} has revived {target.label} from the dead.")
+			target.damage(-target.max_health//4)
+			print(f"{u.name} has revived {target.name} from the dead.")
 		else:
 			amt = random.randint(10, 20)*(1 + u.faith//HEAL_DICE_THRESHOLD)
 			target.damage(-amt)
 
-			print(f"{u.name} has healed {target.label} for {amt} hp.")
+			print(f"{u.name} has healed {target.name} for {amt} hp.")
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -59,3 +61,7 @@ class Priest(ClassSpec):
 		else:			
 			target = self.find_valid_target(opponents)
 			return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Priest"

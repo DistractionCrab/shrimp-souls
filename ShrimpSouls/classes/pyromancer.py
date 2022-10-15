@@ -5,18 +5,21 @@ import math
 
 class Pyromancer(ClassSpec):
 	def score_acc(self, p):
-		return  10 + math.ceil(0.75*p.intelligence) + math.ceil(0.75*p.faith) + math.ceil(0.25*p.dexterity)
+		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
 
 	def score_eva(self, p):
 		return 10 + math.ceil(1.25*p.level) + 2
 
 	def score_att(self, p):
-		return 3*p.faith+3*p.intelligence
+		return 3*p.attributes.faith+3*p.attributes.intelligence
 
-	def score_def(self, p):
+	def score_dfn(self, p):
 		return math.ceil(1.5*p.level) + 3
 
-	def basic_action(self, u, players, npcs):
+	def basic_action(self, u, env):
+		players = env.players
+		npcs = env.npcs
+		npcs = list(n for n in npcs if not npcs.dead)
 		targets = random.choices(npcs, k=3*(1 + len(npcs)//10))
 
 		for t in targets:
@@ -25,7 +28,7 @@ class Pyromancer(ClassSpec):
 		print(f"{u.name} unleashes a small pyroclasm to burn some foes.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_labeled(target)
+		target = env.get_target(target)
 
 		act = actions.DamageTarget(
 			attacker=u, 
@@ -44,4 +47,8 @@ class Pyromancer(ClassSpec):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	@property
+	def cl_string(self):
+		return "Pyromancer"
 
