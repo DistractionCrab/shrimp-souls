@@ -1,34 +1,48 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import enum
 import ShrimpSouls.actions as actions
 import ShrimpSouls as ss
 import ShrimpSouls.utils as utils
 import random
 
+def do_nothing(self):
+	pass
+
+class NPCTags(enum.Enum):
+	Undead = enum.auto()
 
 @dataclass
 class BaseNPC(ss.Entity):
+	commitfn: object = do_nothing
 	_acc: int = 8
 	_eva: int = 9
 	_att: int = 4
 	_dfn: int = 4
+	#weaknesses: list = field(default_factory=list)
+	#resists: list = field(default_factory=list)
+	#tags: list = field(default_factory=list)
+	
 
+	def commit(self):
+		self.commitfn(self)
 
 	@classmethod
-	def generate(cls, n, s):
-		return tuple(cls(name=f"{cls.__name__}[{i}]") for i in range(s, s+n))
+	def generate(cls, n, s, commitfn=do_nothing):
+		return tuple(cls(name=f"{cls.__name__}[{i}]",commitfn=commitfn) for i in range(s, s+n))
 
 	def labeled(self, l):
-		print(l)
-		print(self.name)
-		c1 = l.lower() == self.name.lower()
+		try:
+			c1 = l.lower() == self.name.lower()
 
-		if not c1:
-			(n1, v1) = self.name.split('[')
-			(n2, v2) = l.split('[')
+			if not c1:
+				(n1, v1) = self.name.split('[')
+				(n2, v2) = l.split('[')
 
-			return n1.strip() == n2.strip() and int(v1[:-1]) == int(v2[:-1])
+				return n1.strip() == n2.strip() and int(v1[:-1]) == int(v2[:-1])
 
-		return c1
+			return c1
+		except:
+			return False
 
 
 
@@ -94,7 +108,7 @@ class GoblinBrute(BaseNPC):
 	max_hp: int = 30
 	_acc: int = 22
 	_eva: int = 15
-	_att: int = 33
+	_att: int = 28
 	_dfn: int = 24
 
 	def duel_action(self, actor, party, opponents):

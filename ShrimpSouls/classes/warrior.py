@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -18,26 +19,11 @@ class Warrior(ClassSpec):
 		return 2*p.level + p.attributes.strength + p.attributes.dexterity
 
 	def basic_action(self, u, env):
-		u.stack_attup(amt=4)
-		print(f"{u.name} sharpens their axe, increasing their attack.")
+		return [Action1(attacker=u, defender=u)]
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
-
-		if utils.compute_hit(u, target):
-			target.use_defup(target.defup)
-			target.use_evaup(target.evaup)
-			print(f"{u.name} has broken {target.name}'s armor and removed their defense bonuses.")
-			act = actions.DamageTarget(
-				attacker=u, 
-				defender=target,
-				dmgoverride=random.randint(1, 4)*(1 + (u.strength + u.dexterity)//10),
-				dmgtype=actions.DamageType.Slash,
-				abilityrange=actions.AbilityRange.Close)
-			act.apply()
-			print(act.msg)
-		else:
-			print(f"{u.name} missed with their armor break.")
+		
+		return [Target1(attacker=u, defender=target)]
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -49,3 +35,23 @@ class Warrior(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Warrior"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_attup(amt=3)
+		self.msg += f"{self.attacker.name} sharpens their blade, increasing their attack."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			dmg = 5 + random.randint(1, 6)*(1 + (self.attacker.attributes.strength + self.attacker.attributes.dexterity)//10)
+			self.defender.use_defup(self.defender.defup)
+			self.defender.use_evaup(self.defender.evaup)
+			self.defender.damage(dmg)
+			self.msg += f"{self.attacker.name}'s breaks {self.defender.name}'s armor and deals {dmg} damage. "
+
+		else:
+			self.msg += f"{self.attacker.name} missed {self.defender.name}."

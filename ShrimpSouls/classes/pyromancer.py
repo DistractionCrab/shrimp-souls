@@ -1,4 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
+import ShrimpSouls.utils as utils
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -17,28 +19,13 @@ class Pyromancer(ClassSpec):
 		return math.ceil(1.5*p.level) + 3
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		npcs = list(n for n in npcs if not npcs.dead)
-		targets = random.choices(npcs, k=3*(1 + len(npcs)//10))
-
-		for t in targets:
-			t.stack_burn(amt=2)
-
-		print(f"{u.name} unleashes a small pyroclasm to burn some foes.")
+		npcs = list(n for n in env.npcs if not n.dead)
+		targets = random.sample(npcs, k=min(3, len(npcs)))
+		return [Action1(attacker=u,defender=t) for t in targets]
+			
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
-
-		act = actions.DamageTarget(
-			attacker=u, 
-			defender=target,
-			dmgoverride=random.randint(1, 10)*(1 + (u.faith + u.intelligence)//10),
-			dmgtype=actions.DamageType.Fire,
-			abilityrange=actions.AbilityRange.Medium)
-
-		act.apply()
-		print(act.msg)
+		return [Target1(attacker=u, defender=target)]
 
 
 	def ultimate_action(self, u, players, npcs):
@@ -52,3 +39,24 @@ class Pyromancer(ClassSpec):
 	def cl_string(self):
 		return "Pyromancer"
 
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.stack_burn(amt=3)
+			self.msg += f"{self.attacker.name} has burned {self.defender.name} for 3 turns."
+		else:
+			self.msg += f"{self.attacker.name} failed to burn {self.defender.name}."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.faith + self.attacker.attributes.intelligence)//10)
+			self.defender.stack_burn(amt=3)
+			self.defender.damage(dmg)
+			self.msg += f"{self.attacker.name}'s Fireball strikes {self.defender.name} for {dmg} damage and burns them for 5 turns"
+
+		else:
+			self.msg += f"{self.attacker.name} missed {self.defender.name}."

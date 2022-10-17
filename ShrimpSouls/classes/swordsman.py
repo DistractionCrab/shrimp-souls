@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -18,22 +19,15 @@ class Swordsman(ClassSpec):
 		return 2*p.level + p.attributes.strength + p.attributes.dexterity
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		targets = random.choices(npcs, k=2*(1 + len(npcs)//10))
+		npcs = list(env.npcs)
+		targets = random.sample(npcs, k=min(3, len(npcs)))
 
-		for t in targets:
-			t.stack_evadown(amt=2)
+		return [Action1(attacker=u, defender=t) for t in targets]
 
-		print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
+		#print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
-		if utils.compute_hit(u, target):
-			target.stack_bleed(amt=random.randint(1, 2))
-			print(f"{u.name}'s sharp blades slice into {target.name}.")
-		else:
-			print(f"{u.name}'s blades miss {target.name}.")
+		return [Target1(attacker=u, defender=target)]
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -45,3 +39,21 @@ class Swordsman(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Swordsman"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
+			self.defender.stack_evadown(amt=2)
+			self.msg += f"{self.attacker.name} has hamstrung {self.defender.name}. "
+		else:
+			self.msg += f"{self.attacker.name} has missed their hamstring. "
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.stack_bleed(amt=random.randint(1, 2))
+			self.msg += f"{self.attacker.name}'s sharp blades slice into {self.defender.name}. "
+		else:
+			self.msg += f"{self.attacker.name}'s blades miss {self.defender.name}. "

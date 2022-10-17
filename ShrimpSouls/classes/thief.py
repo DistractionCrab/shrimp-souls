@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -20,52 +21,70 @@ class Thief(ClassSpec):
 		return p.level + 2 * p.attributes.dexterity
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		target = random.choices(npcs)[0]
-		amt = sum(random.randint(1, 4) for i in range(1 + u.luck//STEAL_BONUS_THRESHOLD))
-		msg = ''
-
-		if utils.compute_hit(u, target):
-			u.add_shrimp(amt)
-			msg += f"{u.name} manages to steal {amt} shrimp from {target.name}. "
-			# See if you pilfer armor.
-			if utils.compute_hit(u, target):
-				target.stack_defdown()
-				u.stack_defup()
-				msg += f"{u.name} pilfers armor from {target.name}. "
-
-			if utils.compute_hit(u, target):
-				target.stack_attdown()
-				u.stack_attup()
-				msg += f"{u.name} pilfers the weapon from {target.name}. "
+		enemies = list(env.npcs)
+		
+		if len(enemies) == 0:
+			return []
 		else:
-			msg += f"{u.name} failed to steal any shrimp. "		
-
-		print(msg)
-
-	def targeted_action(self, u, target, env):
-		target = env.get_npc(target)
-
-		if (target.hp/target.max_hp) < 0.2:
-			if utils.compute_hit(u, target):
-				target.damage(-target.hp)
-				u.add_shrimp(2*target.xp)
-				print(f"{u.name} managed to poach {target.name} and earned {2*target.xp} shrimp.")
-			else:
-				print(f"{u.name} failed to poach {target.name}.")
-
-		else:
-			print(f"{target.name} is not weak enough for {u.name} to poach.")
+			#print(enemies)
+			target = random.sample(enemies,k=1)[0]
+			return [Action1(attacker=u, defender = target)]
 		
 
+	def targeted_action(self, u, target, env):
+		return [Target1(attacker=u, defender=target)]
+		
+		
 	def ultimate_action(self, u, players, npcs):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
+		#target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
 
 	@property
 	def cl_string(self):
 		return "Thief"
+
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		amt = sum(random.randint(1, 4) for i in range(1 + self.attacker.attributes.luck//STEAL_BONUS_THRESHOLD))
+		if utils.compute_hit(self.attacker, self.defender):
+			self.attacker.add_shrimp(amt)
+			self.msg += f"{self.attacker.name} manages to steal {amt} shrimp from {self.defender.name}. "
+			# See if you pilfer armor.
+			if utils.compute_hit(self.attacker, self.defender):
+				self.defender.stack_defdown()
+				self.attacker.stack_defup()
+				self.msg += f"{self.attacker.name} pilfers armor from {self.defender.name}. "
+
+			if utils.compute_hit(self.attacker, self.defender):
+				self.defender.stack_attdown()
+				self.attacker.stack_attup()
+				self.msg += f"{self.attacker.name} pilfers the weapon from {self.defender.name}. "
+		else:
+			self.msg += f"{self.attacker.name} failed to steal any shrimp. "
+
+		return self.msg
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if self.defender.is_player:
+			self.msg += f"{self.attacker.name} cannot poach friendly players, naughty thief."
+			return
+		if self.defender.dead:
+			self.msg += f"{self.attacker.name} cannot poach an enemy while their target is dead."
+			return
+		if (self.defender.hp/self.defender.max_hp) < 0.2:
+			if utils.compute_hit(u, target):
+				self.defender.damage(self.defender.max_hp)
+				self.attacker.add_shrimp(2*self.defender.xp)
+				self.msg += f"{self.attacker.name} managed to poach {self.defender.name} and earned {2*self.defender.xp} shrimp."
+			else:
+				self.msg += f"{self.attacker.name} failed to poach {self.defender.name}."
+
+		else:
+			self.msg += f"{self.defender.name} is not weak enough for {self.attacker.name} to poach."

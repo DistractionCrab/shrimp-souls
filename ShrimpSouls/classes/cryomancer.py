@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -18,23 +19,15 @@ class Cryomancer(ClassSpec):
 		return 3 + 2*(p.attributes.faith + p.attributes.intelligence)
 
 	def basic_action(self, u, env):
-		npcs = list(n for n in npcs if not n.dead)
-		targets = random.choices(npcs, k=3*(1 + len(npcs)//10))
+		npcs = list(n for n in env.npcs if not n.dead)
+		targets = random.sample(npcs, k=min(3, len(npcs)))
 
-		for t in targets:
-			t.stack_defdown()
-			t.stack_attdown()
-
-		print(f"{u.name} conjures a frozen fog that chills their foes, lowering their defense and attack.")
+		return [Action1(attacker=u, defender=t) for t in targets]
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u, defender=target)]
 
-		if utils.compute_hit(u, target):
-			target.stack_stun(amt=random.randint(1, 4))
-			print(f"{u.name} has frozen {target.name} solid.")
-		else:
-			print(f"{u.name} has failed to freeze {target.name}")
+		
 
 	def ultimate_action(self, u):
 		pass
@@ -46,3 +39,22 @@ class Cryomancer(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Cryomancer"
+
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.defender.stack_defdown(amt=2)
+		self.defender.stack_attdown(amt=2)
+
+		self.msg += f"{self.attacker.name} chills {self.defender.name} lowering attack and defense."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.stack_stun(amt=random.randint(1, 4))
+			self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid."
+		else:
+			print(f"{self.attacker.name} has failed to freeze {self.defender.name}")

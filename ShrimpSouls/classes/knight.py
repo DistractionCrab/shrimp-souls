@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+from dataclasses import dataclass
 import random
 import math
 
@@ -11,23 +12,19 @@ class Knight(ClassSpec):
 		return super().score_acc(p) + 1
 
 	def score_att(self, p):
-		return 3*attributes.p.strength + 3*p.attributes.dexterity 
+		return 3*p.attributes.strength + 3*p.attributes.dexterity 
 
 	def score_dfn(self, p):
 		return p.attributes.strength + 4*p.attributes.dexterity + 5
 
 	def basic_action(self, u, env):
-		u.stack_block(amt=3)
-		print(f"{u.name} readies their shield to block attacks.")
+		return [Action1(attacker=u, defender=u)]
+		
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u, defender=target)]
 
-		target.stack_block()
-		u.stack_defdown()
-		u.stack_attdown()
-
-		print(f"{u.name} is covering {target.name}.")
+		
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -42,3 +39,18 @@ class Knight(ClassSpec):
 
 
 		
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_block(amt=3)
+		self.msg += f"{self.attacker.name} readies their shield to block attacks."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		self.defender.stack_block()
+		self.attacker.stack_defdown()
+		self.attacker.stack_attdown()
+
+		self.msg += f"{self.attacker.name} is covering {self.defender.name}."

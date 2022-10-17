@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+from dataclasses import dataclass
 import random
 import math
 
@@ -17,20 +18,13 @@ class SpellBlade(ClassSpec):
 		return 2*p.attributes.strength + 3*p.attributes.intelligence
 
 	def basic_action(self, u, env):
-		u.stack_attup()
-		u.stack_defup()
-		print(f"{u.name} enchants their sword and shield enhancing their attack and defense.")
+		
+		return [Action1(attacker=u,defender=u)]
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u,defender=target)]
 
-		target.stack_block()
-		target.stack_soulmass()
-		u.stack_defdown()
-		u.stack_evadown()
-		u.stack_accdown()
-
-		print(f"{u.name} is covering {target.name} with a magical defense.")
+		
 
 	def ultimate_action(self, u):
 		pass
@@ -42,3 +36,22 @@ class SpellBlade(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Spellblade"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_attup(amt=2)
+		self.attacker.stack_defup(amt=2)
+		self.msg += f"{self.attacker.name} enchantes their sword and shield, enhancing their attack and defense."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		self.defender.stack_block()
+		self.defender.stack_soulmass()
+		self.attacker.stack_defdown()
+		self.attacker.stack_evadown()
+		self.attacker.stack_accdown()
+
+		self.msg += f"{self.attacker.name} is covering {self.defender.name} with a magical defense."

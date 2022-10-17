@@ -21,21 +21,16 @@ PLAYER_CACHE = dc.Cache(CACHE_DIR)
 STATE_CACHE = dc.Cache(STATE_DIR)
 
 
-_MODIFIED = set()
+
 
 def auto_commit(f):
 	def wrapper(ref, *args, **kwds):
-		if isinstance(ref, Player):
-			_MODIFIED.update({ref})
-		return f(ref, *args, **kwds)
+		v = f(ref, *args, **kwds)
+		ref.commit()
+		return v
 
 	return wrapper
 
-def commit_changed():
-	for p in _MODIFIED:
-		p.commit()
-
-atexit.register(commit_changed)
 
 if "campaign" not in STATE_CACHE:
 	STATE_CACHE['campaign'] = "Null"
@@ -112,6 +107,8 @@ class Entity:
 	hp:  int = 20
 	max_hp: int = 20
 	status: Statuses = Statuses()
+	acted: bool = False
+
 	
 	def commit(self):
 		pass
@@ -453,7 +450,7 @@ class Entity:
 
 	@auto_commit
 	def taunt_target(self, target):
-		self.status.taunt = target.label
+		self.status.taunt = target.name
 
 	@auto_commit
 	def end_taunt(self):
@@ -498,6 +495,15 @@ class Entity:
 		return False
 
 
+_MODIFIED = set()
+def commit_changed():
+	for p in _MODIFIED:
+		PLAYER_CACHE[p.name] = p
+
+
+
+atexit.register(commit_changed)
+
 import ShrimpSouls.classes as classes
 
 @dataclass
@@ -509,7 +515,7 @@ class Player(Entity):
 		return hash(self.name)
 
 	def commit(self):
-		PLAYER_CACHE[self.name] = self
+		_MODIFIED.update([self])
 
 
 	@property
@@ -530,7 +536,6 @@ class Player(Entity):
 			raise ValueError(f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})")
 
 	def get_xp_req(self):
-		return 0
 		if self.level < 1:
 			return 100
 		else:
@@ -582,14 +587,34 @@ class Player(Entity):
 
 	def soulmass_count(self):
 		return self.myclass.soulmass_count(self)
+
+	@auto_commit
+	def act(self, env):
+		return self.myclass.basic_action(self, env)
+
+	@auto_commit
+	def target(self, target, env):
+		return self.myclass.targeted_action(self, target, env)
+
+	@auto_commit
+	def allow_actions(self):
+		self.acted = False
+
+	@auto_commit
+	def did_act(self):
+		self.acted = True
 	
 
 _FETCHED_PLAYERS = {}
 
 def get_player(name, init=False):
-	if name in _FETCHED_PLAYERS:
-		return _FETCHED_PLAYERS[name]
+	if isinstance(name, Player):
+		return name
+	elif name in _FETCHED_PLAYERS:
+
+		return _FETCHED_PLAYERS[name.lower()]
 	else:
+		name = name.lower()
 		if name not in PLAYER_CACHE and init:
 			player = Player(name=name)
 			PLAYER_CACHE[name] = player
@@ -610,6 +635,11 @@ def update_class(name, clname):
 	p.commit()
 	print(f"{p.name} has updated their class to {p.myclass.cl_string}!!!")
 
+def join(name):
+	p = get_player(name, init=True)
+	import ShrimpSouls.campaigns as cps
+	cps.Campaigns[STATE_CACHE['campaign']].value.join(name)
+
 
 def main(args):
 	if args[0] == "stats":
@@ -629,22 +659,24 @@ def main(args):
 		STATE_CACHE['campaign'] = ctype.name
 		print(ctype.value.start_msg)
 	elif args[0] == "join":
-		p = get_player(args[1])
-		import ShrimpSouls.campaigns as cps
-		cps.Campaigns[STATE_CACHE['campaign']].value.join(args[1])
+		join(args[1])
 
 	elif args[0] == "basicclassaction":		
 		import ShrimpSouls.campaigns as cps
 		c = cps.Campaigns[STATE_CACHE['campaign']].value
-		p = get_player(args[1], init=True)
-		p.myclass.basic_action(p, c)
+
+		c.perform_action(args[1])
+		#p = get_player(args[1], init=True)
+		#if not c.is_joined(p.name):
+		#	join(p.name)
+		#p.act(c)
 		c.commit()
 
 	elif args[0] == "targetclassaction":		
 		import ShrimpSouls.campaigns as cps
 		c = cps.Campaigns[STATE_CACHE['campaign']].value
-		p = get_player(args[1], init=True)
-		p.myclass.targeted_action(p, args[2], c)
+
+		c.perform_target_action(args[1], args[2])
 		c.commit()
 
 	elif args[0] == "foelist":

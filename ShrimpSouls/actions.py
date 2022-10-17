@@ -1,8 +1,12 @@
 import enum
 import math
-from dataclasses import dataclass
+import functools as ftools
+from dataclasses import dataclass, field
 import ShrimpSouls.utils as utils
 import ShrimpSouls as ss
+
+
+
 
 
 class DamageType(enum.Enum):
@@ -37,8 +41,13 @@ class AbilityRange(enum.Enum):
 		return self == AbilityRange.Touch or self == AbilityRange.Close or self == AbilityRange.Medium
 
 
+@dataclass
 class Action:
-	pass
+	attacker: object
+	defender: object
+	msg: str = ''
+
+
 
 @dataclass
 class DoNothing:
@@ -55,114 +64,6 @@ class DoNothing:
 	def msg(self):
 		return f"{self.player.name} did absolutely nothing."
 
-@dataclass
-class DamageTarget:
-	attacker: object
-	defender: object
-	dmgoverride: object = None
-	dmgtype: DamageType = DamageType.Slash
-	abilityrange: AbilityRange = AbilityRange.Close
-	msg: object = None
-
-	def apply(self):
-		if self.msg is not None:
-			return
-		msg = ''
-		if self.attacker.dead:
-			msg += f"{self.attacker.name} cannot attack while dead."
-		elif self.defender.dead:
-			msg += f"{self.defender.name} cannot be attacked while dead."
-		else:
-			if self.defender.ripstance > 0 and self.abilityrange.can_riposte():
-				(parry, a1, d1) = self.parry
-				(riposte, a2, d2) = self.riposte
-				(hit, a3, d3) = self.hit
-				if parry and self.riposte:
-					dmg = utils.compute_dmg(self.defender, self.attacker)[0]
-					self.attacker.damage(dmg)
-					msg += f"{self.defender.name} parries and ripostes {self.attacker.name} for {dmg} damage. ({a1} vs {d1} and {a2} vs {d2})"
-				elif parry and hit:
-					dmg = math.ceil(self.dmg[0]/2)
-					self.defender.damage(dmg)
-					msg += f"{self.defender.name} manages to partially parry {self.attacker.name}'s attack, and suffers {dmg} damage. ({a1} vs {d1} and {a3} vs {d3})"
-				else:
-					msg += f"{self.attacker.name} missed {self.defender.name}. ({a3} vs {d3})"
-			elif self.defender.soulmass > 0 and self.abilityrange.can_soulmass():
-				totals = [
-					utils.compute_hit(self.defender, self.attacker) 
-					for _ in range(self.defender.soulmass_count())]
-				dmg = sum(
-					utils.compute_dmg(self.defender, self.attacker)[0]
-					for t in totals if t[0])
-				self.attacker.damage(dmg)
-
-				msg += f"{self.attacker.name} provokes {self.defender.name}'s Soulmasses and suffers {dmg} damage. "
-
-				if self.hit:
-					dmg = self.dmg[0]
-					self.defender.damage(dmg)
-					msg += f"{self.attacker.name} attacks {self.defender.name} for {dmg} damage. "
-				else:
-					msg += f"{self.attacker.name} missed {self.defender.name}."
-			else:
-				(hit, a, d) = self.hit
-				if hit:
-					if self.defender.block > 0:
-						(dmg, a2, d2) = self.dmg
-						dmg = math.ceil(dmg*0.75)
-						self.defender.damage(dmg)
-						self.defender.use_block()
-						msg += f"{self.attacker.name} attacks {self.defender.name} for {dmg} damage. ({a} vs {d} and {a2} vs {d2}) "
-					else:
-						(dmg, a2, d2) = self.dmg
-						self.defender.damage(dmg)
-						msg += f"{self.attacker.name} attacks {self.defender.name} for {dmg} damage. ({a} vs {d} and {a2} vs {d2}) "
-				else:
-					msg += f"{self.attacker.name} missed {self.defender.name}. ({a} vs {d}) "
-
-			if self.attacker.dead:
-				msg += f"{self.attacker.name} has died."
-
-			if self.defender.dead:
-				msg += f"{self.defender.name} has died."
-
-
-		self.msg = msg
-		return self.msg
-
-	def deal_damage(self, attacker, target, amt):
-		msg = f'{attacker.name} deals {amt} damage to {target.name}. '
-		target.dmg(amt)
-		if target.dead:
-			msg += f'{attacker.name} has slain {target.name}'
-
-		return msg
-
-	@property
-	def dmg(self):
-		if self.dmgoverride is None:
-			return utils.compute_dmg(self.attacker, self.defender)
-		else:
-			return (self.dmgoverride, None, None)
-
-	@property
-	def parry(self):
-		return utils.compute_hit(self.defender, self.attacker)
-
-	@property
-	def hit(self):
-		return utils.compute_hit(self.attacker, self.defender)
-	
-	@property
-	def riposte(self):
-		return utils.compute_hit(self.defender, self.attacker)
-	
-	
-	
-
-	@property
-	def viable(self):
-		return not self.attacker.dead and not self.defender.dead
 
 
 
@@ -186,40 +87,138 @@ class HealTarget:
 		return f"{self.attacker.name} heals {self.dmg} life to {self.defender.name}."
 
 @dataclass
-class Miss:
+class ReviveTarget:
 	attacker: object
 	defender: object
-	ability: str
+	dmg: int
 
 	def apply(self):
-		pass
+		self.defender.damage(-self.dmg)
 
 	@property
 	def viable(self):
-		return True
+		return not self.defender.dead
+			
 
 	@property
 	def msg(self):
-		return f"{self.attacker.name} missed {self.defender.name} with {self.ability}."
+		return f"{self.attacker.name} revives {self.defender.name} for {self.dmg} life."
+
+
+_DEFAULT_COMBAT_LOG = {
+	"act_type": "BasicAttack",
+	"attacker": '',
+	"defender": '',
+	"hits": [],
+	"parry": [False, None, None],
+	"riposte": [False, None, None],
+	"ripostedmg": [False, None, None],
+	'smdmg': 0
+}
+
 
 @dataclass
-class ApplyStatus:
+class DamageTarget:
 	attacker: object
 	defender: object
-	status: ss.Statuses
-	scoreDef: ss.Scores
-	scoreAtt: ss.Scores
-	amt: int = 1
+	dmgoverride: object = None
+	dmgtype: DamageType = DamageType.Slash
+	abilityrange: AbilityRange = AbilityRange.Close
+	msg: str = ""
+	clog: dict = field(default_factory=lambda: dict(_DEFAULT_COMBAT_LOG))
+	applied: bool = False
 
 
 	def apply(self):
-		if not self.attacker.dead and not self.defender.dead:
-			self.defender.stack_status(self.status, amt=self.amt)
+		if self.applied:
+			return self.msg
+		elif self.attacker.dead:
+			self.msg = f"{self.attacker.name} cannot attack while dead."
+		elif self.defender.dead:
+			self.msg = f"{self.defender.name} cannot be attacked while dead."
+		else:
+			self.clog["attacker"] = self.attacker.name
+			self.clog["defender"] = self.defender.name
 
-	@property
-	def viable(self):
-		return not self.attacker.dead and not self.defender.dead
+			if self.defender.ripstance > 0 and self.abilityrange.can_riposte():
+				self.parry_scenario()
+			elif self.defender.soulmass > 0 and self.abilityrange.can_soulmass():
+				self.soulmass_scenario()
+			else:
+				self.standard_scenario()				
 
-	@property
-	def msg(self):
-		return f"{self.attacker.name} applies {self.status.name} to {self.defender.name}."
+			if self.attacker.dead:
+				self.msg += f"{self.attacker.name} has died."
+
+			if self.defender.dead:
+				self.msg += f"{self.defender.name} has died."
+
+
+		return self.msg
+
+	def standard_scenario(self):
+		hits = utils.compute_bool_many(
+			self.attacker, 
+			self.defender, 
+			ss.Scores.Acc,
+			ss.Scores.Eva)
+
+		total = 0
+		for h in hits:
+			if h[0]:
+				d = utils.compute_dmg(self.attacker, self.defender)
+				dmg = d[0] if self.defender.block == 0 else math.ceil(d[0] * 0.75)
+				total += dmg
+			else:
+				d = (None, None, None)
+
+			self.clog['hits'].append((h, d))
+				
+		if total == 0:
+			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+		else:
+			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {total} damage. "
+			self.defender.damage(total)
+
+	def soulmass_scenario(self):
+		totals = [
+			utils.compute_hit(self.defender, self.attacker) 
+			for _ in range(self.defender.soulmass_count())]
+		dmg = sum(
+			utils.compute_dmg(self.defender, self.attacker)[0]
+			for t in totals if t[0])
+		self.attacker.damage(dmg)
+		self.defender.use_soulmass(amt=1)
+		self.clog['smdmg'] = dmg
+
+		if dmg > 0:
+		 	self.msg += f"{self.attacker.name} provokes {self.defender.name}'s Soulmasses and suffers {dmg} damage."
+
+
+		self.standard_scenario()
+
+	def parry_scenario(self):
+		parry = utils.compute_hit(self.defender, self.attacker)
+		self.clog['parry'] = parry
+		if parry[0]:
+			riposte = utils.compute_hit(self.defender, self.attacker)
+			self.clog['riposte'] = riposte
+			if riposte[0]:
+				d = utils.compute_dmg(self.defender, self.attacker)
+				self.attacker.damage(d[0])
+				self.clog['ripostedmg'] = d
+				self.msg += f"{self.defender.name} parries and ripostes {self.attacker.name} for {dmg[0]} damage."
+			else:
+				h = utils.compute_hit(self,attacker, self.defender)
+				if h[0]:
+					d = list(util.compute_dmg(self.attacker, self.defender))
+					d[0] = d[0]//2
+					self.defender.damage(d[0])
+					self.clog['hits'].append((h, d))
+					self.msg += f"{self.defender.name} manages to partially parry {self.attacker.name}'s attack, and suffers {d[0]} damage."
+				else:
+					self.clog['hits'].append((h, (None, None, None)))
+					self.msg += f"{self.attacker.name} missed {self.defender.name}."
+
+
+

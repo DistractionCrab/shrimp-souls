@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -18,21 +19,13 @@ class Paladin(ClassSpec):
 		return 4 + math.ceil(3.5*p.attributes.faith) + math.ceil(3.5*p.attributes.strength)
 
 	def basic_action(self, u, env):
-		u.stack_sealing(amt=3)
-		print(f"{u.name} casts a prayer on their blade to seal their foes.")
+		return [Action1(attacker=u, defender=u)]
+		
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u, defender=target)]
 
-		if utils.compute_hit(u, target):
-			target.stack_attdown(amt=2)
-			target.stack_evadown(amt=2)
-			target.stack_defdown(amt=2)
-			target.stack_accdown(amt=2)
-
-			print(f"{u.name} has weakened {target.name} with a holy censure.")
-		else:
-			print(f"{target.name} maintains their conviction against {u.name}'s censure.")
+		
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -44,3 +37,23 @@ class Paladin(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Paladin"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_sealing(amt=3)
+		self.msg += f"{self.attacker.name} casts a prayer on their blade to seal their foes."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.stack_attdown(amt=2)
+			self.defender.stack_evadown(amt=2)
+			self.defender.stack_defdown(amt=2)
+			self.defender.stack_accdown(amt=2)
+
+			self.msg += f"{self.attacker.name} has weakened {self.defender.name} with a holy censure."
+		else:
+			self.msg += f"{self.defender.name} maintains their conviction against {self.attacker.name}'s censure."

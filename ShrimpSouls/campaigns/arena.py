@@ -5,69 +5,84 @@ from ShrimpSouls import npcs
 from ShrimpSouls.logger import log
 
 import os
+import atexit
 import diskcache as dc
 import ShrimpSouls as ss
 
 CACHE_DIR = ss.CACHE_DIR/"campaigns"/"arena"
-CACHE = dc.Cache(CACHE_DIR)
+PLAYERS = dc.Cache(CACHE_DIR/"players")
+ENEMIES = dc.Cache(CACHE_DIR/"enemies")
 
-
-if 'players' not in CACHE:
-	CACHE['players'] = []
-if 'npcs' not in CACHE:
-	CACHE['npcs'] = []
+def add_npc(n):
+	ENEMIES[n.name] = n
 
 def reset_combatants():
-	CACHE['npcs'] = []
-	CACHE['players'] = []
+	for p in PLAYERS:
+		p = ss.get_player(p)
+		p.reset_status()
+		p.revive()
+	PLAYERS.clear()
+	ENEMIES.clear()
+	#print("resetting.")
+
+_MODIFIED = set()
+
+def commit_npc(self):
+	if not self.dead:
+		_MODIFIED.update([self])
+	else:
+		del ENEMIES[self.name]
+
+def save_npcs():
+	for n in _MODIFIED:
+		if n.name in ENEMIES and not n.dead:
+			ENEMIES[n.name] = n
+
 
 
 class Arena:
 	def __init__(self):
-		self.__players = None
-		self.__npcs = None
+		self.__npcs = list(ENEMIES[n] for n in ENEMIES)
+		self.__players = list(ss.get_player(p) for p in PLAYERS)
+
 
 	@property
 	def players(self):
-		if self.__players is None:
-			self.__players = list([ss.get_player(p) for p in CACHE['players']])
-
-		return self.__players
+		return (a for a in self.__players)
 	
 	@property
 	def npcs(self):
-		if self.__npcs is None:
-			self.__npcs = list(CACHE['npcs'])
+		return (a for a in self.__npcs)
 
-		return self.__npcs
+
 
 	@property
 	def start_msg(self):
 		return "An Arena has started! !join the arena to fight powerful foes!"
 
 	def join(self, player):
-		if any(player == p.name for p in self.players):
-			print(f"{player} is already in the arena!")
+		player = ss.get_player(player)
+		if player.name in PLAYERS:
+			print(f"{player.name} is already in the arena! ")
 		else:
-			p = CACHE['players']
-			p.append(player)
-			CACHE['players'] = p
-			print(f"{player} has joined the arena! ")
+			
+			PLAYERS[player.name] = None
+
+			print(f"{player.name} has joined the arena! ")
 			if not self.finished:
-				player = ss.get_player(player)
 				npcs = self.__add_foes(player)
+				#print(npcs)
 				fstring = (f.name for f in npcs)
-				print(f"As {player.name} joines the arena so do {', '.join(fstring)}")
+				print(f"As {player.name} joins the arena so do {', '.join(fstring)} ")
 
 			self.commit()
 
 		
 
 	def step(self):
-		#print(self.npcs)
-		if len(self.players) == 0:
+		if len(PLAYERS) == 0:
 			print("No players available for the arena: type !join to join the campaign!")
-		elif self.finished:
+		elif len(ENEMIES) == 0:
 			print("The arena has begun!")
 			self.__setup_arena()			
 		else:
@@ -77,16 +92,22 @@ class Arena:
 		
 
 	def commit(self):
-		for p in self.players:
-			p.commit()
-		CACHE['npcs'] = list(n for n in self.npcs)
+		for p in self.__players:
+			if p.dead:
+				del PLAYERS[p.name]
+		for p in self.__npcs:
+			if p.dead:
+				del ENEMIES[p.name]
+			else:
+				ENEMIES[p.name] = p
 
 	def __find_appropriate_encounter(self):
-		avg = int(sum(p.level for p in self.players)/len(self.players))
+		players = list(self.players)
+		avg = int(sum(p.level for p in players)/len(players))
 		try:
 			k = next(k for k in ENCOUNTERS.keys() if avg in k)
 			(l, m) = random.choices(ENCOUNTERS[k])[0]
-			return l(len(self.players)), m
+			return l(len(players)), m
 		except StopIteration:
 			(l, m) = (
 				lambda n: npcs.Goblin.generate(3*n),
@@ -96,7 +117,9 @@ class Arena:
 			return l(len(self.players)), m
 
 	def __setup_arena(self):
-		self.__npcs = []
+		npcs = []
+		#ENEMIES.clear()
+		#PLAYERS.clear()
 		
 		for p in self.players:
 			p.revive()
@@ -109,9 +132,9 @@ class Arena:
 
 	def __add_foes(self, p):
 		k = next(k for k in ENCOUNTERS.keys() if p.level in k)
-		foes = random.choices(ENCOUNTERS[k])[0](len(self.npcs))
+		foes = random.choices(ENCOUNTERS[k])[0](len(ENEMIES))
 		for n in foes:
-			self.npcs.append(n)
+			self.__npcs.append(n)
 
 		return foes
 
@@ -119,6 +142,7 @@ class Arena:
 		order = list(self.players) + list(self.npcs)
 		order = list(filter(lambda x: not x.dead and x.stun <= 0, order))
 		random.shuffle(order)
+
 
 
 		p_fetch = lambda x: self.players if x in self.players else self.npcs
@@ -192,12 +216,13 @@ class Arena:
 		for p in order:
 			p.tick()
 
-		print(msg)
+		print("**The Turn has Ended**: " + msg)
 		log("------------------------------------------------------------")
 
-		if self.finished:
-			reset_combatants()
+		for p in self.players:
+			p.allow_actions()
 
+		#self.commit()
 
 		
 	def get_action(self, entity):
@@ -217,9 +242,11 @@ class Arena:
 			else:
 				return entity.duel_action(entity, self.npcs, self.players)
 
+	def is_joined(self, name):
+		return name in CACHE['players']
 
 	def get_player(self, name):
-		return next(p for p in self.players if p.name == name)
+		return next(p for p in self.players if p.name.lower() == name.lower())
 
 	def get_enemy(self, name):
 		return next(p for p in self.npcs if p.labeled(name))
@@ -238,15 +265,61 @@ class Arena:
 		return all(p.dead for p in self.players) or all(p.dead for p in self.npcs)
 
 	def foes(self):
-		foes = self.npcs
-		if len(foes) == 0:
+		if len(ENEMIES) == 0:
 			print("No enemies can be seen...")
 		else:
-			valid = list(filter(lambda x: not x.dead, foes))
+			#print(self.__npcs)
+			valid = list(filter(lambda x: not x.dead, self.npcs))
+			if len(valid) == 0:
+				print("All foes are dead.")
+				return
 			f = set(random.choices(valid,k=5))
 
 			fstrings = (f'{n.name}({n.hp}/{n.max_hp})' for n in f)
 			print(f"Some foes you can see: {', '.join(fstrings)}")
+
+	def perform_action(self, pname):
+		if pname.lower() not in PLAYERS:
+			print(f"{u.name} is not in the campaign. !join to perform an action.")
+		else:
+			p = ss.get_player(pname)
+			if p.acted:
+				print(f"{p.name} has already acted this turn.")
+			else:				
+				actions = p.act(self)
+				for a in actions:
+					a.apply()
+					print(a.msg)
+
+				p.did_act()
+		self.commit()
+
+	def perform_target_action(self, pname, target):
+		if pname.lower() not in PLAYERS:
+			print(f"{u.name} is not in the campaign. !join to join!")
+		else:
+			p = ss.get_player(pname)
+			if p.acted:				
+				print(f"{p.name} has already acted this turn.")
+			else:				
+				t = self.get_target(target)
+				actions = p.target(t, self)
+				for a in actions:
+					a.apply()
+					print(a.msg)
+
+				p.did_act()
+
+				if t.dead:
+					print(f"{t.name} has died.")
+					if not t.is_player:
+						for p in self.players:
+							p.add_shrimp(t.xp)
+						if len(ENEMIES) == 0:
+							print("All enemies have been defeated and the arena is over.")
+							PLAYERS.clear()
+		self.commit()
+
 
 
 
@@ -258,7 +331,9 @@ ENCOUNTERS = {
 		lambda i: npcs.Wolf.generate(2, i),
 	],
 	range(5, 13): [
-		lambda i: npcs.GoblinBrute.generate(2, i)
-		lambda i: npcs.GoblinBrute.generate(1, i) + npcs.GoblinPriest.generate(1, i)
+		lambda i: npcs.GoblinBrute.generate(1, i),
+		lambda i: (
+			npcs.GoblinBrute.generate(1, i) 
+			+ npcs.GoblinPriest.generate(1, i) if (random.uniform(0, 1) < 0.5) else [])
 	]
 }

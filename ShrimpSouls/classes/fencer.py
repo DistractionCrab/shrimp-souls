@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -18,17 +19,11 @@ class Fencer(ClassSpec):
 		return p.level + 2*p.attributes.dexterity
 
 	def basic_action(self, u, env):
-		u.stack_ripstance()
-		print(f"{u.name} has entered a riposting stance.")
+		return [Action1(attacker=u,defender=u)]
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u, defender=target)]
 
-		if utils.compute_hit(u, target):
-			target.taunt_target(u)
-			print(f"{u.name} has taunted {target.name} into attacking them.")
-		else:
-			print(f"{u.name} has failed to taunt {target.name}.")
 
 
 	def ultimate_action(self, u, players, npcs):
@@ -41,3 +36,19 @@ class Fencer(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Fencer"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_ripstance(amt=2)
+		self.msg += f"{self.attacker.name} has entered a riposting stance."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.taunt_target(self.attacker)
+			self.msg += f"{self.attacker.name} has taunted {self.defender.name} into attacking them. "
+		else:
+			self.msg += f"{self.attacker.name} has failed to taunt {self.defender.name}. "

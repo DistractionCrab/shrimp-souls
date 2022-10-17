@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -17,26 +18,17 @@ class Bard(ClassSpec):
 		return math.ceil(1.5*p.level) + 3
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		npcs = list(n for n in npcs if not n.dead)
-		targets = random.choices(players, k=3*(1 + len(players)//10))
+		players = list(n for n in env.players if not n.dead)
+		targets = random.choices(players, k=min(3, len(players)))
 
-		for t in targets:
-			t.stack_encourage()
+		return [Action1(attacker=u, defender=t) for t in targets]
 
-		print(f"{u.name} plays a wartime ballad, encouraging some of their party.")
+		
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
+		return [Target1(attacker=u, defender=target)]
 
-		if target.is_player:
-			target.use_charm(amt=1)
-			print(f"{u.name} has weakened the charm magic on {target.name}.")
-		elif target.is_npc:
-			t = random.randint(1,4)
-			target.stack_charm(amt=t)
-			print(f"{u.name} has charmed {target.name} for {t} turns.")
+		
 		
 
 	def ultimate_action(self, u):
@@ -49,3 +41,22 @@ class Bard(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Bard"
+
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.defender.stack_encourage(amt=3)
+		self.msg += f"{self.attacker.name}'s ballad encourages {self.defender.name}."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if self.defender.is_player:
+			self.defender.use_charm(amt=1)
+			print(f"{self.attacker.name} has weakened the charm magic on {self.defender.name}.")
+		elif self.defender.is_npc:
+			t = random.randint(1,4)
+			self.defender.stack_charm(amt=t)
+			self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."

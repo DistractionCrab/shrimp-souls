@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -18,16 +19,11 @@ class Assassin(ClassSpec):
 		return p.level + 2*p.dexterity
 
 	def basic_action(self, u, env):
-		u.stack_invis()
-		print(f"{u.name} hides in the shadows.")
+		return [Action1(attacker=u, defender=u)]
+		
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
-		if utils.compute_hit(u, target):
-			target.stack_poison(amt=random.randint(1, 6))
-			print(f"{u.name}'s poisoned blade pierces {target.label}.")
-		else:
-			print(f"{u.name}'s poisoned blade misses their target.")
+		return [Target1(attacker=u, defender=target)]
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -39,3 +35,24 @@ class Assassin(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Assassin"
+
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.attacker.stack_invis(amt=2)
+		self.msg += f"{self.attacker.name} hides in the shadows."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			self.defender.stack_poison(amt=random.randint(1, 6))
+			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.dexterity + self.attacker.attributes.luck)//10)
+			dmg = dmg if self.attacker.invis == 0 else 2*dmg
+			self.defender.damage(dmg)
+
+			self.msg += f"{self.attacker.name}'s poisoned blade pierces {self.defender.name} dealing {dmg} damage."
+		else:
+			self.msg += f"{self.attacker.name}'s poisoned blade misses their target. "

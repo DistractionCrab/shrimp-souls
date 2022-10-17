@@ -14,6 +14,14 @@ class NullCampaign:
 		print("No campaign active to step.")
 
 	@property
+	def players(self):
+		return tuple()
+	
+	@property
+	def npcs(self):
+		return tuple()
+
+	@property
 	def start_msg(self):
 		return "NullCampaign has started, there is nothing to do now...  Sadge"
 

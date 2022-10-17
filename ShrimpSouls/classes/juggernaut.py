@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 import ShrimpSouls.actions as actions
+from dataclasses import dataclass
 import ShrimpSouls.utils as utils
 import random
 import math
@@ -20,31 +21,14 @@ class Juggernaut(ClassSpec):
 		return 4*p.attributes.strength + 4
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		targets = random.choices(players, k=3*(1 + len(players)//10))
+		npcs = list(env.players)
+		targets = random.sample(npcs, k=min(3, len(npcs)))
 
-		for t in targets:
-			t.stack_attup(amt=2)
-
-		print(f"{u.name} emits a powerful warcry, bolstering some of their party.")
+		return [Action1(attacker=u, defender=t) for t in targets]
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
 
-		if utils.compute_hit(u, target):
-			target.stack_defdown(random.randint(1, 6))
-			print(f"{u.name} has shattered {target.name}'s armor. ")
-			act = actions.DamageTarget(
-				attacker=u, 
-				defender=target,
-				dmgoverride=random.randint(1, 10)*(1 + (u.strength)//10),
-				dmgtype=actions.DamageType.Slash,
-				abilityrange=actions.AbilityRange.Close)
-			act.apply()
-			print(act.msg)
-		else:
-			print(f"{u.name} missed with their armor shatter.")
+		return [Target1(attacker=u, defender=target)]
 
 
 
@@ -58,3 +42,22 @@ class Juggernaut(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Juggernaut"
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.defender.stack_attup(amt=3)
+		self.msg += f"{self.attacker.name} warcry boosts {self.defender.name}'s attack."
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		if utils.compute_hit(self.attacker, self.defender):
+			dmg = 5 + random.randint(1, 10)*(1 + 2*(self.attacker.attributes.strength//10))
+			self.defender.stack_defdown(amt=3)
+			self.defender.damage(dmg)
+			self.msg += f"{self.attacker.name}'s shatters {self.defender.name}'s armor and deals {dmg} damage. "
+
+		else:
+			self.msg += f"{self.attacker.name} missed {self.defender.name}."

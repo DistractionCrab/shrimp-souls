@@ -1,4 +1,5 @@
 from ShrimpSouls.classes import ClassSpec
+from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -17,26 +18,16 @@ class Cleric(ClassSpec):
 		return 2*p.attributes.strength + 3*p.attributes.faith
 
 	def basic_action(self, u, env):
-		players = env.players
-		npcs = env.npcs
-		targets = random.choices(players, k=3*(1 + len(players)//10))
+		players = list(p for p in env.players if not p.dead)
+		targets = random.sample(players, k=min(3, len(players)))
 
-		for t in targets:
-			t.stack_defup(amt=2)
+		return [Action1(attacker=u, defender=t) for t in targets]
 
-		print(f"{u.name} utters a short prayer, bolstering some of their party's defense.")
+		
 
 	def targeted_action(self, u, target, env):
-		target = env.get_target(target)
-		target.use_burn(target.burn)
-		target.use_attdown(target.attdown)
-		target.use_evadown(target.evadown)
-		target.use_accdown(target.accdown)
-		target.use_defdown(target.defdown)
-		target.use_poison(target.poison)
-		target.use_stun(target.stun)
-
-		print(f"{u.name} has cleansed {target.name} of their debuffs.")
+		return [Target1(attacker=u, defender=target)]
+		
 
 	def ultimate_action(self, u, players, npcs):
 		pass
@@ -48,3 +39,24 @@ class Cleric(ClassSpec):
 	@property
 	def cl_string(self):
 		return "Cleric"
+
+
+@dataclass
+class Action1(actions.Action):
+	def apply(self):
+		self.defender.stack_defup(amt=3)
+		self.msg += f"{self.attacker.name} prayer bolster's {self.defender.name}'s defense. "
+
+
+@dataclass
+class Target1(actions.Action):
+	def apply(self):
+		self.defender.use_burn(self.defender.burn)
+		self.defender.use_attdown(self.defender.attdown)
+		self.defender.use_evadown(self.defender.evadown)
+		self.defender.use_accdown(self.defender.accdown)
+		self.defender.use_defdown(self.defender.defdown)
+		self.defender.use_poison(self.defender.poison)
+		self.defender.use_stun(self.defender.stun)
+
+		self.msg += f"{self.attacker.name} has cleansed {self.defender.name} of their debuffs."
