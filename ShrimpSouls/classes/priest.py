@@ -9,6 +9,9 @@ import math
 HEAL_DICE_THRESHOLD = 10
 
 class Priest(ClassSpec):
+	def max_hp(self, p):
+		return 10 + 2*p.level + 2*p.attributes.vigor
+
 	def score_acc(self, p):
 		return  10 + math.ceil(1.25*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
 
@@ -23,10 +26,10 @@ class Priest(ClassSpec):
 
 	def basic_action(self, u, env):
 		targets = list(filter(lambda x: not x.dead, env.players))
-		targets = random.sample(
+		targets = list(set(random.sample(
 			targets, 
 			k=min(len(targets), 3 + u.attributes.faith//HEAL_DICE_THRESHOLD),
-			counts=[math.ceil(p.max_hp/p.hp) for p in targets])
+			counts=[math.ceil(p.max_hp/p.hp) for p in targets])))
 		targets = list(filter(lambda x: not x.dead, targets))
 
 		return [
@@ -50,8 +53,8 @@ class Priest(ClassSpec):
 		pass
 
 	def duel_action(self, actor, party, opponents):
-		if sum(p.hp/p.max_hp for p in party)/len(party) < 0.5:
-			party = filter(lambda x: not x.dead, party)
+		if sum(p.hp/p.max_hp for p in party)/(1 + len(list(party))) < 0.5:
+			party = list(filter(lambda x: not x.dead, party))
 			heal = sum(random.randint(1, 4)  for _ in range((1 + actor.attributes.faith//HEAL_DICE_THRESHOLD)))
 			target = min(party, key=lambda p: p.hp)
 			return [actions.HealTarget(attacker=actor, defender=target, dmg=heal)]

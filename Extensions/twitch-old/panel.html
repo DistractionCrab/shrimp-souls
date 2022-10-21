@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Viewer Page</title>
+	<link rel="stylesheet" href="styles/panel.css">
+	
+</head>
+<body>
+	<div id="app" class="full-height"></div>
+	<!--
+	<form id="myForm">
+		Would you rather 
+		<select id="selectA">
+		  <option>option a</option>
+		</select>
+		or 
+		<select id="selectB">
+		  <option>option b</option>
+		</select>
+		?  
+		<input type="submit" value="Submit">
+	</form>
+-->
+	<table>
+		<tr>
+			<td>Class: </td> <td id="class_value">Milquetoast</td>
+			<td>HP: </td><td id="hp_value">0/0</td>
+			<td>XP: </td><td id="xp_value">0/0</td>
+		</tr>
+	</table>
+	<table id=stat-table>
+		<tr><td>Vigor: </td><td id="vigor_value">1</td></tr>
+		<tr><td>Endurance: </td><td id="endurance_value">1</td></tr>
+		<tr><td>Strength: </td><td id="strength_value">1</td></tr>
+		<tr><td>Dexterity: </td><td id="dexterity_value">1</td></tr>
+		<tr><td>Intelligence: </td><td id="intelligence_value">1</td></tr>
+		<tr><td>Faith: </td><td id="faith_value">1</td></tr>
+		<tr><td>Luck: </td><td id="luck_value">1</td></tr>
+		<tr><td>Perception: </td><td id="perception_value">1</td></tr>
+	</table>
+
+	<button type="button" id="testbutton">Test</button>
+
+	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+	<script 
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" 
+		type="text/javascript"></script>
+	<script type="text/javascript" src="scripts/panel.js"></script>
+</body>
+</html>

@@ -16,7 +16,7 @@ def compute_bool(a, d, s1, s2):
 def compute_bool_many(a, d, s1, s2):
 	s1 = s1(a)
 	s2 = s2(d)
-	diff = s2 - s1
+	diff = s1 - s2
 
 	def recurse(d, bs):		
 		if d >= -10:
@@ -51,10 +51,19 @@ def compute_num(a, d, s1, s2):
 def compute_dmg(a, d):
 	dfn = d.dfn
 	att = a.att
+	diff = a.att - d.dfn
 
-	m = min(max(a.att - d.dfn  + 10, 1), 20)
+	if diff <= 10:
+		m = min(max(diff + 10, 1), 20)
+		total =  random.randint(1, m)
+	else:
+		total = 0
+		while diff > 10:
+			m = min(max(diff + 10, 1), 20)
+			total += random.randint(1, m)
+			diff -= 10
 
-	return (random.randint(1, m), att, dfn)
+	return (total, att, dfn)
 
 def compute_hit(a, d):
 	eva = d.eva
@@ -71,6 +80,31 @@ def write_rng():
 	with open(RNG_FILE, 'w') as out:
 		out.write(repr(random.getstate()))
 
+
+
+
+class ListGuard:
+	def __init__(self, l):
+		self.__v = l
+
+	def __iter__(self):
+		return iter(self.__v)
+
+	def __getitem__(self, i):
+		return self.__v[i]
+
+	def __setitem__(self, i, _):
+		raise ValueError("Cannot set item for List Object.")
+
+	def __len__(self):
+		return len(self.__v)
+
+	def __str__(self):
+		return str(f"Guarded{self.__v}")
+
+
+
+# Section for maintaining a fixed RNG state.
 def read_rng():
 	try:
 		with open(RNG_FILE, 'r') as out:

@@ -6,6 +6,9 @@ import random
 import math
 
 class Sorcerer(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 2 * p.level + 4 * p.attributes.vigor
+
 	def score_acc(self, p):
 		return 10 + math.ceil(1.25*p.attributes.intelligence) + math.ceil(0.25*p.attributes.dexterity)
 
@@ -48,7 +51,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			dmg = random.randint(5, 15)*(1 + 2*(self.attacker.attributes.intelligence//10))
 			self.defender.damage(dmg)
 			self.msg += f"{self.attacker.name}'s Souls Spear strikes {self.defender.name} for {dmg} damage."

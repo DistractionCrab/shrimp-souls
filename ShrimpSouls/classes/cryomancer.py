@@ -6,6 +6,9 @@ import math
 import ShrimpSouls.utils as utils
 
 class Cryomancer(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 4*p.level + 2*p.attributes.vigor
+
 	def score_acc(self, p):
 		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
 

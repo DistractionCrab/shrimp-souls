@@ -66,7 +66,6 @@ class Goblin(BaseNPC):
 
 @dataclass
 class Wolf(BaseNPC):
-	name: str = "Wolf"
 	xp:  int = 3
 	hp:  int = 25
 	max_hp: int = 25
@@ -84,7 +83,6 @@ class Wolf(BaseNPC):
 
 @dataclass
 class GoblinPriest(BaseNPC):
-	name: str = "GoblinPriest"
 	xp:  int = 5
 	hp:  int = 20
 	max_hp: int = 20
@@ -102,7 +100,6 @@ class GoblinPriest(BaseNPC):
 
 @dataclass
 class GoblinBrute(BaseNPC):
-	name: str = "GoblinBrute"
 	xp:  int = 7
 	hp:  int = 30
 	max_hp: int = 30
@@ -114,6 +111,43 @@ class GoblinBrute(BaseNPC):
 	def duel_action(self, actor, party, opponents):
 		target = self.find_valid_target(opponents)
 		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	def __hash__(self):
+		return hash(self.name)
+
+@dataclass
+class OrcWarrior(BaseNPC):
+	xp:  int = 7
+	hp:  int = 72
+	max_hp: int = 72
+	_acc: int = 26
+	_eva: int = 24
+	_att: int = 54
+	_dfn: int = 48
+
+	def duel_action(self, actor, party, opponents):
+		target = self.find_valid_target(opponents)
+		return [actions.DamageTarget(attacker=actor, defender=target)]
+
+	def __hash__(self):
+		return hash(self.name)
+
+@dataclass
+class Ogre(BaseNPC):
+	xp:  int = 15
+	hp:  int = 160
+	max_hp: int = 160
+	_acc: int = 26
+	_eva: int = 24
+	_att: int = 54
+	_dfn: int = 50
+
+	def duel_action(self, actor, party, opponents):
+		target = self.find_valid_target(opponents)
+		cleave = self.find_valid_target(opponents)
+		return [
+			actions.DamageTarget(attacker=actor, defender=target),
+			actions.DamageTarget(attacker=actor, defender=cleave)]
 
 	def __hash__(self):
 		return hash(self.name)

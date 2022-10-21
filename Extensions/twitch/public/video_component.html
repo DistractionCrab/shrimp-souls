@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Viewer Page</title>
+	<link rel="stylesheet" href="styles/panel.css">
+	
+</head>
+<body>
+	<div>
+		<button class="tablinks" onclick="openTab(event, 'charsheet')">Stats</button>
+		<button class="tablinks" onclick="openTab(event, 'printouttab')">Log</button>
+		<button class="tablinks" onclick="openTab(event, 'partytab')">Party</button>
+		<button class="tablinks" onclick="openTab(event, 'abilitytab')">Abilities</button>
+	</div>
+	<div id="charsheet" class="tabcontent">
+		<table>
+			<tr>
+				<td>Class: </td> <td id="class_value">?????</td>
+				<td>HP: </td><td id="hp_value">0/0</td>
+				<td>XP: </td><td id="xp_value">0/0</td>
+			</tr>
+		</table>
+		<table id=stat-table>
+			<tr><td>Vigor: </td><td id="vigor_value">?</td></tr>
+			<tr><td>Endurance: </td><td id="endurance_value">?</td></tr>
+			<tr><td>Strength: </td><td id="strength_value">?</td></tr>
+			<tr><td>Dexterity: </td><td id="dexterity_value">?</td></tr>
+			<tr><td>Intelligence: </td><td id="intelligence_value">?</td></tr>
+			<tr><td>Faith: </td><td id="faith_value">?</td></tr>
+			<tr><td>Luck: </td><td id="luck_value">?</td></tr>
+			<tr><td>Perception: </td><td id="perception_value">?</td></tr>
+		</table>
+	</div>
+
+	<div id="printouttab" class="tabcontent">
+		<table id="printout" >
+			<tr><td class="printoutcell">Combat Info Printout...</td></tr>
+		</table>
+	</div>
+
+	<div id="partytab" class="tabcontent">
+		<table id="partytable" >
+			<tr><td class="partycell">Nothing here yet...</td></tr>
+		</table>
+	</div>
+
+	<div id="abilitytab" class="tabcontent">
+		<table>
+			<tr><td><button onclick="MANAGER.action()">Basic Action</button></td><td>....</td></tr>
+			<tr><td><button>Target Action</button></td><td>....</td></tr>
+		</table>
+	</div>
+
+	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+	<script 
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" 
+		type="text/javascript"></script>
+	<script type="text/javascript" src="scripts/panel.js"></script>
+</body>
+</html>

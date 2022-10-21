@@ -167,7 +167,7 @@ class DamageTarget:
 		for h in hits:
 			if h[0]:
 				d = utils.compute_dmg(self.attacker, self.defender)
-				dmg = d[0] if self.defender.block == 0 else math.ceil(d[0] * 0.75)
+				dmg = d[0] if self.defender.block == 0 else math.ceil(d[0] * 0.25)
 				total += dmg
 			else:
 				d = (None, None, None)

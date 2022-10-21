@@ -15,6 +15,9 @@ class ClassSpec:
 	def compute_dmg(self, a, d):
 		return utils.compute_dmg(a, d)
 
+	def max_hp(self, p):
+		return 5
+
 
 	def score_eva(self, p):
 		return p.level + 10
@@ -30,9 +33,11 @@ class ClassSpec:
 
 	def basic_action(self, u, env):
 		print("Milquetoast has no class action.")
+		return []
 
 	def targeted_action(self, u, target, env):
 		print("Milquetoast has no class action.")
+		return []
 
 
 	def duel_action(self, actor, party, opponents):
@@ -44,6 +49,9 @@ class ClassSpec:
 
 	def soulmass_count(self, p):
 		return math.ceil(p.attributes.intelligence/SOULMASS_THRESHOLD)
+
+	def random_action(self, u, env):
+		return self.basic_action(u, env)
 
 	@property
 	def cl_string(self):

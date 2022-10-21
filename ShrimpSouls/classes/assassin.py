@@ -6,6 +6,9 @@ import math
 import ShrimpSouls.utils as utils
 
 class Assassin(ClassSpec):
+	def max_hp(self, p):
+		return 10 + 1 * p.level + 4*p.attributes.vigor
+
 	def score_acc(self, p):
 		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
 
@@ -16,7 +19,7 @@ class Assassin(ClassSpec):
 		return math.ceil(2.5*p.attributes.faith + 3.5*p.attributes.dexterity)
 
 	def score_dfn(self, p):
-		return p.level + 2*p.dexterity
+		return p.level + 2*p.attributes.dexterity
 
 	def basic_action(self, u, env):
 		return [Action1(attacker=u, defender=u)]
@@ -47,7 +50,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			self.defender.stack_poison(amt=random.randint(1, 6))
 			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.dexterity + self.attacker.attributes.luck)//10)
 			dmg = dmg if self.attacker.invis == 0 else 2*dmg

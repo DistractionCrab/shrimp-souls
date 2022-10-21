@@ -5,6 +5,9 @@ import random
 import math
 
 class Bard(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 2*p.level + 5*p.attributes.vigor
+
 	def score_acc(self, p):
 		return super().score_acc(p) + 2
 
@@ -57,6 +60,9 @@ class Target1(actions.Action):
 			self.defender.use_charm(amt=1)
 			print(f"{self.attacker.name} has weakened the charm magic on {self.defender.name}.")
 		elif self.defender.is_npc:
-			t = random.randint(1,4)
-			self.defender.stack_charm(amt=t)
-			self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."
+			if utils.compute_hit(self.attacker, self.defender)[0]:
+				t = random.randint(1,4)
+				self.defender.stack_charm(amt=t)
+				self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."
+			else:
+				self.msg += f"{self.attacker.name} failed to charm {self.defender.name}."

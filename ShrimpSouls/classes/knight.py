@@ -5,6 +5,9 @@ import random
 import math
 
 class Knight(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 5*p.level + 6*p.attributes.vigor
+
 	def score_eva(self, p):
 		return super().score_eva(p) - 1
 

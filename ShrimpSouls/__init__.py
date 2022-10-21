@@ -103,9 +103,6 @@ class Attributes:
 @dataclass
 class Entity:
 	name: str
-	xp:  int = 0
-	hp:  int = 20
-	max_hp: int = 20
 	status: Statuses = Statuses()
 	acted: bool = False
 
@@ -187,6 +184,8 @@ class Entity:
 			base *= 0.8
 		if self.encourage > 0:
 			base *= 1.1
+		if self.status.stun > 0:
+			base *= 0.5
 
 		return math.ceil(base)
 
@@ -483,16 +482,18 @@ class Entity:
 
 	@auto_commit
 	def reset_status(self):
-		self.statu = Statuses()
+		self.status = Statuses()
 
 	def __hash__(self):
 		return hash(self.name)
 
 	def __eq__(self, other):
-		if isinstance(other, Player):
+		if type(self) is type(other):
 			return self.name == other.name
 
 		return False
+
+	
 
 
 _MODIFIED = set()
@@ -508,8 +509,10 @@ import ShrimpSouls.classes as classes
 
 @dataclass
 class Player(Entity):
+	xp: int = 0
 	attributes: Attributes = Attributes()
 	myclass: classes.ClassSpec = classes.ClassSpec()
+
 
 	def __hash__(self):
 		return hash(self.name)
@@ -545,7 +548,7 @@ class Player(Entity):
 	def stat_string(self):
 		s = f"""{self.name}: [Level {self.level} {self.myclass.cl_string}] 
 			HP: ({self.hp}/{self.max_hp})
-			XP: {self.xp},
+			XP: ({self.xp}/{self.get_xp_req()}),
 			Vigor : {self.attributes.vigor},
 			Endurance : {self.attributes.endurance},
 			Strength : {self.attributes.strength},
@@ -553,7 +556,7 @@ class Player(Entity):
 			Intelligence : {self.attributes.intelligence},
 			Faith : {self.attributes.faith},
 			Luck : {self.attributes.luck},
-			Perception : {self.attributes.perception},
+			Perception : {self.attributes.perception}
 		"""
 
 		return ' '.join(s.split())
@@ -603,20 +606,26 @@ class Player(Entity):
 	@auto_commit
 	def did_act(self):
 		self.acted = True
+
+	@property
+	def max_hp(self):
+		return self.myclass.max_hp(self)
 	
 
 _FETCHED_PLAYERS = {}
 
 def get_player(name, init=False):
+	if isinstance(name, str):
+		if name[0:1] == "@":
+			name = name[1:]
 	if isinstance(name, Player):
 		return name
 	elif name in _FETCHED_PLAYERS:
-
 		return _FETCHED_PLAYERS[name.lower()]
 	else:
 		name = name.lower()
 		if name not in PLAYER_CACHE and init:
-			player = Player(name=name)
+			player = Player(name=str(name))
 			PLAYER_CACHE[name] = player
 
 		else:
@@ -640,6 +649,54 @@ def join(name):
 	import ShrimpSouls.campaigns as cps
 	cps.Campaigns[STATE_CACHE['campaign']].value.join(name)
 
+def delete_player(name):
+	if isinstance(p, Player):
+		name = p.name
+
+	if name in PLAYER_CACHE:
+		del PLAYER_CACHE[name]
+
+def print_players():
+	for p in PLAYER_CACHE:
+		print(p)
+
+class GameManager:
+	def step(self):
+		import ShrimpSouls.campaigns as cps
+		prev = cps.Campaigns[STATE_CACHE['campaign']]
+		(n, msg) = prev.value.step()
+		if n is not prev:
+			msg += prev.value.exit()
+			msg += n.value.enter(prev)
+			STATE_CACHE['campaign'] = n.name
+
+		return msg
+
+	@property
+	def players(self):
+		import ShrimpSouls.campaigns as cps
+		c = cps.Campaigns[STATE_CACHE['campaign']]
+		return c.value.players
+
+	def action(self, name):
+		import ShrimpSouls.campaigns as cps
+		c = cps.Campaigns[STATE_CACHE['campaign']].value
+
+		msg = c.perform_action(name)
+		print(msg)
+		return msg
+
+	def target(self, name, target):
+		import ShrimpSouls.campaigns as cps
+		c = cps.Campaigns[STATE_CACHE['campaign']].value
+
+		msg = c.perform_target_action(name, target)
+		print(msg)
+		return msg
+
+	
+
+MANAGER = GameManager()
 
 def main(args):
 	if args[0] == "stats":
@@ -652,7 +709,13 @@ def main(args):
 		print(f"The current campaign is {STATE_CACHE['campaign']}")
 	elif args[0] == 'step':
 		import ShrimpSouls.campaigns as cps
-		cps.Campaigns[STATE_CACHE['campaign']].value.step()
+		prev = cps.Campaigns[STATE_CACHE['campaign']]
+		(n, msg) = prev.value.step()
+		msg = "**The Turn has Ended**: " + msg
+		if n is not prev:
+			prev.value.exit()
+			n.value.enter(prev)
+			STATE_CACHE['campaign'] = n.name
 	elif args[0] == 'startcampaign':
 		import ShrimpSouls.campaigns as cps
 		ctype = cps.Campaigns[args[1].lower().capitalize()]
@@ -670,14 +733,12 @@ def main(args):
 		#if not c.is_joined(p.name):
 		#	join(p.name)
 		#p.act(c)
-		c.commit()
 
 	elif args[0] == "targetclassaction":		
 		import ShrimpSouls.campaigns as cps
 		c = cps.Campaigns[STATE_CACHE['campaign']].value
 
 		c.perform_target_action(args[1], args[2])
-		c.commit()
 
 	elif args[0] == "foelist":
 		import ShrimpSouls.campaigns as cps

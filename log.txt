@@ -1,148 +1,502 @@
----distractioncrab missed GoblinPriest[0].
-GoblinPriest[0] heals 1 life to GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks Goblin[0] for 22 damage. Goblin[0] has died.
 ------------------------------------------------------------
-GoblinPriest[0] heals 4 life to GoblinBrute[0].
-GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 9 damage.GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
+Wolf[0] missed distractioncrab.
+itzteddgrey missed Wolf[0].
+distractioncrab attacks Wolf[0] for 13 damage. 
 ------------------------------------------------------------
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 14 damage.GoblinBrute[1] attacks distractioncrab for 6 damage. 
----distractioncrab missed GoblinBrute[1].
-------------------------------------------------------------
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 9 damage.GoblinBrute[1] missed distractioncrab.
----distractioncrab missed GoblinBrute[1].
-------------------------------------------------------------
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 9 damage.GoblinBrute[1] attacks distractioncrab for 7 damage. 
----distractioncrab missed GoblinBrute[1].
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
----distractioncrab attacks GoblinBrute[1] for 1 damage. 
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
----distractioncrab missed GoblinBrute[1].
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[1].
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 12 damage.GoblinBrute[1] missed distractioncrab.GoblinBrute[1] has died.
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[1].
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 19 damage.GoblinBrute[1] attacks distractioncrab for 3 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
----distractioncrab attacks GoblinBrute[0] for 7 damage. 
-GoblinBrute[0] attacks distractioncrab for 13 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
----distractioncrab attacks GoblinBrute[0] for 10 damage. 
-------------------------------------------------------------
----distractioncrab attacks GoblinBrute[0] for 16 damage. 
-GoblinBrute[0] attacks distractioncrab for 8 damage. distractioncrab has died.
-------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
----distractioncrab attacks GoblinBrute[0] for 5 damage. GoblinBrute[0] has died.
-GoblinBrute[0] attacks distractioncrab for 5 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
----distractioncrab attacks GoblinBrute[0] for 4 damage. GoblinBrute[0] has died.
+Wolf[0] missed itzteddgrey.
+distractioncrab attacks Wolf[0] for 29 damage. Wolf[0] has died.
 ------------------------------------------------------------
 GoblinBrute[0] attacks distractioncrab for 3 damage. 
----distractioncrab missed GoblinBrute[0].
+Goblin[1] missed itzteddgrey.
+distractioncrab attacks Goblin[1] for 67 damage. Goblin[1] has died.
+itzteddgrey missed GoblinBrute[0].
 ------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
+GoblinBrute[0] attacks distractioncrab for 16 damage. 
+distractioncrab attacks GoblinBrute[0] for 1 damage. 
+itzteddgrey missed GoblinBrute[0].
 ------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
----distractioncrab missed GoblinBrute[0].
+itzteddgrey attacks GoblinBrute[0] for 1 damage. 
+distractioncrab attacks GoblinBrute[0] for 11 damage. 
+GoblinBrute[0] missed distractioncrab.
 ------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
----distractioncrab attacks GoblinBrute[0] for 10 damage. 
+GoblinBrute[0] attacks itzteddgrey for 14 damage. 
+itzteddgrey missed GoblinBrute[0].
+distractioncrab attacks GoblinBrute[0] for 2 damage. 
 ------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] attacks itzteddgrey for 19 damage. itzteddgrey has died.
+distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+itzteddgrey attacks Goblin[2] for 4 damage. 
+GoblinPriest[0] heals 4 life to GoblinBrute[0].
+GoblinBrute[0] attacks itzteddgrey for 61 damage. itzteddgrey has died.
+Goblin[2] missed distractioncrab.
+distractioncrab attacks Goblin[2] for 58 damage. Goblin[2] has died.
+------------------------------------------------------------
+GoblinPriest[0] heals 2 life to GoblinPriest[0].
+distractioncrab attacks GoblinPriest[0] for 27 damage. GoblinPriest[0] has died.
 GoblinBrute[0] attacks distractioncrab for 6 damage. 
 ------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 8 damage. 
----distractioncrab missed GoblinBrute[0].
+distractioncrab attacks GoblinBrute[0] for 1 damage. 
+GoblinBrute[0] missed distractioncrab.
 ------------------------------------------------------------
----distractioncrab attacks GoblinBrute[0] for 10 damage. GoblinBrute[0] has died.
+distractioncrab attacks GoblinBrute[0] for 25 damage. 
+GoblinBrute[0] missed distractioncrab.
 ------------------------------------------------------------
----distractioncrab missed GoblinPriest[0].
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinPriest[0] heals 2 life to GoblinPriest[0].
+distractioncrab missed GoblinPriest[0].
+itzteddgrey attacks GoblinBrute[0] for 1 damage. 
+Wolf[2] missed distractioncrab.
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
 GoblinPriest[0] heals 1 life to GoblinBrute[0].
 GoblinBrute[0] missed distractioncrab.
+itzteddgrey missed GoblinBrute[0].
+Wolf[2] missed distractioncrab.
+distractioncrab attacks GoblinPriest[0] for 7 damage. 
 ------------------------------------------------------------
-GoblinBrute[0] missed hackhunter13.
-GoblinBrute[1] missed hackhunter13.
-GoblinBrute[3] attacks distractioncrab for 5 damage. 
----hackhunter13 missed GoblinPriest[1].
-GoblinPriest[1] heals 4 life to GoblinBrute[3].
----distractioncrab missed GoblinBrute[1].
----sabashjon missed GoblinBrute[3].
+itzteddgrey missed Wolf[2].
+GoblinPriest[0] heals 4 life to Wolf[2].
+GoblinBrute[0] attacks itzteddgrey for 42 damage. itzteddgrey has died.
+distractioncrab attacks Wolf[2] for 64 damage. Wolf[2] has died.
+Wolf[2] cannot attack while dead.
 ------------------------------------------------------------
----distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed sabashjon.
-GoblinPriest[1] heals 1 life to GoblinBrute[1].
----sabashjon missed GoblinBrute[1].
----hackhunter13 missed GoblinBrute[0].
-GoblinBrute[1] provokes sabashjon's Soulmasses and suffers 20 damage.GoblinBrute[1] missed sabashjon.
-GoblinBrute[3] missed distractioncrab.
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+GoblinPriest[0] heals 3 life to GoblinBrute[0].
+distractioncrab missed GoblinPriest[0].
 ------------------------------------------------------------
-GoblinBrute[1] attacks hackhunter13 for 12 damage. 
-GoblinBrute[3] provokes sabashjon's Soulmasses and suffers 12 damage.GoblinBrute[3] missed sabashjon.
----distractioncrab missed GoblinBrute[0].
+distractioncrab attacks GoblinBrute[0] for 20 damage. 
+GoblinPriest[0] heals 1 life to GoblinPriest[0].
+GoblinBrute[0] attacks distractioncrab for 10 damage. 
+------------------------------------------------------------
+GoblinPriest[0] heals 4 life to GoblinPriest[0].
+distractioncrab attacks GoblinPriest[0] for 11 damage. 
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+------------------------------------------------------------
+GoblinPriest[0] heals 1 life to GoblinPriest[0].
 GoblinBrute[0] missed distractioncrab.
-GoblinPriest[1] heals 1 life to GoblinPriest[1].
----sabashjon missed GoblinPriest[1].
----hackhunter13 attacks GoblinBrute[0] for 3 damage. 
+distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
 ------------------------------------------------------------
----hackhunter13 missed GoblinBrute[3].
-GoblinBrute[0] provokes sabashjon's Soulmasses and suffers 19 damage.GoblinBrute[0] attacks sabashjon for 8 damage. 
-GoblinBrute[3] attacks hackhunter13 for 8 damage. hackhunter13 has died.
----distractioncrab missed GoblinBrute[3].
----sabashjon missed GoblinPriest[1].
-GoblinPriest[1] heals 1 life to GoblinBrute[0].
-GoblinBrute[1] provokes sabashjon's Soulmasses and suffers 1 damage.GoblinBrute[1] missed sabashjon.
+GoblinPriest[0] heals 4 life to GoblinPriest[0].
+distractioncrab attacks GoblinPriest[0] for 18 damage. GoblinPriest[0] has died.
 ------------------------------------------------------------
-GoblinBrute[0] provokes sabashjon's Soulmasses and suffers 9 damage.GoblinBrute[0] attacks sabashjon for 1 damage. GoblinBrute[0] has died.
-GoblinBrute[3] missed distractioncrab.
-GoblinBrute[1] provokes sabashjon's Soulmasses and suffers 1 damage.GoblinBrute[1] missed sabashjon.
-GoblinPriest[1] heals 2 life to GoblinBrute[1].
----distractioncrab attacks GoblinBrute[3] for 12 damage. 
----sabashjon missed GoblinBrute[1].
+Wolf[1] missed distractioncrab.
+distractioncrab missed Wolf[1].
+GoblinBrute[0] missed distractioncrab.
+itzteddgrey attacks Wolf[1] for 8 damage. 
 ------------------------------------------------------------
-GoblinBrute[1] provokes sabashjon's Soulmasses and suffers 4 damage.GoblinBrute[1] missed sabashjon.
-GoblinPriest[1] heals 2 life to GoblinBrute[3].
----sabashjon missed GoblinPriest[1].
-GoblinBrute[3] attacks sabashjon for 6 damage. 
----distractioncrab missed GoblinBrute[1].
+GoblinBrute[0] attacks itzteddgrey for 15 damage. itzteddgrey has died.
+Wolf[1] missed distractioncrab.
+distractioncrab attacks Wolf[1] for 32 damage. Wolf[1] has died.
+itzteddgrey cannot attack while dead.
 ------------------------------------------------------------
-GoblinBrute[3] provokes sabashjon's Soulmasses and suffers 15 damage.GoblinBrute[3] missed sabashjon.GoblinBrute[3] has died.
-GoblinPriest[1] heals 1 life to GoblinBrute[1].
-GoblinBrute[1] provokes sabashjon's Soulmasses and suffers 1 damage.GoblinBrute[1] attacks sabashjon for 4 damage. sabashjon has died.
----sabashjon cannot attack while dead.
----distractioncrab attacks GoblinBrute[1] for 20 damage. GoblinBrute[1] has died.
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 2 damage. 
 ------------------------------------------------------------
----distractioncrab attacks GoblinPriest[1] for 22 damage. GoblinPriest[1] has died.
+GoblinBrute[0] missed distractioncrab.
+distractioncrab missed GoblinBrute[0].
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 8 damage. 
+distractioncrab was stunned and couldn't act.
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+------------------------------------------------------------
+Goblin[1] missed itzteddgrey.
+distractioncrab attacks GoblinBrute[0] for 20 damage. 
+distractioncrab was stunned and couldn't act.
+GoblinBrute[0] attacks itzteddgrey for 41 damage. itzteddgrey has died.
+------------------------------------------------------------
+Wolf[0] missed itzteddgrey.
+------------------------------------------------------------
+itzteddgrey attacks Wolf[0] for 3 damage. 
+itzteddgrey was stunned and couldn't act.
+distractioncrab missed Wolf[0].
+distractioncrab was stunned and couldn't act.
+Wolf[0] missed distractioncrab.
+------------------------------------------------------------
+Wolf[1] missed itzteddgrey.
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks Wolf[0] for 59 damage. Wolf[0] has died.
+distractioncrab was stunned and couldn't act.
+------------------------------------------------------------
+itzteddgrey missed GoblinBrute[0].
+itzteddgrey was stunned and couldn't act.
+Goblin[1] missed itzteddgrey.
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+itzteddgrey missed GoblinBrute[0].
+itzteddgrey was stunned and couldn't act.
+Wolf[1] missed itzteddgrey.
+GoblinBrute[0] attacks distractioncrab for 9 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+itzteddgrey missed Wolf[1].
+itzteddgrey was stunned and couldn't act.
+distractioncrab attacks Wolf[1] for 36 damage. Wolf[1] has died.
+distractioncrab was stunned and couldn't act.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+Goblin[1] attacks itzteddgrey for 10 damage. 
+------------------------------------------------------------
+Goblin[2] missed distractioncrab.
+GoblinPriest[0] heals 2 life to GoblinPriest[0].
+GoblinBrute[0] attacks distractioncrab for 7 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 9 damage. 
+GoblinBrute[0] attacks distractioncrab for 9 damage. 
+distractioncrab missed GoblinBrute[1].
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 4 damage. 
+GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 7 damage.GoblinBrute[1] attacks distractioncrab for 2 damage. 
+GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 7 damage.GoblinBrute[0] attacks distractioncrab for 4 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 16 damage. 
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 11 damage.GoblinBrute[1] attacks distractioncrab for 11 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 5 damage. 
+GoblinBrute[0] attacks distractioncrab for 7 damage. distractioncrab has died.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 4 damage. 
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 7 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 7 damage. 
+GoblinBrute[0] attacks distractioncrab for 3 damage. 
+distractioncrab attacks GoblinBrute[0] for 16 damage. 
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[1].
+GoblinBrute[1] attacks distractioncrab for 5 damage. 
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+GoblinBrute[1] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 14 damage. GoblinBrute[0] has died.
+GoblinBrute[0] cannot attack while dead.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 10 damage. 
+GoblinBrute[1] attacks distractioncrab for 5 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 7 damage. distractioncrab has died.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 5 damage. 
+GoblinBrute[0] attacks distractioncrab for 3 damage. 
+distractioncrab attacks GoblinBrute[1] for 14 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 18 damage. 
+GoblinBrute[1] missed distractioncrab.
+GoblinBrute[0] attacks distractioncrab for 9 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 5 damage. 
+GoblinBrute[0] missed distractioncrab.
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[1] for 8 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 2 damage. 
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 10 damage. 
+distractioncrab attacks GoblinBrute[0] for 5 damage. GoblinBrute[0] has died.
+GoblinBrute[0] cannot attack while dead.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 4 damage. 
+GoblinBrute[1] attacks distractioncrab for 4 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 4 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 10 damage. 
+GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 5 damage.GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 9 damage. 
+GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 20 damage.GoblinBrute[0] missed distractioncrab.GoblinBrute[0] has died.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 3 damage. 
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+GoblinBrute[1] attacks distractioncrab for 2 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+GoblinBrute[1] attacks distractioncrab for 9 damage. 
+distractioncrab attacks GoblinBrute[0] for 15 damage. 
+------------------------------------------------------------
+GoblinBrute[1] missed distractioncrab.
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab missed GoblinBrute[1].
+GoblinBrute[1] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 11 damage. 
+GoblinBrute[0] missed distractioncrab.
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 13 damage. 
+distractioncrab attacks GoblinBrute[0] for 12 damage. 
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 10 damage. distractioncrab has died.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 7 damage. 
+GoblinBrute[0] attacks distractioncrab for 8 damage. 
+distractioncrab attacks GoblinBrute[1] for 25 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 32 damage. GoblinBrute[1] has died.
+GoblinBrute[1] cannot attack while dead.
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 14 damage. 
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+distractioncrab attacks GoblinBrute[0] for 15 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 3 damage. 
+distractioncrab attacks GoblinBrute[0] for 1 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+distractioncrab attacks GoblinBrute[0] for 10 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 8 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 7 damage. 
+distractioncrab attacks GoblinBrute[0] for 2 damage. 
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[1].
+GoblinBrute[0] missed distractioncrab.
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 8 damage. 
+distractioncrab attacks GoblinBrute[1] for 3 damage. 
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[1] for 14 damage. 
+GoblinBrute[1] attacks distractioncrab for 2 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 10 damage. 
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+GoblinBrute[1] missed distractioncrab.
+distractioncrab attacks GoblinBrute[1] for 20 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab missed GoblinBrute[0].
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 5 damage. 
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+distractioncrab attacks GoblinBrute[0] for 13 damage. 
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 1 damage. distractioncrab has died.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 8 damage. 
+GoblinBrute[1] attacks distractioncrab for 14 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 1 damage. 
+distractioncrab attacks GoblinBrute[1] for 17 damage. 
+GoblinBrute[0] attacks distractioncrab for 8 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 18 damage. 
+GoblinBrute[1] attacks distractioncrab for 9 damage. 
+GoblinBrute[0] attacks distractioncrab for 4 damage. distractioncrab has died.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+GoblinBrute[1] attacks distractioncrab for 9 damage. 
+distractioncrab attacks GoblinBrute[0] for 15 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 10 damage. 
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 26 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 3 damage. 
+distractioncrab attacks GoblinBrute[1] for 20 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 20 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 4 damage. 
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[1] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 18 damage. 
+GoblinBrute[0] attacks distractioncrab for 1 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 6 damage. 
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+distractioncrab attacks GoblinBrute[0] for 11 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
+GoblinBrute[0] cannot attack while dead.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 5 damage. 
+GoblinBrute[1] attacks distractioncrab for 9 damage. 
+------------------------------------------------------------
+GoblinBrute[1] missed distractioncrab.
+distractioncrab attacks GoblinBrute[1] for 17 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 31 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+GoblinPriest[0] heals 4 life to GoblinPriest[0].
+distractioncrab attacks GoblinBrute[0] for 18 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 23 damage. GoblinBrute[0] has died.
+GoblinPriest[0] heals 2 life to GoblinPriest[0].
+------------------------------------------------------------
+distractioncrab attacks GoblinPriest[0] for 37 damage. GoblinPriest[0] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[1] for 16 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+GoblinBrute[1] attacks distractioncrab for 6 damage. 
+distractioncrab attacks GoblinBrute[1] for 16 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 7 damage. 
+distractioncrab missed GoblinBrute[0].
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 16 damage. 
+GoblinBrute[0] attacks distractioncrab for 7 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 10 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab missed GoblinBrute[0].
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 5 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] attacks distractioncrab for 7 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 21 damage. 
+GoblinBrute[0] attacks distractioncrab for 9 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab missed GoblinBrute[0].
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 33 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 13 damage. 
+GoblinPriest[0] heals 4 life to GoblinBrute[0].
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinPriest[0] for 22 damage. GoblinPriest[0] has died.
+GoblinPriest[0] heals 4 life to GoblinBrute[0].
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[0] for 33 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 20 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 10 damage. 
+distractioncrab attacks GoblinBrute[0] for 10 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[1].
+GoblinBrute[0] missed distractioncrab.
+GoblinBrute[1] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 4 damage. 
+GoblinBrute[0] attacks distractioncrab for 8 damage. 
+GoblinBrute[1] attacks distractioncrab for 11 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 8 damage. 
+GoblinBrute[1] missed distractioncrab.
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+GoblinBrute[1] missed distractioncrab.
+distractioncrab attacks GoblinBrute[1] for 13 damage. 
+GoblinBrute[0] attacks distractioncrab for 13 damage. distractioncrab has died.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[1].
+GoblinBrute[1] attacks distractioncrab for 6 damage. 
+GoblinBrute[0] attacks distractioncrab for 7 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 2 damage. 
+distractioncrab attacks GoblinBrute[0] for 1 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 24 damage. 
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+GoblinBrute[1] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 21 damage. GoblinBrute[0] has died.
+GoblinBrute[0] cannot attack while dead.
+GoblinBrute[1] attacks distractioncrab for 5 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 1 damage. 
+distractioncrab attacks GoblinBrute[1] for 17 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[1] for 15 damage. GoblinBrute[1] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 27 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 16 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+GoblinPriest[0] heals 3 life to GoblinBrute[0].
+distractioncrab attacks GoblinPriest[0] for 5 damage. 
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+GoblinPriest[0] heals 4 life to GoblinBrute[0].
+distractioncrab attacks GoblinPriest[0] for 10 damage. 
+------------------------------------------------------------
+GoblinPriest[0] heals 1 life to GoblinPriest[0].
+distractioncrab attacks GoblinPriest[0] for 30 damage. GoblinPriest[0] has died.
+GoblinBrute[0] attacks distractioncrab for 5 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 23 damage. 
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] missed distractioncrab.
+------------------------------------------------------------
+distractioncrab missed GoblinBrute[0].
+GoblinBrute[0] attacks distractioncrab for 6 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 8 damage. GoblinBrute[0] has died.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 13 damage. 
+GoblinBrute[1] attacks distractioncrab for 10 damage. 
+------------------------------------------------------------
+GoblinBrute[1] attacks distractioncrab for 1 damage. 
+GoblinBrute[0] attacks distractioncrab for 4 damage. 
+distractioncrab attacks GoblinBrute[1] for 15 damage. 
+------------------------------------------------------------
+GoblinBrute[0] attacks distractioncrab for 3 damage. 
+distractioncrab attacks GoblinBrute[1] for 35 damage. GoblinBrute[1] has died.
+GoblinBrute[1] cannot attack while dead.
+------------------------------------------------------------
+GoblinBrute[0] missed distractioncrab.
+distractioncrab attacks GoblinBrute[0] for 15 damage. 
+------------------------------------------------------------
+distractioncrab attacks GoblinBrute[0] for 22 damage. GoblinBrute[0] has died.
 ------------------------------------------------------------

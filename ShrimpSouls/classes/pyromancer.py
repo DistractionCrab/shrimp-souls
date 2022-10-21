@@ -6,6 +6,9 @@ import random
 import math
 
 class Pyromancer(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 2*p.level + 4 * p.attributes.vigor
+
 	def score_acc(self, p):
 		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
 
@@ -42,7 +45,7 @@ class Pyromancer(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			self.defender.stack_burn(amt=3)
 			self.msg += f"{self.attacker.name} has burned {self.defender.name} for 3 turns."
 		else:
@@ -52,7 +55,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.faith + self.attacker.attributes.intelligence)//10)
 			self.defender.stack_burn(amt=3)
 			self.defender.damage(dmg)

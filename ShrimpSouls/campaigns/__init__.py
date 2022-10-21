@@ -1,17 +1,17 @@
 import os
 import enum
-import diskcache as dc
+import atexit
 import ShrimpSouls as ss
 
-CACHE_DIR = ss.CACHE_DIR/"campaigns"
-PLAYER_CACHE = dc.Cache(CACHE_DIR)
-
-if 'players' not in PLAYER_CACHE:
-	PLAYER_CACHE['players'] = []
 
 class NullCampaign:
+	def join(self, player):
+			raise ValueError(f"{p.name} cannot join a NullCampaign")
+
 	def step(self):
+
 		print("No campaign active to step.")
+		return "No campaign active to step."
 
 	@property
 	def players(self):
@@ -34,6 +34,15 @@ class NullCampaign:
 
 	def get_target(self, name):
 		raise ValueError(f"No such target as {name} in a NullCampaign")
+
+	def enter(self, previous):
+		return ''
+
+	def exit(self):
+		return ''
+
+	def close(self):
+		pass
 			
 
 
@@ -41,3 +50,10 @@ import ShrimpSouls.campaigns.arena as arena
 class Campaigns(enum.Enum):
 	Null = NullCampaign()
 	Arena = arena.Arena()
+	ArenaSetup = arena.Setup()
+
+def close():
+	for a in Campaigns:
+		a.value.close()
+
+atexit.register(close)

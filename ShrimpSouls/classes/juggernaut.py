@@ -8,6 +8,9 @@ import math
 BONUS_THRESHOLD = 10
 
 class Juggernaut(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 5*p.level + 7*p.attributes.vigor
+
 	def score_eva(self, p):
 		return super().score_eva(p) - 2
 
@@ -53,7 +56,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			dmg = 5 + random.randint(1, 10)*(1 + 2*(self.attacker.attributes.strength//10))
 			self.defender.stack_defdown(amt=3)
 			self.defender.damage(dmg)

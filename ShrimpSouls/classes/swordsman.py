@@ -6,6 +6,9 @@ import random
 import math
 
 class Swordsman(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 4*p.level + 4*p.attributes.vigor
+
 	def score_acc(self, p):
 		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
 
@@ -52,7 +55,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			self.defender.stack_bleed(amt=random.randint(1, 2))
 			self.msg += f"{self.attacker.name}'s sharp blades slice into {self.defender.name}. "
 		else:

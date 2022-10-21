@@ -6,6 +6,9 @@ import random
 import math
 
 class Paladin(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 5*p.level + 6*p.attributes.vigor
+
 	def score_acc(self, p):
 		return super().score_acc(p)
 
@@ -48,7 +51,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			self.defender.stack_attdown(amt=2)
 			self.defender.stack_evadown(amt=2)
 			self.defender.stack_defdown(amt=2)

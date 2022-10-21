@@ -6,6 +6,9 @@ import random
 import math
 
 class Warrior(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 5*p.level + 6*p.attributes.vigor
+		
 	def score_eva(self, p):
 		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
 
@@ -46,7 +49,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			dmg = 5 + random.randint(1, 6)*(1 + (self.attacker.attributes.strength + self.attacker.attributes.dexterity)//10)
 			self.defender.use_defup(self.defender.defup)
 			self.defender.use_evaup(self.defender.evaup)

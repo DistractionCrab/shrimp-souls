@@ -6,6 +6,9 @@ import random
 import math
 
 class Fencer(ClassSpec):
+	def max_hp(self, p):
+		return 20 + 2*p.level + 5*p.attributes.vigor
+
 	def score_acc(self, p):
 		return 12 + math.ceil(1.5*p.attributes.dexterity)
 
@@ -47,7 +50,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			self.defender.taunt_target(self.attacker)
 			self.msg += f"{self.attacker.name} has taunted {self.defender.name} into attacking them. "
 		else:
