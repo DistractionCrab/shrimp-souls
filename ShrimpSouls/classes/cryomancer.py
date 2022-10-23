@@ -1,3 +1,4 @@
+import ShrimpSouls as ss
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -35,9 +36,12 @@ class Cryomancer(ClassSpec):
 	def ultimate_action(self, u):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
-		return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		if actor.invis == 0:
+			target = env.find_valid_target(actor, False, list(ss.Positions), True)
+			return [actions.DamageTarget(attacker=actor, defender=target)]
+		else:
+			return []
 
 	@property
 	def cl_string(self):
@@ -57,7 +61,8 @@ class Action1(actions.Action):
 class Target1(actions.Action):
 	def apply(self):
 		if utils.compute_hit(self.attacker, self.defender):
-			self.defender.stack_stun(amt=random.randint(1, 4))
-			self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid."
+			amt = random.randint(1, 4)
+			self.defender.stack_stun(amt=amt)
+			self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid for {amt} turns."
 		else:
 			print(f"{self.attacker.name} has failed to freeze {self.defender.name}")

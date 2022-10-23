@@ -1,3 +1,4 @@
+import ShrimpSouls as ss
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -31,9 +32,12 @@ class Assassin(ClassSpec):
 	def ultimate_action(self, u, players, npcs):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
-		return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		if actor.invis == 0:
+			target = env.find_valid_target(actor, False, [ss.Positions.FRONT], True)
+			return [actions.DamageTarget(attacker=actor, defender=target)]
+		else:
+			return []
 
 	@property
 	def cl_string(self):
@@ -54,8 +58,11 @@ class Target1(actions.Action):
 			self.defender.stack_poison(amt=random.randint(1, 6))
 			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.dexterity + self.attacker.attributes.luck)//10)
 			dmg = dmg if self.attacker.invis == 0 else 2*dmg
+			
 			self.defender.damage(dmg)
 
 			self.msg += f"{self.attacker.name}'s poisoned blade pierces {self.defender.name} dealing {dmg} damage."
 		else:
 			self.msg += f"{self.attacker.name}'s poisoned blade misses their target. "
+
+		self.attacker.use_invis(self.attacker.invis)

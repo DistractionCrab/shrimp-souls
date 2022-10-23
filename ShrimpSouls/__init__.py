@@ -59,6 +59,10 @@ class Scores(enum.Enum):
 	Att = lambda x: x.att
 	Acc = lambda x: x.acc
 
+class Positions(enum.Enum):
+	FRONT = enum.auto()
+	BACK = enum.auto()
+
 @dataclass
 class Statuses:
 	block: int = 0
@@ -185,7 +189,7 @@ class Entity:
 		if self.encourage > 0:
 			base *= 1.1
 		if self.status.stun > 0:
-			base *= 0.5
+			base *= 0.4
 
 		return math.ceil(base)
 
@@ -203,8 +207,8 @@ class Entity:
 		return math.ceil(base)
 
 
-	def duel_action(self, actor, party, opponents):
-		return actions.DoNothing(player=actor)
+	def duel_action(self, env):
+		return actions.DoNothing(player=self)
 
 
 	@auto_commit
@@ -456,12 +460,12 @@ class Entity:
 		self.status.taunt = None
 	
 
-	def duel_action(self, actor, party, opponents):
-		return [actions.DoNothing(player=actor)]
-
 	def find_valid_target(self, op):
 		op = list(filter(lambda x: x.invis == 0 and not x.dead, op))
-		return random.choices(op)[0]
+		if len(op) > 0:
+			return random.choices(op)[0]
+		else:
+			return None
 
 	def soulmass_count(self):
 		return 0
@@ -509,6 +513,7 @@ import ShrimpSouls.classes as classes
 
 @dataclass
 class Player(Entity):
+	hp: int = 0
 	xp: int = 0
 	attributes: Attributes = Attributes()
 	myclass: classes.ClassSpec = classes.ClassSpec()
@@ -577,8 +582,8 @@ class Player(Entity):
 	def _dfn(self):
 		return self.myclass.score_dfn(self)
 
-	def duel_action(self, actor, party, opponents):
-		return self.myclass.duel_action(actor, party, opponents)
+	def duel_action(self, env):
+		return self.myclass.duel_action(self, env)
 
 	@property
 	def is_player(self):
@@ -610,6 +615,15 @@ class Player(Entity):
 	@property
 	def max_hp(self):
 		return self.myclass.max_hp(self)
+
+	@property
+	def position(self):
+		return self.myclass.position
+
+
+	def random_action(self, u, env):
+		return self.myclass.random_action(u, env)
+	
 	
 
 _FETCHED_PLAYERS = {}
@@ -658,7 +672,7 @@ def delete_player(name):
 
 def print_players():
 	for p in PLAYER_CACHE:
-		print(p)
+		print(PLAYER_CACHE[p].stat_string)
 
 class GameManager:
 	def step(self):

@@ -9,6 +9,11 @@ import math
 HEAL_DICE_THRESHOLD = 10
 
 class Priest(ClassSpec):
+	@property
+	def position(self):
+		return ss.Positions.BACK
+
+
 	def max_hp(self, p):
 		return 10 + 2*p.level + 2*p.attributes.vigor
 
@@ -52,15 +57,13 @@ class Priest(ClassSpec):
 	def ultimate_action(self, u, players, npcs):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		if sum(p.hp/p.max_hp for p in party)/(1 + len(list(party))) < 0.5:
-			party = list(filter(lambda x: not x.dead, party))
-			heal = sum(random.randint(1, 4)  for _ in range((1 + actor.attributes.faith//HEAL_DICE_THRESHOLD)))
-			target = min(party, key=lambda p: p.hp)
-			return [actions.HealTarget(attacker=actor, defender=target, dmg=heal)]
-		else:			
-			target = self.find_valid_target(opponents)
-			return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		party = list(filter(lambda x: not x.dead, env.players))
+		heal = sum(random.randint(1, 10)  for _ in range((1 + actor.attributes.faith//HEAL_DICE_THRESHOLD)))
+		target = min(party, key=lambda p: p.hp)
+		return [
+			actions.HealTarget(attacker=actor, defender=target, dmg=heal)
+			]
 
 	@property
 	def cl_string(self):

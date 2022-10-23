@@ -1,11 +1,16 @@
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
+import ShrimpSouls as ss
 import ShrimpSouls.utils as utils
 import ShrimpSouls.actions as actions
 import random
 import math
 
 class Sorcerer(ClassSpec):
+	@property
+	def position(self):
+		return ss.Positions.BACK
+		
 	def max_hp(self, p):
 		return 20 + 2 * p.level + 4 * p.attributes.vigor
 
@@ -32,9 +37,12 @@ class Sorcerer(ClassSpec):
 	def ultimate_action(self, u):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
-		return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		if actor.invis == 0:
+			target = env.find_valid_target(actor, False, list(ss.Positions), True)
+			return [actions.DamageTarget(attacker=actor, defender=target)]
+		else:
+			return []
 
 	@property
 	def cl_string(self):

@@ -1,502 +1,1027 @@
-distractioncrab attacks Goblin[0] for 22 damage. Goblin[0] has died.
-------------------------------------------------------------
-Wolf[0] missed distractioncrab.
-itzteddgrey missed Wolf[0].
-distractioncrab attacks Wolf[0] for 13 damage. 
-------------------------------------------------------------
-Wolf[0] missed itzteddgrey.
-distractioncrab attacks Wolf[0] for 29 damage. Wolf[0] has died.
 ------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 3 damage. 
-Goblin[1] missed itzteddgrey.
-distractioncrab attacks Goblin[1] for 67 damage. Goblin[1] has died.
-itzteddgrey missed GoblinBrute[0].
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 16 damage. 
-distractioncrab attacks GoblinBrute[0] for 1 damage. 
-itzteddgrey missed GoblinBrute[0].
-------------------------------------------------------------
-itzteddgrey attacks GoblinBrute[0] for 1 damage. 
-distractioncrab attacks GoblinBrute[0] for 11 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks itzteddgrey for 14 damage. 
-itzteddgrey missed GoblinBrute[0].
-distractioncrab attacks GoblinBrute[0] for 2 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks itzteddgrey for 19 damage. itzteddgrey has died.
-distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-itzteddgrey attacks Goblin[2] for 4 damage. 
-GoblinPriest[0] heals 4 life to GoblinBrute[0].
-GoblinBrute[0] attacks itzteddgrey for 61 damage. itzteddgrey has died.
-Goblin[2] missed distractioncrab.
-distractioncrab attacks Goblin[2] for 58 damage. Goblin[2] has died.
-------------------------------------------------------------
-GoblinPriest[0] heals 2 life to GoblinPriest[0].
-distractioncrab attacks GoblinPriest[0] for 27 damage. GoblinPriest[0] has died.
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 1 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 25 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinPriest[0] heals 2 life to GoblinPriest[0].
-distractioncrab missed GoblinPriest[0].
-itzteddgrey attacks GoblinBrute[0] for 1 damage. 
-Wolf[2] missed distractioncrab.
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinPriest[0] heals 1 life to GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-itzteddgrey missed GoblinBrute[0].
-Wolf[2] missed distractioncrab.
-distractioncrab attacks GoblinPriest[0] for 7 damage. 
-------------------------------------------------------------
-itzteddgrey missed Wolf[2].
-GoblinPriest[0] heals 4 life to Wolf[2].
-GoblinBrute[0] attacks itzteddgrey for 42 damage. itzteddgrey has died.
-distractioncrab attacks Wolf[2] for 64 damage. Wolf[2] has died.
-Wolf[2] cannot attack while dead.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-GoblinPriest[0] heals 3 life to GoblinBrute[0].
-distractioncrab missed GoblinPriest[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 20 damage. 
-GoblinPriest[0] heals 1 life to GoblinPriest[0].
-GoblinBrute[0] attacks distractioncrab for 10 damage. 
-------------------------------------------------------------
-GoblinPriest[0] heals 4 life to GoblinPriest[0].
-distractioncrab attacks GoblinPriest[0] for 11 damage. 
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-------------------------------------------------------------
-GoblinPriest[0] heals 1 life to GoblinPriest[0].
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinPriest[0] heals 4 life to GoblinPriest[0].
-distractioncrab attacks GoblinPriest[0] for 18 damage. GoblinPriest[0] has died.
-------------------------------------------------------------
-Wolf[1] missed distractioncrab.
-distractioncrab missed Wolf[1].
-GoblinBrute[0] missed distractioncrab.
-itzteddgrey attacks Wolf[1] for 8 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks itzteddgrey for 15 damage. itzteddgrey has died.
-Wolf[1] missed distractioncrab.
-distractioncrab attacks Wolf[1] for 32 damage. Wolf[1] has died.
-itzteddgrey cannot attack while dead.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 2 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 8 damage. 
-distractioncrab was stunned and couldn't act.
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-------------------------------------------------------------
-Goblin[1] missed itzteddgrey.
-distractioncrab attacks GoblinBrute[0] for 20 damage. 
-distractioncrab was stunned and couldn't act.
-GoblinBrute[0] attacks itzteddgrey for 41 damage. itzteddgrey has died.
-------------------------------------------------------------
-Wolf[0] missed itzteddgrey.
-------------------------------------------------------------
-itzteddgrey attacks Wolf[0] for 3 damage. 
-itzteddgrey was stunned and couldn't act.
-distractioncrab missed Wolf[0].
-distractioncrab was stunned and couldn't act.
-Wolf[0] missed distractioncrab.
-------------------------------------------------------------
-Wolf[1] missed itzteddgrey.
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks Wolf[0] for 59 damage. Wolf[0] has died.
-distractioncrab was stunned and couldn't act.
-------------------------------------------------------------
-itzteddgrey missed GoblinBrute[0].
-itzteddgrey was stunned and couldn't act.
-Goblin[1] missed itzteddgrey.
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-itzteddgrey missed GoblinBrute[0].
-itzteddgrey was stunned and couldn't act.
-Wolf[1] missed itzteddgrey.
-GoblinBrute[0] attacks distractioncrab for 9 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-itzteddgrey missed Wolf[1].
-itzteddgrey was stunned and couldn't act.
-distractioncrab attacks Wolf[1] for 36 damage. Wolf[1] has died.
-distractioncrab was stunned and couldn't act.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-Goblin[1] attacks itzteddgrey for 10 damage. 
-------------------------------------------------------------
-Goblin[2] missed distractioncrab.
-GoblinPriest[0] heals 2 life to GoblinPriest[0].
-GoblinBrute[0] attacks distractioncrab for 7 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 9 damage. 
-GoblinBrute[0] attacks distractioncrab for 9 damage. 
-distractioncrab missed GoblinBrute[1].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 4 damage. 
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 7 damage.GoblinBrute[1] attacks distractioncrab for 2 damage. 
-GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 7 damage.GoblinBrute[0] attacks distractioncrab for 4 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 16 damage. 
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-GoblinBrute[1] provokes distractioncrab's Soulmasses and suffers 11 damage.GoblinBrute[1] attacks distractioncrab for 11 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 5 damage. 
-GoblinBrute[0] attacks distractioncrab for 7 damage. distractioncrab has died.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 4 damage. 
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 7 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 7 damage. 
-GoblinBrute[0] attacks distractioncrab for 3 damage. 
-distractioncrab attacks GoblinBrute[0] for 16 damage. 
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[1].
-GoblinBrute[1] attacks distractioncrab for 5 damage. 
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 14 damage. GoblinBrute[0] has died.
-GoblinBrute[0] cannot attack while dead.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 10 damage. 
-GoblinBrute[1] attacks distractioncrab for 5 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 7 damage. distractioncrab has died.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 5 damage. 
-GoblinBrute[0] attacks distractioncrab for 3 damage. 
-distractioncrab attacks GoblinBrute[1] for 14 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 18 damage. 
-GoblinBrute[1] missed distractioncrab.
-GoblinBrute[0] attacks distractioncrab for 9 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 5 damage. 
-GoblinBrute[0] missed distractioncrab.
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[1] for 8 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 2 damage. 
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 10 damage. 
-distractioncrab attacks GoblinBrute[0] for 5 damage. GoblinBrute[0] has died.
-GoblinBrute[0] cannot attack while dead.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 4 damage. 
-GoblinBrute[1] attacks distractioncrab for 4 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 4 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 10 damage. 
-GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 5 damage.GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 9 damage. 
-GoblinBrute[0] provokes distractioncrab's Soulmasses and suffers 20 damage.GoblinBrute[0] missed distractioncrab.GoblinBrute[0] has died.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 3 damage. 
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-GoblinBrute[1] attacks distractioncrab for 2 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-GoblinBrute[1] attacks distractioncrab for 9 damage. 
-distractioncrab attacks GoblinBrute[0] for 15 damage. 
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab missed GoblinBrute[1].
-GoblinBrute[1] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 11 damage. 
-GoblinBrute[0] missed distractioncrab.
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 13 damage. 
-distractioncrab attacks GoblinBrute[0] for 12 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 10 damage. distractioncrab has died.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 7 damage. 
-GoblinBrute[0] attacks distractioncrab for 8 damage. 
-distractioncrab attacks GoblinBrute[1] for 25 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 32 damage. GoblinBrute[1] has died.
-GoblinBrute[1] cannot attack while dead.
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 14 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-distractioncrab attacks GoblinBrute[0] for 15 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 3 damage. 
-distractioncrab attacks GoblinBrute[0] for 1 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-distractioncrab attacks GoblinBrute[0] for 10 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 8 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 7 damage. 
-distractioncrab attacks GoblinBrute[0] for 2 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[1].
-GoblinBrute[0] missed distractioncrab.
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 8 damage. 
-distractioncrab attacks GoblinBrute[1] for 3 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[1] for 14 damage. 
-GoblinBrute[1] attacks distractioncrab for 2 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 10 damage. 
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-GoblinBrute[1] missed distractioncrab.
-distractioncrab attacks GoblinBrute[1] for 20 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 5 damage. 
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-distractioncrab attacks GoblinBrute[0] for 13 damage. 
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 1 damage. distractioncrab has died.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 8 damage. 
-GoblinBrute[1] attacks distractioncrab for 14 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 1 damage. 
-distractioncrab attacks GoblinBrute[1] for 17 damage. 
-GoblinBrute[0] attacks distractioncrab for 8 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 18 damage. 
-GoblinBrute[1] attacks distractioncrab for 9 damage. 
-GoblinBrute[0] attacks distractioncrab for 4 damage. distractioncrab has died.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-GoblinBrute[1] attacks distractioncrab for 9 damage. 
-distractioncrab attacks GoblinBrute[0] for 15 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 10 damage. 
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 26 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 3 damage. 
-distractioncrab attacks GoblinBrute[1] for 20 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 20 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 4 damage. 
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 18 damage. 
-GoblinBrute[0] attacks distractioncrab for 1 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 6 damage. 
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-distractioncrab attacks GoblinBrute[0] for 11 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 20 damage. GoblinBrute[0] has died.
-GoblinBrute[0] cannot attack while dead.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 5 damage. 
-GoblinBrute[1] attacks distractioncrab for 9 damage. 
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
-distractioncrab attacks GoblinBrute[1] for 17 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 31 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-GoblinPriest[0] heals 4 life to GoblinPriest[0].
-distractioncrab attacks GoblinBrute[0] for 18 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 23 damage. GoblinBrute[0] has died.
-GoblinPriest[0] heals 2 life to GoblinPriest[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinPriest[0] for 37 damage. GoblinPriest[0] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[1] for 16 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-GoblinBrute[1] attacks distractioncrab for 6 damage. 
-distractioncrab attacks GoblinBrute[1] for 16 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 7 damage. 
-distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 16 damage. 
-GoblinBrute[0] attacks distractioncrab for 7 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 10 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 5 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] attacks distractioncrab for 7 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 21 damage. 
-GoblinBrute[0] attacks distractioncrab for 9 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab missed GoblinBrute[0].
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 33 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 13 damage. 
-GoblinPriest[0] heals 4 life to GoblinBrute[0].
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinPriest[0] for 22 damage. GoblinPriest[0] has died.
-GoblinPriest[0] heals 4 life to GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[0] for 33 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 20 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 10 damage. 
-distractioncrab attacks GoblinBrute[0] for 10 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[1].
-GoblinBrute[0] missed distractioncrab.
-GoblinBrute[1] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 4 damage. 
-GoblinBrute[0] attacks distractioncrab for 8 damage. 
-GoblinBrute[1] attacks distractioncrab for 11 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 8 damage. 
-GoblinBrute[1] missed distractioncrab.
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-GoblinBrute[1] missed distractioncrab.
-distractioncrab attacks GoblinBrute[1] for 13 damage. 
-GoblinBrute[0] attacks distractioncrab for 13 damage. distractioncrab has died.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[1].
-GoblinBrute[1] attacks distractioncrab for 6 damage. 
-GoblinBrute[0] attacks distractioncrab for 7 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 2 damage. 
-distractioncrab attacks GoblinBrute[0] for 1 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 24 damage. 
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-GoblinBrute[1] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 21 damage. GoblinBrute[0] has died.
-GoblinBrute[0] cannot attack while dead.
-GoblinBrute[1] attacks distractioncrab for 5 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 1 damage. 
-distractioncrab attacks GoblinBrute[1] for 17 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[1] for 15 damage. GoblinBrute[1] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 27 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 16 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-GoblinPriest[0] heals 3 life to GoblinBrute[0].
-distractioncrab attacks GoblinPriest[0] for 5 damage. 
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-GoblinPriest[0] heals 4 life to GoblinBrute[0].
-distractioncrab attacks GoblinPriest[0] for 10 damage. 
-------------------------------------------------------------
-GoblinPriest[0] heals 1 life to GoblinPriest[0].
-distractioncrab attacks GoblinPriest[0] for 30 damage. GoblinPriest[0] has died.
-GoblinBrute[0] attacks distractioncrab for 5 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 23 damage. 
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] missed distractioncrab.
-------------------------------------------------------------
-distractioncrab missed GoblinBrute[0].
-GoblinBrute[0] attacks distractioncrab for 6 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 8 damage. GoblinBrute[0] has died.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 13 damage. 
-GoblinBrute[1] attacks distractioncrab for 10 damage. 
-------------------------------------------------------------
-GoblinBrute[1] attacks distractioncrab for 1 damage. 
-GoblinBrute[0] attacks distractioncrab for 4 damage. 
-distractioncrab attacks GoblinBrute[1] for 15 damage. 
-------------------------------------------------------------
-GoblinBrute[0] attacks distractioncrab for 3 damage. 
-distractioncrab attacks GoblinBrute[1] for 35 damage. GoblinBrute[1] has died.
-GoblinBrute[1] cannot attack while dead.
-------------------------------------------------------------
-GoblinBrute[0] missed distractioncrab.
-distractioncrab attacks GoblinBrute[0] for 15 damage. 
-------------------------------------------------------------
-distractioncrab attacks GoblinBrute[0] for 22 damage. GoblinBrute[0] has died.
+OrcWarrior[0] attacks chaddytone for 20 damage. 
+chaddytone warcry boosts chaddytone's attack.
+chaddytone attacks OrcWarrior[0] for 1 damage. 
+------------------------------------------------------------
+chaddytone warcry boosts chaddytone's attack.
+chaddytone attacks OrcWarrior[0] for 10 damage. 
+OrcWarrior[0] attacks chaddytone for 12 damage. 
+------------------------------------------------------------
+chaddytone warcry boosts chaddytone's attack.
+chaddytone missed OrcWarrior[0].
+OrcWarrior[0] attacks chaddytone for 1 damage. 
+------------------------------------------------------------
+OrcWarrior[0] attacks chaddytone for 17 damage. 
+chaddytone warcry boosts chaddytone's attack.
+chaddytone missed OrcWarrior[0].
+------------------------------------------------------------
+OrcWarrior[0] attacks chaddytone for 6 damage. 
+chaddytone warcry boosts chaddytone's attack.
+chaddytone attacks OrcWarrior[0] for 8 damage. 
+------------------------------------------------------------
+chaddytone warcry boosts chaddytone's attack.
+chaddytone missed OrcWarrior[0].
+OrcWarrior[0] attacks chaddytone for 15 damage. 
+------------------------------------------------------------
+chaddytone warcry boosts chaddytone's attack.
+chaddytone missed OrcWarrior[0].
+OrcWarrior[0] attacks chaddytone for 11 damage. 
+------------------------------------------------------------
+OrcWarrior[0] attacks chaddytone for 4 damage. 
+chaddytone warcry boosts chaddytone's attack.
+chaddytone missed OrcWarrior[0].
+------------------------------------------------------------
+OrcWarrior[0] attacks chaddytone for 11 damage. 
+chaddytone warcry boosts chaddytone's attack.
+chaddytone attacks OrcWarrior[0] for 4 damage. 
+------------------------------------------------------------
+OrcWarrior[0] attacks chaddytone for 18 damage. chaddytone has died.
+------------------------------------------------------------
+Ogre[12] missed angaarb.
+Ogre[12] missed arixyann.
+Goblin[37] missed chaddytone.
+OrcWarrior[15] attacks prismcardinal for 33 damage. 
+chaddytone missed OrcWarrior[27].
+GoblinBrute[6] attacks prismcardinal for 15 damage. 
+OrcWarrior[21] attacks angaarb for 24 damage. angaarb has died.
+Wolf[20] missed chaddytone.
+Wolf[35] missed prismcardinal.
+eaglechoit heals 4 life to arixyann.
+eaglechoit heals 4 life to eaglechoit.
+eaglechoit heals 5 life to killingman4563.
+Ogre[31] attacks shamesocks for 30 damage. shamesocks has died.
+Ogre[31] attacks chaddytone for 16 damage. 
+arixyann enchantes their sword and shield, enhancing their attack and defense.
+arixyann attacks GoblinBrute[18] for 12 damage. 
+GoblinBrute[6] attacks arixyann for 7 damage. 
+OrcWarrior[24] attacks prismcardinal for 26 damage. prismcardinal has died.
+OrcWarrior[33] missed rango5731.
+GoblinBrute[18] attacks 1recycle_bin1 for 2 damage. 
+Ogre[36] attacks rango5731 for 22 damage. 
+Ogre[36] attacks arixyann for 51 damage. arixyann has died.
+Ogre[8] attacks 1recycle_bin1 for 6 damage. 
+Ogre[8] attacks killingman4563 for 18 damage. killingman4563 has died.
+OrcWarrior[14] attacks rango5731 for 12 damage. 
+OrcWarrior[32] attacks rango5731 for 18 damage. 
+OrcWarrior[1] attacks chaddytone for 23 damage. 
+OrcWarrior[5] missed 1recycle_bin1.
+GoblinBrute[38] attacks chaddytone for 1 damage. 
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks cannot attack while dead.
+chaddytone attacks GoblinBrute[6] for 9 damage. GoblinBrute[6] has died.
+OrcWarrior[22] attacks chaddytone for 1 damage. 
+Goblin[37] missed chaddytone.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks Goblin[16] for 153 damage. Goblin[16] has died.
+OrcWarrior[2] missed 1recycle_bin1.
+Ogre[23] missed 1recycle_bin1.
+Ogre[23] attacks rango5731 for 18 damage. 
+l0kplart heals 2 life to 1recycle_bin1.
+l0kplart heals 1 life to rango5731.
+l0kplart heals 1 life to eaglechoit.
+l0kplart heals 6 life to l0kplart.
+Ogre[30] attacks rango5731 for 20 damage. 
+Ogre[30] attacks chaddytone for 22 damage. 
+Goblin[11] missed 1recycle_bin1.
+OrcWarrior[3] attacks 1recycle_bin1 for 15 damage. 
+rango5731 attacks Wolf[29] for 26 damage. Wolf[29] has died.
+Ogre[40] missed 1recycle_bin1.
+Ogre[40] attacks rango5731 for 2 damage. rango5731 has died.
+Wolf[20] missed chaddytone.
+Wolf[29] cannot attack while dead.
+Wolf[34] missed 1recycle_bin1.
+OrcWarrior[27] attacks chaddytone for 28 damage. 
+GoblinBrute[18] missed chaddytone.
+GoblinBrute[38] missed 1recycle_bin1.
+l0kplart heals 4 life to 1recycle_bin1.
+l0kplart heals 2 life to chaddytone.
+l0kplart heals 10 life to chaddytone.
+OrcWarrior[15] missed 1recycle_bin1.
+Wolf[35] missed chaddytone.
+Wolf[20] missed chaddytone.
+OrcWarrior[22] attacks chaddytone for 8 damage. 
+chaddytone attacks OrcWarrior[5] for 2 damage. 
+Ogre[12] missed 1recycle_bin1.
+Ogre[12] missed chaddytone.
+Goblin[37] attacks chaddytone for 1 damage. 
+OrcWarrior[14] attacks chaddytone for 12 damage. chaddytone has died.
+1recycle_bin1 manages to steal 3 shrimp from Wolf[35]. 1recycle_bin1 pilfers armor from Wolf[35]. 1recycle_bin1 pilfers the weapon from Wolf[35]. 
+1recycle_bin1 missed OrcWarrior[3].
+OrcWarrior[24] missed 1recycle_bin1.
+OrcWarrior[26] attacks 1recycle_bin1 for 15 damage. 
+eaglechoit heals 2 life to eaglechoit.
+eaglechoit heals 4 life to distractioncrab.
+eaglechoit heals 5 life to 1recycle_bin1.
+Ogre[23] attacks 1recycle_bin1 for 6 damage. 
+OrcWarrior[9] attacks 1recycle_bin1 for 18 damage. 1recycle_bin1 has died.
+OrcWarrior[21] attacks eaglechoit for 18 damage. eaglechoit has died.
+Ogre[30] provokes distractioncrab's Soulmasses and suffers 7 damage.Ogre[30] missed distractioncrab.
+Ogre[30] missed sabashjon.
+OrcWarrior[32] attacks sabashjon for 4 damage. 
+Ogre[40] missed l0kplart.
+Ogre[40] provokes distractioncrab's Soulmasses and suffers 12 damage.Ogre[40] attacks distractioncrab for 16 damage. 
+Ogre[36] missed l0kplart.
+Ogre[36] attacks distractioncrab for 10 damage. 
+Wolf[34] missed distractioncrab.
+GoblinBrute[39] attacks l0kplart for 1 damage. 
+OrcWarrior[10] attacks l0kplart for 13 damage. 
+OrcWarrior[33] missed sabashjon.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks Goblin[37] for 56 damage. Goblin[37] has died.
+Goblin[11] provokes sabashjon's Soulmasses and suffers 27 damage.Goblin[11] missed sabashjon.Goblin[11] has died.
+OrcWarrior[27] provokes sabashjon's Soulmasses and suffers 3 damage.OrcWarrior[27] missed sabashjon.
+Ogre[31] attacks l0kplart for 1 damage. 
+Ogre[31] missed sabashjon.
+OrcWarrior[4] missed distractioncrab.
+Ogre[8] attacks l0kplart for 8 damage. l0kplart has died.
+Ogre[8] attacks sabashjon for 3 damage. 
+OrcWarrior[5] attacks sabashjon for 9 damage. 
+OrcWarrior[17] attacks distractioncrab for 20 damage. distractioncrab has died.
+OrcWarrior[3] missed sabashjon.
+Ogre[13] missed sabashjon.
+OrcWarrior[1] attacks sabashjon for 18 damage. 
+OrcWarrior[2] attacks sabashjon for 6 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab cannot attack while dead.
+GoblinPriest[24] heals 6 life to GoblinBrute[38].
+GoblinPriest[24] heals 2 life to OrcWarrior[27].
+GoblinPriest[24] heals 2 life to OrcWarrior[33].
+------------------------------------------------------------
+GoblinPriest[24] heals 2 life to OrcWarrior[2].
+GoblinPriest[24] heals 1 life to Ogre[40].
+GoblinPriest[24] heals 6 life to Ogre[31].
+OrcWarrior[24] missed sabashjon.
+OrcWarrior[17] attacks sabashjon for 18 damage. sabashjon has died.
+------------------------------------------------------------
+dawn_zombie did absolutely nothing.
+GoblinBrute[28] attacks panda_natorx02100 for 24 damage. panda_natorx02100 has died.
+OrcWarrior[4] missed hackhunter13.
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 missed OrcWarrior[17].
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[15].
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks missed GoblinBrute[28].
+Wolf[14] missed hackhunter13.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks Goblin[10] for 116 damage. Goblin[10] has died.
+1recycle_bin1 manages to steal 1 shrimp from OrcWarrior[9]. 1recycle_bin1 pilfers armor from OrcWarrior[9]. 1recycle_bin1 pilfers the weapon from OrcWarrior[9]. 
+1recycle_bin1 attacks OrcWarrior[26] for 14 damage. 
+OrcWarrior[1] attacks hackhunter13 for 9 damage. 
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks missed OrcWarrior[9].
+OrcWarrior[23] attacks rango5731 for 12 damage. 
+l0kplart heals 1 life to mayberecycled.
+l0kplart heals 2 life to archbobs.
+l0kplart heals 3 life to 1recycle_bin1.
+l0kplart heals 10 life to dawn_zombie.
+OrcWarrior[7] missed fishsticks12.
+Wolf[20] missed hackhunter13.
+OrcWarrior[1] attacks chaddytone for 14 damage. 
+karrastheraven_ chills OrcWarrior[30] lowering attack and defense.
+karrastheraven_ chills OrcWarrior[11] lowering attack and defense.
+karrastheraven_ chills GoblinBrute[28] lowering attack and defense.
+karrastheraven_ attacks OrcWarrior[17] for 1 damage. 
+OrcWarrior[15] attacks viktor_kadic for 3 damage. 
+eaglechoit heals 3 life to rango5731.
+eaglechoit heals 4 life to fishsticks12.
+eaglechoit heals 8 life to dawn_zombie.
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin attacks OrcWarrior[23] for 6 damage. 
+OrcWarrior[4] attacks shamesocks for 19 damage. 
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks attacks OrcWarrior[7] for 1 damage. 
+OrcWarrior[21] attacks chaddytone for 20 damage. 
+OrcWarrior[16] attacks killingman4563 for 3 damage. 
+killingman4563 sharpens their blade, increasing their attack.
+killingman4563 missed OrcWarrior[30].
+OrcWarrior[26] missed angaarb.
+OrcWarrior[19] attacks angaarb for 16 damage. 
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin missed OrcWarrior[17].
+battleshippment heals 4 life to dawn_zombie.
+battleshippment heals 2 life to shamesocks.
+battleshippment heals 3 life to distractioncrab.
+battleshippment heals 10 life to dawn_zombie.
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks OrcWarrior[26] for 1 damage. 
+prismcardinal chills OrcWarrior[2] lowering attack and defense.
+prismcardinal chills Wolf[20] lowering attack and defense.
+prismcardinal chills GoblinBrute[28] lowering attack and defense.
+prismcardinal missed OrcWarrior[5].
+Wolf[20] missed hackhunter13.
+Wolf[27] missed viktor_kadic.
+OrcWarrior[11] attacks fishsticks12 for 33 damage. fishsticks12 has died.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed GoblinPriest[12].
+doogiemacgyver failed to steal any shrimp. 
+doogiemacgyver missed OrcWarrior[17].
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 missed OrcWarrior[1].
+rabidtestsubject's ballad encourages angaarb.
+rabidtestsubject's ballad encourages eaglechoit.
+rabidtestsubject's ballad encourages raydia_.
+rabidtestsubject attacks OrcWarrior[17] for 1 damage. 
+dwraith23 has entered a riposting stance.
+dwraith23 attacks Wolf[6] for 15 damage. 
+OrcWarrior[30] attacks angaarb for 3 damage. 
+arixyann enchantes their sword and shield, enhancing their attack and defense.
+arixyann missed OrcWarrior[5].
+archbobs failed to burn OrcWarrior[7].
+archbobs has burned OrcWarrior[8] for 3 turns.
+archbobs failed to burn OrcWarrior[19].
+archbobs attacks OrcWarrior[8] for 1 damage. 
+Goblin[24] missed hackhunter13.
+OrcWarrior[16] missed chaddytone.
+OrcWarrior[0] attacks shamesocks for 17 damage. 
+GoblinBrute[12] missed prismcardinal.
+OrcWarrior[15] attacks doogiemacgyver for 70 damage. doogiemacgyver has died.
+unagiro chills OrcWarrior[15] lowering attack and defense.
+unagiro chills GoblinPriest[28] lowering attack and defense.
+unagiro chills OrcWarrior[0] lowering attack and defense.
+unagiro missed OrcWarrior[0].
+OrcWarrior[1] attacks rango5731 for 1 damage. 
+fishsticks12 hides in the shadows.
+fishsticks12 cannot attack while dead.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[11] for 8 damage. 
+l0kplart heals 4 life to battleshippment.
+l0kplart heals 2 life to hackhunter13.
+l0kplart heals 2 life to killingman4563.
+l0kplart heals 6 life to dawn_zombie.
+
+karrastheraven_ chills Wolf[6] lowering attack and defense.
+karrastheraven_ chills GoblinBrute[3] lowering attack and defense.
+karrastheraven_ chills OrcWarrior[19] lowering attack and defense.
+karrastheraven_ attacks Goblin[24] for 4 damage. 
+itzteddygrey hides in the shadows.
+itzteddygrey attacks GoblinBrute[3] for 1 damage. 
+OrcWarrior[9] attacks hackhunter13 for 17 damage. 
+OrcWarrior[22] missed unagiro.
+Wolf[14] missed unagiro.
+OrcWarrior[17] attacks angaarb for 21 damage. 
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks GoblinPriest[12] for 53 damage. GoblinPriest[12] has died.
+OrcWarrior[5] attacks prismcardinal for 26 damage. 
+chaddytone warcry boosts arixyann's attack.
+chaddytone warcry boosts itzteddygrey's attack.
+chaddytone warcry boosts karrastheraven_'s attack.
+chaddytone attacks Wolf[27] for 80 damage. Wolf[27] has died.
+OrcWarrior[23] missed 1recycle_bin1.
+1recycle_bin1 manages to steal 4 shrimp from OrcWarrior[16]. 1recycle_bin1 pilfers armor from OrcWarrior[16]. 
+1recycle_bin1 attacks OrcWarrior[8] for 5 damage. 
+eaglechoit heals 4 life to rango5731.
+eaglechoit heals 4 life to distractioncrab.
+eaglechoit heals 4 life to angaarb.
+eaglechoit heals 1 life to dawn_zombie.
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks missed OrcWarrior[1].
+Wolf[6] missed killingman4563.
+dawn_zombie did absolutely nothing.
+raydia_ has burned OrcWarrior[1] for 3 turns.
+raydia_ failed to burn OrcWarrior[30].
+raydia_ failed to burn OrcWarrior[9].
+raydia_ missed OrcWarrior[26].
+Goblin[25] missed arixyann.
+rango5731 warcry boosts itzteddygrey's attack.
+rango5731 warcry boosts arixyann's attack.
+rango5731 warcry boosts rango5731's attack.
+rango5731 attacks OrcWarrior[23] for 2 damage. 
+OrcWarrior[4] missed angaarb.
+OrcWarrior[7] missed itzteddygrey.
+GoblinPriest[12] heals 6 life to OrcWarrior[8].
+GoblinPriest[12] heals 3 life to OrcWarrior[11].
+GoblinPriest[12] heals 5 life to OrcWarrior[23].
+OrcWarrior[2] attacks shamesocks for 19 damage. 
+OrcWarrior[21] missed hackhunter13.
+mayberecycled heals 2 life to hackhunter13.
+mayberecycled heals 4 life to eaglechoit.
+mayberecycled heals 3 life to angaarb.
+mayberecycled heals 4 life to dawn_zombie.
+GoblinBrute[28] missed unagiro.
+OrcWarrior[18] attacks hackhunter13 for 12 damage. 
+angaarb has entered a riposting stance.
+angaarb attacks Goblin[24] for 50 damage. Goblin[24] has died.
+GoblinBrute[3] missed 1recycle_bin1.
+GoblinPriest[28] heals 5 life to OrcWarrior[21].
+GoblinPriest[28] heals 2 life to Wolf[14].
+GoblinPriest[28] heals 5 life to OrcWarrior[30].
+------------------------------------------------------------
+mayberecycled heals 1 life to watson1290.
+mayberecycled heals 4 life to killingman4563.
+mayberecycled heals 1 life to rango5731.
+mayberecycled heals 3 life to dawn_zombie.
+dawn_zombie did absolutely nothing.
+dwraith23 has entered a riposting stance.
+dwraith23 missed OrcWarrior[11].
+GoblinPriest[28] heals 5 life to OrcWarrior[15].
+GoblinPriest[28] heals 2 life to Wolf[6].
+GoblinPriest[28] heals 1 life to OrcWarrior[9].
+OrcWarrior[0] attacks rmorrin for 11 damage. 
+OrcWarrior[5] attacks hackhunter13 for 9 damage. 
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[16] for 4 damage. 
+raydia_ has burned GoblinBrute[3] for 3 turns.
+raydia_ failed to burn OrcWarrior[5].
+raydia_ has burned Wolf[6] for 3 turns.
+raydia_ attacks Wolf[14] for 17 damage. 
+Wolf[6] missed hackhunter13.
+OrcWarrior[18] missed angaarb.
+Wolf[20] missed dawn_zombie.
+Goblin[25] missed chaddytone.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[8].
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[19] for 3 damage. 
+unagiro chills OrcWarrior[0] lowering attack and defense.
+unagiro chills GoblinPriest[28] lowering attack and defense.
+unagiro chills GoblinBrute[3] lowering attack and defense.
+unagiro attacks GoblinPriest[28] for 12 damage. 
+eaglechoit heals 4 life to archbobs.
+eaglechoit heals 1 life to angaarb.
+eaglechoit heals 2 life to rango5731.
+eaglechoit heals 5 life to dawn_zombie.
+itzteddygrey hides in the shadows.
+OrcWarrior[1] attacks itzteddygrey for 109 damage. itzteddygrey has died.
+OrcWarrior[15] attacks unagiro for 30 damage. 
+OrcWarrior[16] attacks rango5731 for 2 damage. 
+OrcWarrior[23] attacks arixyann for 36 damage. 
+arixyann enchantes their sword and shield, enhancing their attack and defense.
+arixyann missed OrcWarrior[21].
+OrcWarrior[2] attacks killingman4563 for 47 damage. 
+OrcWarrior[4] attacks rmorrin for 15 damage. 
+OrcWarrior[30] attacks dawn_zombie for 93 damage. dawn_zombie has died.
+GoblinBrute[3] attacks arixyann for 5 damage. 
+GoblinBrute[12] missed chaddytone.
+karrastheraven_ chills GoblinBrute[12] lowering attack and defense.
+karrastheraven_ chills OrcWarrior[2] lowering attack and defense.
+karrastheraven_ chills OrcWarrior[21] lowering attack and defense.
+karrastheraven_ missed OrcWarrior[4].
+OrcWarrior[26] attacks shamesocks for 9 damage. 
+chaddytone warcry boosts distractioncrab's attack.
+chaddytone warcry boosts shamesocks's attack.
+chaddytone warcry boosts rmorrin's attack.
+chaddytone attacks Wolf[20] for 23 damage. 
+battleshippment heals 3 life to raydia_.
+battleshippment heals 2 life to sabashjon.
+battleshippment heals 1 life to eaglechoit.
+battleshippment heals 8 life to mayberecycled.
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 missed OrcWarrior[7].
+prismcardinal chills OrcWarrior[18] lowering attack and defense.
+prismcardinal chills OrcWarrior[5] lowering attack and defense.
+prismcardinal chills Wolf[6] lowering attack and defense.
+prismcardinal missed OrcWarrior[1].
+killingman4563 sharpens their blade, increasing their attack.
+killingman4563 missed OrcWarrior[22].
+OrcWarrior[8] attacks rmorrin for 19 damage. 
+OrcWarrior[22] attacks karrastheraven_ for 55 damage. 
+archbobs has burned Wolf[6] for 3 turns.
+archbobs has burned OrcWarrior[7] for 3 turns.
+archbobs has burned Goblin[25] for 3 turns.
+archbobs attacks OrcWarrior[16] for 1 damage. 
+angaarb has entered a riposting stance.
+angaarb missed OrcWarrior[17].
+l0kplart heals 3 life to l0kplart.
+l0kplart heals 3 life to dwraith23.
+l0kplart heals 4 life to karrastheraven_.
+l0kplart heals 5 life to karrastheraven_.
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks OrcWarrior[17] for 1 damage. 
+angaarb manages to partially parry OrcWarrior[7]'s attack, and suffers 5 damage.
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin missed OrcWarrior[15].
+Wolf[14] missed rango5731.
+OrcWarrior[11] attacks killingman4563 for 26 damage. 
+1recycle_bin1 failed to steal any shrimp. 
+1recycle_bin1 missed OrcWarrior[22].
+GoblinBrute[28] missed hackhunter13.
+OrcWarrior[21] attacks chaddytone for 3 damage. 
+
+rango5731 warcry boosts killingman4563's attack.
+rango5731 warcry boosts shamesocks's attack.
+rango5731 warcry boosts itzteddygrey's attack.
+rango5731 missed OrcWarrior[5].
+OrcWarrior[9] attacks hackhunter13 for 3 damage. 
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks attacks OrcWarrior[8] for 2 damage. 
+OrcWarrior[19] attacks karrastheraven_ for 29 damage. karrastheraven_ has died.
+rabidtestsubject's ballad encourages 1recycle_bin1.
+rabidtestsubject's ballad encourages sabashjon.
+rabidtestsubject's ballad encourages rmorrin.
+rabidtestsubject attacks Wolf[20] for 12 damage. Wolf[20] has died.
+------------------------------------------------------------
+OrcWarrior[23] attacks viktor_kadic for 3 damage. 
+archbobs has burned GoblinBrute[12] for 3 turns.
+archbobs has burned Wolf[6] for 3 turns.
+archbobs failed to burn OrcWarrior[11].
+archbobs attacks OrcWarrior[23] for 1 damage. 
+OrcWarrior[15] attacks shamesocks for 26 damage. 
+OrcWarrior[11] attacks rmorrin for 10 damage. 
+OrcWarrior[5] attacks angaarb for 30 damage. angaarb has died.
+prismcardinal chills Goblin[25] lowering attack and defense.
+prismcardinal chills GoblinBrute[12] lowering attack and defense.
+prismcardinal chills OrcWarrior[26] lowering attack and defense.
+prismcardinal attacks GoblinBrute[3] for 17 damage. 
+GoblinBrute[12] attacks arixyann for 9 damage. 
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin attacks Wolf[14] for 35 damage. Wolf[14] has died.
+OrcWarrior[21] attacks dwraith23 for 39 damage. 
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 attacks GoblinBrute[3] for 1 damage. 
+shamesocks enchantes their sword and shield, enhancing their attack and defense.
+shamesocks attacks OrcWarrior[22] for 1 damage. 
+OrcWarrior[22] missed rango5731.
+OrcWarrior[16] attacks unagiro for 45 damage. 
+battleshippment heals 1 life to unagiro.
+battleshippment heals 1 life to unagiro.
+OrcWarrior[1] attacks killingman4563 for 30 damage. killingman4563 has died.
+eaglechoit heals 2 life to prismcardinal.
+eaglechoit heals 1 life to shamesocks.
+eaglechoit heals 3 life to unagiro.
+OrcWarrior[9] attacks viktor_kadic for 17 damage. 
+GoblinBrute[28] missed 1recycle_bin1.
+arixyann enchantes their sword and shield, enhancing their attack and defense.
+arixyann attacks OrcWarrior[7] for 1 damage. 
+Goblin[25] missed viktor_kadic.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[5] for 7 damage. 
+killingman4563 sharpens their blade, increasing their attack.
+killingman4563 cannot attack while dead.
+GoblinPriest[28] heals 3 life to OrcWarrior[5].
+GoblinPriest[28] heals 6 life to OrcWarrior[16].
+GoblinPriest[28] heals 4 life to OrcWarrior[1].
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks Goblin[25] for 38 damage. Goblin[25] has died.
+OrcWarrior[2] attacks unagiro for 22 damage. unagiro has died.
+angaarb has entered a riposting stance.
+angaarb cannot attack while dead.
+rango5731 warcry boosts viktor_kadic's attack.
+rango5731 warcry boosts rabidtestsubject's attack.
+rango5731 warcry boosts angaarb's attack.
+rango5731 attacks OrcWarrior[1] for 1 damage. 
+rabidtestsubject's ballad encourages eaglechoit.
+rabidtestsubject's ballad encourages rango5731.
+rabidtestsubject's ballad encourages viktor_kadic.
+rabidtestsubject missed OrcWarrior[18].
+OrcWarrior[26] attacks chaddytone for 5 damage. 
+dwraith23 has entered a riposting stance.
+dwraith23 missed OrcWarrior[8].
+1recycle_bin1 manages to steal 3 shrimp from OrcWarrior[1]. 
+1recycle_bin1 attacks OrcWarrior[16] for 4 damage. 
+unagiro chills GoblinBrute[3] lowering attack and defense.
+unagiro chills Wolf[6] lowering attack and defense.
+unagiro chills OrcWarrior[9] lowering attack and defense.
+unagiro cannot attack while dead.
+GoblinBrute[3] attacks arixyann for 15 damage. 
+OrcWarrior[17] attacks rmorrin for 3 damage. 
+OrcWarrior[0] missed hackhunter13.
+OrcWarrior[30] missed rango5731.
+OrcWarrior[8] attacks shamesocks for 24 damage. shamesocks has died.
+mayberecycled heals 2 life to viktor_kadic.
+mayberecycled heals 4 life to rmorrin.
+mayberecycled heals 3 life to prismcardinal.
+mayberecycled heals 8 life to mayberecycled.
+OrcWarrior[19] missed 1recycle_bin1.
+raydia_ failed to burn GoblinPriest[28].
+raydia_ failed to burn OrcWarrior[2].
+raydia_ failed to burn OrcWarrior[21].
+raydia_ attacks GoblinBrute[3] for 4 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab missed OrcWarrior[18].
+
+OrcWarrior[7] missed chaddytone.
+l0kplart heals 1 life to viktor_kadic.
+l0kplart heals 1 life to eaglechoit.
+l0kplart heals 2 life to sabashjon.
+l0kplart heals 6 life to mayberecycled.
+Wolf[14] cannot attack while dead.
+chaddytone warcry boosts dawn_zombie's attack.
+chaddytone warcry boosts doogiemacgyver's attack.
+chaddytone warcry boosts sabashjon's attack.
+chaddytone attacks OrcWarrior[23] for 2 damage. 
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 attacks OrcWarrior[11] for 1 damage. 
+OrcWarrior[18] attacks viktor_kadic for 7 damage. 
+Wolf[6] missed rmorrin.
+------------------------------------------------------------
+OrcWarrior[30] attacks arixyann for 44 damage. arixyann has died.
+OrcWarrior[26] attacks prismcardinal for 21 damage. 
+OrcWarrior[5] attacks dwraith23 for 18 damage. 
+OrcWarrior[0] missed prismcardinal.
+dwraith23 has entered a riposting stance.
+dwraith23 missed OrcWarrior[8].
+
+Wolf[6] missed 1recycle_bin1.
+
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 attacks Wolf[6] for 41 damage. Wolf[6] has died.
+1recycle_bin1 failed to steal any shrimp. 
+1recycle_bin1 attacks OrcWarrior[11] for 6 damage. 
+GoblinBrute[3] missed hackhunter13.
+OrcWarrior[1] attacks prismcardinal for 15 damage. 
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks OrcWarrior[8] for 1 damage. 
+chaddytone warcry boosts hackhunter13's attack.
+chaddytone warcry boosts mayberecycled's attack.
+chaddytone warcry boosts rango5731's attack.
+chaddytone attacks OrcWarrior[8] for 1 damage. 
+arixyann enchantes their sword and shield, enhancing their attack and defense.
+arixyann cannot attack while dead.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[30] for 5 damage. 
+GoblinBrute[28] missed viktor_kadic.
+rango5731 warcry boosts prismcardinal's attack.
+rango5731 warcry boosts arixyann's attack.
+rango5731 warcry boosts dawn_zombie's attack.
+rango5731 attacks OrcWarrior[1] for 16 damage. 
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin attacks OrcWarrior[2] for 4 damage. 
+OrcWarrior[21] missed prismcardinal.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab missed OrcWarrior[0].
+dwraith23 parries and ripostes OrcWarrior[15] for 1 damage.
+OrcWarrior[16] attacks hackhunter13 for 10 damage. 
+GoblinPriest[28] heals 2 life to OrcWarrior[23].
+GoblinPriest[28] heals 5 life to OrcWarrior[21].
+GoblinPriest[28] heals 2 life to OrcWarrior[17].
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[18].
+OrcWarrior[2] attacks viktor_kadic for 6 damage. 
+OrcWarrior[9] missed rmorrin.
+OrcWarrior[8] attacks 1recycle_bin1 for 4 damage. 
+l0kplart heals 2 life to rmorrin.
+l0kplart heals 2 life to dwraith23.
+l0kplart heals 1 life to prismcardinal.
+l0kplart heals 5 life to dwraith23.
+OrcWarrior[18] attacks hackhunter13 for 20 damage. 
+archbobs failed to burn OrcWarrior[7].
+archbobs failed to burn OrcWarrior[2].
+archbobs failed to burn OrcWarrior[0].
+archbobs attacks OrcWarrior[7] for 1 damage. 
+OrcWarrior[7] attacks viktor_kadic for 7 damage. 
+battleshippment heals 3 life to raydia_.
+battleshippment heals 4 life to dwraith23.
+battleshippment heals 4 life to eaglechoit.
+battleshippment heals 4 life to prismcardinal.
+mayberecycled heals 1 life to prismcardinal.
+mayberecycled heals 1 life to viktor_kadic.
+mayberecycled heals 1 life to hackhunter13.
+mayberecycled heals 3 life to mayberecycled.
+raydia_ failed to burn OrcWarrior[21].
+raydia_ has burned OrcWarrior[11] for 3 turns.
+raydia_ failed to burn GoblinBrute[12].
+raydia_ missed OrcWarrior[7].
+OrcWarrior[11] attacks viktor_kadic for 3 damage. 
+rabidtestsubject's ballad encourages chaddytone.
+rabidtestsubject's ballad encourages watson1290.
+rabidtestsubject's ballad encourages archbobs.
+rabidtestsubject missed OrcWarrior[23].
+OrcWarrior[23] missed rmorrin.
+OrcWarrior[17] attacks rango5731 for 3 damage. 
+OrcWarrior[4] attacks prismcardinal for 35 damage. prismcardinal has died.
+OrcWarrior[19] missed 1recycle_bin1.
+eaglechoit heals 3 life to dwraith23.
+eaglechoit heals 3 life to rango5731.
+eaglechoit heals 4 life to 1recycle_bin1.
+eaglechoit heals 2 life to mayberecycled.
+prismcardinal chills OrcWarrior[2] lowering attack and defense.
+prismcardinal chills OrcWarrior[18] lowering attack and defense.
+prismcardinal chills OrcWarrior[9] lowering attack and defense.
+prismcardinal cannot attack while dead.
+------------------------------------------------------------
+rmorrin enchantes their sword and shield, enhancing their attack and defense.
+rmorrin attacks OrcWarrior[1] for 5 damage. 
+eaglechoit heals 2 life to dwraith23.
+eaglechoit heals 3 life to rmorrin.
+eaglechoit heals 2 life to eaglechoit.
+eaglechoit heals 8 life to mayberecycled.
+OrcWarrior[11] attacks rmorrin for 17 damage. 
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 missed OrcWarrior[18].
+l0kplart heals 3 life to 1recycle_bin1.
+l0kplart heals 3 life to hackhunter13.
+l0kplart heals 3 life to battleshippment.
+l0kplart heals 2 life to mayberecycled.
+OrcWarrior[2] attacks chaddytone for 19 damage. 
+chaddytone warcry boosts karrastheraven_'s attack.
+chaddytone warcry boosts rango5731's attack.
+chaddytone warcry boosts archbobs's attack.
+chaddytone attacks OrcWarrior[1] for 2 damage. 
+OrcWarrior[17] missed 1recycle_bin1.
+battleshippment heals 3 life to chaddytone.
+battleshippment heals 2 life to archbobs.
+battleshippment heals 1 life to hackhunter13.
+battleshippment heals 1 life to mayberecycled.
+OrcWarrior[5] missed rango5731.
+OrcWarrior[23] attacks dwraith23 for 48 damage. dwraith23 has died.
+dwraith23 has entered a riposting stance.
+dwraith23 cannot attack while dead.
+OrcWarrior[21] attacks chaddytone for 1 damage. 
+OrcWarrior[26] missed chaddytone.
+OrcWarrior[1] attacks rmorrin for 11 damage. 
+OrcWarrior[22] attacks rmorrin for 10 damage. rmorrin has died.
+GoblinBrute[28] missed viktor_kadic.
+OrcWarrior[8] attacks rango5731 for 3 damage. 
+OrcWarrior[0] attacks viktor_kadic for 19 damage. 
+OrcWarrior[7] missed rango5731.
+mayberecycled heals 1 life to chaddytone.
+mayberecycled heals 1 life to mayberecycled.
+mayberecycled heals 2 life to archbobs.
+mayberecycled heals 3 life to mayberecycled.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon missed OrcWarrior[4].
+OrcWarrior[18] missed rango5731.
+GoblinBrute[12] missed chaddytone.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[2].
+OrcWarrior[16] attacks chaddytone for 3 damage. 
+1recycle_bin1 manages to steal 4 shrimp from OrcWarrior[0]. 1recycle_bin1 pilfers armor from OrcWarrior[0]. 
+1recycle_bin1 missed OrcWarrior[4].
+rabidtestsubject's ballad encourages hackhunter13.
+rabidtestsubject's ballad encourages eaglechoit.
+rabidtestsubject's ballad encourages chaddytone.
+rabidtestsubject attacks OrcWarrior[2] for 1 damage. 
+OrcWarrior[9] attacks 1recycle_bin1 for 30 damage. 
+OrcWarrior[30] missed hackhunter13.
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks OrcWarrior[16] for 1 damage. 
+archbobs has burned GoblinBrute[12] for 3 turns.
+archbobs has burned OrcWarrior[19] for 3 turns.
+archbobs has burned OrcWarrior[11] for 3 turns.
+archbobs attacks GoblinBrute[12] for 41 damage. GoblinBrute[12] has died.
+OrcWarrior[15] missed viktor_kadic.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab missed OrcWarrior[19].
+OrcWarrior[19] attacks viktor_kadic for 19 damage. 
+OrcWarrior[4] attacks rango5731 for 12 damage. 
+GoblinPriest[28] heals 1 life to GoblinBrute[28].
+GoblinPriest[28] heals 3 life to OrcWarrior[8].
+GoblinPriest[28] heals 4 life to OrcWarrior[19].
+raydia_ failed to burn OrcWarrior[1].
+raydia_ failed to burn OrcWarrior[11].
+raydia_ failed to burn OrcWarrior[5].
+raydia_ missed OrcWarrior[0].
+rango5731 warcry boosts 1recycle_bin1's attack.
+rango5731 warcry boosts sabashjon's attack.
+rango5731 warcry boosts fishsticks12's attack.
+rango5731 attacks OrcWarrior[2] for 15 damage. 
+------------------------------------------------------------
+eaglechoit heals 3 life to battleshippment.
+eaglechoit heals 1 life to hackhunter13.
+eaglechoit heals 3 life to chaddytone.
+eaglechoit heals 3 life to mayberecycled.
+GoblinPriest[28] heals 1 life to OrcWarrior[0].
+GoblinPriest[28] heals 1 life to OrcWarrior[7].
+GoblinPriest[28] heals 3 life to OrcWarrior[21].
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks GoblinBrute[28] for 8 damage. 
+OrcWarrior[17] attacks viktor_kadic for 7 damage. 
+GoblinBrute[28] attacks rango5731 for 2 damage. 
+battleshippment heals 3 life to 1recycle_bin1.
+battleshippment heals 2 life to hackhunter13.
+battleshippment heals 4 life to eaglechoit.
+battleshippment heals 10 life to viktor_kadic.
+OrcWarrior[7] missed 1recycle_bin1.
+OrcWarrior[11] missed 1recycle_bin1.
+OrcWarrior[4] attacks rango5731 for 4 damage. 
+mayberecycled heals 1 life to 1recycle_bin1.
+mayberecycled heals 4 life to hackhunter13.
+mayberecycled heals 2 life to mayberecycled.
+mayberecycled heals 7 life to mayberecycled.
+OrcWarrior[19] attacks 1recycle_bin1 for 6 damage. 
+OrcWarrior[2] attacks rango5731 for 7 damage. 
+OrcWarrior[15] attacks viktor_kadic for 2 damage. 
+OrcWarrior[16] attacks chaddytone for 14 damage. 
+OrcWarrior[22] missed chaddytone.
+l0kplart heals 1 life to battleshippment.
+l0kplart heals 3 life to hackhunter13.
+l0kplart heals 3 life to mayberecycled.
+rango5731 warcry boosts archbobs's attack.
+rango5731 warcry boosts eaglechoit's attack.
+rango5731 warcry boosts distractioncrab's attack.
+rango5731 missed OrcWarrior[2].
+OrcWarrior[18] attacks rango5731 for 29 damage. 
+rabidtestsubject's ballad encourages sabashjon.
+rabidtestsubject's ballad encourages distractioncrab.
+rabidtestsubject's ballad encourages eaglechoit.
+rabidtestsubject missed OrcWarrior[21].
+OrcWarrior[21] attacks rango5731 for 13 damage. 
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[15].
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic attacks OrcWarrior[26] for 1 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[21] for 7 damage. 
+1recycle_bin1 failed to steal any shrimp. 
+1recycle_bin1 missed OrcWarrior[11].
+archbobs has burned GoblinPriest[28] for 3 turns.
+archbobs has burned OrcWarrior[8] for 3 turns.
+archbobs has burned OrcWarrior[2] for 3 turns.
+archbobs missed OrcWarrior[21].
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 attacks OrcWarrior[30] for 3 damage. 
+OrcWarrior[5] attacks viktor_kadic for 14 damage. 
+OrcWarrior[9] attacks viktor_kadic for 5 damage. 
+OrcWarrior[26] attacks 1recycle_bin1 for 11 damage. 
+chaddytone warcry boosts 1recycle_bin1's attack.
+chaddytone warcry boosts killingman4563's attack.
+chaddytone warcry boosts mayberecycled's attack.
+chaddytone attacks OrcWarrior[18] for 5 damage. 
+OrcWarrior[1] attacks chaddytone for 7 damage. 
+OrcWarrior[23] attacks chaddytone for 9 damage. 
+OrcWarrior[30] attacks hackhunter13 for 1 damage. 
+OrcWarrior[8] attacks 1recycle_bin1 for 4 damage. 
+OrcWarrior[0] attacks hackhunter13 for 7 damage. 
+raydia_ failed to burn OrcWarrior[15].
+raydia_ failed to burn OrcWarrior[21].
+raydia_ failed to burn OrcWarrior[7].
+raydia_ missed OrcWarrior[19].
+------------------------------------------------------------
+OrcWarrior[9] attacks chaddytone for 4 damage. 
+OrcWarrior[23] missed rango5731.
+eaglechoit heals 1 life to watson1290.
+eaglechoit heals 3 life to viktor_kadic.
+eaglechoit heals 6 life to viktor_kadic.
+OrcWarrior[4] attacks rango5731 for 12 damage. 
+OrcWarrior[16] attacks rango5731 for 13 damage. 
+rabidtestsubject's ballad encourages rango5731.
+rabidtestsubject's ballad encourages rabidtestsubject.
+rabidtestsubject's ballad encourages hackhunter13.
+rabidtestsubject attacks OrcWarrior[5] for 1 damage. 
+OrcWarrior[17] attacks viktor_kadic for 6 damage. 
+OrcWarrior[15] missed rango5731.
+raydia_ failed to burn OrcWarrior[1].
+raydia_ has burned OrcWarrior[2] for 3 turns.
+raydia_ failed to burn OrcWarrior[0].
+raydia_ missed OrcWarrior[11].
+rango5731 warcry boosts killingman4563's attack.
+rango5731 warcry boosts karrastheraven_'s attack.
+rango5731 warcry boosts eaglechoit's attack.
+rango5731 missed OrcWarrior[30].
+OrcWarrior[11] attacks hackhunter13 for 10 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[21] for 3 damage. 
+chaddytone warcry boosts angaarb's attack.
+chaddytone warcry boosts dwraith23's attack.
+chaddytone warcry boosts l0kplart's attack.
+chaddytone attacks OrcWarrior[7] for 2 damage. 
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 attacks OrcWarrior[23] for 2 damage. 
+GoblinBrute[28] attacks viktor_kadic for 10 damage. viktor_kadic has died.
+mayberecycled heals 2 life to sabashjon.
+mayberecycled heals 1 life to rango5731.
+mayberecycled heals 3 life to hackhunter13.
+mayberecycled heals 2 life to 1recycle_bin1.
+OrcWarrior[8] missed hackhunter13.
+OrcWarrior[30] attacks chaddytone for 4 damage. 
+1recycle_bin1 failed to steal any shrimp. 
+1recycle_bin1 missed OrcWarrior[15].
+OrcWarrior[1] missed rango5731.
+l0kplart heals 1 life to archbobs.
+l0kplart heals 1 life to chaddytone.
+l0kplart heals 4 life to hackhunter13.
+l0kplart heals 5 life to 1recycle_bin1.
+OrcWarrior[2] attacks rango5731 for 9 damage. 
+OrcWarrior[22] attacks 1recycle_bin1 for 3 damage. 
+OrcWarrior[0] missed hackhunter13.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[15] for 4 damage. 
+OrcWarrior[21] missed chaddytone.
+GoblinPriest[28] heals 1 life to OrcWarrior[2].
+GoblinPriest[28] heals 6 life to OrcWarrior[5].
+GoblinPriest[28] heals 6 life to OrcWarrior[11].
+OrcWarrior[18] missed hackhunter13.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[19].
+battleshippment heals 2 life to rango5731.
+battleshippment heals 1 life to 1recycle_bin1.
+battleshippment heals 7 life to mayberecycled.
+OrcWarrior[5] missed chaddytone.
+OrcWarrior[19] attacks chaddytone for 5 damage. 
+viktor_kadic sharpens their blade, increasing their attack.
+viktor_kadic cannot attack while dead.
+OrcWarrior[7] attacks 1recycle_bin1 for 12 damage. 
+OrcWarrior[26] attacks chaddytone for 1 damage. 
+archbobs has burned OrcWarrior[7] for 3 turns.
+archbobs has burned GoblinPriest[28] for 3 turns.
+archbobs failed to burn OrcWarrior[8].
+archbobs missed OrcWarrior[21].
+------------------------------------------------------------
+OrcWarrior[16] attacks rango5731 for 7 damage. 
+1recycle_bin1 failed to steal any shrimp. 
+1recycle_bin1 attacks GoblinBrute[28] for 21 damage. 
+OrcWarrior[11] attacks rango5731 for 4 damage. 
+OrcWarrior[9] attacks 1recycle_bin1 for 7 damage. 1recycle_bin1 has died.
+OrcWarrior[18] missed rango5731.
+chaddytone warcry boosts battleshippment's attack.
+chaddytone warcry boosts sabashjon's attack.
+chaddytone warcry boosts eaglechoit's attack.
+chaddytone attacks OrcWarrior[18] for 1 damage. 
+OrcWarrior[15] attacks chaddytone for 6 damage. 
+archbobs failed to burn OrcWarrior[7].
+archbobs failed to burn OrcWarrior[30].
+archbobs failed to burn OrcWarrior[4].
+archbobs missed OrcWarrior[5].
+raydia_ failed to burn OrcWarrior[5].
+raydia_ failed to burn OrcWarrior[0].
+raydia_ has burned OrcWarrior[15] for 3 turns.
+raydia_ missed OrcWarrior[16].
+OrcWarrior[2] attacks chaddytone for 6 damage. chaddytone has died.
+l0kplart heals 1 life to rango5731.
+l0kplart heals 4 life to eaglechoit.
+l0kplart heals 6 life to rango5731.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[5].
+OrcWarrior[30] missed hackhunter13.
+OrcWarrior[21] missed rango5731.
+OrcWarrior[26] missed rango5731.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks GoblinPriest[28] for 138 damage. GoblinPriest[28] has died.
+GoblinPriest[28] heals 4 life to OrcWarrior[22].
+GoblinPriest[28] heals 2 life to GoblinBrute[28].
+GoblinPriest[28] heals 5 life to OrcWarrior[18].
+OrcWarrior[4] missed hackhunter13.
+battleshippment heals 3 life to rango5731.
+battleshippment heals 1 life to sabashjon.
+battleshippment heals 2 life to hackhunter13.
+battleshippment heals 3 life to mayberecycled.
+mayberecycled heals 1 life to archbobs.
+mayberecycled heals 4 life to raydia_.
+mayberecycled heals 1 life to hackhunter13.
+mayberecycled heals 4 life to mayberecycled.
+OrcWarrior[8] missed rango5731.
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 attacks OrcWarrior[21] for 3 damage. 
+OrcWarrior[22] attacks rango5731 for 2 damage. 
+OrcWarrior[23] attacks rango5731 for 5 damage. 
+OrcWarrior[0] attacks rango5731 for 9 damage. 
+OrcWarrior[5] missed rango5731.
+eaglechoit heals 2 life to rango5731.
+eaglechoit heals 1 life to rango5731.
+OrcWarrior[19] missed rango5731.
+rabidtestsubject's ballad encourages distractioncrab.
+rabidtestsubject's ballad encourages eaglechoit.
+rabidtestsubject's ballad encourages hackhunter13.
+rabidtestsubject attacks OrcWarrior[22] for 1 damage. 
+OrcWarrior[1] missed hackhunter13.
+OrcWarrior[7] attacks rango5731 for 1 damage. 
+OrcWarrior[17] missed rango5731.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[22] for 9 damage. 
+rango5731 warcry boosts unagiro's attack.
+rango5731 warcry boosts rmorrin's attack.
+rango5731 warcry boosts hackhunter13's attack.
+rango5731 attacks OrcWarrior[18] for 5 damage. 
+GoblinBrute[28] missed hackhunter13.
+------------------------------------------------------------
+OrcWarrior[8] attacks rango5731 for 11 damage. rango5731 has died.
+rabidtestsubject's ballad encourages watson1290.
+rabidtestsubject's ballad encourages archbobs.
+rabidtestsubject's ballad encourages watson1290.
+rabidtestsubject attacks OrcWarrior[2] for 1 damage. 
+archbobs failed to burn OrcWarrior[23].
+archbobs has burned OrcWarrior[30] for 3 turns.
+archbobs failed to burn OrcWarrior[18].
+archbobs attacks OrcWarrior[18] for 2 damage. 
+OrcWarrior[7] missed hackhunter13.
+OrcWarrior[23] missed hackhunter13.
+OrcWarrior[2] attacks hackhunter13 for 15 damage. 
+l0kplart heals 1 life to l0kplart.
+l0kplart heals 1 life to hackhunter13.
+l0kplart heals 4 life to mayberecycled.
+l0kplart heals 10 life to hackhunter13.
+OrcWarrior[21] attacks hackhunter13 for 7 damage. 
+eaglechoit heals 2 life to hackhunter13.
+eaglechoit heals 5 life to hackhunter13.
+OrcWarrior[22] missed hackhunter13.
+OrcWarrior[0] missed hackhunter13.
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon missed OrcWarrior[17].
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[4].
+OrcWarrior[9] missed hackhunter13.
+OrcWarrior[11] missed hackhunter13.
+battleshippment heals 2 life to rabidtestsubject.
+battleshippment heals 2 life to hackhunter13.
+battleshippment heals 4 life to archbobs.
+battleshippment heals 2 life to mayberecycled.
+OrcWarrior[17] attacks hackhunter13 for 6 damage. 
+OrcWarrior[4] attacks hackhunter13 for 4 damage. 
+OrcWarrior[1] missed hackhunter13.
+OrcWarrior[19] attacks hackhunter13 for 9 damage. 
+OrcWarrior[26] missed hackhunter13.
+OrcWarrior[15] missed hackhunter13.
+OrcWarrior[5] attacks hackhunter13 for 8 damage. hackhunter13 has died.
+mayberecycled heals 4 life to rabidtestsubject.
+mayberecycled heals 2 life to distractioncrab.
+mayberecycled heals 1 life to l0kplart.
+mayberecycled heals 2 life to mayberecycled.
+OrcWarrior[16] attacks mayberecycled for 93 damage. mayberecycled has died.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[23] for 8 damage. 
+rango5731 warcry boosts mayberecycled's attack.
+rango5731 warcry boosts 1recycle_bin1's attack.
+rango5731 warcry boosts itzteddygrey's attack.
+rango5731 cannot attack while dead.
+hackhunter13 enchantes their sword and shield, enhancing their attack and defense.
+hackhunter13 cannot attack while dead.
+OrcWarrior[18] attacks raydia_ for 71 damage. raydia_ has died.
+raydia_ failed to burn OrcWarrior[1].
+raydia_ failed to burn OrcWarrior[23].
+raydia_ has burned OrcWarrior[7] for 3 turns.
+raydia_ cannot attack while dead.
+OrcWarrior[30] attacks battleshippment for 40 damage. battleshippment has died.
+GoblinBrute[28] provokes sabashjon's Soulmasses and suffers 12 damage.GoblinBrute[28] missed sabashjon.GoblinBrute[28] has died.
+------------------------------------------------------------
+OrcWarrior[21] attacks watson1290 for 24 damage. 
+rabidtestsubject's ballad encourages watson1290.
+rabidtestsubject's ballad encourages sabashjon.
+rabidtestsubject's ballad encourages sabashjon.
+rabidtestsubject attacks OrcWarrior[9] for 1 damage. 
+OrcWarrior[17] missed rabidtestsubject.
+watson1290 summons a phalanx of soulmasses to defend themselves.
+watson1290 missed OrcWarrior[18].
+OrcWarrior[2] provokes distractioncrab's Soulmasses and suffers 10 damage.OrcWarrior[2] missed distractioncrab.
+l0kplart heals 1 life to eaglechoit.
+l0kplart heals 3 life to watson1290.
+l0kplart heals 4 life to watson1290.
+OrcWarrior[11] provokes sabashjon's Soulmasses and suffers 7 damage.OrcWarrior[11] attacks sabashjon for 7 damage. 
+OrcWarrior[4] missed l0kplart.
+OrcWarrior[5] attacks watson1290 for 33 damage. watson1290 has died.
+OrcWarrior[18] missed archbobs.
+archbobs has burned OrcWarrior[9] for 3 turns.
+archbobs failed to burn OrcWarrior[30].
+archbobs has burned OrcWarrior[11] for 3 turns.
+archbobs missed OrcWarrior[0].
+OrcWarrior[19] provokes sabashjon's Soulmasses and suffers 9 damage.OrcWarrior[19] missed sabashjon.
+OrcWarrior[23] provokes sabashjon's Soulmasses and suffers 6 damage.OrcWarrior[23] missed sabashjon.
+OrcWarrior[0] attacks rabidtestsubject for 18 damage. 
+OrcWarrior[26] missed archbobs.
+OrcWarrior[9] attacks rabidtestsubject for 28 damage. 
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[4] for 1 damage. 
+OrcWarrior[15] provokes sabashjon's Soulmasses and suffers 8 damage.OrcWarrior[15] attacks sabashjon for 9 damage. 
+OrcWarrior[1] missed rabidtestsubject.
+eaglechoit heals 4 life to rabidtestsubject.
+eaglechoit heals 3 life to sabashjon.
+eaglechoit heals 10 life to rabidtestsubject.
+OrcWarrior[16] missed rabidtestsubject.
+OrcWarrior[22] missed archbobs.
+OrcWarrior[7] attacks eaglechoit for 20 damage. 
+OrcWarrior[30] attacks rabidtestsubject for 46 damage. rabidtestsubject has died.
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[4] for 4 damage. 
+OrcWarrior[8] attacks l0kplart for 6 damage. 
+------------------------------------------------------------
+OrcWarrior[21] attacks archbobs for 28 damage. 
+OrcWarrior[16] attacks eaglechoit for 23 damage. 
+OrcWarrior[19] missed archbobs.
+archbobs failed to burn OrcWarrior[1].
+archbobs has burned OrcWarrior[19] for 3 turns.
+archbobs has burned OrcWarrior[2] for 3 turns.
+archbobs attacks OrcWarrior[5] for 2 damage. 
+OrcWarrior[8] provokes distractioncrab's Soulmasses and suffers 13 damage.OrcWarrior[8] attacks distractioncrab for 15 damage. 
+l0kplart heals 2 life to eaglechoit.
+l0kplart heals 4 life to distractioncrab.
+l0kplart heals 8 life to eaglechoit.
+OrcWarrior[5] attacks eaglechoit for 16 damage. eaglechoit has died.
+OrcWarrior[4] attacks l0kplart for 7 damage. 
+OrcWarrior[0] missed archbobs.
+OrcWarrior[22] missed archbobs.
+OrcWarrior[15] attacks archbobs for 28 damage. archbobs has died.
+OrcWarrior[18] provokes distractioncrab's Soulmasses and suffers 4 damage.OrcWarrior[18] attacks distractioncrab for 2 damage. 
+OrcWarrior[2] attacks l0kplart for 14 damage. 
+sabashjon summons a phalanx of soulmasses to defend themselves.
+sabashjon attacks OrcWarrior[16] for 14 damage. 
+OrcWarrior[30] provokes sabashjon's Soulmasses and suffers 3 damage.OrcWarrior[30] attacks sabashjon for 15 damage. 
+OrcWarrior[9] provokes sabashjon's Soulmasses and suffers 2 damage.OrcWarrior[9] missed sabashjon.
+OrcWarrior[26] provokes distractioncrab's Soulmasses and suffers 1 damage.OrcWarrior[26] missed distractioncrab.
+eaglechoit heals 4 life to distractioncrab.
+eaglechoit heals 1 life to sabashjon.
+eaglechoit heals 2 life to l0kplart.
+eaglechoit heals 10 life to l0kplart.
+OrcWarrior[1] provokes distractioncrab's Soulmasses and suffers 15 damage.OrcWarrior[1] attacks distractioncrab for 4 damage. 
+OrcWarrior[23] provokes sabashjon's Soulmasses and suffers 3 damage.OrcWarrior[23] attacks sabashjon for 13 damage. 
+OrcWarrior[17] provokes distractioncrab's Soulmasses and suffers 20 damage.OrcWarrior[17] missed distractioncrab.
+OrcWarrior[11] attacks l0kplart for 12 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab missed OrcWarrior[1].
+OrcWarrior[7] provokes distractioncrab's Soulmasses and suffers 23 damage.OrcWarrior[7] missed distractioncrab.
+------------------------------------------------------------
+OrcWarrior[16] provokes sabashjon's Soulmasses and suffers 8 damage.OrcWarrior[16] missed sabashjon.
+OrcWarrior[21] provokes distractioncrab's Soulmasses and suffers 8 damage.OrcWarrior[21] attacks distractioncrab for 8 damage. 
+l0kplart heals 2 life to l0kplart.
+l0kplart heals 2 life to sabashjon.
+l0kplart heals 3 life to distractioncrab.
+l0kplart heals 6 life to l0kplart.
+OrcWarrior[11] attacks l0kplart for 1 damage. 
+distractioncrab summons a phalanx of soulmasses to defend themselves.
+distractioncrab attacks OrcWarrior[17] for 4 damage. 
+OrcWarrior[0] attacks distractioncrab for 9 damage. 
+OrcWarrior[22] attacks sabashjon for 4 damage. 
+OrcWarrior[15] provokes sabashjon's Soulmasses and suffers 4 damage.OrcWarrior[15] attacks sabashjon for 16 damage. sabashjon has died.
+OrcWarrior[23] attacks l0kplart for 4 damage. 
+OrcWarrior[2] attacks l0kplart for 20 damage. l0kplart has died.
+OrcWarrior[1] attacks distractioncrab for 33 damage. distractioncrab has died.
 ------------------------------------------------------------

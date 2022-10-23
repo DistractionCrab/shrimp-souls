@@ -7,6 +7,8 @@ import ShrimpSouls.utils as utils
 
 SOULMASS_THRESHOLD = 10
 
+
+
 class ClassSpec:
 	def compute_hit(self, a, d):
 		return utils.compute_hit(a,d)
@@ -18,6 +20,9 @@ class ClassSpec:
 	def max_hp(self, p):
 		return 5
 
+	@property
+	def position(self):
+		return ss.Positions.FRONT	
 
 	def score_eva(self, p):
 		return p.level + 10
@@ -40,7 +45,7 @@ class ClassSpec:
 		return []
 
 
-	def duel_action(self, actor, party, opponents):
+	def duel_action(self, actor, env):
 		return [actions.DoNothing(player=actor)]
 
 	def find_valid_target(self, op):

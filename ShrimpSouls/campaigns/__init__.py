@@ -43,6 +43,9 @@ class NullCampaign:
 
 	def close(self):
 		pass
+
+	def find_valid_target(self, att, dfn, evn, pos):
+		return None
 			
 
 

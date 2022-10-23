@@ -1,3 +1,4 @@
+import ShrimpSouls as ss
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -41,9 +42,12 @@ class Thief(ClassSpec):
 	def ultimate_action(self, u, players, npcs):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
-		return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		if actor.invis == 0:
+			target = env.find_valid_target(actor, False, [ss.Positions.FRONT], True)
+			return [actions.DamageTarget(attacker=actor, defender=target)]
+		else:
+			return []
 
 	@property
 	def cl_string(self):

@@ -6,9 +6,6 @@ import ShrimpSouls.utils as utils
 import ShrimpSouls as ss
 
 
-
-
-
 class DamageType(enum.Enum):
 	Slash = enum.auto()
 	Strike = enum.auto()
@@ -132,10 +129,14 @@ class DamageTarget:
 	def apply(self):
 		if self.applied:
 			return self.msg
+		elif self.attacker is None or self.defender is None:
+			pass
 		elif self.attacker.dead:
 			self.msg = f"{self.attacker.name} cannot attack while dead."
 		elif self.defender.dead:
 			self.msg = f"{self.defender.name} cannot be attacked while dead."
+		elif self.attacker.stun > 0:
+			self.msg = f"{self.attacker.name} was stunned and could not act."
 		else:
 			self.clog["attacker"] = self.attacker.name
 			self.clog["defender"] = self.defender.name
@@ -207,11 +208,11 @@ class DamageTarget:
 				d = utils.compute_dmg(self.defender, self.attacker)
 				self.attacker.damage(d[0])
 				self.clog['ripostedmg'] = d
-				self.msg += f"{self.defender.name} parries and ripostes {self.attacker.name} for {dmg[0]} damage."
+				self.msg += f"{self.defender.name} parries and ripostes {self.attacker.name} for {d[0]} damage."
 			else:
-				h = utils.compute_hit(self,attacker, self.defender)
+				h = utils.compute_hit(self.attacker, self.defender)
 				if h[0]:
-					d = list(util.compute_dmg(self.attacker, self.defender))
+					d = list(utils.compute_dmg(self.attacker, self.defender))
 					d[0] = d[0]//2
 					self.defender.damage(d[0])
 					self.clog['hits'].append((h, d))

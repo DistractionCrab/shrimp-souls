@@ -1,5 +1,6 @@
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
+import ShrimpSouls as ss
 import ShrimpSouls.utils as utils
 import ShrimpSouls.actions as actions
 import random
@@ -8,6 +9,10 @@ import math
 class Pyromancer(ClassSpec):
 	def max_hp(self, p):
 		return 20 + 2*p.level + 4 * p.attributes.vigor
+
+	@property
+	def position(self):
+		return ss.Positions.BACK
 
 	def score_acc(self, p):
 		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
@@ -34,9 +39,12 @@ class Pyromancer(ClassSpec):
 	def ultimate_action(self, u, players, npcs):
 		pass
 
-	def duel_action(self, actor, party, opponents):
-		target = self.find_valid_target(opponents)
-		return [actions.DamageTarget(attacker=actor, defender=target)]
+	def duel_action(self, actor, env):
+		if actor.invis == 0:
+			target = env.find_valid_target(actor, False, list(ss.Positions), True)
+			return [actions.DamageTarget(attacker=actor, defender=target)]
+		else:
+			return []
 
 	@property
 	def cl_string(self):

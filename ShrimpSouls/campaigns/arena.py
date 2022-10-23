@@ -180,7 +180,8 @@ class Arena(ArenaBase):
 		import ShrimpSouls.campaigns as cps
 		if previous == cps.Campaigns.ArenaSetup:
 			print("The Arena has started!!!")
-			self.__setup_arena()
+			while len(self.npcs) == 0:
+				self.__setup_arena()
 			return "The Arena has started!!!"
 		else:
 			PLAYERS.clear()
@@ -213,7 +214,6 @@ class Arena(ArenaBase):
 		#print(self.npcs)
 		#print(self.players)
 		if len(self.npcs) == 0 or len(self.players) == 0:
-			print("Is this happening?")
 			return (cps.Campaigns.ArenaSetup, '')
 		
 		msg = self.__do_combat()
@@ -247,7 +247,6 @@ class Arena(ArenaBase):
 		return foes
 
 	def __do_combat(self):
-		ignore_round_print = not self.finished
 		party = set(self.players)
 		enemies = set(self.npcs)
 
@@ -264,7 +263,10 @@ class Arena(ArenaBase):
 			if self.finished:
 				break
 			if p.stun == 0:
-				actions = self.get_action(p)
+				#actions = self.get_action(p)
+				actions = p.duel_action(self)
+				if not p.acted:
+					actions = p.random_action(p, self) + actions
 				for a in actions:
 					a.apply()
 					log(a.msg)
@@ -275,14 +277,14 @@ class Arena(ArenaBase):
 				log(f"{p.name} was stunned and couldn't act.")
 
 
-		msg = self.__get_death_msgs(alivep, aliven, ignore_round_print)
+		msg = self.__get_death_msgs(alivep, aliven)
 
 
 		for p in order:
 			if not p.dead:
 				p.tick()
 
-		#msg = "**The Turn has Ended**: " + msg
+		msg = "**The Turn has Ended**: " + msg
 		log("------------------------------------------------------------")
 
 		for p in self.players:
@@ -297,6 +299,8 @@ class Arena(ArenaBase):
 			if n.dead:
 				s += n.xp
 				n.xp = 0
+		for p in self.players:
+			p.add_shrimp(s)
 
 		if s > 0:
 			return f"The party has been awarded {s} xp."
@@ -305,7 +309,7 @@ class Arena(ArenaBase):
 
 
 
-	def __get_death_msgs(self, party, enemies, ignore_round_print):
+	def __get_death_msgs(self, party, enemies):
 		msg = ""
 
 		deadp = [p for p in party if p.dead]
@@ -326,8 +330,8 @@ class Arena(ArenaBase):
 			msg += self.handle_dead_foes()
 			
 
-		if len(deadp) == 0 and len(deade) == 0 and not ignore_round_print:
-			msg += "No deaths so far..."
+		if len(deadp) == 0 and len(deade) == 0:
+			msg += "No deaths this round... "
 
 		if not self.finished:
 			msg += f"The battle, however, continues to rage..."
@@ -346,7 +350,7 @@ class Arena(ArenaBase):
 		tt = entity.get_taunt_target()
 		if entity.is_player:
 			if tt is not None:
-				return entity.duel_action(entity, self.players, [self.get_target(tt)])
+				return entity.duel_action(entity, self)
 			elif entity.charm > 0:
 				return entity.duel_action(entity, self.npcs, self.players)			
 			else:
@@ -420,7 +424,7 @@ class Arena(ArenaBase):
 				actions = p.target(t, self)
 				for a in actions:
 					a.apply()
-					msg += a.msg
+					msg += a.msg + ' '
 
 				p.did_act()
 
@@ -444,6 +448,58 @@ class Arena(ArenaBase):
 			fstrings = (f'{n.name}({n.hp}/{n.max_hp})' for n in f)
 			print(f"Some foes you can see: {', '.join(fstrings)}")
 
+	def opponents(self, att):
+		tt = att.get_taunt_target()
+		if att.is_player:
+			if tt is not None:
+				return [self.get_target(tt)]
+			elif att.charm > 0:
+				return self.players
+			else:
+				return self.npcs
+		else:
+			if tt is not None:
+				return [self.get_target(tt)]
+			if att.charm == 0:
+				return self.players
+			else:
+				return self.npcs
+
+	def allies(self, att):
+		if att.is_player:
+			if att.charm == 0:
+				return self.players
+			else:
+				return self.npcs
+		else:
+			if att.charm > 0:
+				return self.players
+			else:
+				return self.npcs
+
+	@property
+	def front_line(self):
+		return list(p for p in self.players if p.position == ss.Positions.FRONT)
+
+	@property
+	def back_line(self):
+		return list(p for p in self.players if p.position == ss.Positions.BACK)
+
+	def find_valid_target(self, att, ally, pos, aliveq, amt=1):
+		pool = self.allies(att) if ally else self.opponents(att)
+		pool = pool if not aliveq else list(filter(lambda x: not x.dead, pool))
+		pool = list(filter(
+			lambda x: x.position in pos or x.invis > 0 or all(p.dead for p in self.front_line), 
+			pool))
+		pool = list(set(random.sample(pool, k=min(amt, len(pool)))))
+
+		if amt == 1:
+			if len(pool) == 0:
+				return None
+			else:
+				return pool[0]
+		else:
+			return pool
 
 
 
@@ -453,23 +509,17 @@ class Arena(ArenaBase):
 
 ENCOUNTERS = {
 	range(1, 5): [
-		lambda i: npcs.Goblin.generate(1, i),
-		lambda i: npcs.Wolf.generate(1, i),
+		lambda i: npcs.Goblin.generate(5, i, prob=0.7),
+		lambda i: npcs.Wolf.generate(3, i, prob=0.6),
 	],
 	range(5, 10): [
-		lambda i: npcs.GoblinBrute.generate(2, i),
-		lambda i: (
-			npcs.GoblinBrute.generate(1, i) 
-			+ (npcs.GoblinPriest.generate(1, i) if (random.uniform(0, 1) < 0.5) else tuple())),
+		lambda i: npcs.GoblinBrute.generate(3, i, prob=0.6),
+		lambda i: npcs.GoblinBrute.generate(1, i) + npcs.GoblinPriest.generate(1, i, prob=0.7) ,
 	],
 
-	range(10, 15): [
-		lambda i: npcs.OrcWarrior.generate(3, i),
-		lambda i: (
-			npcs.OrcWarrior.generate(2, i) 
-			+ (npcs.GoblinPriest.generate(1, i) if (random.uniform(0, 1) < 0.5) else tuple())),
-		lambda i: npcs.Ogre.generate(1, i),
+	range(10, 1000): [
+		lambda i: npcs.OrcWarrior.generate(2, i, prob=0.5),
+		lambda i: npcs.OrcWarrior.generate(1, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
+		lambda i: npcs.Ogre.generate(1, i, prob=0.4),
 	]
-	
 }
-
