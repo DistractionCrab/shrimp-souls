@@ -1,4 +1,5 @@
 import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.utils as utils
@@ -6,25 +7,46 @@ import ShrimpSouls.actions as actions
 import random
 import math
 
+def encourage(u, targets, env):
+	players = list(n for n in env.players if not n.dead)
+	targets = random.choices(players, k=min(3, len(players)))
+
+	return [Action1(attacker=u, defender=t) for t in targets]
+
+def charm(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for charming.")]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"encourage": encourage,
+	"charm": charm,
+}
+
 class Bard(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+	
 	@property
 	def position(self):
 		return ss.Positions.BACK
 	
 	def max_hp(self, p):
-		return 20 + 2*p.level + 5*p.attributes.vigor
+		return cs.stat_map(p, base=20, level=2, vigor=5)
 
 	def score_acc(self, p):
-		return super().score_acc(p) + 2
+		return cs.stat_map(p, base=12, level=1)
 
 	def score_eva(self, p):
-		return 10 + math.ceil(p.level*0.35) + math.ceil(p.attributes.dexterity*0.65)
+		return cs.stat_map(p, level=0.35, dexterity=0.65)
 
 	def score_att(self, p):
-		return p.attributes.dexterity + p.attributes.intelligence + p.attributes.perception + p.attributes.luck
+		return cs.stat_map(p, dexterity=1, intelligence=1, luck=1, perception=1)
 
 	def score_dfn(self, p):
-		return math.ceil(1.5*p.level) + 3
+		return cs.stat_map(p, level=1.5, base=3)
 
 	def basic_action(self, u, env):
 		players = list(n for n in env.players if not n.dead)
@@ -32,6 +54,11 @@ class Bard(ClassSpec):
 
 		return [Action1(attacker=u, defender=t) for t in targets]
 
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 		
 
 	def targeted_action(self, u, target, env):

@@ -1,24 +1,47 @@
+import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
 
+def blessing(u, targets, env):
+	players = list(p for p in env.players if not p.dead)
+	targets = random.sample(players, k=min(3, len(players)))
+
+	return [Action1(attacker=u, defender=t) for t in targets]
+
+def cleanse(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for cleanseing.")]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"blessing": blessing,
+	"cleanse": cleanse,
+}
+
 class Cleric(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+		
 	def max_hp(self, p):
-		return 20 + 5*p.level + 6*p.attributes.vigor
+		return cs.stat_map(p, base=20, level=5, vigor=6)
 
 	def score_acc(self, p):
-		return super().score_acc(p) + 1
+		return cs.stat_map(p, base=11, level=1)
 
 	def score_eva(self, p):
-		return super().score_eva(p) - 1
+		return cs.stat_map(p, base=9, level=1)
 
 	def score_att(self, p):
-		return 3*p.attributes.strength+3*p.attributes.faith
+		return cs.stat_map(p, strength=3, faith=3)
 
 	def score_dfn(self, p):
-		return 2*p.attributes.strength + 3*p.attributes.faith
+		return cs.stat_map(p, strength=2, faith=3)
 
 	def basic_action(self, u, env):
 		players = list(p for p in env.players if not p.dead)
@@ -26,7 +49,11 @@ class Cleric(ClassSpec):
 
 		return [Action1(attacker=u, defender=t) for t in targets]
 
-		
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def targeted_action(self, u, target, env):
 		return [Target1(attacker=u, defender=target)]

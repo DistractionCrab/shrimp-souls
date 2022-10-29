@@ -1,4 +1,5 @@
 import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -6,21 +7,42 @@ import random
 import math
 import ShrimpSouls.utils as utils
 
+def chill(u, targets, env):
+	npcs = list(n for n in env.npcs if not n.dead)
+	targets = random.sample(npcs, k=min(3, len(npcs)))
+
+	return [Action1(attacker=u, defender=t) for t in targets]
+
+def freeze(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for freezing.")]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"chill": chill,
+	"freeze": freeze,
+}
+
 class Cryomancer(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+		
 	def max_hp(self, p):
-		return 20 + 4*p.level + 2*p.attributes.vigor
+		return cs.stat_map(p, base=20, level=4, vigor=2)
 
 	def score_acc(self, p):
-		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
+		return cs.stat_map(p, base=10, intelligence=1, faith=1, dexterity=0.25)
 
 	def score_eva(self, p):
-		return 10 + math.ceil(0.75*p.level) + 2
+		return cs.stat_map(p, base=10, faith=0.75, dexterity=0.25)
 
 	def score_att(self, p):
-		return 3*p.attributes.faith+3*p.attributes.intelligence
+		return cs.stat_map(p, faith=3, intelligence=3)
 
 	def score_dfn(self, p):
-		return 3 + 2*(p.attributes.faith + p.attributes.intelligence)
+		return cs.stat_map(p, base=3, faith=3.5, intelligence=3.5)
 
 	def basic_action(self, u, env):
 		npcs = list(n for n in env.npcs if not n.dead)
@@ -31,7 +53,11 @@ class Cryomancer(ClassSpec):
 	def targeted_action(self, u, target, env):
 		return [Target1(attacker=u, defender=target)]
 
-		
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def ultimate_action(self, u):
 		pass
@@ -51,7 +77,7 @@ class Cryomancer(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.defender.stack_defdown(amt=2)
+		self.defender.stack_evadown(amt=2)
 		self.defender.stack_attdown(amt=2)
 
 		self.msg += f"{self.attacker.name} chills {self.defender.name} lowering attack and defense."
@@ -60,7 +86,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_hit(self.attacker, self.defender)[0]:
 			amt = random.randint(1, 4)
 			self.defender.stack_stun(amt=amt)
 			self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid for {amt} turns."

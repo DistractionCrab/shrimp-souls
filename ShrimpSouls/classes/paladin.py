@@ -1,3 +1,5 @@
+import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -5,21 +7,39 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
+def sealing(u, targets, env):
+	return [Action1(attacker=u, defender=u)]
+
+def censure(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for poaching.")]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"sealing": sealing,
+	"censure": censure,
+}
+
 class Paladin(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+	
 	def max_hp(self, p):
-		return 20 + 5*p.level + 6*p.attributes.vigor
+		return cs.stat_map(p, base=20, level=5, vigor=6)
 
 	def score_acc(self, p):
-		return super().score_acc(p)
+		return cs.stat_map(p, base=10, level=1)
 
 	def score_eva(self, p):
-		return super().score_eva(p) - 2
+		return cs.stat_map(p, base=8, level=1)
 
 	def score_att(self, p):
-		return math.ceil(3*p.attributes.strength) + math.ceil(4*p.attributes.faith)
+		return cs.stat_map(p, strength=3, faith=4)
 
 	def score_dfn(self, p):
-		return 4 + math.ceil(3.5*p.attributes.faith) + math.ceil(3.5*p.attributes.strength)
+		return cs.stat_map(p, faith=3.5, strength=3.5)
 
 	def basic_action(self, u, env):
 		return [Action1(attacker=u, defender=u)]
@@ -29,6 +49,11 @@ class Paladin(ClassSpec):
 		return [Target1(attacker=u, defender=target)]
 
 		
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def ultimate_action(self, u, players, npcs):
 		pass

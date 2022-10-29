@@ -1,0 +1,387 @@
+
+
+body {
+	font-family: Arial Black;
+	font-size: var(--body-fontsize);
+	/*font-weight: 100;*/
+	color: white;
+	background-color: #575757;
+
+	background: linear-gradient(
+			rgba(0, 0, 0, 0.5),
+			rgba(0, 0, 0, 0.5)
+		), url("../images/background.png") no-repeat center center fixed;
+	will-change: transform;
+
+	text-shadow: 0 0 3px rgba(0,0,0,0.3);
+	overflow: hidden;
+}
+
+.hpamt {
+	padding-left: var(--hpamt-padding);
+}
+
+#charsheet {
+	font-size: var(--charsheet-fontsize);
+}
+
+
+.spacedtable {
+	font-size: 120%;
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 15px;
+}
+
+.borderedcell {
+	border: 8px solid black;
+}
+
+#printouttab {
+	overflow:  auto;
+	height: 85vh;
+	font-size: 120%;
+}
+
+#printout {
+	font-size: 120%;
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 15px;
+}
+
+.printoutcell {
+	border: 5px solid black;
+}
+
+#partytab {
+	overflow:  auto;
+	height: 85vh;
+	font-size: 120%;
+}
+
+
+#npctab {
+	overflow:  auto;
+	height: 85vh;
+	font-size: 120%;
+}
+
+/* Style the tab */
+.tab {
+	overflow: hidden;
+	background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+	background-color: inherit;
+	float: left;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+@keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+.tablinks {
+	height: var(--tablinks-height);
+	width: var(--tablinks-width);
+	font-size: var(--tablinks-fontsize);
+	font-weight: var(--default-fontweight);
+}
+
+.spellbutton {
+	height: 70px;
+	width: 180px;
+	font-size: 150%;
+}
+
+#player_healthbar {
+	width: var(--player-bar-width);
+	height:  var(--player-bar-height);
+	background-repeat: no-repeat;
+	background-image: url("../images/healthbar foreground.png"), url("../images/healthbar background.png");
+	background-position: 0 0, 0 0;
+	background-size: 50% 100%, 100% 100%;
+}
+
+.healthbar {
+	width: var(--hp-bar-width);
+	height:  var(--hp-bar-height);
+	background-repeat: no-repeat;
+	background-image: url("../images/healthbar foreground.png"), url("../images/healthbar background.png");
+	background-position: 0 0, 0 0;
+	background-size: 50% 100%, 100% 100%;
+}
+
+#player_xpbar {
+	width: 400px;
+	height:  30px;
+	background-repeat: no-repeat;
+	background-image: url("../images/xpbar foreground.png"), url("../images/xpbar background.png");
+	background-position: 0 0, 0 0;
+	background-size: 50% 100%, 100% 100%;
+}
+
+
+.lvlup {
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
+	background-image: url("../images/plus icon.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-color: rbga(0,0,0,0);
+	border:  none;
+	outline:  none;
+}
+
+.lvlup:hover {
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
+	background-image: url("../images/plus icon hover.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.lvlup:active {
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
+	background-image: url("../images/plus icon clicked.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.accupicon {
+	background-image: url("../images/status icons/accup.png");
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.accdownicon {
+	background-image: url("../images/status icons/accdown.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.attupicon {
+	background-image: url("../images/status icons/attup.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.attdownicon {
+	background-image: url("../images/status icons/attdown.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.defupicon {
+	background-image: url("../images/status icons/defup.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.defdownicon {
+	background-image: url("../images/status icons/defdown.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.evaupicon {
+	background-image: url("../images/status icons/evaup.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.evadownicon {
+	background-image: url("../images/status icons/evadown.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.burnicon {
+	background-image: url("../images/status icons/burn.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.stunicon {
+	background-image: url("../images/status icons/stunicon.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.invisicon {
+	background-image: url("../images/status icons/invis.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.poisonicon {
+	background-image: url("../images/status icons/poison.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.bleedicon {
+	background-image: url("../images/status icons/bleed.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.soulmassicon {
+	background-image: url("../images/status icons/soulmassicon.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.sealingicon {
+	background-image: url("../images/status icons/sealingicon.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.charmicon {
+	background-image: url("../images/status icons/charmicon.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.ripstanceicon {
+	background-image: url("../images/status icons/ripstanceicon.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.encourageicon {
+	background-image: url("../images/status icons/encourage.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.inactive-icon {
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.default_abilityicon {
+	background-image: url("../images/abilities/default.png");
+	width:  var(--ability-icon-width);
+	height: var(--ability-icon-height);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.tselector {
+	width: var(--tar-select-width);
+	height: var(--tar-select-height);
+	font-size: var(--tar-select-fontsize);
+
+    overflow-y :auto; 
+}
+
+#targetselect {
+	border-color: white;
+	border-style: solid;
+	border-width: 5px;
+	background-color: rgba(171, 171, 171, 0.8);
+}
+
+.spellname {
+	width: 300px;
+	font-size: 175%;
+}
+
+.spelldesc {
+	width: 500px;
+	font-size: 175%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.scrollfit {
+	height:  80vh;
+	overflow-y: auto;
+}
+
+.playertarget {
+	font-size: var(--tar-select-fontsize);
+	background-color: rgba(124, 255, 116, 0.8);
+}
+
+.enemytarget {
+	font-size: var(--tar-select-fontsize);
+	background-color: rgba(255, 95, 95, 0.8);
+}
+
+.spellrow {
+	outline: thick solid;
+}
+
+#spelltable {
+	width: var(--spelltable-width);
+}

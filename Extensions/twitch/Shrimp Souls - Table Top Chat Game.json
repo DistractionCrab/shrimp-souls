@@ -6,7 +6,29 @@
   "extensionViews": [
     {
       "channelId": "150659682",
-      "configurationAnchor": "component",
+      "configurationAnchor": "video_overlay",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 375,
+        "height": 822
+      },
+      "id": "2",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "451176857",
+      "orientation": "Portrait",
+      "type": "mobile",
+      "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "150659682",
+      "configurationAnchor": "video_overlay",
       "displayChannelName": "distractioncrab",
       "features": {
         "isBitsEnabled": false,
@@ -17,7 +39,7 @@
         "width": 1280,
         "height": 720
       },
-      "id": "1",
+      "id": "3",
       "isPopout": false,
       "label": "",
       "linked": true,
@@ -28,7 +50,7 @@
     }
   ],
   "manifest": {
-    "anchor": "component",
+    "anchor": "video_overlay",
     "assetUrls": [],
     "authorName": "DistractionCrab",
     "bitsEnabled": false,
@@ -59,17 +81,26 @@
     "viewerSummary": "",
     "viewerUrl": "",
     "viewerUrls": {
+      "mobile": "https://localhost:8080/mobile.html",
+      "videoOverlay": "https://localhost:8080/video_overlay.html",
       "component": "https://localhost:8080/video_component.html"
     },
     "views": {
+      "mobile": {
+        "viewerUrl": "https://localhost:8080/mobile.html"
+      },
+      "videoOverlay": {
+        "viewerUrl": "https://localhost:8080/video_overlay.html",
+        "canLinkExternalContent": false
+      },
       "component": {
         "viewerUrl": "https://localhost:8080/video_component.html",
         "aspectWidth": 0,
         "aspectHeight": 0,
-        "aspectRatioX": 300,
-        "aspectRatioY": 200,
+        "aspectRatioX": 600,
+        "aspectRatioY": 1000,
         "scalePixels": 1024,
-        "targetHeight": 4000,
+        "targetHeight": 8000,
         "size": 0,
         "zoom": false,
         "zoomPixels": 0,

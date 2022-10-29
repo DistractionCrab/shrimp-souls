@@ -13,9 +13,9 @@ def compute_bool(a, d, s1, s2):
 
 	return (roll <= check)
 
-def compute_bool_many(a, d, s1, s2):
-	s1 = s1(a)
-	s2 = s2(d)
+def compute_bool_many(a, d, s1, s2, b1=0, b2=0, m1=1, m2=1):
+	s1 = m1*s1(a) + b1
+	s2 = m2*s2(d) + b2
 	diff = s1 - s2
 
 	def recurse(d, bs):		
@@ -48,9 +48,9 @@ def compute_num(a, d, s1, s2):
 
 	return (random.randint(1, m), s1, s2)
 
-def compute_dmg(a, d):
-	dfn = d.dfn
-	att = a.att
+def compute_dmg(a, d, b1=0, b2=0, m1=1, m2=1):
+	dfn = m2 * d.dfn + b2
+	att = m1 * a.att + b1
 	diff = a.att - d.dfn
 
 	if diff <= 10:

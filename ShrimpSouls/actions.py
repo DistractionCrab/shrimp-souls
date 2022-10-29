@@ -44,6 +44,34 @@ class Action:
 	defender: object
 	msg: str = ''
 
+	@property	
+	def receivers(self):
+		if self.attacker.is_player:
+			if self.defender.is_player:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_player:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+	@property	
+	def receivers_npc(self):
+		if self.attacker.is_npc:
+			if self.defender.is_npc:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_npc:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+
+
 
 
 @dataclass
@@ -60,6 +88,11 @@ class DoNothing:
 	@property
 	def msg(self):
 		return f"{self.player.name} did absolutely nothing."
+
+
+	@property	
+	def receivers(self):
+		return tuple()
 
 
 
@@ -83,6 +116,32 @@ class HealTarget:
 	def msg(self):
 		return f"{self.attacker.name} heals {self.dmg} life to {self.defender.name}."
 
+	@property	
+	def receivers(self):
+		if self.attacker.is_player:
+			if self.defender.is_player:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_player:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+	@property	
+	def receivers_npc(self):
+		if self.attacker.is_npc:
+			if self.defender.is_npc:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_npc:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
 @dataclass
 class ReviveTarget:
 	attacker: object
@@ -99,7 +158,50 @@ class ReviveTarget:
 
 	@property
 	def msg(self):
-		return f"{self.attacker.name} revives {self.defender.name} for {self.dmg} life."
+		return f"{self.attacker.name} revives {self.defender.name} for {self.dmg} life. Wokege"
+
+	@property	
+	def receivers(self):
+		if self.attacker.is_player:
+			if self.defender.is_player:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_player:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+	@property	
+	def receivers_npc(self):
+		if self.attacker.is_npc:
+			if self.defender.is_npc:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_npc:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+
+@dataclass
+class Error:
+	info: str 
+
+	@property
+	def msg(self):
+		return f"ERROR: {self.info}"
+
+	def apply(self):
+		pass
+
+	@property	
+	def receivers(self):
+		return tuple()
+	
 
 
 _DEFAULT_COMBAT_LOG = {
@@ -124,6 +226,7 @@ class DamageTarget:
 	msg: str = ""
 	clog: dict = field(default_factory=lambda: dict(_DEFAULT_COMBAT_LOG))
 	applied: bool = False
+	statuses: list[ss.StatusEnum] = field(default_factory=list)
 
 
 	def apply(self):
@@ -138,6 +241,7 @@ class DamageTarget:
 		elif self.attacker.stun > 0:
 			self.msg = f"{self.attacker.name} was stunned and could not act."
 		else:
+			self.applied = True
 			self.clog["attacker"] = self.attacker.name
 			self.clog["defender"] = self.defender.name
 
@@ -178,6 +282,11 @@ class DamageTarget:
 		if total == 0:
 			self.msg += f"{self.attacker.name} missed {self.defender.name}."
 		else:
+			if self.defender.weak(self.dmgtype):
+				total = math.ceil(1.5 * total)
+			if self.defender.resist(self.dmgtype):
+				total = math.ceil(0.5 * total)
+
 			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {total} damage. "
 			self.defender.damage(total)
 
@@ -193,7 +302,9 @@ class DamageTarget:
 		self.clog['smdmg'] = dmg
 
 		if dmg > 0:
-		 	self.msg += f"{self.attacker.name} provokes {self.defender.name}'s Soulmasses and suffers {dmg} damage."
+			if self.defender.weak(DamageType.Magic):
+				dmg = math.ceil(1.5 * dmg)
+			self.msg += f"{self.attacker.name} provokes {self.defender.name}'s Soulmasses and suffers {dmg} damage."
 
 
 		self.standard_scenario()
@@ -220,6 +331,34 @@ class DamageTarget:
 				else:
 					self.clog['hits'].append((h, (None, None, None)))
 					self.msg += f"{self.attacker.name} missed {self.defender.name}."
+		else:
+			self.standard_scenario()
+
+	@property	
+	def receivers(self):
+		if self.attacker.is_player:
+			if self.defender.is_player:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_player:
+			return (self.defender,)
+
+		else:
+			return tuple()
+
+	@property	
+	def receivers_npc(self):
+		if self.attacker.is_npc:
+			if self.defender.is_npc:
+				return (self.attacker, self.defender)
+			else:
+				return (self.defender,)
+		elif self.defender.is_npc:
+			return (self.defender,)
+
+		else:
+			return tuple()
 
 
 

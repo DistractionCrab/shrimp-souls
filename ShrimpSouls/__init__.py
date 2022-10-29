@@ -11,7 +11,11 @@ import sys
 import diskcache as dc
 import pathlib
 import atexit
-from dataclasses import dataclass, fields
+import persistent
+import persistent.mapping
+import ShrimpSouls.messages as messages
+from dataclasses import dataclass, fields, field
+
 
 
 
@@ -21,7 +25,11 @@ PLAYER_CACHE = dc.Cache(CACHE_DIR)
 STATE_CACHE = dc.Cache(STATE_DIR)
 
 
-
+def xp_req(l):
+	if l < 1:
+		return 100
+	else:
+		return int(100 * (1.2 ** (l - 1)))
 
 def auto_commit(f):
 	def wrapper(ref, *args, **kwds):
@@ -34,23 +42,6 @@ def auto_commit(f):
 
 if "campaign" not in STATE_CACHE:
 	STATE_CACHE['campaign'] = "Null"
-#URL = "http://localhost:8911/api/"
-#HEADERS = {'Content-type': 'application/json; charset=utf-8'}
-#RNG_REQUEST = "https://www.random.org/integers/?num={0}&min=1&max=20&col=1&base=10&format=plain&rnd=new"
-
-
-def stat_ratio(d1, d2):
-	return sum(d1)/(sum(d1) + sum(d2))
-
-def roll_against(s1, p1, s2, p2):
-	s1 = [p1.get_skill_amt(s.name) for s in s1]
-	s2 = [p2.get_skill_amt(s.name) for s in s2]
-	ratio = sum(s1)/(sum(s1) + sum(s2))
-	thresh = int(20 * ratio)
-
-	roll = roll_dice()[0]
-
-	return (roll > thresh, thresh, roll)
 
 
 class Scores(enum.Enum):
@@ -62,6 +53,39 @@ class Scores(enum.Enum):
 class Positions(enum.Enum):
 	FRONT = enum.auto()
 	BACK = enum.auto()
+
+class StatusEnum(enum.Enum):
+	block = enum.auto()
+	attup = enum.auto()
+	attdown = enum.auto()
+	defup = enum.auto()
+	defdown = enum.auto()
+	evaup = enum.auto()
+	evadown = enum.auto()
+	accup = enum.auto()
+	accdown = enum.auto()
+	burn = enum.auto()
+	poison = enum.auto()
+	stun = enum.auto()
+	invis = enum.auto()
+	encourage = enum.auto()
+	soulmass = enum.auto()
+	ripstance = enum.auto()
+	sealing = enum.auto()
+	charm = enum.auto()
+	taunt = enum.auto()
+	bleed = enum.auto()
+
+	def stack(self, p, amt):
+		setattr(p.status, self.name, max(0, amt + getattr(p.status, self.name)))
+
+	def use(self, p, amt):
+		setattr(p.status, self.name, max(0, -amt + getattr(p.status, self.name)))
+
+	def get(self, p):
+		return  getattr(p.status, self.name)
+
+
 
 @dataclass
 class Statuses:
@@ -86,6 +110,17 @@ class Statuses:
 	taunt: str = None
 	bleed: int = 0
 
+class AttriEnum(enum.Enum):
+	Vigor = "vigor"
+	Strength = 'strength'
+	Endurance = "endurance"
+	Dexterity = "dexterity"
+	Intelligence = 'intelligence'
+	Faith = 'faith'
+	Luck = 'luck'
+	Perception = 'perception'
+
+
 @dataclass
 class Attributes:
 	vigor: int = 1
@@ -105,7 +140,7 @@ class Attributes:
 
 
 @dataclass
-class Entity:
+class Entity(persistent.Persistent):
 	name: str
 	status: Statuses = Statuses()
 	acted: bool = False
@@ -114,10 +149,21 @@ class Entity:
 	def commit(self):
 		pass
 
+	def weak(self, v):
+		return False
+
+	def resist(self, v):
+		return False
+
+	def has_tag(self, t):
+		return False
 
 	@property
 	def dead(self):
 		return self.hp <= 0
+
+	
+	
 
 	def tick(self):
 		if self.burn > 0:
@@ -186,8 +232,6 @@ class Entity:
 			base *= 1.2
 		if self.evadown > 0:
 			base *= 0.8
-		if self.encourage > 0:
-			base *= 1.1
 		if self.status.stun > 0:
 			base *= 0.4
 
@@ -201,8 +245,6 @@ class Entity:
 			base *= 1.2
 		if self.defdown > 0:
 			base *= 0.8
-		if self.encourage > 0:
-			base *= 1.1
 
 		return math.ceil(base)
 
@@ -522,9 +564,18 @@ class Player(Entity):
 	def __hash__(self):
 		return hash(self.name)
 
-	def commit(self):
-		_MODIFIED.update([self])
-
+	@property
+	def json(self):
+		return {
+				'name': self.name,
+				'hp': self.hp,
+				'max_hp': self.max_hp,
+				'xp': self.xp,
+				'xp_req': self.get_xp_req(),
+				'class': self.myclass.cl_string,
+				'attributes': self.attributes.__dict__,
+				'status': self.status.__dict__
+			}
 
 	@property
 	def level(self):
@@ -537,17 +588,16 @@ class Player(Entity):
 		req = self.get_xp_req()
 		if self.xp >= req:
 			self.xp -= req
-			self.attributes.increment(att)
-			print(f"{self.name} has leveled up {att}!!!")
-			self.commit()
+			try:
+				self.attributes.increment(att)
+			except:
+				return messages.Error(msg=[f"{att} does not exist to level up???"])
+			return messages.Message(msg=[f"{self.name} has leveled up {att}!!!"])
 		else:
-			raise ValueError(f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})")
+			return messages.Error([f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})"])
 
 	def get_xp_req(self):
-		if self.level < 1:
-			return 100
-		else:
-			return int(100 * (1.2 ** (self.level - 1)))
+		return xp_req(self.level)
 
 	@property
 	def stat_string(self):
@@ -623,142 +673,135 @@ class Player(Entity):
 
 	def random_action(self, u, env):
 		return self.myclass.random_action(u, env)
-	
-	
 
-_FETCHED_PLAYERS = {}
+	@property
+	def is_npc(self):
+		return False
 
-def get_player(name, init=False):
-	if isinstance(name, str):
-		if name[0:1] == "@":
-			name = name[1:]
-	if isinstance(name, Player):
-		return name
-	elif name in _FETCHED_PLAYERS:
-		return _FETCHED_PLAYERS[name.lower()]
-	else:
-		name = name.lower()
-		if name not in PLAYER_CACHE and init:
-			player = Player(name=str(name))
-			PLAYER_CACHE[name] = player
+	@auto_commit
+	def respec(self):
+		l = self.level
+		self.attributes = Attributes()
 
-		else:
-			player = PLAYER_CACHE[name]
+		for i in range(1, l):
+			self.add_shrimp(xp_req(i))
 
-		_FETCHED_PLAYERS[name] = player
-		return player
+		self.hp = min(self.hp, self.max_hp)
 
-	
-def level_up(name, stat):
-	get_player(name, init=True).level_up(stat)
 
-def update_class(name, clname):
-	p = get_player(name, init=True)
-	p.myclass = classes.Classes[clname.lower().capitalize()].value
-	p.commit()
-	print(f"{p.name} has updated their class to {p.myclass.cl_string}!!!")
+	def update_class(self, name):
+		self.myclass = classes.Classes[name.lower().capitalize()].value
+		self.hp = min(self.hp, self.max_hp)
+		return messages.Message(msg=f"{self.name} has updated their class to {self.myclass.cl_string}!!!")
 
-def join(name):
-	p = get_player(name, init=True)
-	import ShrimpSouls.campaigns as cps
-	cps.Campaigns[STATE_CACHE['campaign']].value.join(name)
 
-def delete_player(name):
-	if isinstance(p, Player):
-		name = p.name
+class GameManager(persistent.Persistent):
+	def __init__(self):
+		import ShrimpSouls.campaigns.arena as cps
+		self.__campaign = cps.WaitingRoom()
+		self.__players = persistent.mapping.PersistentMapping()
 
-	if name in PLAYER_CACHE:
-		del PLAYER_CACHE[name]
-
-def print_players():
-	for p in PLAYER_CACHE:
-		print(PLAYER_CACHE[p].stat_string)
-
-class GameManager:
 	def step(self):
-		import ShrimpSouls.campaigns as cps
-		prev = cps.Campaigns[STATE_CACHE['campaign']]
-		(n, msg) = prev.value.step()
-		if n is not prev:
-			msg += prev.value.exit()
-			msg += n.value.enter(prev)
-			STATE_CACHE['campaign'] = n.name
+		(n, msg) = self.__campaign.step()
+		if n is not self.__campaign:
+			self.__campaign = n
 
 		return msg
+
+	def add_player(self, name):
+		if name not in self.__players:
+			p = Player(name=name)
+			self.__players[name] = p
+			return p
+		else:
+			return self.__players[name]
+
+	def temp_add_player(self, p):
+		self.__players[p.name] = p
+
+	def join(self, name):		
+		return self.__campaign.join(self.add_player(name))
+
+	def is_joined(self, name):
+		return self.__campaign.is_joined(name)
+
 
 	@property
 	def players(self):
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']]
-		return c.value.players
+		return list(self.__players.values())
 
-	def action(self, name):
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']].value
+	@property
+	def joined_players(self):
+		return self.__campaign.players
 
-		msg = c.perform_action(name)
-		print(msg)
-		return msg
+	def get_player(self, name):
+		name = name.lower()
+		return self.add_player(name)
 
-	def target(self, name, target):
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']].value
+	def get_npc(self, name):
+		return self.__campaign.get_npc(name)
 
-		msg = c.perform_target_action(name, target)
-		print(msg)
-		return msg
+	@property
+	def npcs(self):
+		return self.__campaign.npcs
 
+
+	def use_ability(self, name, abi, targets):
+		return self.__campaign.use_ability(self.get_player(name), abi, targets)
+
+	@property
+	def campaign(self):
+		return self.__campaign
+
+	def reset_campaign(self):
+		import ShrimpSouls.campaigns.arena as cps
+		self.__campaign = cps.WaitingRoom()
 	
 
-MANAGER = GameManager()
-
 def main(args):
+	import ShrimpSouls.server as server
+	game = server.DATABASE.root.clients[150659682]
+	#game.reset_campaign()
+
 	if args[0] == "stats":
-		print(get_player(args[1], init=True).stat_string)
+		print(game.get_player(args[1]).stat_string)
 	elif args[0] == "levelup":
-		level_up(args[1], args[2])
+		print(game.get_player(args[1]).level_up(args[2])[-1])
 	elif args[0] == "updateclass":
-		update_class(args[1], args[2])
-	elif args[0] == "campaigntype":
-		print(f"The current campaign is {STATE_CACHE['campaign']}")
+		print(game.get_player(args[1]).update_class(args[2]).msg)
 	elif args[0] == 'step':
-		import ShrimpSouls.campaigns as cps
-		prev = cps.Campaigns[STATE_CACHE['campaign']]
-		(n, msg) = prev.value.step()
-		msg = "**The Turn has Ended**: " + msg
-		if n is not prev:
-			prev.value.exit()
-			n.value.enter(prev)
-			STATE_CACHE['campaign'] = n.name
-	elif args[0] == 'startcampaign':
-		import ShrimpSouls.campaigns as cps
-		ctype = cps.Campaigns[args[1].lower().capitalize()]
-		STATE_CACHE['campaign'] = ctype.name
-		print(ctype.value.start_msg)
-	elif args[0] == "join":
-		join(args[1])
-
-	elif args[0] == "basicclassaction":		
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']].value
-
-		c.perform_action(args[1])
-		#p = get_player(args[1], init=True)
-		#if not c.is_joined(p.name):
-		#	join(p.name)
-		#p.act(c)
-
-	elif args[0] == "targetclassaction":		
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']].value
-
-		c.perform_target_action(args[1], args[2])
-
+		print(game.step()[-1])
 	elif args[0] == "foelist":
-		import ShrimpSouls.campaigns as cps
-		c = cps.Campaigns[STATE_CACHE['campaign']].value.foes()
+		print(game.campaign.foes())
+	elif args[0] == "join":
+		print(game.join(args[1]))
+	elif args[0] == "action":
+		if len(args) == 2:
+			print(f"{args[1]} Must supply ability name to perform action. Use !abilities to list yours.")
+		else:
+			m = game.use_ability(args[1], args[2], args[3:])
+			if m.is_err:
+				print(m.msg)
+			else:
+				print(" ".join(s for s in m.msg))
+	elif args[0] == "respec":
+		p = game.get_player(args[1])
+		p.respec()
+		print(f"{p.name} has respeced, getting reset to level 1 and getting shrimp refunded.")
 
+	elif args[0] == "clear":
+		game.campaign.clear_npcs()
+		game.campaign.clear_players()
 
-
-
-
+	elif args[0] == "abilities":
+		p = game.get_player(args[1])
+		c = p.myclass
+		abis = c.ability_list
+		print(f"@{args[1]} Abilities for {c.cl_string} are {abis}")
+	elif args[0] == "xp_test":
+		p = game.get_player("distractioncrab")
+		p.add_shrimp(p.get_xp_req())
+	elif args[0] == "reset_testing":
+		p = game.get_player("distractioncrab")
+		p.respec()
+		p.xp = 0

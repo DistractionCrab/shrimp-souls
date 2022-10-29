@@ -18,9 +18,18 @@ class BaseNPC(ss.Entity):
 	_eva: int = 9
 	_att: int = 4
 	_dfn: int = 4
-	#weaknesses: list = field(default_factory=list)
-	#resists: list = field(default_factory=list)
-	#tags: list = field(default_factory=list)
+	_weaknesses: frozenset = field(default_factory=frozenset)
+	_resists: frozenset = field(default_factory=frozenset)
+	_tags: frozenset = field(default_factory=frozenset)
+
+	def weak(self, v):
+		return v in self._weaknesses
+
+	def resist(self, v):
+		return v in self._resists
+
+	def has_tag(self, t):
+		return t in self._tags
 
 	@property
 	def position(self):
@@ -61,6 +70,16 @@ class BaseNPC(ss.Entity):
 
 	def __hash__(self):
 		return hash(self.name)
+
+	@property
+	def json(self):
+		return {
+				'name': self.name,
+				'hp': self.hp,
+				'max_hp': self.max_hp,
+				'xp': self.xp,
+				'status': self.status.__dict__
+			}
 
 
 
@@ -137,11 +156,11 @@ class GoblinBrute(BaseNPC):
 @dataclass
 class OrcWarrior(BaseNPC):
 	xp:  int = 7
-	hp:  int = 72
-	max_hp: int = 72
+	hp:  int = 120
+	max_hp: int = 120
 	_acc: int = 26
 	_eva: int = 24
-	_att: int = 50
+	_att: int = 58
 	_dfn: int = 48
 
 	def __hash__(self):
@@ -151,11 +170,11 @@ class OrcWarrior(BaseNPC):
 @dataclass
 class Ogre(BaseNPC):
 	xp:  int = 15
-	hp:  int = 160
-	max_hp: int = 160
+	hp:  int = 200
+	max_hp: int = 200
 	_acc: int = 26
 	_eva: int = 21
-	_att: int = 54
+	_att: int = 63
 	_dfn: int = 50
 
 	def __hash__(self):
@@ -172,3 +191,28 @@ class Ogre(BaseNPC):
 				actions.DamageTarget(attacker=self, defender=target[0]),
 				actions.DamageTarget(attacker=self, defender=target[1])]
 
+
+@dataclass
+class Troll(BaseNPC):
+	xp:  int = 30
+	hp:  int = 400
+	max_hp: int = 400
+	_acc: int = 32
+	_eva: int = 29
+	_att: int = 86
+	_dfn: int = 70
+
+	def __hash__(self):
+		return hash(self.name)
+
+	def duel_action(self, env):
+		target = env.find_valid_target(self, False, [ss.Positions.FRONT], True, amt=2)
+		if len(target) == 0:
+			return [actions.DoNothing(player=self)]
+		elif len(target) == 1:
+			return [actions.DamageTarget(attacker=self, defender=target[0])]
+		else:
+			return [
+				actions.DamageTarget(attacker=self, defender=target[0]),
+				actions.DamageTarget(attacker=self, defender=target[1]),
+				actions.HealTarget(attacker=self, defender=self, dmg=20)]

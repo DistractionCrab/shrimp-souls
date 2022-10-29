@@ -7,7 +7,32 @@ import ShrimpSouls.utils as utils
 
 SOULMASS_THRESHOLD = 10
 
+def stat_map(
+	p,
+	base=0, 
+	level=0,
+	vigor=0,
+	endurance=0,
+	strength=0,
+	dexterity=0,
+	intelligence=0,
+	faith=0,
+	luck=0,
+	perception=0):
+	
+	return math.ceil(
+		base 
+		+ level * p.level
+		+ p.attributes.vigor * vigor
+		+ p.attributes.endurance * endurance
+		+ p.attributes.strength * strength
+		+ p.attributes.dexterity * dexterity
+		+ p.attributes.intelligence * intelligence
+		+ p.attributes.faith * faith
+		+ p.attributes.luck * luck
+		+ p.attributes.perception * perception)
 
+	
 
 class ClassSpec:
 	def compute_hit(self, a, d):
@@ -37,11 +62,11 @@ class ClassSpec:
 		return 1
 
 	def basic_action(self, u, env):
-		print("Milquetoast has no class action.")
+		#print("Milquetoast has no class action.")
 		return []
 
 	def targeted_action(self, u, target, env):
-		print("Milquetoast has no class action.")
+		#print("Milquetoast has no class action.")
 		return []
 
 
@@ -62,6 +87,8 @@ class ClassSpec:
 	def cl_string(self):
 		return "Milquetoast"
 
+	def use_ability(self, u, abi, targets):
+		return [actions.Error(info="Milquetoast has no abilities to use.")]
 
 import ShrimpSouls.classes.knight as knight
 import ShrimpSouls.classes.juggernaut as juggernaut

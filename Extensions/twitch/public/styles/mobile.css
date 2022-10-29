@@ -1,0 +1,27 @@
+:root {
+	--hp-bar-width:  150px;
+	--hp-bar-height: 10px;
+	--player-bar-width:  150px;
+	--player-bar-height: 20px;
+	--tablinks-width: 18vh;
+	--tablinks-height: 30px;
+	--tablinks-fontsize: 150%;
+	--default-fontsize: 100%;
+	--charsheet-fontsize: 130%;
+	--body-fontsize: 100%;
+	--lvlup-icon-height: 30px;
+	--lvlup-icon-width: 30px;
+	--status-icon-width: 20px;
+	--status-icon-height: 20px;
+	--hpamt-padding: 10px;
+	--default-fontweight:  300;
+	--spelltable-width: 300px;
+	--tar-select-width: 300px;
+	--tar-select-height: 300px;
+
+	--ability-icon-width: 50px;
+	--ability-icon-height: 50px;
+
+	--tar-select-fontsize: 24px;
+	--lvlup-margin:  50px;
+}

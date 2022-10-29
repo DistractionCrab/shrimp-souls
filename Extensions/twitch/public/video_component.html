@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>Viewer Page</title>
-	<link rel="stylesheet" href="styles/panel.css">
+	<link rel="stylesheet" href="styles/component.css">
+	<link rel="stylesheet" href="styles/main.css">
 	
 </head>
 <body>
@@ -10,51 +11,126 @@
 		<button class="tablinks" onclick="openTab(event, 'charsheet')">Stats</button>
 		<button class="tablinks" onclick="openTab(event, 'printouttab')">Log</button>
 		<button class="tablinks" onclick="openTab(event, 'partytab')">Party</button>
+		<button class="tablinks" onclick="openTab(event, 'npctab')">NPC</button>
 		<button class="tablinks" onclick="openTab(event, 'abilitytab')">Abilities</button>
 	</div>
 	<div id="charsheet" class="tabcontent">
+		<div id="class_value">?ClassName?</div>
 		<table>
 			<tr>
-				<td>Class: </td> <td id="class_value">?????</td>
-				<td>HP: </td><td id="hp_value">0/0</td>
-				<td>XP: </td><td id="xp_value">0/0</td>
+				<td>HP: </td>
+				<td><div id="player_healthbar"></div></td>
+				<td style="padding-left: 50px;" id="hp_value">?/?</td>
+			</tr>
+			<td>XP: </td>
+			<!--<td><div id="player_xpbar"></div></td>-->
+			<td></td>
+			<td style="padding-left: 50px;" id="xp_value">?/?</td>
+		</table>
+		<table style="margin-top: 10px;" id="playerstatus">
+			<tr>
+				<td class="inactive-icon"></td>
+				<td class="inactive-icon"></td>
 			</tr>
 		</table>
 		<table id=stat-table>
-			<tr><td>Vigor: </td><td id="vigor_value">?</td></tr>
-			<tr><td>Endurance: </td><td id="endurance_value">?</td></tr>
-			<tr><td>Strength: </td><td id="strength_value">?</td></tr>
-			<tr><td>Dexterity: </td><td id="dexterity_value">?</td></tr>
-			<tr><td>Intelligence: </td><td id="intelligence_value">?</td></tr>
-			<tr><td>Faith: </td><td id="faith_value">?</td></tr>
-			<tr><td>Luck: </td><td id="luck_value">?</td></tr>
-			<tr><td>Perception: </td><td id="perception_value">?</td></tr>
+			<tr>
+				<td>Vigor: </td>
+				<td id="vigor_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('vigor')"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Endurance: </td>
+				<td id="endurance_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('endurance')"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Strength: </td>
+				<td id="strength_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('strength')"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Dexterity: </td>
+				<td id="dexterity_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('dexterity')"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Intelligence: </td>
+				<td id="intelligence_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('intelligence')"></button></td>
+			</tr>
+			<tr>
+				<td>Faith: </td>
+				<td id="faith_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('faith')"></button></td>
+			</tr>
+			<tr>
+				<td>Luck: </td>
+				<td id="luck_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('luck')"></button></td>
+			</tr>
+			<tr>
+				<td>Perception: </td>
+				<td id="perception_value">?</td>
+				<td><button class=lvlup onclick="MANAGER.level('perception')"></button></td>
+			</tr>
 		</table>
 	</div>
 
 	<div id="printouttab" class="tabcontent">
-		<table id="printout" >
-			<tr><td class="printoutcell">Combat Info Printout...</td></tr>
+		<table id="printout" class="spacedtable">
+			<tr><td class="borderedcell">Combat Info Printout...</td></tr>
+			<tr><td class="borderedcell">Combat Info Printout...</td></tr>
 		</table>
 	</div>
 
 	<div id="partytab" class="tabcontent">
-		<table id="partytable" >
-			<tr><td class="partycell">Nothing here yet...</td></tr>
+		<table id="partytable" class="spacedtable">
+			
+		</table>
+	</div>
+
+	<div id="npctab" class="tabcontent">
+		<table id="npctable" class="spacedtable">
+			<tr><td class="npccell">Nothing here yet...</td></tr>
 		</table>
 	</div>
 
 	<div id="abilitytab" class="tabcontent">
 		<table>
-			<tr><td><button onclick="MANAGER.action()">Basic Action</button></td><td>....</td></tr>
-			<tr><td><button>Target Action</button></td><td>....</td></tr>
+			<tr>
+				<td >
+					<div class="scrollfit">
+					<table id="spelltable" class="spacedtable" 
+						style="margin-right: 60px; margin-left: 20px;">
+						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td><td class="spelldesc">Does stuff</td></tr>
+						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+					</table>
+					</div>
+				</td>
+				<td style="vertical-align: top;">
+					<select id="targetselect" class="tselector" size=5 multiple>
+
+					</select>
+				</td>
+			</tr>
+			
 		</table>
+		
 	</div>
 
 	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
 	<script 
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" 
 		type="text/javascript"></script>
-	<script type="text/javascript" src="scripts/panel.js"></script>
+		<script type="text/javascript" src="scripts/component.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script>
 </body>
 </html>

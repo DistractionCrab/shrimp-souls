@@ -1,13 +1,35 @@
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 import ShrimpSouls.utils as utils
 import ShrimpSouls.actions as actions
 import random
 import math
 
+def pyroclasm(u, targets, env):
+	npcs = list(n for n in env.npcs if not n.dead)
+	targets = random.sample(npcs, k=min(3, len(npcs)))
+	return [Action1(attacker=u,defender=t) for t in targets]
+
+def fireball(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for poaching.")]
+	t = env.get_enemy(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"pyroclasm": pyroclasm,
+	"fireball": fireball,
+}
+
 class Pyromancer(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+	
 	def max_hp(self, p):
+		return cs.stat_map(p, base=20, level=2, vigor=4)
 		return 20 + 2*p.level + 4 * p.attributes.vigor
 
 	@property
@@ -15,16 +37,16 @@ class Pyromancer(ClassSpec):
 		return ss.Positions.BACK
 
 	def score_acc(self, p):
-		return  10 + math.ceil(0.75*p.attributes.intelligence) + math.ceil(0.75*p.attributes.faith) + math.ceil(0.25*p.attributes.dexterity)
+		return cs.stat_map(p, base=13, intelligence=1, faith=1, dexterity=0.25)
 
 	def score_eva(self, p):
-		return 10 + math.ceil(1.25*p.level) + 2
+		return cs.stat_map(p, base=12, level=1.25)
 
 	def score_att(self, p):
-		return 3*p.attributes.faith+3*p.attributes.intelligence
+		return cs.stat_map(p, faith=3, intelligence=3)
 
 	def score_dfn(self, p):
-		return math.ceil(1.5*p.level) + 3
+		return cs.stat_map(p, base=3, level=1.5)
 
 	def basic_action(self, u, env):
 		npcs = list(n for n in env.npcs if not n.dead)
@@ -34,6 +56,12 @@ class Pyromancer(ClassSpec):
 
 	def targeted_action(self, u, target, env):
 		return [Target1(attacker=u, defender=target)]
+
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 
 	def ultimate_action(self, u, players, npcs):

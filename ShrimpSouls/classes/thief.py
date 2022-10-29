@@ -1,4 +1,5 @@
 import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -8,20 +9,49 @@ import math
 
 STEAL_BONUS_THRESHOLD = 10
 
+def steal(u, targets, env):
+	enemies = list(env.npcs)
+		
+	if len(enemies) == 0:
+		return []
+	else:
+		target = random.sample(enemies,k=1)[0]
+		return [Action1(attacker=u, defender = target)]
+
+def poach(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for poaching.")]
+	t = env.get_enemy(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"steal": steal,
+	"poach": poach,
+}
+
 class Thief(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+	
+
 	def max_hp(self, p):
+		return cs.stat_map(p, base=20, level=2, vigor=5)
 		return 20 + 2 * p.level + 5*p.attributes.vigor
 
 	def score_acc(self, p):
+		return cs.stat_map(p, base=10, level=0.5, dexterity=0.5)
 		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
 
 	def score_eva(self, p):
-		return 10 + math.ceil(1.25 * p.attributes.luck) + math.ceil(p.attributes.dexterity*1.25)	
+		return cs.stat_map(p, base=10, luck=1.25, dexterity=1.5)
 
 	def score_att(self, p):
+		return cs.stat_map(p, dexterity=3.5, luck=2.5)
 		return math.ceil(3.5*p.attributes.dexterity + 2.5*p.attributes.luck)
 
 	def score_dfn(self, p):
+		return cs.stat_map(p, level=1, dexterity=2)
 		return p.level + 2 * p.attributes.dexterity
 
 	def basic_action(self, u, env):
@@ -41,6 +71,12 @@ class Thief(ClassSpec):
 		
 	def ultimate_action(self, u, players, npcs):
 		pass
+
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

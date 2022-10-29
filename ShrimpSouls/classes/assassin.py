@@ -1,4 +1,5 @@
 import ShrimpSouls as ss
+import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
@@ -6,20 +7,40 @@ import random
 import math
 import ShrimpSouls.utils as utils
 
+def invis(u, targets, env):
+	return [Action1(attacker=u, defender=u)]
+
+def poison_blade(u, targets, env):
+	if len(targets) == 0:
+		return [actions.Error(info=f"No targets specified for poison blade.")]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=target)]
+
+ABI_MAP = {
+	"invis": invis,
+	"poison_blade": poison_blade,
+}
+
 class Assassin(ClassSpec):
+	@property
+	def ability_list(self):
+		return tuple(ABI_MAP.keys())
+	
 	def max_hp(self, p):
-		return 10 + 1 * p.level + 4*p.attributes.vigor
+		return cs.stat_map(p, base=10, level=1, vigor=4)
 
 	def score_acc(self, p):
-		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
+		return cs.stat_map(p, base=10, level=1, dexterity=0.5)
 
 	def score_eva(self, p):
-		return 12 + math.ceil(1.25*p.attributes.dexterity) + math.ceil(1.25*p.attributes.faith)
+		return cs.stat_map(p, base=12, dexterity=1.25, faith=1.25)
 
 	def score_att(self, p):
+		return cs.stat_map(p, faith=2.5, dexterity=3.5)
 		return math.ceil(2.5*p.attributes.faith + 3.5*p.attributes.dexterity)
 
 	def score_dfn(self, p):
+		return cs.stat_map(p, level=1, dexterity=2)
 		return p.level + 2*p.attributes.dexterity
 
 	def basic_action(self, u, env):
@@ -38,6 +59,12 @@ class Assassin(ClassSpec):
 			return [actions.DamageTarget(attacker=actor, defender=target)]
 		else:
 			return []
+
+	def use_ability(self, u, abi, targets, env):
+		if abi in ABI_MAP:
+			return ABI_MAP[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 	@property
 	def cl_string(self):
