@@ -8,7 +8,6 @@ import enum
 import ast
 import math
 import sys
-import diskcache as dc
 import pathlib
 import atexit
 import persistent
@@ -17,12 +16,6 @@ import ShrimpSouls.messages as messages
 from dataclasses import dataclass, fields, field
 
 
-
-
-CACHE_DIR = pathlib.Path(os.path.join(os.path.split(__file__)[0], "../databases"))
-STATE_DIR = pathlib.Path(os.path.join(os.path.split(__file__)[0], "../databases/state"))
-PLAYER_CACHE = dc.Cache(CACHE_DIR)
-STATE_CACHE = dc.Cache(STATE_DIR)
 
 
 def xp_req(l):
@@ -39,9 +32,6 @@ def auto_commit(f):
 
 	return wrapper
 
-
-if "campaign" not in STATE_CACHE:
-	STATE_CACHE['campaign'] = "Null"
 
 
 class Scores(enum.Enum):

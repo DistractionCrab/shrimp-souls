@@ -655,8 +655,8 @@ class PageManager {
 		if (this.username === null) {
 			log("Tried to connect without username");
 		} else {
-			//this.websocket = new WebSocket("ws://shrimpsouls.distractioncrab.net:443/");
-			this.websocket = new WebSocket(`ws://localhost:443/${this.username["channelId"]}`);
+			this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);
+			//this.websocket = new WebSocket(`ws://localhost:443/${this.username["channelId"]}`);
 			this.websocket.addEventListener("open", () => this.opened());
 			this.websocket.addEventListener("message", ( {data}) => this.receive(data));
 			this.websocket.addEventListener(

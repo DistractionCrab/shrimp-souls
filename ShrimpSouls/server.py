@@ -20,16 +20,19 @@ import ShrimpSouls.campaigns as cps
 import ShrimpSouls.messages as messages
 from dataclasses import dataclass
 
-OAUTH_PATH = os.path.join(os.path.split(__file__)[0], "oauth.txt")
+
 DB_PATH = os.path.join(os.path.split(__file__)[0], "../databases/testing.fs")
-with open(OAUTH_PATH, 'r') as inp:
-	OAUTH_DATA = json.loads(inp.read())
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
+with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
+	SECRETS = json.loads(read.read())
+
 
 def server_secret():
+	return SECRETS["server_secret"]
 	return "j5mcv9re65gp62xihqxqyk402laf81"
 
 def jwt_secret():
+	return base64.b64decode(SECRETS["jwt_secret"])
 	return base64.b64decode("6JvuBgcH+U2M/upQ7fwf+X9rj48BV7nyYvx5H6H1+9g=")
 
 def parse_jwt(msg):
@@ -69,7 +72,7 @@ async def get_username(i):
 		async with aiohttp.ClientSession() as session:
 			url = f'https://api.twitch.tv/helix/users?id={i}'
 			headers = {
-				"Authorization": "Bearer " + OAUTH_DATA['access_token'],
+				"Authorization": "Bearer " + SECRETS['oauth_token'],
 				"Client-ID": CLIENT_ID,
 			}
 			r = await session.get(url, headers=headers)
@@ -360,7 +363,11 @@ async def main(args):
 	elif args[0] == 'networked':
 		m = Router()
 		print("Setting up networked secure server.")
-		s = ssl.create_default_context()
+		root = os.environ['SS_SSL_PATH']
+		s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
+		s.load_cert_chain(
+			os.path.join(root, "shrimpsouls_distractioncrab_net.crt"), 
+			keyfile=os.path.join(root, "csr.key"))
 		async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
 			await m.main()
 			#await asyncio.gather(m.heartbeat(), m.server_loop())
