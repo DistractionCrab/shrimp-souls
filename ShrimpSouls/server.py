@@ -29,11 +29,9 @@ with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as re
 
 def server_secret():
 	return SECRETS["server_secret"]
-	return "j5mcv9re65gp62xihqxqyk402laf81"
 
 def jwt_secret():
 	return base64.b64decode(SECRETS["jwt_secret"])
-	return base64.b64decode("6JvuBgcH+U2M/upQ7fwf+X9rj48BV7nyYvx5H6H1+9g=")
 
 def parse_jwt(msg):
 	s = jwt_secret()
