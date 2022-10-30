@@ -14,7 +14,7 @@ def censure(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for poaching.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"sealing": sealing,
@@ -22,6 +22,10 @@ ABI_MAP = {
 }
 
 class Paladin(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

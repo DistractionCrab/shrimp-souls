@@ -50,7 +50,7 @@ class Action:
 			if self.defender.is_player:
 				return (self.attacker, self.defender)
 			else:
-				return (self.defender,)
+				return tuple()
 		elif self.defender.is_player:
 			return (self.defender,)
 
@@ -63,7 +63,7 @@ class Action:
 			if self.defender.is_npc:
 				return (self.attacker, self.defender)
 			else:
-				return (self.defender,)
+				return tuple()
 		elif self.defender.is_npc:
 			return (self.defender,)
 
@@ -102,19 +102,18 @@ class HealTarget:
 	attacker: object
 	defender: object
 	dmg: int
+	msg: str = ''
 
 	def apply(self):
 		if not self.defender.dead:
+			self.msg += f"{self.attacker.name} heals {self.dmg} life to {self.defender.name}."
 			self.defender.damage(-self.dmg)
+		else:
+			self.msg += f"{self.attacker.name} could not heal dead target {self.defender.name}."
 
 	@property
 	def viable(self):
 		return not self.defender.dead
-			
-
-	@property
-	def msg(self):
-		return f"{self.attacker.name} heals {self.dmg} life to {self.defender.name}."
 
 	@property	
 	def receivers(self):
@@ -122,7 +121,7 @@ class HealTarget:
 			if self.defender.is_player:
 				return (self.attacker, self.defender)
 			else:
-				return (self.defender,)
+				return tuple()
 		elif self.defender.is_player:
 			return (self.defender,)
 
@@ -135,12 +134,14 @@ class HealTarget:
 			if self.defender.is_npc:
 				return (self.attacker, self.defender)
 			else:
-				return (self.defender,)
+				return tuple()
 		elif self.defender.is_npc:
 			return (self.defender,)
 
 		else:
 			return tuple()
+			
+
 
 @dataclass
 class ReviveTarget:
@@ -201,6 +202,14 @@ class Error:
 	@property	
 	def receivers(self):
 		return tuple()
+
+	@property	
+	def receivers(self):
+		return tuple()
+
+	@property	
+	def receivers_npc(self):
+		return tuple()
 	
 
 
@@ -217,7 +226,7 @@ _DEFAULT_COMBAT_LOG = {
 
 
 @dataclass
-class DamageTarget:
+class DamageTarget(Action):
 	attacker: object
 	defender: object
 	dmgoverride: object = None
@@ -334,31 +343,6 @@ class DamageTarget:
 		else:
 			self.standard_scenario()
 
-	@property	
-	def receivers(self):
-		if self.attacker.is_player:
-			if self.defender.is_player:
-				return (self.attacker, self.defender)
-			else:
-				return (self.defender,)
-		elif self.defender.is_player:
-			return (self.defender,)
-
-		else:
-			return tuple()
-
-	@property	
-	def receivers_npc(self):
-		if self.attacker.is_npc:
-			if self.defender.is_npc:
-				return (self.attacker, self.defender)
-			else:
-				return (self.defender,)
-		elif self.defender.is_npc:
-			return (self.defender,)
-
-		else:
-			return tuple()
 
 
 

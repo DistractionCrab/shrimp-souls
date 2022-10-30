@@ -8,18 +8,18 @@ import random
 import math
 
 def hamstring(u, targets, env):
-	npcs = list(env.npcs)
-	targets = random.sample(npcs, k=min(3, len(npcs)))
-
-	return [Action1(attacker=u, defender=t) for t in targets]
-
-	#print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
+	targets = env.find_valid_target(u, False, ss.Positions, True, amt=3)
+		
+	if targets is None:
+		return []
+	else:
+		return [Action1(attacker=u, defender=t) for t in targets]
 
 def slice(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for poaching.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"hamstring": hamstring,
@@ -27,6 +27,10 @@ ABI_MAP = {
 }
 
 class Swordsman(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

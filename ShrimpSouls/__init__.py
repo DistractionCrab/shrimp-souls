@@ -725,7 +725,10 @@ class GameManager(persistent.Persistent):
 	def is_joined(self, name):
 		return self.__campaign.is_joined(name)
 
-
+	@property
+	def party(self):
+		return list(self.campaign.players.values())
+	
 	@property
 	def players(self):
 		return list(self.__players.values())
@@ -743,7 +746,7 @@ class GameManager(persistent.Persistent):
 
 	@property
 	def npcs(self):
-		return self.__campaign.npcs
+		return list(self.__campaign.npcs.values())
 
 
 	def use_ability(self, name, abi, targets):
@@ -756,6 +759,22 @@ class GameManager(persistent.Persistent):
 	def reset_campaign(self):
 		import ShrimpSouls.campaigns.arena as cps
 		self.__campaign = cps.WaitingRoom()
+
+	def resting(self, p):
+		return self.__campaign.restarea or not self.__campaign.is_joined(p)
+
+	def respec(self, p, cl):
+		if isinstance(p, str):
+			p = self.get_player(p)
+
+		if self.resting(p):
+			p.update_class(cl)
+			p.respec()
+			return messages.Message(
+				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
+				users=[p])
+		else:
+			return messages.Error(msg=[f"{p.name} cannot respec in a non-resting arena."])
 	
 
 def main(args):

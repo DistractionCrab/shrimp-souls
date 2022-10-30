@@ -3,6 +3,7 @@ var log = window.Twitch ? window.Twitch.ext.rig.log : console.log;
 const MESSAGES = {
 	connect: name => { return {msg: "connect", jwt: name} },
 	action: () => { return {msg: "basicclassaction"} },
+	join: () => { return {msg: "join"}},
 	ability: (sname, targets) => { 
 		return { 
 			msg: "ability",
@@ -14,6 +15,12 @@ const MESSAGES = {
 		return {
 			msg: "levelup",
 			att: att
+		}
+	},
+	respec: (cl) => {
+		return {
+			msg: "respec",
+			data: cl,
 		}
 	},
 };
@@ -72,7 +79,7 @@ const ABILITY_DATA = {
 	],
 	bard: [
 		{
-			name: "encouarge",
+			name: "encourage",
 			displayName: "War Ballad",
 			targets: 0,
 			icon: "default",
@@ -249,7 +256,7 @@ const ABILITY_DATA = {
 			desc: "Slice into a target, dealing damage and inflicting bleed."
 		}
 	],
-	warrior [
+	warrior: [
 		{
 			name: "sharpen",
 			displayName: "Grindstone",
@@ -287,7 +294,7 @@ class CharSheet {
 
 		this.hp_val = document.getElementById("hp_value");
 		this.xp_val = document.getElementById("xp_value");
-		this.class_val = document.getElementById("class_value");
+		this.class_val = document.getElementById("classselect");
 
 		this.hp_bar = document.getElementById("player_healthbar");
 		this.statusdisplay = document.getElementById("playerstatus");
@@ -315,6 +322,7 @@ class CharSheet {
 			button.classList.add("default_abilityicon");
 
 			var ncell = row.insertCell(1);
+			ncell.classList.add("spellname")
 			ncell.innerHTML = d.displayName;
 
 			//var dcell = row.insertCell(2);
@@ -366,7 +374,7 @@ class CharSheet {
 
 		this.hp_val.innerHTML = `${msg['hp']}/${msg['max_hp']}`;
 		this.xp_val.innerHTML = `${msg['xp']}/${msg['xp_req']}`;
-		this.class_val.innerHTML = msg['class'];
+		
 
 		this.vigor_val.innerHTML = msg['attributes']['vigor'];
 		this.endurance_val.innerHTML = msg['attributes']['endurance'];
@@ -392,7 +400,14 @@ class CharSheet {
 			this.update_spells();
 		}
 		this.class_name = msg['class'].toLowerCase();
+
+
 		this.update_status(msg);
+
+		// Update class value.
+		const obj = document.getElementById("classselect");
+		const i = [...obj.options].findIndex((v) => { return v.value == this.class_name});
+		this.class_val.selectedIndex = i;
 	}
 
 	update_status(data) {
@@ -402,10 +417,10 @@ class CharSheet {
 
 		const kv = Object.entries(data.status);
 		var ct = 0;
-		var row = this.statusdisplay.insertRow(ct);
+		var row = this.statusdisplay.insertRow(0);
 		for (const [k, v] of kv) {
 			if (ct > 8) {
-				row = this.statusdisplay.insertRow(ct);
+				row = this.statusdisplay.insertRow(0);
 			}
 			if (k == "taunt") {			
 				if (v !== null) {
@@ -431,11 +446,26 @@ class CombatLog {
 		if (this.printout.rows.length > 1000) {
 			this.printout.deleteRow(0);
 		} else {
-			var row = this.printout.insertRow(this.printout.rows.length);
-			var cell = row.insertCell(0);
-			cell.classList.add("printoutcell");
-			cell.innerHTML = msg;
+			for (const c of msg) {
+				var row = this.printout.insertRow(this.printout.rows.length);
+				var cell = row.insertCell(0);
+				cell.classList.add("printoutcell");
+				cell.innerHTML = c;
+			}
+			
 		}
+	}
+
+	join_message() {	
+		var row = this.printout.insertRow(this.printout.rows.length);
+		var cell = row.insertCell(0);
+		cell.classList.add("printoutcell");
+
+		cell.innerHTML = `
+			Click <button 
+				onclick='MANAGER.sendMessage(MESSAGES.join());'
+				class="joinbutton">join</button>
+			to join the campaign and chat members!`;
 	}
 }
 
@@ -525,7 +555,7 @@ class Entity {
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(this.data.hp/this.data.max_hp*100)));
 		this.hp_bar.style.backgroundSize = `${prop}% 100%, 100% 100%`;
-		this.hp_display = `${this.data.hp} / ${this.data.max_hp}`;
+		this.hp_display.innerHTML = `${this.data.hp} / ${this.data.max_hp}`;
 
 		// Update status
 		while (this.status_table.rows.length > 0) {
@@ -534,10 +564,10 @@ class Entity {
 
 		const kv = Object.entries(this.data.status);
 		var ct = 0;
-		var row = this.status_table.insertRow(ct);
+		var row = this.status_table.insertRow(0);
 		for (const [k, v] of kv) {
 			if (ct > 8) {
-				row = this.status_table.insertRow(ct);
+				row = this.status_table.insertRow(0);
 			}
 
 			if (k == "taunt") {			
@@ -563,6 +593,19 @@ class EntityManager {
 		this.npcs = {}
 	}
 
+	clear() {
+		this.players = {};
+		this.npcs = {}
+
+		while (this.playerdisplay.rows.length > 0) {
+			this.playerdisplay.deleteRow(0);
+		}
+
+		while (this.npcdisplay.rows.length > 0) {
+			this.npcdisplay.deleteRow(0);
+		}
+	}
+
 	updateNPCS(npcs) {
 		for (const p of npcs) {
 			if (!(p.name in this.npcs)) {
@@ -570,6 +613,7 @@ class EntityManager {
 				this.npcs[p.name] = en
 
 				var cell = this.npcdisplay.insertRow(0).insertCell(0);
+				cell.classList.add("borderedcell");
 				cell.appendChild(en.entity_table);
 			}
 
@@ -598,7 +642,8 @@ class EntityManager {
 
 class PageManager {
 	constructor(testing) {		
-		this.username = null;	
+		this.username = null;
+		this.joined = false;
 
 		// Parts of the page to update the statuses.
 		this.csheet = new CharSheet();
@@ -620,26 +665,11 @@ class PageManager {
 			this.websocket.addEventListener("close", 
 				(event) => {
 					log("Connection to server lost.");
-					this.printout.addlog("Connection to server lost.");
+					this.printout.addlog(["Connection to server lost."]);
 				});
 		}
 	}
 
-	join() {
-		if (this.ocheck) {
-			if (this.username) {
-				clearInterval(this.joinid);
-						
-			} else {
-				log("Twitch has not provided username yet.")
-			}
-			
-		} else {
-			log("Attempted to join on closed socket.")
-		}
-		
-		
-	}
 
 	setUName(name) {
 		if (name === null) {
@@ -653,7 +683,7 @@ class PageManager {
 
 	sendMessage(msg) {
 		var s = JSON.stringify(msg)
-		log("Message to be sent: " + s);
+		//log("Message to be sent: " + s);
 		this.websocket.send(s);
 		
 	}
@@ -661,16 +691,26 @@ class PageManager {
 	receive(msg) {
 		msg = JSON.parse(msg);
 
+		if ("refreshEntities" in msg && msg["refreshEntities"]) {
+			this.entities.clear();
+		}
+
+		if ("joined" in msg) {
+			this.joined = msg['joined'];
+			if (!msg["joined"]) {
+				this.printout.join_message();
+			}
+		}
 		if ("charsheet" in msg) {
 			this.csheet.update_charsheet(msg['charsheet']);	
 		}
-		if ("log" in msg) {
+		if ("log" in msg && this.joined) {
 			this.printout.addlog(msg['log']);
 		}
-		if ("partyinfo" in msg) {
+		if ("partyinfo" in msg && this.joined) {
 			this.entities.updatePlayers(msg['partyinfo']);
 		}
-		if ("npcinfo" in msg) {
+		if ("npcinfo" in msg && this.joined) {
 			this.entities.updateNPCS(msg["npcinfo"]);
 		}
 		
@@ -679,6 +719,9 @@ class PageManager {
 			this.printout.addlog(msg['error']);
 			this.websocket.close();
 		}
+
+		
+		
 	}
 
 	level(att) {
@@ -740,3 +783,20 @@ function openTab(evt, cityName) {
 }
 
 openTab(null, "charsheet")
+
+function expand_select(obj) {
+	obj.setAttribute("size", 5);
+	//obj.style.height="700px";
+	obj.style.height="var(--classselect-opened)";
+	obj.click();
+}
+
+function blur_select(obj) {
+	obj.size=0;
+	obj.style.height="var(--class-select-height)";
+}
+
+function respec() {
+	const obj = document.getElementById("classselect");
+	MANAGER.sendMessage(MESSAGES.respec(obj.options[obj.selectedIndex].value))
+}

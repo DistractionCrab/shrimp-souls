@@ -13,6 +13,10 @@ import atexit
 import ShrimpSouls as ss
 import ShrimpSouls.messages as messages
 
+def refresh_player(p):
+	p.revive()
+	p.reset_status()
+
 
 class BaseArena(persistent.Persistent):
 	def __init__(self, players=None):
@@ -24,9 +28,15 @@ class BaseArena(persistent.Persistent):
 
 	def get_player(self, name):
 		if isinstance(name, str):
-			return self.__players[name]
+			if name in self.__players:
+				return self.__players[name]
+			else:
+				return None
 		else:
-			return name
+			if name.is_player:
+				return name
+			else:
+				return None
 
 	@property
 	def restarea(self):
@@ -45,7 +55,7 @@ class BaseArena(persistent.Persistent):
 
 	@property
 	def npcs(self):
-		return tuple()
+		return {}
 	
 	def is_joined(self, name):	
 		if isinstance(name, str):
@@ -70,7 +80,7 @@ class BaseArena(persistent.Persistent):
 
 	@property
 	def npcs(self):
-		return list(self.__npcs.values())
+		return {}
 
 	def add_npc(self, n):
 		pass
@@ -106,10 +116,16 @@ class WaitingRoom(BaseArena):
 
 	def step(self):
 		if self.player_ct == 0:
-			self.ct += 1
 			return (self, messages.Message(msg=["No players in the arena, click Join to join!"]))
 		else:
-			return (Arena(self.players), messages.Message(msg=["The Arena is starting soon..."]))
+			for p in self.players.values():
+				refresh_player(p)
+			return (
+				Arena(self.players), 
+				messages.Message(
+					msg=["The Arena is starting soon..."],
+					users=list(self.players.values()),
+					refreshEntities=True))
 				
 
 
@@ -130,10 +146,6 @@ class Arena(BaseArena):
 			return self.__npcs[name]
 		else:
 			return name
-
-	@property
-	def npcs(self):
-		return self.__npcs.values()
 
 	@property
 	def npc_ct(self):
@@ -174,7 +186,11 @@ class Arena(BaseArena):
 		elif len(self.__npcs) == 0:
 			while len(self.__npcs) == 0:
 				self.__setup_arena()
-			return (self, messages.Message(msg=["The Arena has started!!!"]))
+			return (self, messages.Message(
+				msg=["The Arena has started!!!"],
+				users=list(self.players.values()),
+				npcs=list(self.npcs.values()),
+				refreshEntities=True))
 		else:
 			v = self.__do_combat()
 			if self.finished:
@@ -192,7 +208,7 @@ class Arena(BaseArena):
 		
 			f = self.__add_foes(p)	
 			#print(f"Foes added for {p.name} = {[f.name for f in f]}")
-		print(self.foes())
+		#print(self.foes())
 
 
 	def __add_foes(self, p):
@@ -250,7 +266,7 @@ class Arena(BaseArena):
 
 		return messages.Message(msg=total, users=rec_p, npcs=rec_n)
 
-	def __do_combat(self):
+	def ___do_combat(self):
 		party = list(self.players.values())
 		enemies = list(self.npcs.values())
 
@@ -320,7 +336,7 @@ class Arena(BaseArena):
 		else:
 			return ''
 
-	def handle_dead_foes(self):
+	def _handle_dead_foes(self):
 		d = []
 		s = 0
 		for n in self.npcs.values():			
@@ -375,8 +391,6 @@ class Arena(BaseArena):
 			elif all(p.dead for p in self.npcs.values()):
 				msg += f"The match has ended. The party is victorious!!!"
 
-			
-
 		return msg
 
 		
@@ -396,9 +410,6 @@ class Arena(BaseArena):
 				return entity.duel_action(entity, self.players, self.npcs)
 			else:
 				return entity.duel_action(entity, self.npcs, self.players)
-
-	
-
 
 
 	@property
@@ -484,17 +495,20 @@ class Arena(BaseArena):
 					total = []
 					targets = list(filter(lambda x: x is not None, [self.get_target(t) for t in targets]))
 					actions = p.myclass.use_ability(p, abi, targets, self)
+					#print(actions)
 					for a in actions:
 						a.apply()
 						total.append(a.msg)
-						total.append(self.handle_dead_foes())
+						dd = self.handle_dead_foes()
+						if len(dd) > 0:
+							total.append(dd)
 						rec.update(a.receivers)
 						rec_n.update(a.receivers_npc)
 
-					p.did_act()
-
+					#p.did_act()
 					return messages.Message(msg=total, users=rec, npcs=rec_n)
 				except Exception as ex:
+					raise ex
 					return messages.Error(msg=[str(ex)])
 
 
@@ -520,21 +534,21 @@ class Arena(BaseArena):
 
 ENCOUNTERS = {
 	range(1, 5): [
-		lambda i: npcs.Goblin.generate(5, i, prob=0.7),
-		lambda i: npcs.Wolf.generate(3, i, prob=0.6),
+		lambda i: npcs.Goblin.generate(3, i, prob=0.7),
+		lambda i: npcs.Wolf.generate(2, i, prob=0.6),
 	],
 	range(5, 10): [
-		lambda i: npcs.GoblinBrute.generate(3, i, prob=0.6),
+		lambda i: npcs.GoblinBrute.generate(2, i, prob=0.6),
 		lambda i: npcs.GoblinBrute.generate(1, i) + npcs.GoblinPriest.generate(1, i, prob=0.7) ,
 	],
 
 	range(10, 16): [
-		lambda i: npcs.OrcWarrior.generate(3, i, prob=0.5),
-		lambda i: npcs.OrcWarrior.generate(2, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
-		lambda i: npcs.Ogre.generate(3, i, prob=0.4),
+		lambda i: npcs.OrcWarrior.generate(2, i, prob=0.5),
+		lambda i: npcs.OrcWarrior.generate(1, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
+		lambda i: npcs.Ogre.generate(2, i, prob=0.6),
 	],
 
 	range(16, 20): [
-		lambda i: npcs.Troll.generate(2, i, prob=0.7),		
+		lambda i: npcs.Troll.generate(1, i, prob=0.7),		
 	],
 }

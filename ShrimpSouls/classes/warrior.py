@@ -7,14 +7,14 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def sharpen(self, u, env):
+def sharpen(u, targets, env):
 	return [Action1(attacker=u, defender=u)]
 
 def armor_break(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for armor_breaking.")]
-	t = env.get_enemy(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"sharpen": sharpen,
@@ -22,6 +22,10 @@ ABI_MAP = {
 }
 
 class Warrior(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

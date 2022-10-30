@@ -15,7 +15,7 @@ def shatter(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for shattering.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"warcry": warcry,
@@ -25,6 +25,10 @@ ABI_MAP = {
 BONUS_THRESHOLD = 10
 
 class Juggernaut(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

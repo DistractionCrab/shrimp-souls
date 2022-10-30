@@ -7,14 +7,14 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def ripstance(self, u, env):
+def ripstance(u, targets, env):
 	return [Action1(attacker=u,defender=u)]
 
 def taunt(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for taunting.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"ripstance": ripstance,
@@ -23,8 +23,13 @@ ABI_MAP = {
 
 class Fencer(ClassSpec):
 	@property
-	def ability_list(self):
+	def abi_map(self):
+		return ABI_MAP
+	
+	@property
+	def ability_list(self):		
 		return tuple(ABI_MAP.keys())
+
 	def max_hp(self, p):
 		
 		return cs.stat_map(p, base=20, level=2, vigor=5)

@@ -8,16 +8,18 @@ import math
 import ShrimpSouls.utils as utils
 
 def chill(u, targets, env):
-	npcs = list(n for n in env.npcs if not n.dead)
-	targets = random.sample(npcs, k=min(3, len(npcs)))
-
-	return [Action1(attacker=u, defender=t) for t in targets]
+	targets = env.find_valid_target(u, False, ss.Positions, True, amt=3)
+		
+	if targets is None:
+		return []
+	else:
+		return [Action1(attacker=u, defender=t) for t in targets]
 
 def freeze(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for freezing.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"chill": chill,
@@ -25,6 +27,10 @@ ABI_MAP = {
 }
 
 class Cryomancer(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())
@@ -91,4 +97,4 @@ class Target1(actions.Action):
 			self.defender.stack_stun(amt=amt)
 			self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid for {amt} turns."
 		else:
-			print(f"{self.attacker.name} has failed to freeze {self.defender.name}")
+			self.msg += f"{self.attacker.name} has failed to freeze {self.defender.name}"

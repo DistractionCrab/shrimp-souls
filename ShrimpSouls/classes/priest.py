@@ -7,12 +7,8 @@ import random
 import math
 
 def prayer(u, targets, env):
-	targets = list(filter(lambda x: not x.dead, env.players))
-	targets = list(set(random.sample(
-		targets, 
-		k=min(len(targets), 3 + u.attributes.faith//HEAL_DICE_THRESHOLD),
-		counts=[math.ceil(p.max_hp/p.hp) for p in targets])))
-	targets = list(filter(lambda x: not x.dead, targets))
+	targets = env.find_valid_target(u, True, ss.Positions, True, amt=3)
+
 
 	return [
 		actions.HealTarget(
@@ -42,6 +38,10 @@ ABI_MAP = {
 HEAL_DICE_THRESHOLD = 10
 
 class Priest(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

@@ -144,7 +144,7 @@ class GoblinBrute(BaseNPC):
 	xp:  int = 7
 	hp:  int = 30
 	max_hp: int = 30
-	_acc: int = 22
+	_acc: int = 18
 	_eva: int = 15
 	_att: int = 28
 	_dfn: int = 24
@@ -158,8 +158,8 @@ class OrcWarrior(BaseNPC):
 	xp:  int = 7
 	hp:  int = 120
 	max_hp: int = 120
-	_acc: int = 26
-	_eva: int = 24
+	_acc: int = 20
+	_eva: int = 21
 	_att: int = 58
 	_dfn: int = 48
 
@@ -170,10 +170,10 @@ class OrcWarrior(BaseNPC):
 @dataclass
 class Ogre(BaseNPC):
 	xp:  int = 15
-	hp:  int = 200
-	max_hp: int = 200
-	_acc: int = 26
-	_eva: int = 21
+	hp:  int = 300
+	max_hp: int = 300
+	_acc: int = 24
+	_eva: int = 18
 	_att: int = 63
 	_dfn: int = 50
 

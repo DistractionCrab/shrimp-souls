@@ -6,6 +6,7 @@ class Message:
 	msg: list[str] = field(default_factory=list)
 	users: list = field(default_factory=list)
 	npcs: list = field(default_factory=list)
+	refreshEntities: bool = False
 
 	@property
 	def is_err(self):

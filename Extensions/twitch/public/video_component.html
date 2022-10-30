@@ -12,20 +12,42 @@
 		<button class="tablinks" onclick="openTab(event, 'printouttab')">Log</button>
 		<button class="tablinks" onclick="openTab(event, 'partytab')">Party</button>
 		<button class="tablinks" onclick="openTab(event, 'npctab')">NPC</button>
-		<button class="tablinks" onclick="openTab(event, 'abilitytab')">Abilities</button>
+		<button class="tablinks" onclick="openTab(event, 'abilitytab')">Skills</button>
 	</div>
 	<div id="charsheet" class="tabcontent">
-		<div id="class_value">?ClassName?</div>
+		<div>
+			<select id="classselect" 
+				onmousedown="expand_select(this);" 
+				onchange='blur_select(this);'>
+				<option value="milquetoast" class="classoption">Milquetoast</option>
+				<option value="bard" class="classoption">Bard</option>
+				<option value="assassin" class="classoption">Assassin</option>
+				<option value="cleric" class="classoption">Cleric</option>
+				<option value="cryomancer" class="classoption">Cryomancer</option>
+				<option value="fencer" class="classoption">Fencer</option>
+				<option value="juggernaut" class="classoption">Juggernaut</option>
+				<option value="knight" class="classoption">Knight</option>
+				<option value="paladin" class="classoption">Paladin</option>
+				<option value="priest" class="classoption">Priest</option>
+				<option value="pyromancer" class="classoption">Pyromancer</option>
+				<option value="sorcerer" class="classoption">Sorcerer</option>
+				<option value="swordsman" class="classoption">Swordsman</option>
+				<option value="thief" class="classoption">Thief</option>
+				<option value="warrior" class="classoption">Warrior</option>
+			</select>
+			<button onclick="respec();" id="respecbutton"></button>
+		</div>
 		<table>
 			<tr>
 				<td>HP: </td>
-				<td><div id="player_healthbar"></div></td>
-				<td style="padding-left: 50px;" id="hp_value">?/?</td>
-			</tr>
+				<td id="hp_value">?/?</td>
+			</tr>			
+		</table>
+		<div id="player_healthbar"></div>
+		<table>
 			<td>XP: </td>
-			<!--<td><div id="player_xpbar"></div></td>-->
-			<td></td>
-			<td style="padding-left: 50px;" id="xp_value">?/?</td>
+			<td id="xp_value">?/?</td>
+			<!--<td><div id="player_xpbar"></div></td>-->			
 		</table>
 		<table style="margin-top: 10px;" id="playerstatus">
 			<tr>
@@ -36,46 +58,46 @@
 		<table id=stat-table>
 			<tr>
 				<td>Vigor: </td>
-				<td id="vigor_value">?</td>
+				<td id="vigor_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('vigor')"></button></td>
 				
 			</tr>
 			<tr>
 				<td>Endurance: </td>
-				<td id="endurance_value">?</td>
+				<td id="endurance_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('endurance')"></button></td>
 				
 			</tr>
 			<tr>
 				<td>Strength: </td>
-				<td id="strength_value">?</td>
+				<td id="strength_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('strength')"></button></td>
 				
 			</tr>
 			<tr>
 				<td>Dexterity: </td>
-				<td id="dexterity_value">?</td>
+				<td id="dexterity_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('dexterity')"></button></td>
 				
 			</tr>
 			<tr>
 				<td>Intelligence: </td>
-				<td id="intelligence_value">?</td>
+				<td id="intelligence_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('intelligence')"></button></td>
 			</tr>
 			<tr>
 				<td>Faith: </td>
-				<td id="faith_value">?</td>
+				<td id="faith_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('faith')"></button></td>
 			</tr>
 			<tr>
 				<td>Luck: </td>
-				<td id="luck_value">?</td>
+				<td id="luck_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('luck')"></button></td>
 			</tr>
 			<tr>
 				<td>Perception: </td>
-				<td id="perception_value">?</td>
+				<td id="perception_value" class="statamt">?</td>
 				<td><button class=lvlup onclick="MANAGER.level('perception')"></button></td>
 			</tr>
 		</table>
@@ -101,28 +123,17 @@
 	</div>
 
 	<div id="abilitytab" class="tabcontent">
-		<table>
-			<tr>
-				<td >
-					<div class="scrollfit">
-					<table id="spelltable" class="spacedtable" 
-						style="margin-right: 60px; margin-left: 20px;">
-						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td><td class="spelldesc">Does stuff</td></tr>
-						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
-						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
-						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
-						<tr><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
-					</table>
-					</div>
-				</td>
-				<td style="vertical-align: top;">
-					<select id="targetselect" class="tselector" size=5 multiple>
+		<div class="scrollfit">
+			<table id="spelltable" class="spacedtable" >
+						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+			</table>
+			<select id="targetselect" class="tselector" size=5 multiple >
 
-					</select>
-				</td>
-			</tr>
-			
-		</table>
+			</select>
+		</div>	
 		
 	</div>
 

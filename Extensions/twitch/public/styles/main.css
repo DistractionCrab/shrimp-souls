@@ -1,7 +1,7 @@
 
 
 body {
-	font-family: Arial Black;
+	font-family: var(--main-font);
 	font-size: var(--body-fontsize);
 	/*font-weight: 100;*/
 	color: white;
@@ -34,7 +34,8 @@ body {
 }
 
 .borderedcell {
-	border: 8px solid black;
+	border: 8px solid;
+	border-color: rgb(148, 148, 148);
 }
 
 #printouttab {
@@ -44,7 +45,7 @@ body {
 }
 
 #printout {
-	font-size: 120%;
+	font-size: var(--printout-fontsize);
 	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0 15px;
@@ -163,17 +164,23 @@ body {
 	width: var(--lvlup-icon-width);
 	height:  var(--lvlup-icon-height);
 	background-image: url("../images/plus icon hover.png");
+	background-color: rbga(0,0,0,0);
 	background-size: contain;
 	background-repeat: no-repeat;
+	border:  none;
+	outline:  none;
 }
 
 .lvlup:active {
 	margin-left: var(--lvlup-margin);
 	width: var(--lvlup-icon-width);
 	height:  var(--lvlup-icon-height);
+	background-color: rbga(0,0,0,0);
 	background-image: url("../images/plus icon clicked.png");
 	background-size: contain;
 	background-repeat: no-repeat;
+	border:  none;
+	outline:  none;
 }
 
 .accupicon {
@@ -352,7 +359,6 @@ body {
 }
 
 .spellname {
-	width: 300px;
 	font-size: 175%;
 }
 
@@ -384,4 +390,40 @@ body {
 
 #spelltable {
 	width: var(--spelltable-width);
+	margin-left: var(--spelltable-margin-left);
+}
+
+.joinbutton {
+	width: var(--joinbutton-width);
+	height: var(--joinbutton-height);
+	font-size: var(--printout-fontsize);
+}
+
+#classselect {
+	color: white;
+	font-size: 120%;
+	width: var(--class-select-width);
+	height: var(--class-select-height);
+	background-color: rgba(0, 0, 0, 0);
+	border:  none;
+}
+
+.classoption {
+	/*font-family: var(--main-font)*/
+	color:  white;
+	width:  300px;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+#respecbutton {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
+	background-image: url("../images/respec.png");
+	background-size:  cover;
+	background-color: rgba(0, 0, 0, 0.0);
+	border:  none;
+}
+
+.statamt {
+	padding-left: var(--statamt-padding-left);
 }

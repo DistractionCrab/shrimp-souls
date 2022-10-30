@@ -81,7 +81,11 @@ class ClassSpec:
 		return math.ceil(p.attributes.intelligence/SOULMASS_THRESHOLD)
 
 	def random_action(self, u, env):
-		return self.basic_action(u, env)
+		m = self.abi_map
+		if len(m) > 0:
+			return []
+		else:
+			return []
 
 	@property
 	def cl_string(self):

@@ -86,15 +86,15 @@ class Heartbeat:
 
 
 class Messages(enum.Enum):
-	CONNECTONLY = (lambda p: {
+	CONNECTONLY = (lambda g, p: {
 			'charsheet': p.json,
-			"joined": False
+			"joined": g.is_joined(p)
 		})
 	UPDATE = (lambda g, msg, p: {
 			"log": msg,
 			"joined": g.is_joined(p),
 			"charsheet": p.json,
-			"partyinfo": [p.json for p in g.players],
+			"partyinfo": [p.json for p in g.party],
 			"npcinfo": [p.json for p in g.npcs],
 		})
 	ERROR = (lambda msg: {"msg": "error", "data": f"ERROR: {msg}"})
@@ -165,7 +165,28 @@ class Server:
 		return self.__idmaps[wsid]
 
 	async def __join(self, msg):
-		pass
+		try:
+			name = self.__idmaps[msg['wsid']]
+			self.__game.join(name)
+			await self.__handle_update(
+				messages.Message(msg=[f"{name} has joined the party!"], 
+				users=self.__game.party,
+				npcs=self.__game.npcs))
+		except Exception as ex:
+			await self.__send_message(msg['wsid'], {"log": f"Error on joining: {ex}"})
+
+
+	async def __respec(self, msg):
+		wsid = msg['wsid']
+		cl = msg['data']
+		p = self.__game.get_player(self.__idmaps[wsid])
+		m = self.__game.respec(p, cl)
+
+		if m.is_err:
+			await self.__send_message(wsid, {"log": m.msg[-1]})
+		else:			
+			await self.__handle_update(m)
+
 
 	async def __connect(self, msg):
 		wsid = msg['wsid']
@@ -184,9 +205,9 @@ class Server:
 					self.__idmaps[wsid] = uname
 					player = self.__game.get_player(uname)
 					if self.__game.is_joined(uname):
-						await self.__send_message(wsid, Messages.UPDATE(self.__game, "Connected", player))						
+						await self.__send_message(wsid, Messages.UPDATE(self.__game, ["Connected"], player))						
 					else:
-						await self.__send_message(wsid, Messages.CONNECTONLY(player))
+						await self.__send_message(wsid, Messages.CONNECTONLY(self.__game, player))
 						
 			else:
 				await self.__send_message(wsid, Messages.ERROR("User ID not supplied."))
@@ -204,30 +225,19 @@ class Server:
 			await self.__send_message(msg['wsid'], {
 					"charsheet": p.json,
 					"log": [m.msg]
-				})	
-
-	async def __handle_update_step(self, msg):
-		items = list(self.__idmaps.items())
-		party = [r.json for r in self.__game.players]
-		enemies = [r.json for r in self.__game.npcs]
-		#players = [player_to_json(r) for r in self.__idmaps.values()]
-		for (wsid, r) in items:
-			send = {
-				'log': msg,
-				'charsheet': self.__game.get_player(r).json,
-				'partyinfo': party,
-				'npcinfo': enemies,
-			}
-			await self.__sockets[wsid].send(json.dumps(send))
+				})
 			
 	async def __handle_update(self, msg):
 		items = list(self.__idmaps.items())
 		for (wsid, r) in items:
+			p = self.__game.get_player(r)
 			send = {
 				'log': msg.msg,
-				'charsheet': self.__game.get_player(r).json,
+				'charsheet': p.json,
 				'partyinfo': [u.json for u in msg.users],
 				'npcinfo': [u.json for u in msg.npcs],
+				'refreshEntities': msg.refreshEntities,
+				"joined": self.__game.is_joined(p)
 			}
 			await self.__send_message(wsid, send)
 
@@ -245,11 +255,11 @@ class Server:
 	async def __handle_msg(self, msg):
 		if isinstance(msg, Heartbeat):
 			now = time.time()
-			if now - self.__last >= 30:
+			if now - self.__last >= 180:
 				self.__last = now
-				#msg = self.__game.step()
+				msg = self.__game.step()
 
-				#await self.__handle_update_step(msg)
+				await self.__handle_update(msg)
 
 		else:
 			if msg['msg'] == "connect":
@@ -261,6 +271,10 @@ class Server:
 			elif msg['msg'] == "disconnect":
 				del self.__sockets[msg["wsid"]]
 				del self.__idmaps[msg["wsid"]]
+			elif msg['msg'] == "join":
+				await self.__join(msg)
+			elif msg['msg'] == "respec":
+				await self.__respec(msg)
 
 
 	async def __add_sock(self, ws):

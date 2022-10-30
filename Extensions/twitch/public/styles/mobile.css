@@ -1,10 +1,12 @@
 :root {
+	--main-font: Arial Black;
+	
 	--hp-bar-width:  150px;
 	--hp-bar-height: 10px;
-	--player-bar-width:  150px;
+	--player-bar-width:  300px;
 	--player-bar-height: 20px;
-	--tablinks-width: 18vh;
-	--tablinks-height: 30px;
+	--tablinks-width: 16vh;
+	--tablinks-height: 33px;
 	--tablinks-fontsize: 150%;
 	--default-fontsize: 100%;
 	--charsheet-fontsize: 130%;
@@ -24,4 +26,17 @@
 
 	--tar-select-fontsize: 24px;
 	--lvlup-margin:  50px;
+	--printout-fontsize:  120%;
+
+	--spelltable-margin-left: 10px;
+	--joinbutton-width: 100px;
+	--joinbutton-height: 45px;
+
+	--class-select-width: 200px;
+	--class-select-height: 40px;
+	--respec-button-width:  30px;
+	--respec-button-height:  30px;
+	--statamt-padding-left:  10px;
+
+	--classselect-opened: 100px;
 }

@@ -8,15 +8,18 @@ import random
 import math
 
 def pyroclasm(u, targets, env):
-	npcs = list(n for n in env.npcs if not n.dead)
-	targets = random.sample(npcs, k=min(3, len(npcs)))
-	return [Action1(attacker=u,defender=t) for t in targets]
+	targets = env.find_valid_target(u, False, ss.Positions, True, amt=3)
+		
+	if targets is None:
+		return []
+	else:
+		return [Action1(attacker=u, defender=t) for t in targets]
 
 def fireball(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for poaching.")]
-	t = env.get_enemy(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"pyroclasm": pyroclasm,
@@ -24,6 +27,10 @@ ABI_MAP = {
 }
 
 class Pyromancer(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

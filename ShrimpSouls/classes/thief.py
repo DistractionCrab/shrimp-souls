@@ -10,19 +10,19 @@ import math
 STEAL_BONUS_THRESHOLD = 10
 
 def steal(u, targets, env):
-	enemies = list(env.npcs)
+	t = env.find_valid_target(u, False, ss.Positions, True)
 		
-	if len(enemies) == 0:
+	print(t)
+	if t is None:
 		return []
 	else:
-		target = random.sample(enemies,k=1)[0]
-		return [Action1(attacker=u, defender = target)]
+		return [Action1(attacker=u, defender=t)]
 
 def poach(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for poaching.")]
-	t = env.get_enemy(targets[0])
-	return [Target1(attacker=u, defender=target)]
+	t = env.get_target(targets[0])
+	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
 	"steal": steal,
@@ -30,6 +30,11 @@ ABI_MAP = {
 }
 
 class Thief(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
+	
+
 	@property
 	def ability_list(self):
 		return tuple(ABI_MAP.keys())

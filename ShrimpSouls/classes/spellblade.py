@@ -14,7 +14,7 @@ def magic_cover(u, targets, env):
 	if len(targets) == 0:
 		return [actions.Error(info=f"No targets specified for Magic Cover.")]
 	t = env.get_target(targets[0])
-	return [Target1(attacker=u,defender=target)]
+	return [Target1(attacker=u,defender=t)]
 
 ABI_MAP = {
 	"enchant": enchant,
@@ -22,6 +22,9 @@ ABI_MAP = {
 }
 
 class SpellBlade(ClassSpec):
+	@property
+	def abi_map(self):
+		return ABI_MAP
 
 	
 	@property
