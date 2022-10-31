@@ -499,13 +499,13 @@ class Arena(BaseArena):
 					for a in actions:
 						a.apply()
 						total.append(a.msg)
-						dd = self.handle_dead_foes()
+						dd = self.handle_dead_foes(a.receivers_npc)
 						if len(dd) > 0:
 							total.append(dd)
 						rec.update(a.receivers)
 						rec_n.update(a.receivers_npc)
 
-					#p.did_act()
+					p.did_act()
 					return messages.Message(msg=total, users=rec, npcs=rec_n)
 				except Exception as ex:
 					raise ex
@@ -542,7 +542,7 @@ ENCOUNTERS = {
 		lambda i: npcs.GoblinBrute.generate(1, i) + npcs.GoblinPriest.generate(1, i, prob=0.7) ,
 	],
 
-	range(10, 16): [
+	range(10, 100): [
 		lambda i: npcs.OrcWarrior.generate(2, i, prob=0.5),
 		lambda i: npcs.OrcWarrior.generate(1, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
 		lambda i: npcs.Ogre.generate(2, i, prob=0.6),

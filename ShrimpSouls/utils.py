@@ -2,6 +2,7 @@ import random
 import math
 import atexit
 import os
+import scipy
 import functools as ftools
 
 ROLL_THRESHOLD = 30
@@ -15,14 +16,21 @@ def compute_bool(a, d, s1, s2):
 
 	return (roll <= check)
 
-def __compute_bool_many(a, d, s1, s2, b1=0, b2=0, m1=1, m2=1):
+def compute_bool_many(a, d, s1, s2, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
-	diff = s1 - s2
+	r = max(0.5, min(s1/s2, 2))
+	p = -0.3 * r**2 + 1.35 * r - 0.55
 
-	rolls = 2
+	rolls = s1//ROLL_THRESHOLD + 1
 
-def compute_bool_many(a, d, s1, s2, b1=0, b2=0, m1=1, m2=1):
+	total = []
+	for d in range(1, rolls + 1):
+		total .append((random.random() < p/(d**1.5), s1, s2))
+
+	return total
+
+def __compute_bool_many(a, d, s1, s2, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
 	diff = s1 - s2
@@ -57,6 +65,8 @@ def compute_num(a, d, s1, s2):
 
 	return (random.randint(1, m), s1, s2)
 
+
+
 def compute_dmg(a, d, b1=0, b2=0, m1=1, m2=1):
 	dfn = m2 * d.dfn + b2
 	att = m1 * a.att + b1
@@ -73,6 +83,14 @@ def compute_dmg(a, d, b1=0, b2=0, m1=1, m2=1):
 			diff -= 10
 
 	return (total, att, dfn)
+
+def compute_dmg(a, d, b1=0, b2=0, m1=1, m2=1):
+	dfn = m2 * d.dfn + b2
+	att = m1 * a.att + b1
+	r = max(0.5, min(att/dfn, 2))
+	p = (r**2)/(-3) + 1.5 * r - (2/3)
+
+	return (math.ceil(att * p), att, dfn)
 
 def compute_hit(a, d):
 	eva = d.eva

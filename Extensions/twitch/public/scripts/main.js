@@ -275,6 +275,11 @@ const ABILITY_DATA = {
 
 }
 
+function clear_node(n) {
+	n.innerHTML = "";
+	return n;
+}
+
 class CharSheet {
 	constructor() {
 		this.xp_cur = 0;
@@ -322,11 +327,11 @@ class CharSheet {
 			button.classList.add("default_abilityicon");
 
 			var ncell = row.insertCell(1);
-			ncell.classList.add("spellname")
-			ncell.innerHTML = d.displayName;
+			ncell.classList.add("spellname");
+			clear_node(ncell).appendChild(document.createTextNode(d.displayName));
 
 			//var dcell = row.insertCell(2);
-			//dcell.innerHTML = d.desc;
+			//dcell.appendChild(document.createTextNode(d.desc));
 
 			var target_selector = this.target_selector;
 			button.addEventListener("click", function() {
@@ -361,7 +366,7 @@ class CharSheet {
 			e.classList.add("enemytarget");	
 		}
 		
-		e.innerHTML = t.name;
+		clear_node(e).appendChild(document.createTextNode(t.name));
 
 		this.target_selector.add(e);
 		this.available_targets.add(t.name);
@@ -372,18 +377,18 @@ class CharSheet {
 		this.xp_cur = msg['xp'];
 		this.xp_req = msg['xp_req'];
 
-		this.hp_val.innerHTML = `${msg['hp']}/${msg['max_hp']}`;
-		this.xp_val.innerHTML = `${msg['xp']}/${msg['xp_req']}`;
+		clear_node(this.hp_val).appendChild(document.createTextNode(`${msg['hp']}/${msg['max_hp']}`));
+		clear_node(this.xp_val).appendChild(document.createTextNode(`${msg['xp']}/${msg['xp_req']}`));
 		
 
-		this.vigor_val.innerHTML = msg['attributes']['vigor'];
-		this.endurance_val.innerHTML = msg['attributes']['endurance'];
-		this.strength_val.innerHTML = msg['attributes']['strength'];
-		this.dexterity_val.innerHTML = msg['attributes']['dexterity'];
-		this.intelligence_val.innerHTML = msg['attributes']['intelligence'];
-		this.faith_val.innerHTML = msg['attributes']['faith'];
-		this.luck_val.innerHTML = msg['attributes']['luck'];
-		this.perception_val.innerHTML = msg['attributes']['perception'];
+		clear_node(this.vigor_val).appendChild(document.createTextNode(msg['attributes']['vigor']));
+		clear_node(this.endurance_val).appendChild(document.createTextNode(msg['attributes']['endurance']));
+		clear_node(this.strength_val).appendChild(document.createTextNode(msg['attributes']['strength']));
+		clear_node(this.dexterity_val).appendChild(document.createTextNode(msg['attributes']['dexterity']));
+		clear_node(this.intelligence_val).appendChild(document.createTextNode(msg['attributes']['intelligence']));
+		clear_node(this.faith_val).appendChild(document.createTextNode(msg['attributes']['faith']));
+		clear_node(this.luck_val).appendChild(document.createTextNode(msg['attributes']['luck']));
+		clear_node(this.perception_val).appendChild(document.createTextNode(msg['attributes']['perception']));
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(msg['hp']/msg['max_hp']*100)));
 		var propx = Math.max(0, Math.min(100, Math.ceil(msg['xp']/msg['xp_req']*100)));
@@ -450,7 +455,7 @@ class CombatLog {
 				var row = this.printout.insertRow(this.printout.rows.length);
 				var cell = row.insertCell(0);
 				cell.classList.add("printoutcell");
-				cell.innerHTML = c;
+				clear_node(cell).appendChild(document.createTextNode(c));
 			}
 			
 		}
@@ -529,7 +534,7 @@ class Entity {
 
 		var name = row1.insertCell(0);
 		name.classList.add("name-cell");
-		name.innerHTML = this.data["name"];
+		clear_node(name).appendChild(document.createTextNode(this.data["name"]));
 		row1.insertCell(1);
 		row1 = this.data_table.insertRow(1);
 		var hpbar = row1.insertCell(0);
@@ -543,7 +548,7 @@ class Entity {
 		var hpamt = row1.insertCell(1);
 		hpamt.classList.add("hpamt");
 		
-		hpamt.innerHTML = `${this.data.hp} / ${this.data.max_hp}`;
+		clear_node(hpamt).appendChild(document.createTextNode(`${this.data.hp} / ${this.data.max_hp}`));
 
 		this.hp_bar = d;
 		this.hp_display = hpamt;
@@ -555,7 +560,7 @@ class Entity {
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(this.data.hp/this.data.max_hp*100)));
 		this.hp_bar.style.backgroundSize = `${prop}% 100%, 100% 100%`;
-		this.hp_display.innerHTML = `${this.data.hp} / ${this.data.max_hp}`;
+		clear_node(this.hp_display).appendChild(document.createTextNode(`${this.data.hp} / ${this.data.max_hp}`));
 
 		// Update status
 		while (this.status_table.rows.length > 0) {
@@ -786,7 +791,6 @@ openTab(null, "charsheet")
 
 function expand_select(obj) {
 	obj.setAttribute("size", 5);
-	//obj.style.height="700px";
 	obj.style.height="var(--classselect-opened)";
 	obj.click();
 }
@@ -800,3 +804,21 @@ function respec() {
 	const obj = document.getElementById("classselect");
 	MANAGER.sendMessage(MESSAGES.respec(obj.options[obj.selectedIndex].value))
 }
+
+
+document.getElementById("charsheetheader").addEventListener("click", (event) => { openTab(event, "charsheet"); });
+document.getElementById("printoutheader").addEventListener("click", (event) => { openTab(event, "printouttab"); });
+document.getElementById("partyheader").addEventListener("click", (event) => { openTab(event, "partytab"); });
+document.getElementById("npcheader").addEventListener("click", (event) => { openTab(event, "npctab"); });
+document.getElementById("abilityheader").addEventListener("click", (event) => { openTab(event, "abilitytab"); });
+document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
+document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
+document.getElementById("respecbutton").addEventListener("click", () => { respec(); });
+document.getElementById("lvlup-vigor").addEventListener("click", () => { MANAGER.level("vigor"); });
+document.getElementById("lvlup-endurance").addEventListener("click", () => { MANAGER.level("endurance"); });
+document.getElementById("lvlup-strength").addEventListener("click", () => { MANAGER.level("strength"); });
+document.getElementById("lvlup-dexterity").addEventListener("click", () => { MANAGER.level("dexterity"); });
+document.getElementById("lvlup-intelligence").addEventListener("click", () => { MANAGER.level("intelligence"); });
+document.getElementById("lvlup-faith").addEventListener("click", () => { MANAGER.level("faith"); });
+document.getElementById("lvlup-luck").addEventListener("click", () => { MANAGER.level("luck"); });
+document.getElementById("lvlup-perception").addEventListener("click", () => { MANAGER.level("perception"); });

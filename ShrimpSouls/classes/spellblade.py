@@ -82,7 +82,7 @@ class Action1(actions.Action):
 	def apply(self):
 		self.attacker.stack_attup(amt=2)
 		self.attacker.stack_defup(amt=2)
-		self.msg += f"{self.attacker.name} enchantes their sword and shield, enhancing their attack and defense."
+		self.msg += f"{self.attacker.name} enchants their sword and shield, enhancing their attack and defense."
 
 
 @dataclass

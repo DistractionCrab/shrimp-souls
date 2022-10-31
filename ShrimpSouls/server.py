@@ -21,7 +21,8 @@ import ShrimpSouls.messages as messages
 from dataclasses import dataclass
 
 
-DB_PATH = os.path.join(os.path.split(__file__)[0], "../databases/testing.fs")
+#DB_PATH = os.path.join(os.path.split(__file__)[0], "../databases/testing.fs")
+DB_PATH = os.environ["SS_DB_PATH"]
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
 	SECRETS = json.loads(read.read())
@@ -184,7 +185,7 @@ class Server:
 		m = self.__game.respec(p, cl)
 
 		if m.is_err:
-			await self.__send_message(wsid, {"log": m.msg[-1]})
+			await self.__send_message(wsid, {"log": m.msg})
 		else:			
 			await self.__handle_update(m)
 
@@ -258,9 +259,9 @@ class Server:
 			now = time.time()
 			if now - self.__last >= 180:
 				self.__last = now
-				msg = self.__game.step()
+				#msg = self.__game.step()
 
-				await self.__handle_update(msg)
+				#await self.__handle_update(msg)
 
 		else:
 			if msg['msg'] == "connect":

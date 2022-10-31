@@ -654,7 +654,7 @@ class Player(Entity):
 
 	@property
 	def max_hp(self):
-		return self.myclass.max_hp(self)
+		return 5*self.myclass.max_hp(self)
 
 	@property
 	def position(self):
@@ -779,7 +779,10 @@ def main(args):
 	elif args[0] == "updateclass":
 		print(game.get_player(args[1]).update_class(args[2]).msg)
 	elif args[0] == 'step':
-		print(game.step()[-1])
+		m = game.step()
+		for i in m.msg:
+			print(i)
+		print("-"*30)
 	elif args[0] == "foelist":
 		print(game.campaign.foes())
 	elif args[0] == "join":

@@ -46,6 +46,10 @@ class ClassSpec:
 		return 5
 
 	@property
+	def abi_map(self):
+		return {}
+
+	@property
 	def position(self):
 		return ss.Positions.FRONT	
 

@@ -8,17 +8,15 @@
 </head>
 <body>
 	<div>
-		<button class="tablinks" onclick="openTab(event, 'charsheet')">Stats</button>
-		<button class="tablinks" onclick="openTab(event, 'printouttab')">Log</button>
-		<button class="tablinks" onclick="openTab(event, 'partytab')">Party</button>
-		<button class="tablinks" onclick="openTab(event, 'npctab')">NPC</button>
-		<button class="tablinks" onclick="openTab(event, 'abilitytab')">Skills</button>
+		<button class="tablinks" id="charsheetheader">Stats</button>
+		<button class="tablinks" id="printoutheader">Log</button>
+		<button class="tablinks" id=partyheader>Party</button>
+		<button class="tablinks" id="npcheader">NPC</button>
+		<button class="tablinks" id="abilityheader">Skills</button>
 	</div>
 	<div id="charsheet" class="tabcontent">
 		<div>
-			<select id="classselect" 
-				onmousedown="expand_select(this);" 
-				onchange='blur_select(this);'>
+			<select id="classselect">
 				<option value="milquetoast" class="classoption">Milquetoast</option>
 				<option value="bard" class="classoption">Bard</option>
 				<option value="assassin" class="classoption">Assassin</option>
@@ -35,7 +33,7 @@
 				<option value="thief" class="classoption">Thief</option>
 				<option value="warrior" class="classoption">Warrior</option>
 			</select>
-			<button onclick="respec();" id="respecbutton"></button>
+			<button id="respecbutton"></button>
 		</div>
 		<table>
 			<tr>
@@ -58,49 +56,51 @@
 		</table>
 		<div style="overflow-y: scroll; height: 50vh">
 			<table id=stat-table>
-				<tr>
-					<td>Vigor: </td>
-					<td id="vigor_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('vigor')"></button></td>
-				</tr>
-				<tr>
-					<td>Endurance: </td>
-					<td id="endurance_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('endurance')"></button></td>
-				</tr>
-				<tr>
-					<td>Strength: </td>
-					<td id="strength_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('strength')"></button></td>
-					
-				</tr>
-				<tr>
-					<td>Dexterity: </td>
-					<td id="dexterity_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('dexterity')"></button></td>
-					
-				</tr>
-				<tr>
-					<td>Intelligence: </td>
-					<td id="intelligence_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('intelligence')"></button></td>
-				</tr>
-				<tr>
-					<td>Faith: </td>
-					<td id="faith_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('faith')"></button></td>
-				</tr>
-				<tr>
-					<td>Luck: </td>
-					<td id="luck_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('luck')"></button></td>
-				</tr>
-				<tr>
-					<td>Perception: </td>
-					<td id="perception_value" class="statamt">?</td>
-					<td><button class=lvlup onclick="MANAGER.level('perception')"></button></td>
-				</tr>
-			</table>
+			<tr>
+				<td>Vigor: </td>
+				<td id="vigor_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-vigor"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Endurance: </td>
+				<td id="endurance_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-endurance"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Strength: </td>
+				<td id="strength_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-strength"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Dexterity: </td>
+				<td id="dexterity_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-dexterity"></button></td>
+				
+			</tr>
+			<tr>
+				<td>Intelligence: </td>
+				<td id="intelligence_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-intelligence"></button></td>
+			</tr>
+			<tr>
+				<td>Faith: </td>
+				<td id="faith_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-faith"></button></td>
+			</tr>
+			<tr>
+				<td>Luck: </td>
+				<td id="luck_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-luck"></button></td>
+			</tr>
+			<tr>
+				<td>Perception: </td>
+				<td id="perception_value" class="statamt">?</td>
+				<td><button class=lvlup id="lvlup-perception"></button></td>
+			</tr>
+		</table>
 		</div>
 	</div>
 
@@ -138,9 +138,6 @@
 	</div>
 
 	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-	<script 
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" 
-		type="text/javascript"></script>
 	<script type="text/javascript" src="scripts/mobile.js"></script>
 	<script type="text/javascript" src="scripts/main.js"></script>
 </body>

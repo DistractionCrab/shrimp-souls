@@ -94,6 +94,10 @@ class DoNothing:
 	def receivers(self):
 		return tuple()
 
+	@property	
+	def receivers_npc(self):
+		return tuple()
+
 
 
 

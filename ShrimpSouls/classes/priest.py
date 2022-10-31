@@ -67,7 +67,7 @@ class Priest(ClassSpec):
 		return cs.stat_map(p, level=1.25, faith=2.25)
 
 	def basic_action(self, u, env):
-		targets = list(filter(lambda x: not x.dead, env.players))
+		targets = list(filter(lambda x: not x.dead, env.players.values()))
 		targets = list(set(random.sample(
 			targets, 
 			k=min(len(targets), 3 + u.attributes.faith//HEAL_DICE_THRESHOLD),
@@ -101,7 +101,7 @@ class Priest(ClassSpec):
 		pass
 
 	def duel_action(self, actor, env):
-		party = list(filter(lambda x: not x.dead, env.players))
+		party = list(filter(lambda x: not x.dead, env.players.values()))
 		heal = sum(random.randint(1, 10)  for _ in range((1 + actor.attributes.faith//HEAL_DICE_THRESHOLD)))
 		target = min(party, key=lambda p: p.hp)
 		return [
