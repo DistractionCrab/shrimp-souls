@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 
 #DB_PATH = os.path.join(os.path.split(__file__)[0], "../databases/testing.fs")
-DB_PATH = os.environ["SS_DB_PATH"]
+DB_PATH = os.path.join(os.environ["SS_DB_PATH"], "ss_db.fs")
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
 	SECRETS = json.loads(read.read())
