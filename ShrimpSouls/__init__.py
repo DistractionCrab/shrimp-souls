@@ -13,6 +13,7 @@ import atexit
 import persistent
 import persistent.mapping
 import ShrimpSouls.messages as messages
+
 from dataclasses import dataclass, fields, field
 
 
@@ -66,10 +67,10 @@ class StatusEnum(enum.Enum):
 	taunt = enum.auto()
 	bleed = enum.auto()
 
-	def stack(self, p, amt):
+	def stack(self, p, amt=1):
 		setattr(p.status, self.name, max(0, amt + getattr(p.status, self.name)))
 
-	def use(self, p, amt):
+	def use(self, p, amt=1):
 		setattr(p.status, self.name, max(0, -amt + getattr(p.status, self.name)))
 
 	def get(self, p):
@@ -132,7 +133,7 @@ class Attributes:
 @dataclass
 class Entity(persistent.Persistent):
 	name: str
-	status: Statuses = Statuses()
+	status: Statuses = field(default_factory=Statuses)
 	acted: bool = False
 
 	
@@ -189,54 +190,21 @@ class Entity(persistent.Persistent):
 	def acc(self):
 		base = float(self._acc)
 
-		if self.accup > 0:
-			base *= 1.2
-		if self.accdown > 0:
-			base *= 0.8
-		if self.encourage > 0:
-			base *= 1.2
-		if self.poison > 0:
-			base *= 0.7
-
-		return math.ceil(base)
+		return utils.acc_scale(self, base)
 	
 	@property
 	def att(self):
 		base = float(self._att)
-		if self.attup > 0:
-			base *= 1.2
-		if self.attdown > 0:
-			base *= 0.8
-		if self.encourage > 0:
-			base *= 1.1
-		if self.poison > 0:
-			base *= 0.7
-
-		return math.ceil(base)
-
+		return utils.att_scale(self, base)
 	@property
 	def eva(self):
 		base = float(self._eva)
-
-		if self.evaup > 0:
-			base *= 1.2
-		if self.evadown > 0:
-			base *= 0.8
-		if self.status.stun > 0:
-			base *= 0.4
-
-		return math.ceil(base)
+		return utils.eva_scale(self, base)
 
 	@property
 	def dfn(self):
 		base = float(self._dfn)
-
-		if self.defup > 0:
-			base *= 1.2
-		if self.defdown > 0:
-			base *= 0.8
-
-		return math.ceil(base)
+		return utils.def_scale(self, base)
 
 
 	def duel_action(self, env):
@@ -547,7 +515,7 @@ import ShrimpSouls.classes as classes
 class Player(Entity):
 	hp: int = 0
 	xp: int = 0
-	attributes: Attributes = Attributes()
+	attributes: Attributes = field(default_factory=Attributes)
 	myclass: classes.ClassSpec = classes.ClassSpec()
 
 
@@ -682,7 +650,9 @@ class Player(Entity):
 	def update_class(self, name):
 		self.myclass = classes.Classes[name.lower().capitalize()].value
 		self.hp = min(self.hp, self.max_hp)
-		return messages.Message(msg=f"{self.name} has updated their class to {self.myclass.cl_string}!!!")
+		return messages.Message(
+			msg=f"{self.name} has updated their class to {self.myclass.cl_string}!!!",
+			users=[self])
 
 
 class GameManager(persistent.Persistent):
@@ -694,6 +664,7 @@ class GameManager(persistent.Persistent):
 	def step(self):
 		(n, msg) = self.__campaign.step()
 		if n is not self.__campaign:
+			print("potatos")
 			self.__campaign = n
 
 		return msg
@@ -767,10 +738,28 @@ class GameManager(persistent.Persistent):
 			return messages.Error(msg=[f"{p.name} cannot respec in a non-resting arena."])
 	
 
+import ShrimpSouls.utils as utils
+
+
 def main(args):
-	import ShrimpSouls.server as server
-	game = server.DATABASE.root.clients[150659682]
-	#game.reset_campaign()
+	import ZODB, persistent
+	import persistent.mapping
+	import transaction
+
+
+	DB_PATH = os.path.join(os.path.split(__file__)[0], "../../databases/testing.fs")
+	db = ZODB.DB(DB_PATH)
+	cn = db.open()
+
+	if "clients" not in cn.root():
+		cn.root.clients = persistent.mapping.PersistentMapping()
+		game = GameManager()
+		cn.root.clients[150659682] = game
+	else:
+		print("Waffles")
+		game = cn.root.clients[150659682]
+
+
 
 	if args[0] == "stats":
 		print(game.get_player(args[1]).stat_string)
@@ -780,9 +769,11 @@ def main(args):
 		print(game.get_player(args[1]).update_class(args[2]).msg)
 	elif args[0] == 'step':
 		m = game.step()
-		for i in m.msg:
-			print(i)
-		print("-"*30)
+		print(m.msg[-1])
+		#return
+		#for i in m.msg:
+		#	print(i)
+		#print("-"*30)
 	elif args[0] == "foelist":
 		print(game.campaign.foes())
 	elif args[0] == "join":
@@ -817,3 +808,10 @@ def main(args):
 		p = game.get_player("distractioncrab")
 		p.respec()
 		p.xp = 0
+	elif args[0] == "print":
+
+		for p in game.players:
+			print(p.name)
+
+	transaction.commit()
+	cn.close()

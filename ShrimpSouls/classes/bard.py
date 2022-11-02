@@ -97,15 +97,15 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
+class Target1(actions.EffectAction):
+	def on_hit(self):
 		if self.defender.is_player:
 			self.defender.use_charm(amt=1)
 			print(f"{self.attacker.name} has weakened the charm magic on {self.defender.name}.")
 		elif self.defender.is_npc:
-			if utils.compute_hit(self.attacker, self.defender)[0]:
-				t = random.randint(1,4)
-				self.defender.stack_charm(amt=t)
-				self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."
-			else:
-				self.msg += f"{self.attacker.name} failed to charm {self.defender.name}."
+			t = random.randint(1,4)
+			self.defender.stack_charm(amt=t)
+			self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."
+			
+	def on_miss(self):
+		self.msg += f"{self.attacker.name} failed to charm {self.defender.name}."

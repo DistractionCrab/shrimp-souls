@@ -26,10 +26,6 @@ class Sorcerer(ClassSpec):
 	@property
 	def abi_map(self):
 		return ABI_MAP
-	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
 		
 	@property
 	def position(self):
@@ -50,21 +46,6 @@ class Sorcerer(ClassSpec):
 	def score_dfn(self, p):
 		return cs.stat_map(p, level=1.25, intelligence=2.25)
 
-	def basic_action(self, u, env):
-		return [Action1(attacker=u, defender=u)]
-		
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-	def ultimate_action(self, u):
-		pass
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -86,12 +67,5 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			dmg = random.randint(5, 15)*(1 + 2*(self.attacker.attributes.intelligence//10))
-			self.defender.damage(dmg)
-			self.msg += f"{self.attacker.name}'s Souls Spear strikes {self.defender.name} for {dmg} damage."
-
-		else:
-			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+class Target1(actions.DamageTarget):
+	score_dmg: tuple = utils.score_dmg(m1=1.5)

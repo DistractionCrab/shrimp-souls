@@ -39,4 +39,8 @@
 	--statamt-padding-left:  10px;
 
 	--classselect-opened: 100px;
+
+	--bordered-width:  8px;
+	--printout-fontsize:  120%;
+	--spellname-fontsize:  175%;
 }

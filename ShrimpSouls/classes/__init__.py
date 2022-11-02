@@ -4,8 +4,25 @@ import math
 import enum
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
+from dataclasses import dataclass
 
 SOULMASS_THRESHOLD = 10
+
+
+def score_wrap(p, **kwds):
+	return lambda p: stat_map(p, **kwds)
+
+def acc_wrap(p, **kwds):
+	return lambda p: utils.acc_scale(p, stat_map(p, **kwds))
+
+def att_wrap(p, **kwds):
+	return lambda p: utils.att_scale(p, stat_map(p, **kwds))
+
+def eva_wrap(p, **kwds):
+	return lambda p: utils.eva_scale(p, stat_map(p, **kwds))
+
+def def_wrap(p, **kwds):
+	return lambda p: utils.def_scale(p, stat_map(p, **kwds))
 
 def stat_map(
 	p,
@@ -50,6 +67,10 @@ class ClassSpec:
 		return {}
 
 	@property
+	def ability_list(self):
+		return tuple(self.abi_map.keys())
+
+	@property
 	def position(self):
 		return ss.Positions.FRONT	
 
@@ -64,14 +85,6 @@ class ClassSpec:
 
 	def score_dfn(self, p):
 		return 1
-
-	def basic_action(self, u, env):
-		#print("Milquetoast has no class action.")
-		return []
-
-	def targeted_action(self, u, target, env):
-		#print("Milquetoast has no class action.")
-		return []
 
 
 	def duel_action(self, actor, env):
@@ -97,6 +110,14 @@ class ClassSpec:
 
 	def use_ability(self, u, abi, targets):
 		return [actions.Error(info="Milquetoast has no abilities to use.")]
+
+	def use_ability(self, u, abi, targets, env):
+		if len(self.abi_map) == 0:
+			return [actions.Error(info="Milquetoast has no abilities to use.")]
+		elif abi in self.abi_map:
+			return self.abi_map[abi](u, targets, env)
+		else:
+			return [actions.Error(info=f"No such ability: {abi}")]
 
 import ShrimpSouls.classes.knight as knight
 import ShrimpSouls.classes.juggernaut as juggernaut

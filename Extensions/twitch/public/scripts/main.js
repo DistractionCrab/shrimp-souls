@@ -1,3 +1,4 @@
+const TESTING = true;
 var log = window.Twitch ? window.Twitch.ext.rig.log : console.log;
 
 const MESSAGES = {
@@ -27,6 +28,8 @@ const MESSAGES = {
 
 
 const ABILITY_DATA = {
+	milquetoast: [
+	],
 	knight: [
 		{
 			name: "block",
@@ -653,24 +656,34 @@ class PageManager {
 		// Parts of the page to update the statuses.
 		this.csheet = new CharSheet();
 		this.printout = new CombatLog();
-		this.entities = new EntityManager();	
+		this.entities = new EntityManager();
+
+		this.reconnect = null;
 	}
 
 	init_socket() {
 		if (this.username === null) {
 			log("Tried to connect without username");
 		} else {
-			this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);
-			//this.websocket = new WebSocket(`ws://localhost:443/${this.username["channelId"]}`);
+			if (TESTING) {
+				this.websocket = new WebSocket(`ws://localhost:443/${this.username["channelId"]}`);	
+			} else {
+				this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);	
+			}
+			
+			
 			this.websocket.addEventListener("open", () => this.opened());
-			this.websocket.addEventListener("message", ( {data}) => this.receive(data));
+			this.websocket.addEventListener("message", ({data}) => this.receive(data));
 			this.websocket.addEventListener(
 				"error", 
-				(event) => log("Error occurred: " + event));
+				(event) => {
+					log("Error occurred: " + event);
+				});
 			this.websocket.addEventListener("close", 
 				(event) => {
 					log("Connection to server lost.");
 					this.printout.addlog(["Connection to server lost."]);
+					MANAGER.reconnect = setTimeout(function() { Manager.init_socket(); }, 20000);
 				});
 		}
 	}
@@ -735,6 +748,9 @@ class PageManager {
 
 	opened() {
 		log("Established connection: shrimpsouls.distractioncrab.net");
+		if (this.reconnect !== null) {
+			clearTimeout(this.reconnect);
+		}
 		this.websocket.send(JSON.stringify(MESSAGES.connect(this.username)))
 	}
 

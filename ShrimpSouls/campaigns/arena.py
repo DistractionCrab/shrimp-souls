@@ -266,51 +266,7 @@ class Arena(BaseArena):
 
 		return messages.Message(msg=total, users=rec_p, npcs=rec_n)
 
-	def ___do_combat(self):
-		party = list(self.players.values())
-		enemies = list(self.npcs.values())
-
-		order = list(a for a in (party + enemies) if not a.dead)
-		random.shuffle(order)
-
-		#for p in order:
-		#	p.tick()
-
-		alivep = [p for p in party if not p.dead]
-		aliven = [p for p in enemies if not p.dead]
-
-		for p in order:
-			if self.finished:
-				break
-			if p.stun == 0:
-				#actions = self.get_action(p)
-				actions = p.duel_action(self)
-				if not p.acted:
-					actions = p.random_action(p, self) + actions
-				for a in actions:
-					a.apply()
-					log(a.msg + " ")
-
-			#if not p.is_player:
-			#	p.damage(p.hp)
-			else:
-				log(f"{p.name} was stunned and couldn't act.")
-
-
-		msg = self.__get_death_msgs(alivep, aliven)
-
-
-		for p in order:
-			if not p.dead:
-				p.tick()
-
-		msg = "**The Turn has Ended**: " + msg
-		log("------------------------------------------------------------")
-
-		for p in self.players.values():
-			p.allow_actions()
-
-		return messages.Message(msg=[msg])
+	
 
 	def handle_dead_foes(self, rec_n):
 		if len(rec_n) == 0:
@@ -336,62 +292,6 @@ class Arena(BaseArena):
 		else:
 			return ''
 
-	def _handle_dead_foes(self):
-		d = []
-		s = 0
-		for n in self.npcs.values():			
-			if n.dead and n.xp > 0:
-				d.append(n)
-				s += n.xp
-				n.xp = 0
-
-		for p in self.players.values():
-			p.add_shrimp(s)
-
-		if len(d) > 0:
-			if len(d) > 3:
-				return f"Many foes have fallen. The party has been awarded {s} xp."
-			else:
-				return f"{', '.join(n.name for n in d)} have fallen.The party has been awarded {s} xp."
-			
-		else:
-			return ''
-
-
-
-	def __get_death_msgs(self, party, enemies):
-		msg = ""
-
-		deadp = [p for p in party if p.dead]
-		deade = [p for p in enemies if p.dead]
-
-		if len(deadp) > 0 and len(deadp) <= 3:
-			msg += f"{', '.join(p.name for p in deadp)} have perished in the arena. "
-		elif len(deadp) > 0:
-			msg += "Many players have perished in the arena. "
-		
-
-		if len(deade) > 0:
-			if len(deade) <= 3:
-				msg += f"{', '.join(p.name for p in deade)} have perished in the arena. "
-			else:
-				msg += "Many foes have perished in the arena. "
-
-			msg += self.handle_dead_foes()
-			
-
-		if len(deadp) == 0 and len(deade) == 0:
-			msg += "No deaths this round... "
-
-		if not self.finished:
-			msg += f"The battle, however, continues to rage..."
-		else:
-			if all(p.dead for p in self.players.values()):
-				msg += "The match has ended. The party has been defeated..."
-			elif all(p.dead for p in self.npcs.values()):
-				msg += f"The match has ended. The party is victorious!!!"
-
-		return msg
 
 		
 	def get_action(self, entity):

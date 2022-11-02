@@ -43,10 +43,6 @@ class Priest(ClassSpec):
 		return ABI_MAP
 	
 	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
-	
-	@property
 	def position(self):
 		return ss.Positions.BACK
 
@@ -66,39 +62,6 @@ class Priest(ClassSpec):
 	def score_dfn(self, p):
 		return cs.stat_map(p, level=1.25, faith=2.25)
 
-	def basic_action(self, u, env):
-		targets = list(filter(lambda x: not x.dead, env.players.values()))
-		targets = list(set(random.sample(
-			targets, 
-			k=min(len(targets), 3 + u.attributes.faith//HEAL_DICE_THRESHOLD),
-			counts=[math.ceil(p.max_hp/p.hp) for p in targets])))
-		targets = list(filter(lambda x: not x.dead, targets))
-
-		return [
-			actions.HealTarget(
-				attacker=u, 
-				defender=t, 
-				dmg=random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)) for t in targets
-		]
-		
-
-	def targeted_action(self, u, target, env):
-
-		if target.dead:
-			amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-			return [actions.ReviveTarget(attacker=u, defender=target, dmg=amt)]
-		else:
-			amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-			return [actions.HealTarget(attacker=u, defender=target, dmg=amt)]
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		party = list(filter(lambda x: not x.dead, env.players.values()))

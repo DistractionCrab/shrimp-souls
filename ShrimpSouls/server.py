@@ -21,8 +21,8 @@ import ShrimpSouls.messages as messages
 from dataclasses import dataclass
 
 
-#DB_PATH = os.path.join(os.path.split(__file__)[0], "../databases/testing.fs")
-DB_PATH = os.path.join(os.environ["SS_DB_PATH"], "ss_db.fs")
+STEP_FREQUENCY = 180
+
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
 	SECRETS = json.loads(read.read())
@@ -41,30 +41,7 @@ def parse_jwt(msg):
 	except:
 		return None
 
-def get_db_conn(testing=False):
-	if testing:
-		db = ZODB.DB(DB_PATH)
-		return db.open()
-	else:
-		db = ZODB.DB(DB_PATH)
-		return db.open()
 
-def init_db(testing=False):
-	cn = get_db_conn(testing=testing)
-
-	if "clients" not in cn.root():
-		cn.root.clients = persistent.mapping.PersistentMapping()
-
-	#transaction.commit()
-
-	return cn
-
-DATABASE = init_db(testing=True)
-
-def close_server():
-	transaction.commit()
-	DATABASE.close()
-atexit.register(close_server)
 
 async def get_username(i):
 	try:
@@ -104,21 +81,16 @@ class Messages(enum.Enum):
 
 
 class Server:
-	def __init__(self, clientid, test=False):
-		self.__clientid = clientid		
+	def __init__(self, game):
 		self.__msgs = asyncio.Queue()
 		self.__sockets = {}
 		self.__connections = {}
 		self.__last = time.time()		
 		self.__idmaps = {}
-		self.__test = test
 		self.__wsid_ct = 0
+		self.__game = game
 
-
-		if clientid not in DATABASE.root.clients:
-			 self.__db.clients[clientid] = ss.GameManager()
-
-		self.__game = DATABASE.root.clients[clientid]
+		
 
 
 	async def server_loop(self):
@@ -257,11 +229,11 @@ class Server:
 	async def __handle_msg(self, msg):
 		if isinstance(msg, Heartbeat):
 			now = time.time()
-			if now - self.__last >= 180:
+			if now - self.__last >= STEP_FREQUENCY:
 				self.__last = now
-				#msg = self.__game.step()
-
-				#await self.__handle_update(msg)
+				msg = self.__game.step()
+				
+				await self.__handle_update(msg)
 
 		else:
 			if msg['msg'] == "connect":
@@ -318,6 +290,43 @@ class Router:
 	def __init__(self, test=False):
 		self.__test = test
 		self.__games = {}
+		self.__db = self.__init_db()
+
+		atexit.register(self.__close)
+
+		if self.__test:
+			global STEP_FREQUENCY
+			STEP_FREQUENCY = 30
+
+
+	def __close(self):
+		transaction.commit()
+		self.__db.close()
+
+	def __init_db(self):
+		if self.__test:
+			DB_PATH = os.path.join(os.path.split(__file__)[0], "../../databases/testing.fs")
+			db = ZODB.DB(DB_PATH)
+			cn = db.open()
+		else:
+			DB_PATH = os.path.join(os.environ["SS_DB_PATH"], "ss_db.fs")
+			db = ZODB.DB(DB_PATH)
+			cn = db.open()
+
+		if "clients" not in cn.root():
+			cn.root.clients = persistent.mapping.PersistentMapping()
+
+		return cn
+	
+
+
+	def __get_game(self, i):
+		if i in self.__db.root.clients:
+			return self.__db.root.clients[i]
+		else:
+			s = ss.GameManager()
+			self.__db.root.clients[i] = s
+			return s
 
 	async def __call__(self, ws, path):
 		try:
@@ -325,7 +334,8 @@ class Router:
 			print(f"Received Connection for channelId {i}")
 
 			if i not in self.__games:
-				s = Server(i, test=self.__test)
+				g = self.__get_game(i)
+				s = Server(g)
 				self.__games[i] = s
 				
 			else:

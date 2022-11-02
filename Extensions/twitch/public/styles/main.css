@@ -34,14 +34,14 @@ body {
 }
 
 .borderedcell {
-	border: 8px solid;
+	border: var(--bordered-width) solid;
 	border-color: rgb(148, 148, 148);
 }
 
 #printouttab {
 	overflow:  auto;
 	height: 85vh;
-	font-size: 120%;
+	font-size: var(--printout-fontsize);
 }
 
 #printout {
@@ -52,7 +52,7 @@ body {
 }
 
 .printoutcell {
-	border: 5px solid;
+	border: var(--bordered-width) solid;
 	border-color: rgb(148, 148, 148);
 }
 
@@ -360,7 +360,7 @@ body {
 }
 
 .spellname {
-	font-size: 175%;
+	font-size: var(--spellname-fontsize);
 }
 
 .spelldesc {
@@ -386,7 +386,8 @@ body {
 }
 
 .spellrow {
-	outline: thick solid;
+	outline: var(--bordered-width) solid;
+	outline-color: rgb(148, 148, 148);
 }
 
 #spelltable {

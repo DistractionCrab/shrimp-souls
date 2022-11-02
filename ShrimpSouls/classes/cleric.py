@@ -26,10 +26,6 @@ class Cleric(ClassSpec):
 	@property
 	def abi_map(self):
 		return ABI_MAP
-	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
 		
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=5, vigor=6)
@@ -45,25 +41,6 @@ class Cleric(ClassSpec):
 
 	def score_dfn(self, p):
 		return cs.stat_map(p, strength=2, faith=3)
-
-	def basic_action(self, u, env):
-		players = list(p for p in env.players if not p.dead)
-		targets = random.sample(players, k=min(3, len(players)))
-
-		return [Action1(attacker=u, defender=t) for t in targets]
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-		
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

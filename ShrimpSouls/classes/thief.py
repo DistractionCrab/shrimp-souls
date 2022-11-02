@@ -11,8 +11,6 @@ STEAL_BONUS_THRESHOLD = 10
 
 def steal(u, targets, env):
 	t = env.find_valid_target(u, False, ss.Positions, True)
-		
-	print(t)
 	if t is None:
 		return []
 	else:
@@ -32,13 +30,7 @@ ABI_MAP = {
 class Thief(ClassSpec):
 	@property
 	def abi_map(self):
-		return ABI_MAP
-	
-
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
-	
+		return ABI_MAP	
 
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=2, vigor=5)
@@ -59,29 +51,6 @@ class Thief(ClassSpec):
 		return cs.stat_map(p, level=1, dexterity=2)
 		return p.level + 2 * p.attributes.dexterity
 
-	def basic_action(self, u, env):
-		enemies = list(env.npcs)
-		
-		if len(enemies) == 0:
-			return []
-		else:
-			#print(enemies)
-			target = random.sample(enemies,k=1)[0]
-			return [Action1(attacker=u, defender = target)]
-		
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-		
-		
-	def ultimate_action(self, u, players, npcs):
-		pass
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -99,16 +68,16 @@ class Thief(ClassSpec):
 class Action1(actions.Action):
 	def apply(self):
 		amt = sum(random.randint(1, 4) for i in range(1 + self.attacker.attributes.luck//STEAL_BONUS_THRESHOLD))
-		if utils.compute_hit(self.attacker, self.defender)[0]:
+		if utils.compute_bool(self.attacker, self.defender):
 			self.attacker.add_shrimp(amt)
 			self.msg += f"{self.attacker.name} manages to steal {amt} shrimp from {self.defender.name}. "
 			# See if you pilfer armor.
-			if utils.compute_hit(self.attacker, self.defender)[0]:
+			if utils.compute_bool(self.attacker, self.defender):
 				self.defender.stack_defdown()
 				self.attacker.stack_defup()
 				self.msg += f"{self.attacker.name} pilfers armor from {self.defender.name}. "
 
-			if utils.compute_hit(self.attacker, self.defender)[0]:
+			if utils.compute_bool(self.attacker, self.defender):
 				self.defender.stack_attdown()
 				self.attacker.stack_attup()
 				self.msg += f"{self.attacker.name} pilfers the weapon from {self.defender.name}. "
@@ -127,7 +96,7 @@ class Target1(actions.Action):
 			self.msg += f"{self.attacker.name} cannot poach an enemy while their target is dead."
 			return
 		if (self.defender.hp/self.defender.max_hp) < 0.2:
-			if utils.compute_hit(self.attacker, self.defender)[0]:
+			if utils.compute_bool(self.attacker, self.defender):
 				self.defender.damage(self.defender.max_hp)
 				self.attacker.add_shrimp(self.defender.xp)
 				self.msg += f"{self.attacker.name} managed to poach {self.defender.name} and earned {self.defender.xp} shrimp."

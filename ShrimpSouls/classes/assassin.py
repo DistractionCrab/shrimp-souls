@@ -1,7 +1,7 @@
 import ShrimpSouls as ss
 import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import ShrimpSouls.actions as actions
 import random
 import math
@@ -83,17 +83,8 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			self.defender.stack_poison(amt=random.randint(1, 6))
-			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.dexterity + self.attacker.attributes.luck)//10)
-			dmg = dmg if self.attacker.invis == 0 else 2*dmg
-			
-			self.defender.damage(dmg)
+class Target1(actions.DamageTarget):
+	statuses: tuple = field(default_factory=lambda:((ss.StatusEnum.poison, random.randint(1, 3)),))
 
-			self.msg += f"{self.attacker.name}'s poisoned blade pierces {self.defender.name} dealing {dmg} damage."
-		else:
-			self.msg += f"{self.attacker.name}'s poisoned blade misses their target. "
-
-		self.attacker.use_invis(self.attacker.invis)
+	def __post_init__(self):
+		self.score_dmg = utils.score_dmg(m1=2) if self.attacker.invis > 0 else utils.score_dmg()

@@ -1,0 +1,48 @@
+:root {
+	--main-font: Arial Black;
+
+	--hp-bar-width:  600px;
+	--hp-bar-height: 30px;
+	--player-bar-width:  150px;
+	--player-bar-height: 15px;
+	--tablinks-width: 60px;
+	--tablinks-height: 20px;
+	--tablinks-fontsize: 100%;
+	--default-fontsize: 110%;
+	--body-fontsize: 80%;
+	--charsheet-fontsize: 80%;
+	--lvlup-icon-height: 15px;
+	--lvlup-icon-width: 15px;
+	--status-icon-width: 15px;
+	--status-icon-height: 15px;
+	--hpamt-padding:  50px;
+	--default-fontweight:  300;
+	--spelltable-width:  50vh;
+	--tar-select-width:  80vh;
+	--tar-select-height: 75vh;
+
+	--ability-icon-width: 20px;
+	--ability-icon-height: 20px;
+
+	--tar-select-fontsize:  48px;
+
+	--lvlup-margin: 50px;
+
+	--printout-fontsize: 10%;
+
+	--spelltable-margin-left:  60px;
+	--joinbutton-width: 200px;
+	--joinbutton-height: 70px;
+
+	--class-select-height: 40px;
+	--class-select-width: 130px;
+	--respec-button-width:  15px;
+	--respec-button-height:  15px;
+	--statamt-padding-left:  50px;
+
+	--classselect-opened: 700px;
+	--bordered-width:  2px;
+	--printout-fontsize:  120%;
+	--spellname-fontsize:  100%;
+}
+

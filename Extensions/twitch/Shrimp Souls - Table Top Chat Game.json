@@ -5,8 +5,8 @@
   "certificateExceptions": [],
   "extensionViews": [
     {
-      "channelId": "150659682",
-      "configurationAnchor": "video_overlay",
+      "channelId": "265737932",
+      "configurationAnchor": "component",
       "displayChannelName": "distractioncrab",
       "features": {
         "isBitsEnabled": false,
@@ -17,18 +17,18 @@
         "width": 375,
         "height": 822
       },
-      "id": "2",
+      "id": "1",
       "isPopout": false,
       "label": "",
       "linked": true,
-      "linkedUserId": "451176857",
+      "linkedUserId": "150659682",
       "orientation": "Portrait",
       "type": "mobile",
       "viewerType": "Logged-In Viewer"
     },
     {
-      "channelId": "150659682",
-      "configurationAnchor": "video_overlay",
+      "channelId": "265737932",
+      "configurationAnchor": "component",
       "displayChannelName": "distractioncrab",
       "features": {
         "isBitsEnabled": false,
@@ -39,11 +39,11 @@
         "width": 1280,
         "height": 720
       },
-      "id": "3",
+      "id": "2",
       "isPopout": false,
       "label": "",
       "linked": true,
-      "linkedUserId": "150659682",
+      "linkedUserId": "451176857",
       "orientation": "Portrait",
       "type": "component",
       "viewerType": "Logged-In Viewer"
@@ -55,7 +55,7 @@
     "authorName": "DistractionCrab",
     "bitsEnabled": false,
     "canInstall": true,
-    "configUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/config.html",
+    "configUrl": "https://localhost:8080/config.html",
     "configurationLocation": "none",
     "description": "This extension is an RPG extension that allows one to play the Shrimp Souls RPG with other chat members and the streamer.",
     "eulaTosUrl": "",
@@ -68,7 +68,7 @@
     },
     "id": "ec767p01w3r37lrj9gfvcz9248ju9v",
     "installationCount": -42,
-    "liveConfigUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/live_config.html",
+    "liveConfigUrl": "https://localhost:8080/live_config.html",
     "name": "Shrimp Souls - Table Top Chat Game",
     "panelHeight": 0,
     "privacyPolicyUrl": "",
@@ -78,7 +78,7 @@
       "https://extensions-discovery-images.twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/screenshot73b477e7-45f1-43db-a22b-4210182987f2"
     ],
     "sku": "",
-    "state": "Assets Uploaded",
+    "state": "Testing",
     "subscriptionsSupportLevel": "none",
     "summary": "A Overlay Panel for the Shrimp Souls Table Top Chat Game.",
     "supportEmail": "convoluted.nonsense@gmail.com",
@@ -87,15 +87,15 @@
     "viewerSummary": "Shrimp Souls is a Twitch Chat RPG designed for fun interaction and fun adventures.",
     "viewerUrl": "",
     "viewerUrls": {
-      "mobile": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/mobile.html",
-      "component": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/video_component.html"
+      "mobile": "https://localhost:8080/mobile.html",
+      "component": "https://localhost:8080/video_component.html"
     },
     "views": {
       "mobile": {
-        "viewerUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/mobile.html"
+        "viewerUrl": "https://localhost:8080/mobile.html"
       },
       "component": {
-        "viewerUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/video_component.html",
+        "viewerUrl": "https://localhost:8080/video_component.html",
         "aspectWidth": 0,
         "aspectHeight": 0,
         "aspectRatioX": 600,
@@ -109,11 +109,11 @@
         "autoScale": true
       },
       "config": {
-        "viewerUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/config.html",
+        "viewerUrl": "https://localhost:8080/config.html",
         "canLinkExternalContent": false
       },
       "liveConfig": {
-        "viewerUrl": "https://ec767p01w3r37lrj9gfvcz9248ju9v.ext-twitch.tv/ec767p01w3r37lrj9gfvcz9248ju9v/0.0.1/7a047a05cec8b1274ce4ef690290fd87/live_config.html",
+        "viewerUrl": "https://localhost:8080/live_config.html",
         "canLinkExternalContent": false
       }
     },

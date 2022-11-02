@@ -28,10 +28,7 @@ class Juggernaut(ClassSpec):
 	@property
 	def abi_map(self):
 		return ABI_MAP
-	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
+
 	
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=5, vigor=7)
@@ -48,26 +45,6 @@ class Juggernaut(ClassSpec):
 	def score_dfn(self, p):
 		return cs.stat_map(p, base=4, strength=4)
 
-	def basic_action(self, u, env):
-		targets = env.find_valid_target(u, True, ss.Positions, True, amt=3)
-
-		return [Action1(attacker=u, defender=t) for t in targets]
-
-	def targeted_action(self, u, target, env):
-
-		return [Target1(attacker=u, defender=target)]
-
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-
-
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -88,13 +65,6 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			dmg = 5 + random.randint(1, 10)*(1 + 2*(self.attacker.attributes.strength//10))
-			self.defender.stack_defdown(amt=3)
-			self.defender.damage(dmg)
-			self.msg += f"{self.attacker.name}'s shatters {self.defender.name}'s armor and deals {dmg} damage. "
-
-		else:
-			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+class Target1(actions.DamageTarget):
+	score_dmg: tuple = utils.score_dmg(m1=1.3)
+	statuses: tuple = ((ss.StatusEnum.defdown, 3), )

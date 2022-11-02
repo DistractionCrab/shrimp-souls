@@ -86,23 +86,17 @@ class Pyromancer(ClassSpec):
 		return "Pyromancer"
 
 @dataclass
-class Action1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			self.defender.stack_burn(amt=3)
-			self.msg += f"{self.attacker.name} has burned {self.defender.name} for 3 turns."
-		else:
-			self.msg += f"{self.attacker.name} failed to burn {self.defender.name}."
+class Action1(actions.EffectAction):
+	def on_hit(self):
+		t = random.randint(1, 3)
+		self.defender.stack_burn(amt=t)
+		self.msg += f"{self.attacker.name} has burned {self.defender.name} for {t} turns."
+
+	def on_miss(self):
+		self.msg += f"{self.attacker.name} failed to burn {self.defender.name}."
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			dmg = random.randint(1, 10)*(1 + (self.attacker.attributes.faith + self.attacker.attributes.intelligence)//10)
-			self.defender.stack_burn(amt=3)
-			self.defender.damage(dmg)
-			self.msg += f"{self.attacker.name}'s Fireball strikes {self.defender.name} for {dmg} damage and burns them for 5 turns"
-
-		else:
-			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+class Target1(actions.DamageTarget):
+	score_dmg: tuple = utils.score_dmg(m1=1.3)
+	statuses: tuple = ((ss.StatusEnum.burn, 2),)

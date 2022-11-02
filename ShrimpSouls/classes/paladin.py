@@ -26,9 +26,6 @@ class Paladin(ClassSpec):
 	def abi_map(self):
 		return ABI_MAP
 	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
 	
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=5, vigor=6)
@@ -44,23 +41,6 @@ class Paladin(ClassSpec):
 
 	def score_dfn(self, p):
 		return cs.stat_map(p, faith=3.5, strength=3.5)
-
-	def basic_action(self, u, env):
-		return [Action1(attacker=u, defender=u)]
-		
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-		
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -81,14 +61,14 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			self.defender.stack_attdown(amt=2)
-			self.defender.stack_evadown(amt=2)
-			self.defender.stack_defdown(amt=2)
-			self.defender.stack_accdown(amt=2)
+class Target1(actions.EffectAction):
+	def on_hit(self):
+		self.defender.stack_attdown(amt=2)
+		self.defender.stack_evadown(amt=2)
+		self.defender.stack_defdown(amt=2)
+		self.defender.stack_accdown(amt=2)
 
-			self.msg += f"{self.attacker.name} has weakened {self.defender.name} with a holy censure."
-		else:
-			self.msg += f"{self.defender.name} maintains their conviction against {self.attacker.name}'s censure."
+		self.msg += f"{self.attacker.name} has weakened {self.defender.name} with a holy censure."
+
+	def on_miss(self):
+		self.msg += f"{self.defender.name} maintains their conviction against {self.attacker.name}'s censure."

@@ -1,7 +1,7 @@
 import ShrimpSouls as ss
 import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 import random
@@ -30,10 +30,7 @@ class Swordsman(ClassSpec):
 	@property
 	def abi_map(self):
 		return ABI_MAP
-	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
+
 	
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=4, vigor=4)
@@ -55,51 +52,27 @@ class Swordsman(ClassSpec):
 		return cs.stat_map(p, level=2, strength=1, dexterity=1)
 		return 2*p.level + p.attributes.strength + p.attributes.dexterity
 
-	def basic_action(self, u, env):
-		npcs = list(env.npcs)
-		targets = random.sample(npcs, k=min(3, len(npcs)))
-
-		return [Action1(attacker=u, defender=t) for t in targets]
-
-		#print(f"{u.name} hamstrings some of their foes, decreasing their evasion.")
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
 			target = env.find_valid_target(actor, False, [ss.Positions.FRONT], True)
-			return [actions.DamageTarget(attacker=actor, defender=target)]
+			return [
+				actions.DamageTarget(attacker=actor, defender=target),
+				actions.DamageTarget(attacker=actor, defender=target)
+			]
 		else:
 			return []
 
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
 
 	@property
 	def cl_string(self):
 		return "Swordsman"
 
 @dataclass
-class Action1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			self.defender.stack_evadown(amt=2)
-			self.msg += f"{self.attacker.name} has hamstrung {self.defender.name}. "
-		else:
-			self.msg += f"{self.attacker.name} has missed their hamstring. "
+class Action1(actions.DamageTarget):
+	statuses: tuple = ((ss.Statuses.evadown, 2),)
+
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			self.defender.stack_bleed(amt=random.randint(1, 2))
-			self.msg += f"{self.attacker.name}'s sharp blades slice into {self.defender.name}. "
-		else:
-			self.msg += f"{self.attacker.name}'s blades miss {self.defender.name}. "
+class Target1(actions.DamageTarget):
+	statuses: tuple = field(default_factory=lambda:(ss.StatusEnum.bleed, random.randint(1,2)))

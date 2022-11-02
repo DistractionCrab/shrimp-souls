@@ -26,10 +26,6 @@ class Warrior(ClassSpec):
 	def abi_map(self):
 		return ABI_MAP
 	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
-	
 	def max_hp(self, p):
 		return cs.stat_map(p, base=20, level=5, vigor=6)
 		
@@ -44,22 +40,6 @@ class Warrior(ClassSpec):
 
 	def score_dfn(self, p):
 		return cs.stat_map(p, level=2, strength=1, dexterity=1)
-
-	def basic_action(self, u, env):
-		return [Action1(attacker=u, defender=u)]
-
-	def targeted_action(self, u, target, env):
-		
-		return [Target1(attacker=u, defender=target)]
-
-	def ultimate_action(self, u, players, npcs):
-		pass
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -80,14 +60,12 @@ class Action1(actions.Action):
 
 
 @dataclass
-class Target1(actions.Action):
-	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender)[0]:
-			dmg = 5 + random.randint(1, 6)*(1 + (self.attacker.attributes.strength + self.attacker.attributes.dexterity)//10)
-			self.defender.use_defup(self.defender.defup)
-			self.defender.use_evaup(self.defender.evaup)
-			self.defender.damage(dmg)
-			self.msg += f"{self.attacker.name}'s breaks {self.defender.name}'s armor and deals {dmg} damage. "
+class Target1(actions.DamageTarget):
+	score_dmg: tuple = utils.score_dmg(m1=1.2)
 
-		else:
-			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+	def on_hit(self):
+		self.defender.use_defup(self.defender.defup)
+		self.defender.use_evaup(self.defender.evaup)
+
+		self.msg += f"{self.attacker.name}'s armor break removed {self.defender.name}'s defensive buffs."
+		
