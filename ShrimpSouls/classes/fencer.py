@@ -29,19 +29,19 @@ class Fencer(ClassSpec):
 
 	def max_hp(self, p):
 		
-		return cs.stat_map(p, base=20, level=2, vigor=5)
+		return cs.stat_map(p, base=100, level=10, vigor=25)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=12, dexterity=1.5)
+		return cs.stat_map(p, level=35, dexterity=10)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=12, dexterity=1.5)
+		return cs.stat_map(p, level=35, dexterity=8)
 
 	def score_att(self, p):
-		return cs.stat_map(p, dexterity=3.5)
+		return cs.stat_map(p, level=22, dexterity=4)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=1, dexterity=2)
+		return cs.stat_map(p, level=22, dexterity=2)
 
 
 	def duel_action(self, actor, env):

@@ -28,24 +28,19 @@ class SpellBlade(ClassSpec):
 
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=5, vigor=6)
-		return 20 + 5*p.level + 6*p.attributes.vigor
+		return cs.stat_map(p, base=100, level=25, vigor=30)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=11, level=1)
-		return super().score_acc(p) + 1
+		return cs.stat_map(p, level=25, intelligence=3)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=9, level=1)
-		return super().score_eva(p) - 1
+		return cs.stat_map(p, level=25, intelligence=3, strength=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, strength=3, intelligence=3)
-		return 3*p.attributes.strength+3*p.attributes.intelligence
+		return cs.stat_map(p, level=25, intelligence=3)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, strength=4, intelligence=4)
-		return 2*p.attributes.strength + 3*p.attributes.intelligence
+		return cs.stat_map(p, level=25, intelligence=3, strength=1)
 
 
 

@@ -622,7 +622,7 @@ class Player(Entity):
 
 	@property
 	def max_hp(self):
-		return 5*self.myclass.max_hp(self)
+		return self.myclass.max_hp(self)
 
 	@property
 	def position(self):
@@ -664,7 +664,6 @@ class GameManager(persistent.Persistent):
 	def step(self):
 		(n, msg) = self.__campaign.step()
 		if n is not self.__campaign:
-			print("potatos")
 			self.__campaign = n
 
 		return msg
@@ -756,7 +755,6 @@ def main(args):
 		game = GameManager()
 		cn.root.clients[150659682] = game
 	else:
-		print("Waffles")
 		game = cn.root.clients[150659682]
 
 

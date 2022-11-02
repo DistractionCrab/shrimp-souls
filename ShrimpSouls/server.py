@@ -243,8 +243,11 @@ class Server:
 			elif msg['msg'] == 'levelup':
 				await self.__level_up(msg)
 			elif msg['msg'] == "disconnect":
-				del self.__sockets[msg["wsid"]]
-				del self.__idmaps[msg["wsid"]]
+				i = msg['wsid']
+				if i in self.__sockets:
+					del self.__sockets[msg["wsid"]]
+				if i in self.__idmaps:
+					del self.__idmaps[i]
 			elif msg['msg'] == "join":
 				await self.__join(msg)
 			elif msg['msg'] == "respec":
@@ -278,10 +281,21 @@ class Server:
 			except asyncio.CancelledError:
 				print("Program Exited closing socket.")
 				reading = False
-			except websockets.exceptions.ConnectionClosedOK:
-				print(f"Connection closed.")
+			except websockets.exceptions.ConnectionClosedError:
+				print(f"Connection closed: {wsid}")
 				reading = False
-
+			except ConnectionResetError:
+				print(f"Connection closed: {wsid}")
+				reading = False
+			except websockets.exceptions.ConnectionClosedOK:
+				print(f"Connection closed {wsid}")
+				reading = False
+			except ValueError as ex:
+				print(f"Client sent invalid path for connection: {ex}")
+				reading = False
+			except Exception as ex:
+				print(f"Generic Connection Error: {ex}")
+				reading = False
 
 
 		await self.__msgs.put({"msg": "disconnect", "wsid": wsid})
@@ -347,12 +361,18 @@ class Router:
 
 		except asyncio.CancelledError:
 			print("Program Exited closing socket.")
+		except websockets.exceptions.ConnectionClosedError:
+			print(f"Connection closed: {wsid}")
+		except ConnectionResetError:
+			print(f"Connection closed: {wsid}")
 		except websockets.exceptions.ConnectionClosedOK:
-			print(f"Connection closed.")
+			print(f"Connection closed {wsid}")
 		except ValueError as ex:
 			print(f"Client sent invalid path for connection: {ex}")
 			await ws.close()
 			raise ex
+		except Exception as ex:
+			print(f"Generic Connection Error: {ex}")
 
 	async def main(self):
 		looping = True

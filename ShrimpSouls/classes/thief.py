@@ -33,23 +33,20 @@ class Thief(ClassSpec):
 		return ABI_MAP	
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=2, vigor=5)
+		return cs.stat_map(p, base=100, level=10, vigor=25)
 		return 20 + 2 * p.level + 5*p.attributes.vigor
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=10, level=0.5, dexterity=0.5)
-		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
+		return cs.stat_map(p, level=30, dexterity=5, luck=5)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=10, luck=1.25, dexterity=1.5)
+		return cs.stat_map(p, level=25, dexterity=5)
 
 	def score_att(self, p):
-		return cs.stat_map(p, dexterity=3.5, luck=2.5)
-		return math.ceil(3.5*p.attributes.dexterity + 2.5*p.attributes.luck)
+		return cs.stat_map(p, level=23, dexterity=2, luck=4)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=1, dexterity=2)
-		return p.level + 2 * p.attributes.dexterity
+		return cs.stat_map(p, level=25, dexterity=4, luck=4)
 
 
 	def duel_action(self, actor, env):

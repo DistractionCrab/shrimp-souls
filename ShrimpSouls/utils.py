@@ -65,7 +65,8 @@ def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1
 	r = max(0.5, min(s1/s2, 2))
 	p = -0.3 * r**2 + 1.35 * r - 0.55
 
-	rolls = s1//ROLL_THRESHOLD + 1
+	#rolls = s1//ROLL_THRESHOLD + 1
+	rolls = 1
 
 	total = []
 

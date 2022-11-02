@@ -14,16 +14,16 @@
         "isSubscriptionStatusAvailable": false
       },
       "frameSize": {
-        "width": 375,
-        "height": 822
+        "width": 1280,
+        "height": 720
       },
-      "id": "1",
+      "id": "2",
       "isPopout": false,
       "label": "",
       "linked": true,
-      "linkedUserId": "150659682",
+      "linkedUserId": "451176857",
       "orientation": "Portrait",
-      "type": "mobile",
+      "type": "component",
       "viewerType": "Logged-In Viewer"
     },
     {
@@ -39,13 +39,35 @@
         "width": 1280,
         "height": 720
       },
-      "id": "2",
+      "id": "3",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "265737932",
+      "orientation": "Portrait",
+      "type": "dashboard",
+      "viewerType": "Broadcaster"
+    },
+    {
+      "channelId": "265737932",
+      "configurationAnchor": "component",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 375,
+        "height": 822
+      },
+      "id": "4",
       "isPopout": false,
       "label": "",
       "linked": true,
       "linkedUserId": "451176857",
       "orientation": "Portrait",
-      "type": "component",
+      "type": "mobile",
       "viewerType": "Logged-In Viewer"
     }
   ],

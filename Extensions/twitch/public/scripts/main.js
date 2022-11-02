@@ -448,6 +448,7 @@ class CharSheet {
 class CombatLog {
 	constructor() {
 		this.printout = document.getElementById("printout");
+		this.printouttab = document.getElementById("printouttab")
 	}
 
 	addlog(msg) {
@@ -460,6 +461,10 @@ class CombatLog {
 				cell.classList.add("printoutcell");
 				clear_node(cell).appendChild(document.createTextNode(c));
 			}
+
+			if (this.printouttab.scrollHeight > this.printouttab.clientHeight) {
+				this.printouttab.scrollTop = this.printouttab.scrollHeight - this.printouttab.clientHeight
+			}
 			
 		}
 	}
@@ -469,11 +474,15 @@ class CombatLog {
 		var cell = row.insertCell(0);
 		cell.classList.add("printoutcell");
 
-		cell.innerHTML = `
-			Click <button 
-				onclick='MANAGER.sendMessage(MESSAGES.join());'
-				class="joinbutton">join</button>
-			to join the campaign and chat members!`;
+
+		const b = document.createElement("button");
+		const t1 = document.createTextNode("Click ");
+		const t2 = document.createTextNode(" to join the campaign and other chat members!");
+		b.classList.add("joinbutton");
+		b.addEventListener("click", function() { MANAGER.sendMessage(MESSAGES.join())});
+		cell.appendChild(t1);
+		cell.appendChild(b);
+		cell.appendChild(t2);
 	}
 }
 

@@ -31,31 +31,21 @@ class Assassin(ClassSpec):
 		return tuple(ABI_MAP.keys())
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=10, level=1, vigor=4)
+		return cs.stat_map(p, base = 50, level=5, vigor=20)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=10, level=1, dexterity=0.5)
+		return cs.stat_map(p, level=35, faith=10)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=12, dexterity=1.25, faith=1.25)
+		return cs.stat_map(p, level=35, faith=5, dexterity=10)
 
 	def score_att(self, p):
-		return cs.stat_map(p, faith=2.5, dexterity=3.5)
-		return math.ceil(2.5*p.attributes.faith + 3.5*p.attributes.dexterity)
+		return cs.stat_map(p, level=35, faith=8, dexterity=8)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=1, dexterity=2)
-		return p.level + 2*p.attributes.dexterity
+		return cs.stat_map(p, level=18, dexterity=2)
 
-	def basic_action(self, u, env):
-		return [Action1(attacker=u, defender=u)]
-		
 
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-	def ultimate_action(self, u, players, npcs):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -64,11 +54,6 @@ class Assassin(ClassSpec):
 		else:
 			return []
 
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
 
 	@property
 	def cl_string(self):

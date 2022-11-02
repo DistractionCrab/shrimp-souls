@@ -27,19 +27,19 @@ class Warrior(ClassSpec):
 		return ABI_MAP
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=5, vigor=6)
+		return cs.stat_map(p, baes=100, level=25, vigor=30)
 		
 	def score_eva(self, p):
-		return cs.stat_map(p, base=10, level=0.5, dexterity=0.5)
+		return cs.stat_map(p, level=25, dexterity=6, strength=6)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=10, level=1, dexterity=0.5)
+		return cs.stat_map(p, level=25, dexterity=6)
 
 	def score_att(self, p):
-		return cs.stat_map(p, strength=3.5, dexterity=2.5)
+		return cs.stat_map(p, level=32, strength=8, dexterity=8)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=2, strength=1, dexterity=1)
+		return cs.stat_map(p, level=32, strength=8, dexterity=8)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

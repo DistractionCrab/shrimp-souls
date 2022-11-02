@@ -33,24 +33,19 @@ class Swordsman(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=4, vigor=4)
-		return 20 + 4*p.level + 4*p.attributes.vigor
+		return cs.stat_map(p, base=100, level=20, vigor=20)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=10, level=0.5, dexterity=0.5)
-		return 10 + math.ceil(p.level/2) + math.ceil(p.attributes.dexterity/2)
+		return cs.stat_map(p, level=25, dexterity=6)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=10, level=0.35, dexterity=0.65)
-		return 10 + math.ceil(p.level*0.35) + math.ceil(p.attributes.dexterity*0.65)
+		return cs.stat_map(p, level=25, dexterity=5)
 
 	def score_att(self, p):
-		return cs.stat_map(p, strength=2.5, dexterity=3.5)
-		return math.ceil(2.5*p.attributes.strength + 3.5*p.attributes.dexterity)
+		return cs.stat_map(p, level=22, dexterity=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=2, strength=1, dexterity=1)
-		return 2*p.level + p.attributes.strength + p.attributes.dexterity
+		return cs.stat_map(p, level=22, dexterity=4)
 
 
 	def duel_action(self, actor, env):

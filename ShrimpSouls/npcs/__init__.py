@@ -14,10 +14,10 @@ class NPCTags(enum.Enum):
 @dataclass
 class BaseNPC(ss.Entity):
 	commitfn: object = do_nothing
-	_acc: int = 8
-	_eva: int = 9
-	_att: int = 4
-	_dfn: int = 4
+	_acc: int = 1
+	_eva: int = 1
+	_att: int = 1
+	_dfn: int = 1
 	_weaknesses: frozenset = field(default_factory=frozenset)
 	_resists: frozenset = field(default_factory=frozenset)
 	_tags: frozenset = field(default_factory=frozenset)
@@ -86,12 +86,12 @@ class BaseNPC(ss.Entity):
 @dataclass
 class Goblin(BaseNPC):
 	xp:  int = 1
-	hp:  int = 10
-	max_hp: int = 10
-	_acc: int = 8
-	_eva: int = 9
-	_att: int = 4
-	_dfn: int = 4
+	hp:  int = 100
+	max_hp: int = 100
+	_acc: int = 40
+	_eva: int = 35
+	_att: int = 45
+	_dfn: int = 40
 
 	def __hash__(self):
 		return hash(self.name)
@@ -103,12 +103,12 @@ class Goblin(BaseNPC):
 @dataclass
 class Wolf(BaseNPC):
 	xp:  int = 3
-	hp:  int = 25
-	max_hp: int = 25
-	_acc: int = 12
-	_eva: int = 14
-	_att: int = 9
-	_dfn: int = 7
+	hp:  int = 300
+	max_hp: int = 300
+	_acc: int = 50
+	_eva: int = 45
+	_att: int = 35
+	_dfn: int = 50
 
 	def __hash__(self):
 		return hash(self.name)
@@ -117,12 +117,12 @@ class Wolf(BaseNPC):
 @dataclass
 class GoblinPriest(BaseNPC):
 	xp:  int = 5
-	hp:  int = 20
-	max_hp: int = 20
-	_acc: int = 20
-	_eva: int = 17
-	_att: int = 10
-	_dfn: int = 12
+	hp:  int = 400
+	max_hp: int = 400
+	_acc: int = 150
+	_eva: int = 210
+	_att: int = 100
+	_dfn: int = 180
 
 	def __hash__(self):
 		return hash(self.name)
@@ -142,12 +142,12 @@ class GoblinPriest(BaseNPC):
 @dataclass
 class GoblinBrute(BaseNPC):
 	xp:  int = 7
-	hp:  int = 30
-	max_hp: int = 30
-	_acc: int = 18
-	_eva: int = 15
-	_att: int = 28
-	_dfn: int = 24
+	hp:  int = 600
+	max_hp: int = 600
+	_acc: int = 180
+	_eva: int = 190
+	_att: int = 190
+	_dfn: int = 200
 
 	def __hash__(self):
 		return hash(self.name)
@@ -156,12 +156,12 @@ class GoblinBrute(BaseNPC):
 @dataclass
 class OrcWarrior(BaseNPC):
 	xp:  int = 7
-	hp:  int = 120
-	max_hp: int = 120
-	_acc: int = 20
-	_eva: int = 21
-	_att: int = 58
-	_dfn: int = 48
+	hp:  int = 1200
+	max_hp: int = 1200
+	_acc: int = 310
+	_eva: int = 300
+	_att: int = 380
+	_dfn: int = 300
 
 	def __hash__(self):
 		return hash(self.name)
@@ -170,12 +170,12 @@ class OrcWarrior(BaseNPC):
 @dataclass
 class Ogre(BaseNPC):
 	xp:  int = 15
-	hp:  int = 300
-	max_hp: int = 300
-	_acc: int = 24
-	_eva: int = 18
-	_att: int = 63
-	_dfn: int = 50
+	hp:  int = 2500
+	max_hp: int = 2500
+	_acc: int = 600
+	_eva: int = 300
+	_att: int = 600
+	_dfn: int = 450
 
 	def __hash__(self):
 		return hash(self.name)
@@ -201,6 +201,7 @@ class Troll(BaseNPC):
 	_eva: int = 29
 	_att: int = 86
 	_dfn: int = 70
+	_weaknesses: frozenset = frozenset([actions.DamageType.Fire])
 
 	def __hash__(self):
 		return hash(self.name)

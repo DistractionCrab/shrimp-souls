@@ -36,43 +36,23 @@ class Pyromancer(ClassSpec):
 		return tuple(ABI_MAP.keys())
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=2, vigor=4)
-		return 20 + 2*p.level + 4 * p.attributes.vigor
+		return cs.stat_map(p, base = 100, level=10, vigor=20)
 
 	@property
 	def position(self):
 		return ss.Positions.BACK
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=13, intelligence=1, faith=1, dexterity=0.25)
+		return cs.stat_map(p, level=25, intelligence=5, faith=2)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=12, level=1.25)
+		return cs.stat_map(p, level=27, intelligence=2, faith=5)
 
 	def score_att(self, p):
-		return cs.stat_map(p, faith=3, intelligence=3)
+		return cs.stat_map(p, level=30, intelligence=10, faith=10)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, base=3, level=1.5)
-
-	def basic_action(self, u, env):
-		npcs = list(n for n in env.npcs if not n.dead)
-		targets = random.sample(npcs, k=min(3, len(npcs)))
-		return [Action1(attacker=u,defender=t) for t in targets]
-			
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-
-
-	def ultimate_action(self, u, players, npcs):
-		pass
+		return cs.stat_map(p, level=22)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

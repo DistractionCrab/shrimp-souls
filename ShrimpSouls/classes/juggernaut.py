@@ -31,19 +31,19 @@ class Juggernaut(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=5, vigor=7)
+		return cs.stat_map(p, base=100, level=25, vigor=35)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=8, level=1)
+		return cs.stat_map(p, level=22, strength=2)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=1, base=10)
+		return cs.stat_map(p, level=22, strength=2)
 
 	def score_att(self, p):
-		return cs.stat_map(p, strength=4)
+		return cs.stat_map(p, level=35, strength=10)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, base=4, strength=4)
+		return cs.stat_map(p, level=35, strength=10)
 
 
 	def duel_action(self, actor, env):

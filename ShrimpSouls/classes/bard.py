@@ -41,41 +41,20 @@ class Bard(ClassSpec):
 		return ss.Positions.BACK
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=2, vigor=5)
+		return cs.stat_map(p, base=100, level=10, vigor=25)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=12, level=1)
+		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=0.35, dexterity=0.65)
+		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
 
 	def score_att(self, p):
-		return cs.stat_map(p, dexterity=1, intelligence=1, luck=1, perception=1)
+		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=1.5, base=3)
+		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
 
-	def basic_action(self, u, env):
-		players = list(n for n in env.players if not n.dead)
-		targets = random.choices(players, k=min(3, len(players)))
-
-		return [Action1(attacker=u, defender=t) for t in targets]
-
-	def use_ability(self, u, abi, targets, env):
-		if abi in ABI_MAP:
-			return ABI_MAP[abi](u, targets, env)
-		else:
-			return [actions.Error(info=f"No such ability: {abi}")]
-		
-
-	def targeted_action(self, u, target, env):
-		return [Target1(attacker=u, defender=target)]
-
-		
-		
-
-	def ultimate_action(self, u):
-		pass
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

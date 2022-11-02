@@ -32,19 +32,19 @@ class Sorcerer(ClassSpec):
 		return ss.Positions.BACK
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=20, level=2, vigor=4)
+		return cs.stat_map(p, base=50, level=10, vigor=10)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, base=10, intelligence=1.25, dexterity=0.25)
+		return cs.stat_map(p, level=25, intelligence=5)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, base=12, level=1)
+		return cs.stat_map(p, level=25)
 
 	def score_att(self, p):
-		return cs.stat_map(p, base=3, intelligence=4)
+		return cs.stat_map(p, level=35, intelligence=10)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=1.25, intelligence=2.25)
+		return cs.stat_map(p, level=25)
 
 
 	def duel_action(self, actor, env):
