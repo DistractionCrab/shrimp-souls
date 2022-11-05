@@ -12,8 +12,12 @@ def ripstance(u, targets, env):
 
 def taunt(u, targets, env):
 	if len(targets) == 0:
-		return [actions.Error(info=f"No targets specified for taunting.")]
-	t = env.get_target(targets[0])
+		t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
+		if t is None:
+			return [actions.Error(info="No targets could be found...")]
+	else:
+		t = env.get_target(targets[0])
+		
 	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
@@ -65,7 +69,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		if utils.compute_hit(self.attacker, self.defender):
+		if utils.compute_bool(self.attacker, self.defender):
 			self.defender.taunt_target(self.attacker)
 			self.msg += f"{self.attacker.name} has taunted {self.defender.name} into attacking them. "
 		else:

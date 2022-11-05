@@ -81,7 +81,6 @@ def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=
 
 	return random.random() < p
 
-
 def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 	dfn = m2 * s2(d) + b2
 	att = m1 * s1(a) + b1

@@ -17,8 +17,11 @@ def hamstring(u, targets, env):
 
 def slice(u, targets, env):
 	if len(targets) == 0:
-		return [actions.Error(info=f"No targets specified for poaching.")]
-	t = env.get_target(targets[0])
+		t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
+		if t is None:
+			return [actions.Error(info="No targets could be found...")]
+	else:
+		t = env.get_target(targets[0])
 	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {

@@ -5,7 +5,7 @@ import persistent.list
 import persistent.mapping
 from functools import reduce
 from ShrimpSouls import npcs
-from ShrimpSouls.logger import log
+
 import ShrimpSouls.utils as utils
 
 import os

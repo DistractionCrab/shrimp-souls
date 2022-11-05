@@ -173,7 +173,9 @@ class Server:
 			if 'user_id' in payload:
 				r = await get_username(payload['user_id'])
 				if r is None:
-					await self.__send_message(wsid, {"error": "Could not retrieve username from Twitch."})
+					await self.__send_message(wsid, {
+						"error": "Could not retrieve username from Twitch.",
+						"requestid": True})
 				else:
 					uname = r["data"][0]["login"]
 					self.__idmaps[wsid] = uname
@@ -184,7 +186,7 @@ class Server:
 						await self.__send_message(wsid, Messages.CONNECTONLY(self.__game, player))
 						
 			else:
-				await self.__send_message(wsid, Messages.ERROR("User ID not supplied."))
+				await self.__send_message(wsid, {"requestid": True})
 
 
 	async def __level_up(self, msg):
@@ -201,7 +203,7 @@ class Server:
 					"log": [m.msg]
 				})
 			
-	async def __handle_update(self, msg):
+	async def __handle_update(self, msg, step=False):
 		items = list(self.__idmaps.items())
 		for (wsid, r) in items:
 			p = self.__game.get_player(r)
@@ -213,6 +215,10 @@ class Server:
 				'refreshEntities': msg.refreshEntities,
 				"joined": self.__game.is_joined(p)
 			}
+
+			if step:
+				send["tinfo"] = {"now": self.__last, "ttotal": STEP_FREQUENCY}
+
 			await self.__send_message(wsid, send)
 
 
@@ -233,7 +239,7 @@ class Server:
 				self.__last = now
 				msg = self.__game.step()
 				
-				await self.__handle_update(msg)
+				await self.__handle_update(msg, step=True)
 
 		else:
 			if msg['msg'] == "connect":

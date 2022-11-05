@@ -12,8 +12,12 @@ def sharpen(u, targets, env):
 
 def armor_break(u, targets, env):
 	if len(targets) == 0:
-		return [actions.Error(info=f"No targets specified for armor_breaking.")]
-	t = env.get_target(targets[0])
+		t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
+		if t is None:
+			return [actions.Error(info="No targets could be found...")]
+	else:
+		t = env.get_target(targets[0])
+
 	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
@@ -27,7 +31,7 @@ class Warrior(ClassSpec):
 		return ABI_MAP
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, baes=100, level=25, vigor=30)
+		return cs.stat_map(p, base=100, level=25, vigor=30)
 		
 	def score_eva(self, p):
 		return cs.stat_map(p, level=25, dexterity=6, strength=6)

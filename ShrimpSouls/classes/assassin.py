@@ -12,8 +12,15 @@ def invis(u, targets, env):
 
 def poison_blade(u, targets, env):
 	if len(targets) == 0:
-		return [actions.Error(info=f"No targets specified for poison blade.")]
-	t = env.get_target(targets[0])
+		if u.invis > 0:
+			t = env.find_valid_target(u, False, ss.Positions, True)
+		else:
+			t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
+		if t is None:
+			return [actions.Error(info="No targets could be found...")]
+	else:
+		t = env.get_target(targets[0])
+
 	return [Target1(attacker=u, defender=t)]
 
 ABI_MAP = {
@@ -26,9 +33,6 @@ class Assassin(ClassSpec):
 	def abi_map(self):
 		return ABI_MAP
 	
-	@property
-	def ability_list(self):
-		return tuple(ABI_MAP.keys())
 	
 	def max_hp(self, p):
 		return cs.stat_map(p, base = 50, level=5, vigor=20)

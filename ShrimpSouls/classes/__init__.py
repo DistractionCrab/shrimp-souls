@@ -75,16 +75,25 @@ class ClassSpec:
 		return ss.Positions.FRONT	
 
 	def score_eva(self, p):
-		return p.level + 10
+		return stat_map(p, level=20)
 
 	def score_acc(self, p):
-		return p.level + 10
+		return stat_map(p, level=20)
 
 	def score_att(self, p):
-		return 1
+		return stat_map(p, level=20)
 
 	def score_dfn(self, p):
-		return 1
+		return stat_map(p, level=20)
+
+	def score_will(self, p):
+		return stat_map(p, level=20)
+
+	def score_char(self, p):
+		return stat_map(p, level=20)
+
+	def score_fort(self, p):
+		return stat_map(p, level=20)
 
 
 	def duel_action(self, actor, env):
@@ -100,7 +109,8 @@ class ClassSpec:
 	def random_action(self, u, env):
 		m = self.abi_map
 		if len(m) > 0:
-			return []
+			a = random.sample(list(m.values()),k=1)[0]
+			return a(u, tuple(), env)
 		else:
 			return []
 
@@ -108,8 +118,6 @@ class ClassSpec:
 	def cl_string(self):
 		return "Milquetoast"
 
-	def use_ability(self, u, abi, targets):
-		return [actions.Error(info="Milquetoast has no abilities to use.")]
 
 	def use_ability(self, u, abi, targets, env):
 		if len(self.abi_map) == 0:

@@ -1,4 +1,4 @@
-const TESTING = true;
+const TESTING = false;
 var log = window.Twitch ? window.Twitch.ext.rig.log : console.log;
 
 const MESSAGES = {
@@ -448,7 +448,42 @@ class CharSheet {
 class CombatLog {
 	constructor() {
 		this.printout = document.getElementById("printout");
-		this.printouttab = document.getElementById("printouttab")
+		this.printouttab = document.getElementById("printouttab");
+		this.timercell = this.insertCell()
+
+		this.ttotal = 300;
+		this.now = new Date().getTime()/1000;
+
+		const t = this.timer;
+		setInterval(function() {
+				var now = new Date().getTime()/1000;
+				var rem = MANAGER.printout.ttotal - Math.abs(Math.floor((now - MANAGER.printout.now)));
+
+				if (rem <= 0) {
+					MANAGER.printout.refreshTimer("TURN ENDING SOON");
+				} else {
+					var min = Math.floor(rem/60);
+					var s = Math.floor(rem % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+					MANAGER.printout.refreshTimer(`Turn Ending in ${min}:${s}`);
+				}
+			},
+			200);
+	}
+
+	refreshTimer(s) {
+		this.timercell.innerHTML = s;
+	}
+
+	updateTimer(msg) {
+		this.ttotal = msg.ttotal;
+		this.now = msg.now;
+	}
+
+	insertCell() {
+		var row = this.printout.insertRow(this.printout.rows.length);
+		var cell = row.insertCell(0);
+		cell.classList.add("printoutcell");
+		return cell;
 	}
 
 	addlog(msg) {
@@ -456,16 +491,22 @@ class CombatLog {
 			this.printout.deleteRow(0);
 		} else {
 			for (const c of msg) {
-				var row = this.printout.insertRow(this.printout.rows.length);
+				var row = this.printout.insertRow(this.printout.rows.length-1);
 				var cell = row.insertCell(0);
 				cell.classList.add("printoutcell");
 				clear_node(cell).appendChild(document.createTextNode(c));
 			}
 
-			if (this.printouttab.scrollHeight > this.printouttab.clientHeight) {
-				this.printouttab.scrollTop = this.printouttab.scrollHeight - this.printouttab.clientHeight
-			}
+			this.focus_recent();
 			
+		}
+		
+		
+	}
+
+	focus_recent() {
+		if (this.printouttab.scrollHeight > this.printouttab.clientHeight) {
+			this.printouttab.scrollTop = this.printouttab.scrollHeight - this.printouttab.clientHeight
 		}
 	}
 
@@ -716,6 +757,7 @@ class PageManager {
 	}
 
 	receive(msg) {
+		console.log(msg);
 		msg = JSON.parse(msg);
 
 		if ("refreshEntities" in msg && msg["refreshEntities"]) {
@@ -747,7 +789,15 @@ class PageManager {
 			this.websocket.close();
 		}
 
-		
+		if ("requestid" in msg && msg["requestid"]) {
+
+			//window.Twitch.ext.actions.requestIdShare();
+			this.printout.addlog(["Please give access to your username to play this game."]);
+		}
+
+		if ("tinfo" in msg) {
+			this.printout.updateTimer(msg["tinfo"]);
+		}
 		
 	}
 
@@ -779,6 +829,7 @@ var MANAGER = new PageManager();
 
 
 
+
 window.Twitch.ext.onAuthorized(
 	function(auth){
 		//log(auth);
@@ -796,13 +847,13 @@ function openTab(evt, cityName) {
 	// Get all elements with class="tabcontent" and hide them
 	tabcontent = document.getElementsByClassName("tabcontent");
 	for (i = 0; i < tabcontent.length; i++) {
-	tabcontent[i].style.display = "none";
+		tabcontent[i].style.display = "none";
 	}
 
 	// Get all elements with class="tablinks" and remove the class "active"
 	tablinks = document.getElementsByClassName("tablinks");
 	for (i = 0; i < tablinks.length; i++) {
-	tablinks[i].className = tablinks[i].className.replace(" active", "");
+		tablinks[i].className = tablinks[i].className.replace(" active", "");
 	}
 
 	// Show the current tab, and add an "active" class to the button that opened the tab
@@ -812,7 +863,7 @@ function openTab(evt, cityName) {
 	}
 }
 
-openTab(null, "charsheet")
+openTab(null, "printouttab")
 
 function expand_select(obj) {
 	obj.setAttribute("size", 5);
@@ -832,7 +883,10 @@ function respec() {
 
 
 document.getElementById("charsheetheader").addEventListener("click", (event) => { openTab(event, "charsheet"); });
-document.getElementById("printoutheader").addEventListener("click", (event) => { openTab(event, "printouttab"); });
+document.getElementById("printoutheader").addEventListener("click", (event) => { 
+	openTab(event, "printouttab");
+	MANAGER.printout.focus_recent();
+});
 document.getElementById("partyheader").addEventListener("click", (event) => { openTab(event, "partytab"); });
 document.getElementById("npcheader").addEventListener("click", (event) => { openTab(event, "npctab"); });
 document.getElementById("abilityheader").addEventListener("click", (event) => { openTab(event, "abilitytab"); });
@@ -847,3 +901,4 @@ document.getElementById("lvlup-intelligence").addEventListener("click", () => { 
 document.getElementById("lvlup-faith").addEventListener("click", () => { MANAGER.level("faith"); });
 document.getElementById("lvlup-luck").addEventListener("click", () => { MANAGER.level("luck"); });
 document.getElementById("lvlup-perception").addEventListener("click", () => { MANAGER.level("perception"); });
+

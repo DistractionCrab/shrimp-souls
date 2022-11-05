@@ -20,15 +20,18 @@ def prayer(u, targets, env):
 
 def heal(u, targets, env):
 	if len(targets) == 0:
-		return [actions.Error(info=f"No targets specified for poaching.")]
-	target = env.get_target(targets[0])
+		t = env.find_valid_target(u, True, ss.Positions, True)
+		if t is None:
+			return [actions.Error(info="No targets could be found...")]
+	else:
+		t = env.get_target(targets[0])
 
-	if target.dead:
+	if t.dead:
 		amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.ReviveTarget(attacker=u, defender=target, dmg=amt)]
+		return [actions.ReviveTarget(attacker=u, defender=t, dmg=amt)]
 	else:
 		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.HealTarget(attacker=u, defender=target, dmg=amt)]
+		return [actions.HealTarget(attacker=u, defender=t, dmg=amt)]
 
 ABI_MAP = {
 	"prayer": prayer,

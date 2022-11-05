@@ -6,13 +6,13 @@
 	--player-bar-width:  150px;
 	--player-bar-height: 15px;
 	--tablinks-width: 60px;
-	--tablinks-height: 20px;
+	--tablinks-height: 30px;
 	--tablinks-fontsize: 100%;
 	--default-fontsize: 110%;
-	--body-fontsize: 80%;
-	--charsheet-fontsize: 80%;
-	--lvlup-icon-height: 15px;
-	--lvlup-icon-width: 15px;
+	--body-fontsize: 120%;
+	--charsheet-fontsize: 120%;
+	--lvlup-icon-height: 30px;
+	--lvlup-icon-width: 30px;
 	--status-icon-width: 15px;
 	--status-icon-height: 15px;
 	--hpamt-padding:  50px;
@@ -36,8 +36,8 @@
 
 	--class-select-height: 40px;
 	--class-select-width: 130px;
-	--respec-button-width:  15px;
-	--respec-button-height:  15px;
+	--respec-button-width:  20px;
+	--respec-button-height:  20px;
 	--statamt-padding-left:  50px;
 
 	--classselect-opened: 700px;
