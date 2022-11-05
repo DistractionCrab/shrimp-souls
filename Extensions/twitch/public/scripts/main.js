@@ -727,6 +727,7 @@ class PageManager {
 			this.websocket.addEventListener(
 				"error", 
 				(event) => {
+					this.printout.addlog(["An error has happened: "]);
 					log("Error occurred: " + event);
 				});
 			this.websocket.addEventListener("close", 
@@ -806,7 +807,7 @@ class PageManager {
 	}
 
 	opened() {
-		log("Established connection: shrimpsouls.distractioncrab.net");
+		this.printout.addlog(["Established connection: shrimpsouls.distractioncrab.net"]);
 		if (this.reconnect !== null) {
 			clearTimeout(this.reconnect);
 		}
@@ -835,7 +836,9 @@ window.Twitch.ext.onAuthorized(
 		//log(auth);
 		//var parts=auth.token.split(".");
 		//var payload=JSON.parse(window.atob(parts[1]));
+		MANAGER.printout.addlog([JSON.stringify(auth)]);
 		MANAGER.setUName(auth);
+
 	}
 );
 
