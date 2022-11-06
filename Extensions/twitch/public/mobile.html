@@ -106,10 +106,17 @@
 	</div>
 
 	<div id="printouttab" class="tabcontent">
-		<table id="printout" >
-			<tr><td class="printoutcell">Combat Info Printout...</td></tr>
-			<tr><td class="printoutcell">Combat Info Printout...</td></tr>
-		</table>
+		<button id="filterbutton">Filters</button>
+		<span id="timertext">TIMER TEXT</span>
+		<div id="printoutcontainer">
+			<table id="printout" class="spacedtable">
+			</table>
+		</div>
+		<div id="filterpopup" class="hidden">
+			<button onclick="MANAGER.printout.apply_filters();"> filter button</button>
+			<table id="filtertable">			
+			</table>
+		</div>
 	</div>
 
 	<div id="partytab" class="tabcontent">

@@ -174,7 +174,7 @@ class Server:
 				r = await get_username(payload['user_id'])
 				if r is None:
 					await self.__send_message(wsid, {
-						"error": "Could not retrieve username from Twitch.",
+						"error": ["Could not retrieve username from Twitch."],
 						"requestid": True})
 				else:
 					uname = r["data"][0]["login"]
@@ -213,11 +213,12 @@ class Server:
 				'partyinfo': [u.json for u in msg.users],
 				'npcinfo': [u.json for u in msg.npcs],
 				'refreshEntities': msg.refreshEntities,
-				"joined": self.__game.is_joined(p)
+				"joined": self.__game.is_joined(p),
 			}
 
 			if step:
 				send["tinfo"] = {"now": self.__last, "ttotal": STEP_FREQUENCY}
+				send["step"] = True
 
 			await self.__send_message(wsid, send)
 

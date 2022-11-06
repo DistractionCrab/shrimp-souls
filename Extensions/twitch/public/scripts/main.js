@@ -1,5 +1,8 @@
 const TESTING = false;
-var log = window.Twitch ? window.Twitch.ext.rig.log : console.log;
+
+function log(s) {
+	MANAGER.printout.addlog([s]);
+}
 
 const MESSAGES = {
 	connect: name => { return {msg: "connect", jwt: name} },
@@ -283,6 +286,12 @@ function clear_node(n) {
 	return n;
 }
 
+function set_text(n, s) {
+	n.innerHTML = "";
+	n.appendChild(document.createTextNode(s));
+}
+
+
 class CharSheet {
 	constructor() {
 		this.xp_cur = 0;
@@ -449,29 +458,84 @@ class CombatLog {
 	constructor() {
 		this.printout = document.getElementById("printout");
 		this.printouttab = document.getElementById("printouttab");
-		this.timercell = this.insertCell()
+		this.printoutcontainer = document.getElementById("printoutcontainer");
+		//this.timercell = this.insertCell()
+		//this.timercell.setAttribute("id", "printouttimercell");
+		this.timercell = document.getElementById("timertext");
+		this.header = document.getElementById("printoutheader");
+		this.filternames = {};
+		this.filtertable = document.getElementById("filtertable");
 
 		this.ttotal = 300;
-		this.now = new Date().getTime()/1000;
+		this.now = 0;
 
-		const t = this.timer;
+		const p = this;
 		setInterval(function() {
 				var now = new Date().getTime()/1000;
-				var rem = MANAGER.printout.ttotal - Math.abs(Math.floor((now - MANAGER.printout.now)));
+				var rem = p.ttotal - Math.abs(Math.floor((now - p.now)));
 
 				if (rem <= 0) {
-					MANAGER.printout.refreshTimer("TURN ENDING SOON");
+					p.refreshTimer("TURN ENDING SOON");
 				} else {
 					var min = Math.floor(rem/60);
 					var s = Math.floor(rem % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-					MANAGER.printout.refreshTimer(`Turn Ending in ${min}:${s}`);
+					p.refreshTimer(`Turn Ending in ${min}:${s}`);
 				}
 			},
 			200);
 	}
 
+	apply_filters() {
+
+		for (const r of this.printout.rows) {
+			if (r.firstChild.id == "printouttimercell") {
+
+			} else {
+				var check = false;
+				for (const [_, f] of Object.entries(this.filternames)) {
+
+					if (f.cbox.checked) {
+						if (r.firstChild.firstChild.textContent.includes(f.name)) {
+							
+							check = true;
+							break;
+						}
+					}
+				}	
+				r.classList.toggle("hidden", !check);
+			}
+		}
+		
+	}
+
+	add_filter_names(l, player) {
+		for (const p of l) {
+			if (!(p.name in this.filternames)) {
+				var row = this.filtertable.insertRow(0);
+				var ccell = row.insertCell(0);
+				var label = row.insertCell(1);
+
+				var cbox = document.createElement("input");
+				cbox.setAttribute("type", "checkbox");
+				cbox.classList.add("filtercheck");
+				cbox.checked = true;
+				set_text(label, p.name);
+
+				ccell.appendChild(cbox);
+
+				this.filternames[p.name] = {
+					name: p.name,
+					player: player, 
+					npc: !player, 
+					row: row,
+					cbox: cbox,
+				};
+			}
+		}
+	}
+
 	refreshTimer(s) {
-		this.timercell.innerHTML = s;
+		set_text(this.timercell, s);
 	}
 
 	updateTimer(msg) {
@@ -486,27 +550,35 @@ class CombatLog {
 		return cell;
 	}
 
-	addlog(msg) {
+	addlog(msg, step=false) {
+		this.header.classList.toggle("alerttab", true);	
+		
 		if (this.printout.rows.length > 1000) {
-			this.printout.deleteRow(0);
+			while (this.printout.rows.length > 1000 - msg.length) {
+				this.printout.deleteRow(0);
+			}				
 		} else {
+			
 			for (const c of msg) {
-				var row = this.printout.insertRow(this.printout.rows.length-1);
-				var cell = row.insertCell(0);
-				cell.classList.add("printoutcell");
-				clear_node(cell).appendChild(document.createTextNode(c));
+				var cell = this.insertCell();
+				set_text(cell, c);
+			}
+			if (step) {
+				var cell = this.insertCell();
+				cell.classList.add("stependcell");
+				set_text(cell, "** The Turn has Ended **");
 			}
 
 			this.focus_recent();
 			
 		}
-		
-		
+
+		//console.log(document.getElementById("printoutheader"));		
 	}
 
 	focus_recent() {
-		if (this.printouttab.scrollHeight > this.printouttab.clientHeight) {
-			this.printouttab.scrollTop = this.printouttab.scrollHeight - this.printouttab.clientHeight
+		if (this.printoutcontainer.scrollHeight > this.printoutcontainer.clientHeight) {
+			this.printoutcontainer.scrollTop = this.printoutcontainer.scrollHeight - this.printoutcontainer.clientHeight;
 		}
 	}
 
@@ -713,12 +785,12 @@ class PageManager {
 
 	init_socket() {
 		if (this.username === null) {
-			log("Tried to connect without username");
+			log("Tried to connect without username (This should not happen).");
 		} else {
 			if (TESTING) {
 				this.websocket = new WebSocket(`ws://localhost:443/${this.username["channelId"]}`);	
 			} else {
-				this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);	
+				this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);
 			}
 			
 			
@@ -727,14 +799,13 @@ class PageManager {
 			this.websocket.addEventListener(
 				"error", 
 				(event) => {
-					this.printout.addlog(["An error has happened: "]);
-					log("Error occurred: " + event);
+					this.printout.addlog(["An error has happened, disconnecting..."]);
 				});
 			this.websocket.addEventListener("close", 
 				(event) => {
-					log("Connection to server lost.");
+					//log("Connection to server lost.");
 					this.printout.addlog(["Connection to server lost."]);
-					MANAGER.reconnect = setTimeout(function() { Manager.init_socket(); }, 20000);
+					this.reconnect = setTimeout(() => { this.init_socket(); }, 20000);
 				});
 		}
 	}
@@ -758,7 +829,6 @@ class PageManager {
 	}
 
 	receive(msg) {
-		console.log(msg);
 		msg = JSON.parse(msg);
 
 		if ("refreshEntities" in msg && msg["refreshEntities"]) {
@@ -775,13 +845,15 @@ class PageManager {
 			this.csheet.update_charsheet(msg['charsheet']);	
 		}
 		if ("log" in msg && this.joined) {
-			this.printout.addlog(msg['log']);
+			this.printout.addlog(msg['log'], "step" in msg);
 		}
 		if ("partyinfo" in msg && this.joined) {
 			this.entities.updatePlayers(msg['partyinfo']);
+			this.printout.add_filter_names(msg["partyinfo"], true);
 		}
 		if ("npcinfo" in msg && this.joined) {
 			this.entities.updateNPCS(msg["npcinfo"]);
+			this.printout.add_filter_names(msg["npcinfo"], false);
 		}
 		
 		if ("error" in msg) {
@@ -792,7 +864,7 @@ class PageManager {
 
 		if ("requestid" in msg && msg["requestid"]) {
 
-			//window.Twitch.ext.actions.requestIdShare();
+			window.Twitch.ext.actions.requestIdShare();
 			this.printout.addlog(["Please give access to your username to play this game."]);
 		}
 
@@ -807,38 +879,25 @@ class PageManager {
 	}
 
 	opened() {
-		this.printout.addlog(["Established connection: shrimpsouls.distractioncrab.net"]);
+		this.printout.addlog(["Established connection to game server."]);
 		if (this.reconnect !== null) {
 			clearTimeout(this.reconnect);
 		}
 		this.websocket.send(JSON.stringify(MESSAGES.connect(this.username)))
 	}
 
-	initEvents() {
-		this.websocket.addEventListener("open", this.opened);
-		this.websocket.addEventListener("message", this.receive);
-	}
-
 	action() {
-		log("Trying to action.");
 		var msg = MESSAGES.action();
 		this.websocket.send(JSON.stringify(msg));
 	}
 }
 
-var MANAGER = new PageManager();
-
-
+const MANAGER = new PageManager();
 
 
 window.Twitch.ext.onAuthorized(
 	function(auth){
-		//log(auth);
-		//var parts=auth.token.split(".");
-		//var payload=JSON.parse(window.atob(parts[1]));
-		MANAGER.printout.addlog([JSON.stringify(auth)]);
 		MANAGER.setUName(auth);
-
 	}
 );
 
@@ -869,14 +928,24 @@ function openTab(evt, cityName) {
 openTab(null, "printouttab")
 
 function expand_select(obj) {
-	obj.setAttribute("size", 5);
-	obj.style.height="var(--classselect-opened)";
-	obj.click();
+	if (obj.size == 0) {
+		obj.setAttribute("size", 5);
+		obj.style.height="var(--classselect-opened)";
+	} else {
+		obj.size=0;
+		obj.style.height="var(--class-select-height)";
+	}
+	
+	//obj.click();
+
+	//log("Expanding");
 }
 
 function blur_select(obj) {
 	obj.size=0;
 	obj.style.height="var(--class-select-height)";
+
+	log("Blurring");
 }
 
 function respec() {
@@ -884,17 +953,23 @@ function respec() {
 	MANAGER.sendMessage(MESSAGES.respec(obj.options[obj.selectedIndex].value))
 }
 
+function confirm_level(att) {
+	if (confirm(`Do you wish to level ${att}?`)) {
+		MANAGER.level(att);	
+	}
+}
 
 document.getElementById("charsheetheader").addEventListener("click", (event) => { openTab(event, "charsheet"); });
 document.getElementById("printoutheader").addEventListener("click", (event) => { 
 	openTab(event, "printouttab");
 	MANAGER.printout.focus_recent();
+	event.currentTarget.classList.toggle("alerttab", false);
 });
 document.getElementById("partyheader").addEventListener("click", (event) => { openTab(event, "partytab"); });
 document.getElementById("npcheader").addEventListener("click", (event) => { openTab(event, "npctab"); });
 document.getElementById("abilityheader").addEventListener("click", (event) => { openTab(event, "abilitytab"); });
 document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
-document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
+//document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
 document.getElementById("respecbutton").addEventListener("click", () => { respec(); });
 document.getElementById("lvlup-vigor").addEventListener("click", () => { MANAGER.level("vigor"); });
 document.getElementById("lvlup-endurance").addEventListener("click", () => { MANAGER.level("endurance"); });
@@ -905,3 +980,25 @@ document.getElementById("lvlup-faith").addEventListener("click", () => { MANAGER
 document.getElementById("lvlup-luck").addEventListener("click", () => { MANAGER.level("luck"); });
 document.getElementById("lvlup-perception").addEventListener("click", () => { MANAGER.level("perception"); });
 
+// Setup click listeners for class options to close selection menus.
+for (const c of document.getElementsByClassName("classoption")) {
+	c.addEventListener("click", function(event) {
+		const p = event.currentTarget.parentElement
+
+		if (p.size > 0) {
+			p.size=0;
+			p.style.height="var(--class-select-height)";
+		}
+	});
+}
+
+/*
+setInterval(function() {
+	var popup = document.getElementById("myPopup");
+  	popup.classList.toggle("show");
+}, 5000);
+*/
+
+document.getElementById("filterbutton").addEventListener("click", () => {
+	document.getElementById("filterpopup").classList.toggle("hidden");
+});

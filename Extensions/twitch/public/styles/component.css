@@ -40,5 +40,13 @@
 	--bordered-width: 8px;
 	--printout-fontsize:  120%;
 	--spellname-fontsize:  175%;
+
+	--filterbutton-width:  90px;
+	--filterbutton-height:  90px;
+
+	--printoutcontainer-width: 93vw;
+	--printoutcell-font-size: 120%;
+
+	--timertext-margin-left: 20px;
 }
 

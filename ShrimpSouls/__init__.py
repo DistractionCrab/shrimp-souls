@@ -727,7 +727,7 @@ class GameManager(persistent.Persistent):
 		if isinstance(p, str):
 			p = self.get_player(p)
 
-		if self.resting(p) or True:
+		if self.resting(p):
 			p.update_class(cl)
 			p.respec()
 			return messages.Message(

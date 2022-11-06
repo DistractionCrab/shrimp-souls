@@ -25,10 +25,13 @@ body {
 	font-size: var(--charsheet-fontsize);
 }
 
+.hidden {
+	visibility: hidden;
+	display: none;
+}
 
 .spacedtable {
 	font-size: 120%;
-	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0 15px;
 }
@@ -39,21 +42,37 @@ body {
 }
 
 #printouttab {
-	overflow:  auto;
 	height: 85vh;
 	font-size: var(--printout-fontsize);
+	
+}
+
+#printoutcontainer {
+	overflow-y: auto;
+	overflow-x: hidden;
+	
+	height: 80vh;
+	width: var(--printoutcontainer-width);
+	position: absolute;
 }
 
 #printout {
 	font-size: var(--printout-fontsize);
-	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0 15px;
+	
 }
 
 .printoutcell {
+	word-wrap: break-word;
+	font-size: var(--printoutcell-font-size);
 	border: var(--bordered-width) solid;
 	border-color: rgb(148, 148, 148);
+}
+
+.stependcell {
+	border: var(--bordered-width) solid;
+	border-color: rgb(79, 0, 224);
 }
 
 #partytab {
@@ -428,4 +447,120 @@ body {
 
 .statamt {
 	padding-left: var(--statamt-padding-left);
+}
+
+
+/*
+
+-------------------------------------------------------------------------------------
+
+*/
+
+#filterpopup {
+	border: 5px solid white;
+	margin-top: 18px;
+	padding-top: 30px;
+	padding-left: 30px;
+	font-size: var(--printout-fontsize);
+	overflow:  auto;
+	width: var(--printoutcontainer-width);
+	height: 85vh;
+	z-index: 9;
+	position: absolute;
+	background-color: rgba(69, 69, 69, 0.9);
+	font-size: var(--printoutcell-font-size);
+}
+
+#filterbutton {
+	width: var(--filterbutton-width);
+	height: var(--filterbutton-height);
+	background-image: url("../images/filter-setting-icon.png");
+	background-size: contain;
+	border-radius: 10px;
+
+}
+
+.filtercheck {
+	width: 60px;
+	height: 60px;
+	margin-right: 30px;
+}
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  position: absolute;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+@keyframes glowing {
+        0% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+        50% {
+          background-color: #49e819;
+          box-shadow: 0 0 5px #49e819;
+        }
+        100% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+      }
+
+.alerttab {
+	background-color:  green;
+	animation: glowing 1300ms infinite;
+}
+
+#timertext {
+	font-size: var(--printoutcell-font-size);
+	margin-left:  var(--timertext-margin-left);
 }
