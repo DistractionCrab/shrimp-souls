@@ -106,88 +106,38 @@ class DoNothing:
 
 
 @dataclass
-class HealTarget:
+class HealTarget(Action):
 	attacker: object
 	defender: object
-	dmg: int
+	
 	msg: str = ''
+	dmg: int = 0
 
 	def apply(self):
 		if not self.defender.dead:
-			self.msg += f"{self.attacker.name} heals {self.dmg} life to {self.defender.name}."
-			self.defender.damage(-self.dmg)
+			amt = math.ceil(self.attacker.att/20)
+			self.msg += f"{self.attacker.name} heals {amt} life to {self.defender.name}."
+			self.defender.damage(-amt)	
+			
 		else:
 			self.msg += f"{self.attacker.name} could not heal dead target {self.defender.name}."
 
-
-	@property	
-	def receivers(self):
-		if self.attacker.is_player:
-			if self.defender.is_player:
-				return (self.attacker, self.defender)
-			else:
-				return tuple()
-		elif self.defender.is_player:
-			return (self.defender,)
-
-		else:
-			return tuple()
-
-	@property	
-	def receivers_npc(self):
-		if self.attacker.is_npc:
-			if self.defender.is_npc:
-				return (self.attacker, self.defender)
-			else:
-				return tuple()
-		elif self.defender.is_npc:
-			return (self.defender,)
-
-		else:
-			return tuple()
 			
 
 
 @dataclass
-class ReviveTarget:
+class ReviveTarget(Action):
 	attacker: object
 	defender: object
-	dmg: int
+	
+	msg: str = ''
+	dmg: int = 0
 
 	def apply(self):
-		self.defender.damage(-self.dmg)
+		amt = math.ceil(self.attacker.att/40)
+		self.defender.damage(-amt)
+		f"{self.attacker.name} revives {self.defender.name} for {amt} life. Wokege"
 
-			
-
-	@property
-	def msg(self):
-		return f"{self.attacker.name} revives {self.defender.name} for {self.dmg} life. Wokege"
-
-	@property	
-	def receivers(self):
-		if self.attacker.is_player:
-			if self.defender.is_player:
-				return (self.attacker, self.defender)
-			else:
-				return (self.defender,)
-		elif self.defender.is_player:
-			return (self.defender,)
-
-		else:
-			return tuple()
-
-	@property	
-	def receivers_npc(self):
-		if self.attacker.is_npc:
-			if self.defender.is_npc:
-				return (self.attacker, self.defender)
-			else:
-				return (self.defender,)
-		elif self.defender.is_npc:
-			return (self.defender,)
-
-		else:
-			return tuple()
 
 
 @dataclass

@@ -1,4 +1,4 @@
-const TESTING = false;
+const TESTING = true;
 
 function log(s) {
 	MANAGER.printout.addlog([s]);
@@ -378,10 +378,35 @@ class CharSheet {
 			e.classList.add("enemytarget");	
 		}
 		
-		clear_node(e).appendChild(document.createTextNode(t.name));
+		set_text(e, t.name);
+		//clear_node(e).appendChild(document.createTextNode(t.name));
 
 		this.target_selector.add(e);
 		this.available_targets.add(t.name);
+	}
+
+	clear_target_selector() {
+		this.available_targets = new Set();
+		while (this.target_selector.firstChild) {
+			this.target_selector.removeChild(this.target_selector.firstChild);
+		}
+	}
+
+	remove_target(t) {
+		this.available_targets.delete(t.name);
+
+		var c = null;
+
+		for (const child of this.target_selector.children) {
+			if (child.nodeName == "OPTION") {
+				if (child.value == t.name) {
+					c = child;
+					break;
+				}
+			}
+		}
+
+		this.target_selector.removeChild(c);
 	}
 
 	update_charsheet(msg) {
@@ -486,9 +511,8 @@ class CombatLog {
 	}
 
 	apply_filters() {
-
 		for (const r of this.printout.rows) {
-			if (r.firstChild.id == "printouttimercell") {
+			if (r.firstChild.classList.contains("stependcell")) {
 
 			} else {
 				var check = false;
@@ -551,7 +575,10 @@ class CombatLog {
 	}
 
 	addlog(msg, step=false) {
-		this.header.classList.toggle("alerttab", true);	
+		if (this.printouttab.style.display !== "none") {
+			this.header.classList.toggle("alerttab", true);	
+		}
+		
 		
 		if (this.printout.rows.length > 1000) {
 			while (this.printout.rows.length > 1000 - msg.length) {
@@ -832,6 +859,7 @@ class PageManager {
 		msg = JSON.parse(msg);
 
 		if ("refreshEntities" in msg && msg["refreshEntities"]) {
+			this.csheet.clear_target_selector();
 			this.entities.clear();
 		}
 

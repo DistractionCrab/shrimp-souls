@@ -84,8 +84,9 @@ class Messages(enum.Enum):
 
 
 class Server:
-	def __init__(self, game):
+	def __init__(self, game, clientid):
 		self.__msgs = asyncio.Queue()
+		self.__clientid = clientid
 		self.__sockets = {}
 		self.__connections = {}
 		self.__last = time.time()		
@@ -128,18 +129,16 @@ class Server:
 					await self.__join(msg)
 				elif msg['msg'] == "respec":
 					await self.__respec(msg)
-		print("finishing server loop")
 
 	async def heartbeat(self):
 		while not self.__closed:
 			await self.__msgs.put(Heartbeat)
 			await asyncio.sleep(10)
-		print("finishing heartbeat")
 
 	async def __heartbeat(self):
 		if len(self.__sockets) == 0:			
 			if time.time() - self.__i_time > 300:
-				print("Shutting down a server.")
+				print(f"Shutting down a server for {self.__clientid}")
 				await self.close()
 		else:
 			self.__i_time = time.time()
@@ -154,9 +153,10 @@ class Server:
 
 	async def __disconnect(self, msg):
 		i = msg['wsid']
+		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
 		if i in self.__sockets:
-			s = self.__sockets[msg["wsid"]]
-			del self.__sockets[msg["wsid"]]
+			s = self.__sockets[i]
+			del self.__sockets[i]
 			try:
 				if s.connected:
 					s.close()
@@ -164,6 +164,8 @@ class Server:
 				pass
 		if i in self.__idmaps:
 			del self.__idmaps[i]
+
+
 
 	async def __send_message(self, wsid, m):
 		s = await self.__get_sock(wsid)
@@ -217,6 +219,7 @@ class Server:
 					uname = r["data"][0]["login"]
 					self.__idmaps[wsid] = uname
 					player = self.__game.get_player(uname)
+					print(f"Connected received for c-id {self.__clientid} from {uname}")
 					if self.__game.is_joined(uname):
 						await self.__send_message(wsid, Messages.UPDATE(self.__game, ["Connected"], player))						
 					else:
@@ -362,18 +365,15 @@ class Router:
 	async def __call__(self, ws, path):
 		try:
 			i = int(path[1:])
-			print(f"Received Connection for channelId {i}")
 
 			if i not in self.__games:
 				g = self.__get_game(i)
-				s = Server(g)
+				s = Server(g, i)
 				self.__games[i] = s
 
 				asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
-				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")	
-				print(f"Initialzing server for {i}")			
+				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")			
 			else:
-				print(f"Retrieving server for {i}")
 				s = self.__games[i]
 
 			
@@ -390,7 +390,6 @@ class Router:
 		except ValueError as ex:
 			print(f"Client sent invalid path for connection: {ex}")
 			await ws.close()
-			raise ex
 		except Exception as ex:
 			print(f"Generic Connection Error: {ex}")
 

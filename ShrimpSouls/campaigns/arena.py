@@ -258,11 +258,11 @@ class Arena(BaseArena):
 
 		if self.finished:
 			if all(p.dead for p in self.players.values()):
-				total.append("** The Turn is Over **: The party has been defeated...")
+				total.append("The party has been defeated...")
 			if all(p.dead for p in self.npcs.values()):
-				total.append("** The Turn is Over **: The party is Victorious!!!")
+				total.append("The party is Victorious!!!")
 		else:
-			total.append("** The Turn is Over **: The battle continues to rage.")
+			total.append("The battle continues to rage.")
 
 
 		return messages.Message(msg=total, users=rec_p, npcs=rec_n)

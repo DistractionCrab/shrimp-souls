@@ -62,6 +62,7 @@ def score_dmg(s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
+	
 	r = max(0.5, min(s1/s2, 2))
 	p = -0.3 * r**2 + 1.35 * r - 0.55
 
@@ -75,6 +76,7 @@ def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1
 def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
+
 	r = max(0.5, min(s1/s2, 2))
 	p = -0.3 * r**2 + 1.35 * r - 0.55
 
@@ -84,10 +86,11 @@ def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=
 def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 	dfn = m2 * s2(d) + b2
 	att = m1 * s1(a) + b1
+
 	r = max(0.5, min(att/dfn, 2))
 	p = (r**2)/(-3) + 1.5 * r - (2/3)
 
-	return math.ceil((att * p)/10)
+	return math.ceil((att * p)/4)
 
 
 
