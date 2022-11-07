@@ -419,7 +419,7 @@ async def main(args):
 		s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
 		s.load_cert_chain(
 			#os.path.join(root, "My_CA_Bundle.ca-bundle"),
-			os.path.join(root, "shrimpsouls_distractioncrab_net.crt"), 
+			os.path.join(root, "concat.crt"), 
 			keyfile=os.path.join(root, "csr.key"))
 		async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
 			await m.main()
