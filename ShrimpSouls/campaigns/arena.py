@@ -44,10 +44,8 @@ class BaseArena(persistent.Persistent):
 	
 
 	def get_npc(self, name):
-		if isinstance(name, str):
-			return self.__npcs[name]
-		else:
-			return name
+		return None
+		
 
 	@property
 	def players(self):
@@ -143,7 +141,10 @@ class Arena(BaseArena):
 
 	def get_npc(self, name):
 		if isinstance(name, str):
-			return self.__npcs[name]
+			if name in self.__npcs:
+				return self.__npcs[name]
+			else:
+				return None
 		else:
 			return name
 
