@@ -1,4 +1,4 @@
-const TESTING = false;
+const TESTING = true;
 
 function log(s) {
 	MANAGER.printout.addlog([s]);

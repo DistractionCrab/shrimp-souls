@@ -62,6 +62,9 @@ async def get_username(i):
 class Heartbeat:
 	pass
 
+class CloseServer:
+	pass
+
 
 
 class Messages(enum.Enum):
@@ -89,44 +92,75 @@ class Server:
 		self.__idmaps = {}
 		self.__wsid_ct = 0
 		self.__game = game
+		self.__closed = False
+		self.__i_time = time.time()
 
+	async def close(self):
+		self.__closed = True
+		#await self.__msgs.put(CloseServer)
 		
+
+	@property
+	def closed(self):
+		return self.__closed
+	
+	async def __len__(self):
+		return len(self.__sockets)
 
 
 	async def server_loop(self):
-		while True:
-			v = await self.__msgs.get()
-			await self.__handle_msg(v)
+		while not self.__closed:
+			msg = await self.__msgs.get()
+
+			if msg is Heartbeat:
+				await self.__heartbeat()
+			else:
+				self.__i_time = time.time()
+				if msg['msg'] == "connect":
+					await self.__connect(msg)
+				elif msg['msg'] == 'ability':
+					await self.__do_ability(msg)
+				elif msg['msg'] == 'levelup':
+					await self.__level_up(msg)
+				elif msg['msg'] == "disconnect":
+					await self.__disconnect(msg)					
+				elif msg['msg'] == "join":
+					await self.__join(msg)
+				elif msg['msg'] == "respec":
+					await self.__respec(msg)
 
 	async def heartbeat(self):
-		while True:
-			await self.__msgs.put(Heartbeat())
+		while not self.__closed:
+			await self.__msgs.put(Heartbeat)
 			await asyncio.sleep(10)
 
-	def player_to_json(p):
-		if isinstance(p, str):
-			p = self.__game.get_player(p)
-		return {
-			'name': p.name,
-			'hp': p.hp,
-			'max_hp': p.max_hp,
-			'xp': p.xp,
-			'xp_req': p.get_xp_req(),
-			'class': p.myclass.cl_string,
-			'attributes': p.attributes.__dict__,
-			'status': p.status.__dict__
-		}
+	async def __heartbeat(self):
+		if len(self.__sockets) == 0:			
+			if time.time() - self.__i_time > 300:
+				await self.close()
+		else:
+			self.__i_time = time.time()
+			now = time.time()
+			if now - self.__last >= STEP_FREQUENCY:
 
-	def enemy_to_json(p):
-		if isinstance(p, str):
-			p = self.__game.get_npc(p)
-		return {
-			'name': p.name,
-			'hp': p.hp,
-			'max_hp': p.max_hp,
-			'xp': p.xp,
-			'status': p.status.__dict__
-		}
+				self.__last = now
+				msg = self.__game.step()
+				
+				await self.__handle_update(msg, step=True)
+
+
+	async def __disconnect(self, msg):
+		i = msg['wsid']
+		if i in self.__sockets:
+			s = self.__sockets[msg["wsid"]]
+			del self.__sockets[msg["wsid"]]
+			try:
+				if s.connected:
+					s.close()
+			except:
+				pass
+		if i in self.__idmaps:
+			del self.__idmaps[i]
 
 	async def __send_message(self, wsid, m):
 		s = await self.__get_sock(wsid)
@@ -233,33 +267,6 @@ class Server:
 			await self.__handle_update(msg)
 
 
-	async def __handle_msg(self, msg):
-		if isinstance(msg, Heartbeat):
-			now = time.time()
-			if now - self.__last >= STEP_FREQUENCY:
-				self.__last = now
-				msg = self.__game.step()
-				
-				await self.__handle_update(msg, step=True)
-
-		else:
-			if msg['msg'] == "connect":
-				await self.__connect(msg)
-			elif msg['msg'] == 'ability':
-				await self.__do_ability(msg)
-			elif msg['msg'] == 'levelup':
-				await self.__level_up(msg)
-			elif msg['msg'] == "disconnect":
-				i = msg['wsid']
-				if i in self.__sockets:
-					del self.__sockets[msg["wsid"]]
-				if i in self.__idmaps:
-					del self.__idmaps[i]
-			elif msg['msg'] == "join":
-				await self.__join(msg)
-			elif msg['msg'] == "respec":
-				await self.__respec(msg)
-
 
 	async def __add_sock(self, ws):
 		index = 0 if len(self.__sockets) == 0 else max(self.__sockets.keys()) + 1
@@ -358,12 +365,13 @@ class Router:
 				g = self.__get_game(i)
 				s = Server(g)
 				self.__games[i] = s
-				
+
+				asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
+				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")				
 			else:
 				s = self.__games[i]
 
-			asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
-			asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")
+			
 			await s(ws)
 
 		except asyncio.CancelledError:
@@ -384,6 +392,14 @@ class Router:
 	async def main(self):
 		looping = True
 		while looping:
+			def filt(i, g):
+				if g.closed:
+					print(f'Game for channel {i} being closed down.')
+					return False
+				else:
+					return True
+			filter(lambda x: filt(*x), self.__games.items())
+
 			await asyncio.sleep(300)
 
 		

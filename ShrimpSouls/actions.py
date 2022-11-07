@@ -56,12 +56,12 @@ class Action:
 
 	@property	
 	def receivers(self):
-		if self.attacker.is_player:
-			if self.defender.is_player:
+		if self.attacker is not None and self.attacker.is_player:
+			if self.defender is not None and self.defender.is_player:
 				return (self.attacker, self.defender)
 			else:
 				return tuple()
-		elif self.defender.is_player:
+		elif self.defender is not None and self.defender.is_player:
 			return (self.defender,)
 
 		else:
@@ -69,12 +69,12 @@ class Action:
 
 	@property	
 	def receivers_npc(self):
-		if self.attacker.is_npc:
-			if self.defender.is_npc:
+		if self.attacker is not None and self.attacker.is_npc:
+			if self.defender is not None and self.defender.is_npc:
 				return (self.attacker, self.defender)
 			else:
 				return tuple()
-		elif self.defender.is_npc:
+		elif self.defender is not None and self.defender.is_npc:
 			return (self.defender,)
 
 		else:
