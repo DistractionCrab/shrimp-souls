@@ -87,7 +87,7 @@ def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1
 	r = max(0.5, min(att/dfn, 2))
 	p = (r**2)/(-3) + 1.5 * r - (2/3)
 
-	return math.ceil(att * p)
+	return math.ceil((att * p)/10)
 
 
 
