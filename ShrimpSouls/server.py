@@ -128,15 +128,18 @@ class Server:
 					await self.__join(msg)
 				elif msg['msg'] == "respec":
 					await self.__respec(msg)
+		print("finishing server loop")
 
 	async def heartbeat(self):
 		while not self.__closed:
 			await self.__msgs.put(Heartbeat)
 			await asyncio.sleep(10)
+		print("finishing heartbeat")
 
 	async def __heartbeat(self):
 		if len(self.__sockets) == 0:			
 			if time.time() - self.__i_time > 300:
+				print("Shutting down a server.")
 				await self.close()
 		else:
 			self.__i_time = time.time()
@@ -367,8 +370,10 @@ class Router:
 				self.__games[i] = s
 
 				asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
-				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")				
+				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")	
+				print(f"Initialzing server for {i}")			
 			else:
+				print(f"Retrieving server for {i}")
 				s = self.__games[i]
 
 			

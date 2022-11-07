@@ -324,7 +324,7 @@ class DamageTarget(Action):
 			s.stack(self.defender, amt=a)
 
 		if len(self.statuses) > 0:
-			self.msg += f"{self.defender.name} was afflicted with {', '.join(s[0].name for s in self.statuses)}"
+			self.msg += f"{self.defender.name} was afflicted with {', '.join(s[0].name for s in self.statuses)}. "
 
 
 	
