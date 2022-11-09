@@ -45,19 +45,19 @@ class Bard(ClassSpec):
 		return ss.Positions.BACK
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=10, vigor=25)
+		return cs.stat_map(p, base=100, level=7, vigor=3)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
+		return cs.stat_map(p, level=10, perception=2, dexterity=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
+		return cs.stat_map(p, level=10, dexterity=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
+		return cs.stat_map(p, level=10, perception=1, dexterity=1)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=20, intelligence=2, luck=2, perception=8, dexterity=8)
+		return cs.stat_map(p, level=10, perception=1)
 
 
 	def duel_action(self, actor, env):
@@ -81,8 +81,11 @@ class Action1(actions.Action):
 
 @dataclass
 class Target1(actions.EffectAction):
+
 	def on_hit(self):
-		if self.defender.is_player:
+		if self.defender.immune(ss.StatusEnum.charm):
+			self.msg += f"{self.defender.name} is immune to being charmed."
+		elif self.defender.is_player:
 			self.defender.use_charm(amt=1)
 			print(f"{self.attacker.name} has weakened the charm magic on {self.defender.name}.")
 		elif self.defender.is_npc:

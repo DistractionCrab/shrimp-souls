@@ -47,6 +47,28 @@
       "orientation": "Portrait",
       "type": "mobile",
       "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "265737932",
+      "configurationAnchor": "component",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "id": "5",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "265737932",
+      "orientation": "Portrait",
+      "type": "dashboard",
+      "viewerType": "Broadcaster"
     }
   ],
   "manifest": {

@@ -31,6 +31,7 @@
 	--printout-fontsize: 10%;
 
 	--spelltable-margin-left:  60px;
+	--spelltable-font-size:  120%;
 	--joinbutton-width: 200px;
 	--joinbutton-height: 70px;
 
@@ -47,5 +48,15 @@
 
 	--filterbutton-width:  90px;
 	--filterbutton-height:  90px;
+	--timertext-margin-left: 10px;
+
+	--filtermenubutton-width:  180px;
+	--filtermenubutton-height:  90px;
+	--filtermenubutton-font-size: 120%;
+
+	--filterinput-width: 500px;
+	--filterinput-height:  90px;
+	--filterinput-font-size: 100%;
+	--filterpopup-width: 93vw;
 }
 

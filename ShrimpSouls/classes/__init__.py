@@ -52,15 +52,8 @@ def stat_map(
 	
 
 class ClassSpec:
-	def compute_hit(self, a, d):
-		return utils.compute_hit(a,d)
-
-
-	def compute_dmg(self, a, d):
-		return utils.compute_dmg(a, d)
-
 	def max_hp(self, p):
-		return 5
+		return stat_map(p, base=50, level=20)
 
 	@property
 	def abi_map(self):
@@ -98,10 +91,6 @@ class ClassSpec:
 
 	def duel_action(self, actor, env):
 		return [actions.DoNothing(player=actor)]
-
-	def find_valid_target(self, op):
-		op = list(filter(lambda x: x.invis == 0 and not x.dead, op))
-		return random.choices(op)[0]
 
 	def soulmass_count(self, p):
 		return math.ceil(p.attributes.intelligence/SOULMASS_THRESHOLD)

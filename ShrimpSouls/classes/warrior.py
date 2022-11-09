@@ -31,19 +31,19 @@ class Warrior(ClassSpec):
 		return ABI_MAP
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=25, vigor=30)
+		return cs.stat_map(p, base=100, level=11, vigor=4)
 		
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25, dexterity=6, strength=6)
+		return cs.stat_map(p, level=10, dexterity=1)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=25, dexterity=6)
+		return cs.stat_map(p, level=10, perception=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=32, strength=8, dexterity=8)
+		return cs.stat_map(p, level=10, strength=1)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=32, strength=8, dexterity=8)
+		return cs.stat_map(p, level=9, strength=1, dexterity=1)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -66,6 +66,8 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.DamageTarget):
 	score_dmg: tuple = utils.score_dmg(m1=1.2)
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
+	dmgtype: actions.DamageType = actions.DamageType.Slash
 
 	def on_hit(self):
 		self.defender.use_defup(self.defender.defup)

@@ -35,19 +35,19 @@ class Sorcerer(ClassSpec):
 		return ss.Positions.BACK
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=50, level=10, vigor=10)
+		return cs.stat_map(p, base=100, level=8, vigor=3)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=25, intelligence=5)
+		return cs.stat_map(p, level=10, intelligence=1, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25)
+		return cs.stat_map(p, level=9, dexterity=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=35, intelligence=10)
+		return cs.stat_map(p, level=11, intelligence=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=25)
+		return cs.stat_map(p, level=8, strength=1)
 
 
 	def duel_action(self, actor, env):
@@ -72,3 +72,5 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.DamageTarget):
 	score_dmg: tuple = utils.score_dmg(m1=1.5)
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Long
+	dmgtype: actions.DamageType = actions.DamageType.Magic

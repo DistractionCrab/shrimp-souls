@@ -478,6 +478,8 @@ class Entity(persistent.Persistent):
 	def is_npc(self):
 		return True
 
+	def immune(self, d):
+		return False
 	
 
 	@auto_commit
@@ -721,6 +723,7 @@ class GameManager(persistent.Persistent):
 		self.__campaign = cps.WaitingRoom()
 
 	def resting(self, p):
+		return True
 		return self.__campaign.restarea or not self.__campaign.is_joined(p)
 
 	def respec(self, p, cl):

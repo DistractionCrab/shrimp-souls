@@ -51,19 +51,19 @@ class Priest(ClassSpec):
 
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base = 50, level=10, vigor=10)
+		return cs.stat_map(p, base=50, level=8, vigor=3)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=25, faith=5)
+		return cs.stat_map(p, level=10, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25)
+		return cs.stat_map(p, level=9, dexterity=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, faith=22)
+		return cs.stat_map(p, level=9, faith=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=25)
+		return cs.stat_map(p, level=8, strength=1)
 
 
 	def duel_action(self, actor, env):

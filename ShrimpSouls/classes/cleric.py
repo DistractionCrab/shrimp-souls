@@ -32,19 +32,19 @@ class Cleric(ClassSpec):
 		return ABI_MAP
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=25, vigor=30)
+		return cs.stat_map(p, base=100, level=10, vigor=5)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=27, faith=2)
+		return cs.stat_map(p, level=10, faith=1, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25, faith=3, strength=1)
+		return cs.stat_map(p, level=10, dexterity=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=27, faith=2)
+		return cs.stat_map(p, level=10, faith=1, strength=1)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=25, faith=3, strength=1)
+		return cs.stat_map(p, level=10, faith=1, strength=1)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

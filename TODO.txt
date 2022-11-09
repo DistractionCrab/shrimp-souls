@@ -1,0 +1,39 @@
+Next Steps:
+- implement charsheet tabs
+- Finish event system
+- setup back/front end new spellbook/action system (queued, rather tha ninstant)
+
+IMPLEMENTATIONS
+- subclassing
+- elemental combos
+- management panel for live_config (reset arena/campaign/remove users)
+- put block/taunt on the buffs icons
+- event system for listening to things
+
+BUGS:
+- Fix the class select option being too tall later.
+- Fix initial timer not being updated correctly when connecting.
+
+CLASSES
+new attack items:
+	Milquetoast: Nothing
+	Knight: Riposte stance (fewer stacks than fencer)
+	Juggernaut: Earthquake (enemy party-wide damage.)
+	Warrior: Whirlwind decreasing AoE damage and inflict bleed.
+	Swordsman: Sparking Blades (adds fire damage to attacks)
+	Fencer: Fan of Blades (AOE damage and debuff)
+	Sorcerer: Twisted Wall of Light
+	Spellblade: Soul Greatsword
+	Pyromancer: Smoke Screen
+	Cryomancer: Retaliation spikes and increased defense
+	Priest: AoE Lightning Strike
+	Cleric: Holy Gavel (deals damage and reduces eva)
+	Paladin: Judgement (AoE stun)
+	Thief: Gambler (roll dice for effects)
+	Assassin: Smoke bomb - grants invis to party
+	Bard: inspiration Full party acc and eva scores up
+
+Dark Knight Str/Vig scaling
+Attack scaling Str 2* Vigor 3* Defense scaling Str 3* Vigor 3*
+Targeted ability Sanguine blade | Attacks targeted monster Stealing a portion of the damage dealt.
+Action Abyssal Blade | Sacrifices Portion of own HP to deal damage to multiple monsters.

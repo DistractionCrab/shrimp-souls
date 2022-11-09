@@ -20,15 +20,16 @@
 	--status-icon-height: 60px;
 	--hpamt-padding:  50px;
 	--default-fontweight:  300;
-	--spelltable-width:  50vh;
-	--tar-select-width:  55vh;
-	--tar-select-height: 75vh;
+	--spelltable-width:  80vw;
+	--tar-select-width:  90vw;
+	--tar-select-height: 40vh;
 	--ability-icon-width: 100px;
 	--ability-icon-height: 100px;
 	--tar-select-fontsize:  48px;
 	--lvlup-margin: 50px;
 	--printout-fontsize: 120%;
 	--spelltable-margin-left:  60px;
+	--spelltable-font-size:  120%;
 	--joinbutton-width: 200px;
 	--joinbutton-height: 70px;
 	--class-select-height: 140px;
@@ -48,5 +49,14 @@
 	--printoutcell-font-size: 120%;
 
 	--timertext-margin-left: 20px;
+
+	--filtermenubutton-width:  180px;
+	--filtermenubutton-height:  90px;
+	--filtermenubutton-font-size: 120%;
+
+	--filterinput-width: 500px;
+	--filterinput-height:  90px;
+	--filterinput-font-size: 100%;
+	--filterpopup-width: 93vw;
 }
 

@@ -35,19 +35,19 @@ class Assassin(ClassSpec):
 	
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base = 50, level=5, vigor=20)
+		return cs.stat_map(p, base=100, level=8, vigor=3)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=35, faith=10)
+		return cs.stat_map(p, level=11, faith=1, perception=2)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=35, faith=5, dexterity=10)
+		return cs.stat_map(p, level=10, dexterity=2)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=35, faith=8, dexterity=8)
+		return cs.stat_map(p, level=11, faith=2, dexterity=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=18, dexterity=2)
+		return cs.stat_map(p, level=8, dexterity=1)
 
 
 
@@ -73,7 +73,11 @@ class Action1(actions.Action):
 
 @dataclass
 class Target1(actions.DamageTarget):
-	statuses: tuple = field(default_factory=lambda:((ss.StatusEnum.poison, random.randint(1, 3)),))
+	statuses: utils.FrozenDict =  utils.FrozenDict({
+		ss.StatusEnum.poison: lambda: random.randint(1, 3)
+	})
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
+	dmgtype: actions.DamageType = actions.DamageType.Pierce
 
 	def __post_init__(self):
 		self.score_dmg = utils.score_dmg(m1=2) if self.attacker.invis > 0 else utils.score_dmg()

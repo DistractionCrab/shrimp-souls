@@ -14,14 +14,28 @@ class DamageType(enum.Enum):
 	Magic = enum.auto()
 	Lightning = enum.auto()
 	Dark = enum.auto()
+	Nature = enum.auto()
 
 	@property
 	def physical(self):
-		return self in [DamageType.Slash, DamageType.Strike, DamageType.Pierce]
+		return self in [
+			DamageType.Slash, 
+			DamageType.Strike, 
+			DamageType.Pierce,
+			Damage.Nature,
+		]
 
 	@property
 	def non_physical(self):
-		return self in [DamageType.Fire, DamageType.Magic, DamageType.Lightning, DamageType.Dark]
+		return self in [
+			DamageType.Fire, 
+			DamageType.Magic, 
+			DamageType.Lightning, 
+			DamageType.Dark, 
+		]
+
+	def is_weak(self, p):
+		return p.weak(self)
 
 	
 
@@ -40,6 +54,7 @@ class AbilityRange(enum.Enum):
 class Tags(enum.Enum):
 	Unblockable = enum.auto()
 	Unparriable = enum.auto()
+
 
 
 @dataclass
@@ -109,18 +124,29 @@ class DoNothing:
 class HealTarget(Action):
 	attacker: object
 	defender: object
+	base: int = 1
+	mult: int = 1/4
 	
 	msg: str = ''
 	dmg: int = 0
 
 	def apply(self):
-		if not self.defender.dead:
-			amt = math.ceil(self.attacker.att/20)
-			self.msg += f"{self.attacker.name} heals {amt} life to {self.defender.name}."
-			self.defender.damage(-amt)	
-			
+		if npcs.NPCTags.Undead.tagged(self.defender):
+			if not self.defender.dead:
+				amt = math.ceil(self.attacker.att*self.mult + self.base)
+				self.msg += f"{self.attacker.name} deals {amt} damage to {self.defender.name} (Undead)."
+				self.defender.damage(amt)	
+				
+			else:
+				self.msg += f"{self.attacker.name} could not damage dead target {self.defender.name}."
 		else:
-			self.msg += f"{self.attacker.name} could not heal dead target {self.defender.name}."
+			if not self.defender.dead:
+				amt = math.ceil(self.attacker.att*self.mult + self.base)
+				self.msg += f"{self.attacker.name} heals {amt} life to {self.defender.name}."
+				self.defender.damage(-amt)	
+				
+			else:
+				self.msg += f"{self.attacker.name} could not heal dead target {self.defender.name}."
 
 			
 
@@ -129,14 +155,16 @@ class HealTarget(Action):
 class ReviveTarget(Action):
 	attacker: object
 	defender: object
+	base: int = 1
+	mult: int = 1/8
 	
 	msg: str = ''
 	dmg: int = 0
 
 	def apply(self):
-		amt = math.ceil(self.attacker.att/40)
+		amt = math.ceil(self.attacker.att*self.mult + self.base)
 		self.defender.damage(-amt)
-		f"{self.attacker.name} revives {self.defender.name} for {amt} life. Wokege"
+		self.msg += f"{self.attacker.name} revives {self.defender.name} for {amt} life. Wokege"
 
 
 
@@ -175,7 +203,7 @@ class DamageTarget(Action):
 	abilityrange: AbilityRange = AbilityRange.Close
 	msg: str = ""
 	applied: bool = False
-	statuses: tuple = tuple()
+	statuses: dict = field(default_factory=dict)
 
 
 	def apply(self):
@@ -222,8 +250,8 @@ class DamageTarget(Action):
 		if total == 0:
 			self.msg += f"{self.attacker.name} missed {self.defender.name}."
 		else:
-			self.on_hit()
-			self.__apply_status()
+			
+			
 			if self.defender.weak(self.dmgtype):
 				total = math.ceil(1.5 * total)
 			if self.defender.resist(self.dmgtype):
@@ -231,6 +259,8 @@ class DamageTarget(Action):
 
 			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {total} damage. "
 			self.defender.damage(total)
+			self.__apply_status()
+			self.on_hit()
 
 	def soulmass_scenario(self):
 		totals = [
@@ -269,12 +299,18 @@ class DamageTarget(Action):
 		else:
 			self.standard_scenario()
 
+	def on_hit(self):
+		pass
+
+	def on_miss(self):
+		pass
+
 	def __apply_status(self):
-		for (s, a) in self.statuses:
-			s.stack(self.defender, amt=a)
+		for (s, a) in self.statuses.items():
+			s.stack(self.defender, amt=a())
 
 		if len(self.statuses) > 0:
-			self.msg += f"{self.defender.name} was afflicted with {', '.join(s[0].name for s in self.statuses)}. "
+			self.msg += f"{self.defender.name} was afflicted with {', '.join(s.name for s in self.statuses.keys())}. "
 
 
 	
@@ -285,7 +321,6 @@ class EffectAction(Action):
 	attacker: object
 	defender: object
 	score_hit: tuple = utils.score_hit()
-	score_dmg: tuple = utils.score_dmg()
 	abilityrange: AbilityRange = AbilityRange.Close
 	msg: str = ""
 	applied: bool = False
@@ -307,5 +342,44 @@ class EffectAction(Action):
 			else:
 				self.on_miss()
 
+	def on_hit(self):
+		pass
+
+	def on_miss(self):
+		pass
+
 	
 
+@dataclass
+class StatusAction(Action):
+	attacker: object
+	defender: object
+	score_hit: tuple = utils.score_hit()
+	abilityrange: AbilityRange = AbilityRange.Close
+	statuses: utils.FrozenDict = utils.FrozenDict({})
+	msg: str = ""
+	applied: bool = False
+
+	def apply(self):
+		if self.applied:
+			return self.msg
+		elif self.attacker is None or self.defender is None:
+			pass
+		elif self.attacker.dead:
+			self.msg = f"{self.attacker.name} cannot attack while dead."
+		elif self.defender.dead:
+			self.msg = f"{self.defender.name} cannot be attacked while dead."
+		elif self.attacker.stun > 0:
+			self.msg = f"{self.attacker.name} was stunned and could not act."
+		else:
+			self.applied = True
+			for (s, amt) in self.statuses.items():
+				
+				if self.defender.immune(s):
+					self.msg += f"{self.defender.name} is immune to {s.name}."
+				else:
+					if utils.compute_bool(self.attacker, self.defender, *self.score_hit):
+						s.stack(self.defender, amt=amt())
+						self.msg += f"{self.attacker.name} afflicted {s.name} on {self.defender.name} for {amt} turns. "
+					else:
+						self.msg += f"{self.attacker.name} failed to afflict {s.name} on {self.defender.name}. "

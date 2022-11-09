@@ -1,8 +1,29 @@
 const TESTING = true;
 
+import { ABILITY_DATA } from "./classdata.js";
+
 function log(s) {
 	MANAGER.printout.addlog([s]);
 }
+
+class EventSystem {
+	addEventListener(name, fn) {
+		if (!(name in this)) {
+			this[name] = []
+		}
+		this[name].push(fn);
+	}
+
+	alert(name, data) {
+		if (name in this) {
+			for (const fn of this[name]) {
+				fn(data);
+			}
+		}
+	}
+}
+
+const EVENTS = new EventSystem();
 
 const MESSAGES = {
 	connect: name => { return {msg: "connect", jwt: name} },
@@ -30,256 +51,6 @@ const MESSAGES = {
 };
 
 
-const ABILITY_DATA = {
-	milquetoast: [
-	],
-	knight: [
-		{
-			name: "block",
-			displayName: "Block",
-			targets: 0,
-			icon: "default",
-			desc: "Raise your shield to reduce incoming damage.",
-		},
-		{
-			name: "cover",
-			displayName: "Cover",
-			targets: 1,
-			icons: "default",
-			desc: "Protect a target from harm, sacrificing your defenses."
-		}
-	],
-
-	thief: [
-		{
-			name: "steal",
-			displayName: "Steal",
-			targets: 0,
-			icon: "default",
-			desc: "Attempt to steal from a nearby target.",
-		},
-		{
-			name: "poach",
-			displayName: "Poach",
-			targets: 1,
-			icons: "default",
-			desc: "Attempt to poach a low-health enemy."
-		}
-	],
-
-	assassin: [
-		{
-			name: "invis",
-			displayName: "Shadowmeld",
-			targets: 0,
-			icon: "default",
-			desc: "Becomes nearly invisible, and hard to detect.",
-		},
-		{
-			name: "poison_blade",
-			displayName: "Poison Blade",
-			targets: 1,
-			icons: "default",
-			desc: "Attacks a target with your poisoned knife. Deals double damage while invisible."
-		}
-	],
-	bard: [
-		{
-			name: "encourage",
-			displayName: "War Ballad",
-			targets: 0,
-			icon: "default",
-			desc: "Raise some party members' Att and Acc.",
-		},
-		{
-			name: "charm",
-			displayName: "Seductive Charisma",
-			targets: 1,
-			icons: "default",
-			desc: "Attempts to charm an enemy, or reduce charm effects on an ally."
-		}
-	],
-	cleric: [
-		{
-			name: "blessing",
-			displayName: "Blessing of Iron",
-			targets: 0,
-			icon: "default",
-			desc: "Raise some party memebers' defense.",
-		},
-		{
-			name: "cleanse",
-			displayName: "Cleanse",
-			targets: 1,
-			icons: "default",
-			desc: "Remove negative effects from a taget."
-		}
-	],
-	cryomancer: [
-		{
-			name: "chill",
-			displayName: "Chilling Mist",
-			targets: 0,
-			icon: "default",
-			desc: "Lowers some foes' attack and evasion.",
-		},
-		{
-			name: "freeze",
-			displayName: "Glaciate",
-			targets: 1,
-			icons: "default",
-			desc: "Attempt to freeze a target for multiple turns."
-		}
-	],
-	fencer: [
-		{
-			name: "ripstance",
-			displayName: "En Garde",
-			targets: 0,
-			icon: "default",
-			desc: "Enter a defensive and ready to parry an attacker.",
-		},
-		{
-			name: "taunt",
-			displayName: "Mocking Call",
-			targets: 1,
-			icons: "default",
-			desc: "Attempt to taunt a target into attacking you."
-		}
-	],
-	juggernaut: [
-		{
-			name: "warcry",
-			displayName: "Battlecry",
-			targets: 0,
-			icon: "default",
-			desc: "Emit a battlecry; Increasing some allies' Att.",
-		},
-		{
-			name: "shatter",
-			displayName: "Armor Shatter",
-			targets: 1,
-			icons: "default",
-			desc: "Attack a target, shattering their armor and lowering their Def."
-		}
-	],
-	priest: [
-		{
-			name: "prayer",
-			displayName: "Healing Prayer",
-			targets: 0,
-			icon: "default",
-			desc: "Utter a prayer, healing some allies for a small amount.",
-		},
-		{
-			name: "heal",
-			displayName: "Divine Touch",
-			targets: 1,
-			icons: "default",
-			desc: "Revive a dead target or massively heal a living target.",
-		}
-	],
-	paladin: [
-		{
-			name: "sealing",
-			displayName: "Sealing Strikes",
-			targets: 0,
-			icon: "default",
-			desc: "Enchant your weapon to stun targets that you strike.",
-		},
-		{
-			name: "censure",
-			displayName: "Divine Censure",
-			targets: 1,
-			icons: "default",
-			desc: "Censure a target and reduce their scores."
-		}
-	],
-	pyromancer: [
-		{
-			name: "pyroclasm",
-			displayName: "Searing Steam",
-			targets: 0,
-			icon: "default",
-			desc: "Release a cloud of steam and burn multiple foes.",
-		},
-		{
-			name: "fireball",
-			displayName: "Fireball",
-			targets: 1,
-			icons: "default",
-			desc: "Throw a fireball at a target, dealing damage and burning them."
-		}
-	],
-
-	sorcerer: [
-		{
-			name: "soulmass",
-			displayName: "Conjure Phalanx",
-			targets: 0,
-			icon: "default",
-			desc: "Conjure a retaliatory phalanx to retaliate against attackers.",
-		},
-		{
-			name: "soulspear",
-			displayName: "Soulspear",
-			targets: 1,
-			icons: "default",
-			desc: "Conjure a magical spear to attack a foe and deal heavy damage."
-		}
-	],
-
-	spellblade: [
-		{
-			name: "enchant",
-			displayName: "Enchant Armaments",
-			targets: 0,
-			icon: "default",
-			desc: "Enchant your sword and shield, increasing defense.",
-		},
-		{
-			name: "magic_cover",
-			displayName: "Magical Protection",
-			targets: 1,
-			icons: "default",
-			desc: "Cover a target, increasing their defenses and granting them a magical phalanx. However your defenses are lowered."
-		}
-	],
-
-	swordsman: [
-		{
-			name: "hamstring",
-			displayName: "Hamstring",
-			targets: 0,
-			icon: "default",
-			desc: "Create a whirl of your blades, and hamstring multiple foes.",
-		},
-		{
-			name: "slice",
-			displayName: "Heavy Slice",
-			targets: 1,
-			icons: "default",
-			desc: "Slice into a target, dealing damage and inflicting bleed."
-		}
-	],
-	warrior: [
-		{
-			name: "sharpen",
-			displayName: "Grindstone",
-			targets: 0,
-			icon: "default",
-			desc: "Sharpen your axe increasing your attack.",
-		},
-		{
-			name: "armor_break",
-			displayName: "Armor Break",
-			targets: 1,
-			icons: "default",
-			desc: "Strike a target, breaking their armor and removing defensive statuses."
-		}
-	],
-
-}
 
 function clear_node(n) {
 	n.innerHTML = "";
@@ -289,7 +60,8 @@ function clear_node(n) {
 function set_text(n, s) {
 	n.innerHTML = "";
 	n.appendChild(document.createTextNode(s));
-}
+	return n;
+} 
 
 
 class CharSheet {
@@ -322,6 +94,14 @@ class CharSheet {
 		//log(this.target_selector);
 
 		this.available_targets = new Set();
+
+		EVENTS.addEventListener("refreshEntities", () => {
+			this.clear_target_selector();
+		})
+
+		EVENTS.addEventListener("charsheet", (data) => {
+			this.update_charsheet(data);
+		})
 	}
 
 	update_spells() {
@@ -414,18 +194,18 @@ class CharSheet {
 		this.xp_cur = msg['xp'];
 		this.xp_req = msg['xp_req'];
 
-		clear_node(this.hp_val).appendChild(document.createTextNode(`${msg['hp']}/${msg['max_hp']}`));
-		clear_node(this.xp_val).appendChild(document.createTextNode(`${msg['xp']}/${msg['xp_req']}`));
+		set_text(this.hp_val, `${msg['hp']}/${msg['max_hp']}`);
+		set_text(this.xp_val, `${msg['xp']}/${msg['xp_req']}`);
 		
 
-		clear_node(this.vigor_val).appendChild(document.createTextNode(msg['attributes']['vigor']));
-		clear_node(this.endurance_val).appendChild(document.createTextNode(msg['attributes']['endurance']));
-		clear_node(this.strength_val).appendChild(document.createTextNode(msg['attributes']['strength']));
-		clear_node(this.dexterity_val).appendChild(document.createTextNode(msg['attributes']['dexterity']));
-		clear_node(this.intelligence_val).appendChild(document.createTextNode(msg['attributes']['intelligence']));
-		clear_node(this.faith_val).appendChild(document.createTextNode(msg['attributes']['faith']));
-		clear_node(this.luck_val).appendChild(document.createTextNode(msg['attributes']['luck']));
-		clear_node(this.perception_val).appendChild(document.createTextNode(msg['attributes']['perception']));
+		set_text(this.vigor_val, msg['attributes']['vigor']);
+		set_text(this.endurance_val, msg['attributes']['endurance']);
+		set_text(this.strength_val, msg['attributes']['strength']);
+		set_text(this.dexterity_val, msg['attributes']['dexterity']);
+		set_text(this.intelligence_val, msg['attributes']['intelligence']);
+		set_text(this.faith_val, msg['attributes']['faith']);
+		set_text(this.luck_val, msg['attributes']['luck']);
+		set_text(this.perception_val, msg['attributes']['perception']);
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(msg['hp']/msg['max_hp']*100)));
 		var propx = Math.max(0, Math.min(100, Math.ceil(msg['xp']/msg['xp_req']*100)));
@@ -484,79 +264,100 @@ class CombatLog {
 		this.printout = document.getElementById("printout");
 		this.printouttab = document.getElementById("printouttab");
 		this.printoutcontainer = document.getElementById("printoutcontainer");
-		//this.timercell = this.insertCell()
-		//this.timercell.setAttribute("id", "printouttimercell");
 		this.timercell = document.getElementById("timertext");
 		this.header = document.getElementById("printoutheader");
 		this.filternames = {};
 		this.filtertable = document.getElementById("filtertable");
+		this.max_rows = 1000;
+
+		this.messages = [];
 
 		this.ttotal = 300;
 		this.now = 0;
 
-		const p = this;
-		setInterval(function() {
+		setInterval(() => {
 				var now = new Date().getTime()/1000;
-				var rem = p.ttotal - Math.abs(Math.floor((now - p.now)));
+				var rem = this.ttotal - Math.abs(Math.floor((now - this.now)));
 
 				if (rem <= 0) {
-					p.refreshTimer("TURN ENDING SOON");
+					set_text(this.timercell, "TURN ENDING SOON");
 				} else {
 					var min = Math.floor(rem/60);
 					var s = Math.floor(rem % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
-					p.refreshTimer(`Turn Ending in ${min}:${s}`);
+					set_text(this.timercell, `Turn Ending in ${min}:${s}`);
 				}
 			},
 			200);
+
+		this.insert_filter_field();
+
+		document.getElementById("filterapplybutton").addEventListener("click", 
+			(event) => {
+				this.apply_filters();
+			});
+
+		EVENTS.addEventListener("joined", (joined) => {
+			if (!joined) {
+				this.join_message();
+			}
+		});
+
+		EVENTS.addEventListener("log", (data) => {
+			this.addlog(data);
+		});
+
+		EVENTS.addEventListener("error", (data) => {
+			this.addlog(data);
+		});
+
+		EVENTS.addEventListener("tinfo", (data) => {
+			this.updateTimer(data);
+		});
+	}
+
+	str_to_msg(s) {
+		if (typeof s == "string") {
+			return { msg: s, type: "generic" }
+		} else {
+			return s;
+		}
 	}
 
 	apply_filters() {
-		for (const r of this.printout.rows) {
-			if (r.firstChild.classList.contains("stependcell")) {
-
-			} else {
-				var check = false;
-				for (const [_, f] of Object.entries(this.filternames)) {
-
-					if (f.cbox.checked) {
-						if (r.firstChild.firstChild.textContent.includes(f.name)) {
-							
-							check = true;
-							break;
-						}
-					}
-				}	
-				r.classList.toggle("hidden", !check);
-			}
+		const texts = []
+		for (const r of document.getElementById("filtertable").rows) {
+			texts.push(r.cells[1].firstChild.value);
 		}
-		
+
+
+		for (const m of this.messages) {
+			if (m.type == "generic") {
+				if (texts.some((f) => m.msg.includes(f))) {
+					m.cell.style.display = "block";
+				} else {
+					m.cell.style.display = "none";
+				}
+			} else if (m.type == "stepend") {
+
+			}
+		}		
 	}
 
-	add_filter_names(l, player) {
-		for (const p of l) {
-			if (!(p.name in this.filternames)) {
-				var row = this.filtertable.insertRow(0);
-				var ccell = row.insertCell(0);
-				var label = row.insertCell(1);
+	insert_filter_field() {
+		const table = document.getElementById("filtertable");
+		const row = table.insertRow(table.rows.length);
+		const cell = row.insertCell(0);
+		set_text(cell, `Filter Text ${table.rows.length}: `);
 
-				var cbox = document.createElement("input");
-				cbox.setAttribute("type", "checkbox");
-				cbox.classList.add("filtercheck");
-				cbox.checked = true;
-				set_text(label, p.name);
+		const cell2 = row.insertCell(1);
+		const inp = document.createElement("input");
+		inp.type = "text";
+		inp.id = `filterinput${table.rows.length}`;
+		inp.classList.add("filterinput");
 
-				ccell.appendChild(cbox);
-
-				this.filternames[p.name] = {
-					name: p.name,
-					player: player, 
-					npc: !player, 
-					row: row,
-					cbox: cbox,
-				};
-			}
-		}
+		cell2.appendChild(inp);
 	}
+
 
 	refreshTimer(s) {
 		set_text(this.timercell, s);
@@ -567,40 +368,44 @@ class CombatLog {
 		this.now = msg.now;
 	}
 
-	insertCell() {
+	insertCell(msg) {
+		msg = this.str_to_msg(msg);
 		var row = this.printout.insertRow(this.printout.rows.length);
 		var cell = row.insertCell(0);
+
 		cell.classList.add("printoutcell");
+		if (msg.type == "stepend") {
+			cell.classList.add("stependcell");
+		}
+
+		msg.cell = cell;
+		set_text(cell, msg.msg);
+		this.messages.push(msg);
 		return cell;
 	}
 
 	addlog(msg, step=false) {
-		if (this.printouttab.style.display !== "none") {
-			this.header.classList.toggle("alerttab", true);	
-		}
+		TABMANAGER.update_tab("printout");		
 		
-		
-		if (this.printout.rows.length > 1000) {
-			while (this.printout.rows.length > 1000 - msg.length) {
+		if (this.printout.rows.length > this.max_rows) {
+			for (var i = 0; i < Math.ceil(this.max_rows/2); ++i) {
 				this.printout.deleteRow(0);
-			}				
-		} else {
-			
-			for (const c of msg) {
-				var cell = this.insertCell();
-				set_text(cell, c);
-			}
-			if (step) {
-				var cell = this.insertCell();
-				cell.classList.add("stependcell");
-				set_text(cell, "** The Turn has Ended **");
 			}
 
-			this.focus_recent();
-			
+			this.messages = this.messages.splice(
+				Math.ceil(this.max_rows/2), 
+				this.printout.rows.length);
+		}		
+
+		for (const c of msg) {
+			var cell = this.insertCell(c);
+		}
+		if (step) {
+			var cell = this.insertCell({type: "stepend", msg: "** The Turn has Ended **"});
 		}
 
-		//console.log(document.getElementById("printoutheader"));		
+		this.apply_filters();
+		this.focus_recent();
 	}
 
 	focus_recent() {
@@ -686,7 +491,13 @@ class Entity {
 
 		var name = row1.insertCell(0);
 		name.classList.add("name-cell");
-		clear_node(name).appendChild(document.createTextNode(this.data["name"]));
+		if (this.player) {
+			set_text(name, `${this.data.name} (${this.data["class"]})`)
+		} else {
+			set_text(name, this.data.name);
+		}
+		
+		//clear_node(name).appendChild(document.createTextNode(this.data["name"]));
 		row1.insertCell(1);
 		row1 = this.data_table.insertRow(1);
 		var hpbar = row1.insertCell(0);
@@ -748,6 +559,18 @@ class EntityManager {
 		this.npcdisplay = document.getElementById("npctable");
 		this.players = {}
 		this.npcs = {}
+
+		EVENTS.addEventListener("refreshEntities", () => {
+			this.clear();
+		});
+
+		EVENTS.addEventListener("partyinfo", (data) => {
+			this.updatePlayers(data);
+		});
+
+		EVENTS.addEventListener("npcinfo", (data) => {
+			this.updateNPCS(data);
+		});
 	}
 
 	clear() {
@@ -808,6 +631,12 @@ class PageManager {
 		this.entities = new EntityManager();
 
 		this.reconnect = null;
+
+		window.Twitch.ext.onAuthorized(
+			(auth) => {
+				this.setUName(auth);
+			}
+		);
 	}
 
 	init_socket() {
@@ -858,47 +687,55 @@ class PageManager {
 	receive(msg) {
 		msg = JSON.parse(msg);
 
-		if ("refreshEntities" in msg && msg["refreshEntities"]) {
-			this.csheet.clear_target_selector();
-			this.entities.clear();
-		}
-
-		if ("joined" in msg) {
-			this.joined = msg['joined'];
-			if (!msg["joined"]) {
-				this.printout.join_message();
-			}
-		}
-		if ("charsheet" in msg) {
-			this.csheet.update_charsheet(msg['charsheet']);	
-		}
-		if ("log" in msg && this.joined) {
-			this.printout.addlog(msg['log'], "step" in msg);
-		}
-		if ("partyinfo" in msg && this.joined) {
-			this.entities.updatePlayers(msg['partyinfo']);
-			this.printout.add_filter_names(msg["partyinfo"], true);
-		}
-		if ("npcinfo" in msg && this.joined) {
-			this.entities.updateNPCS(msg["npcinfo"]);
-			this.printout.add_filter_names(msg["npcinfo"], false);
-		}
-		
-		if ("error" in msg) {
-			log(msg['error']);
-			this.printout.addlog(msg['error']);
-			this.websocket.close();
+		for (const [k, v] of Object.entries(msg)) {
+			EVENTS.alert(k, v)
 		}
 
 		if ("requestid" in msg && msg["requestid"]) {
-
 			window.Twitch.ext.actions.requestIdShare();
-			this.printout.addlog(["Please give access to your username to play this game."]);
 		}
+		if ("error" in msg) {
+			this.websocket.close();
+		}
+
+		/*
+		if ("refreshEntities" in msg && msg["refreshEntities"]) {
+			//this.csheet.clear_target_selector();
+			//this.entities.clear();
+			EVENTS.alert("refreshEntities")
+		}
+
+		if ("joined" in msg) {
+			//this.joined = msg['joined'];
+			//if (!msg["joined"]) {
+			//	this.printout.join_message();
+			//}
+			EVENTS.alert("joined", msg.joined);
+		}
+		if ("charsheet" in msg) {
+			//this.csheet.update_charsheet(msg['charsheet']);	
+			EVENTS.alert("charsheet", msg.charsheet);
+		}
+
+		if ("log" in msg) {
+			//this.printout.addlog(msg['log'], "step" in msg);
+			
+			EVENTS.alert("log", msg.log);
+		}
+		if ("partyinfo" in msg) {
+			//this.entities.updatePlayers(msg['partyinfo']);
+			EVENTS.alert("partyinfo", msg.partyinfo)
+		}
+		if ("npcinfo" in msg) {
+			//this.entities.updateNPCS(msg["npcinfo"]);
+			EVENTS.alert("npcinfo", msg.npcinfo)
+		}
+		
 
 		if ("tinfo" in msg) {
-			this.printout.updateTimer(msg["tinfo"]);
-		}
+			//this.printout.updateTimer(msg["tinfo"]);
+			EVENTS.alert("tinfo", msg.tinfo)
+		}*/
 		
 	}
 
@@ -923,37 +760,97 @@ class PageManager {
 const MANAGER = new PageManager();
 
 
-window.Twitch.ext.onAuthorized(
-	function(auth){
-		MANAGER.setUName(auth);
-	}
-);
+
+class TabManager {
+	constructor(tabs) {
+		this.tabs = tabs;
+		this.init();
+		//this.tabs = this.tabs.reduce((m, o) => { m[o.body] = o; return m}, {})
+		//console.log(JSON.stringify(this.tabs));
+		this.tabs.printout.button.click();
 
 
-function openTab(evt, cityName) {
-	// Declare all variables
-	var i, tabcontent, tablinks;
-
-	// Get all elements with class="tabcontent" and hide them
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
 	}
 
-	// Get all elements with class="tablinks" and remove the class "active"
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
+	init() {
+		for (const [_, e] of Object.entries(this.tabs)) {
+
+			e.button = document.getElementById(e.header);
+			e.button.addEventListener("click", (event) => {
+				this.hide_tabs();
+				e.content.style.display = "block";
+				e.active = true;
+
+				e.button.classList.toggle("alerttab", false);
+				e.active_fn();
+			});
+			e.content = document.getElementById(e.body);
+		}
+
+
 	}
 
-	// Show the current tab, and add an "active" class to the button that opened the tab
-	document.getElementById(cityName).style.display = "block";
-	if (evt) {
-		evt.currentTarget.className += " active";
+	hide_tabs() {
+		for (const [_, e] of Object.entries(this.tabs)) {
+			e.content.style.display = "none";
+			e.active = false;
+		}
+	}
+
+	is_active(name) {
+		for (const [_, e] of Object.entries(this.tabs)) {
+			if (e.body === name) {
+				return e.active;
+			}
+		}
+		return false;
+	}
+
+	update_tab(name) {
+		if (name in this.tabs && !this.tabs[name].active) {
+			this.tabs[name].button.classList.toggle("alerttab", true);
+		}
 	}
 }
 
-openTab(null, "printouttab")
+const TABMANAGER = new TabManager({
+	charsheet: { 
+		header: "charsheetheader",
+		body: "charsheet", 
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	printout: { 
+		header: "printoutheader", 
+		body: "printouttab", 
+		active: false,
+		active_fn: () => { MANAGER.printout.focus_recent() },
+		deactive_fn: () => {},
+	},
+	party: { 
+		header: "partyheader", 
+		body: "partytab", 
+		active: false, 
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	npcs: { 
+		header: "npcheader", 
+		body: "npctab", 
+		active: false, 
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	skills: { 
+		header: "abilityheader", 
+		body: "abilitytab", 
+		active: false, 
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+});
+
 
 function expand_select(obj) {
 	if (obj.size == 0) {
@@ -972,8 +869,6 @@ function expand_select(obj) {
 function blur_select(obj) {
 	obj.size=0;
 	obj.style.height="var(--class-select-height)";
-
-	log("Blurring");
 }
 
 function respec() {
@@ -987,15 +882,7 @@ function confirm_level(att) {
 	}
 }
 
-document.getElementById("charsheetheader").addEventListener("click", (event) => { openTab(event, "charsheet"); });
-document.getElementById("printoutheader").addEventListener("click", (event) => { 
-	openTab(event, "printouttab");
-	MANAGER.printout.focus_recent();
-	event.currentTarget.classList.toggle("alerttab", false);
-});
-document.getElementById("partyheader").addEventListener("click", (event) => { openTab(event, "partytab"); });
-document.getElementById("npcheader").addEventListener("click", (event) => { openTab(event, "npctab"); });
-document.getElementById("abilityheader").addEventListener("click", (event) => { openTab(event, "abilitytab"); });
+
 document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
 //document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
 document.getElementById("respecbutton").addEventListener("click", () => { respec(); });

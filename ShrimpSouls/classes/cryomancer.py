@@ -36,19 +36,19 @@ class Cryomancer(ClassSpec):
 		return ABI_MAP
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=20, vigor=10)
+		return cs.stat_map(p, base=100, level=8, vigor=3)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=27, intelligence=5, faith=5)
+		return cs.stat_map(p, level=10, faith=1, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25)
+		return cs.stat_map(p, level=10)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=22, faith=4, intelligence=4)
+		return cs.stat_map(p, level=11, faith=1, intelligence=1)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=35, intelligence=8, faith=8)
+		return cs.stat_map(p, level=11, intelligence=2, faith=2)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
@@ -63,20 +63,15 @@ class Cryomancer(ClassSpec):
 
 
 @dataclass
-class Action1(actions.Action):
-	def apply(self):
-		self.defender.stack_evadown(amt=2)
-		self.defender.stack_attdown(amt=2)
-
-		self.msg += f"{self.attacker.name} chills {self.defender.name} lowering attack and defense."
+class Action1(actions.StatusAction):
+	statuses: utils.FrozenDict =  utils.FrozenDict({
+		ss.StatusEnum.evadown: lambda: random.randint(1, 3),
+		ss.StatusEnum.attdown: lambda: random.randint(1, 3),
+	})
 
 
 @dataclass
-class Target1(actions.EffectAction):
-	def on_hit(self):
-		amt = random.randint(1, 4)
-		self.defender.stack_stun(amt=amt)
-		self.msg += f"{self.attacker.name} has frozen {self.defender.name} solid for {amt} turns."
-
-	def on_miss(self):
-		self.msg += f"{self.attacker.name} has failed to freeze {self.defender.name}"
+class Target1(actions.StatusAction):
+	statuses: utils.FrozenDict =  utils.FrozenDict({
+		ss.StatusEnum.stun: lambda: random.randint(1, 4)
+	})

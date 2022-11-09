@@ -75,6 +75,11 @@ body {
 	border-color: rgb(79, 0, 224);
 }
 
+.errorcell {
+	border: var(--bordered-width) solid;
+	border-color: rgb(209, 188, 0);
+}
+
 #partytab {
 	overflow:  auto;
 	height: 85vh;
@@ -378,6 +383,11 @@ body {
 	background-color: rgba(171, 171, 171, 0.8);
 }
 
+.name-cell {
+	overflow:  hidden;
+	width: var(--hp-bar-width);
+}
+
 .spellname {
 	font-size: var(--spellname-fontsize);
 }
@@ -412,6 +422,7 @@ body {
 #spelltable {
 	width: var(--spelltable-width);
 	margin-left: var(--spelltable-margin-left);
+	font-size:  var(--spelltable-font-size);
 }
 
 .joinbutton {
@@ -463,7 +474,7 @@ body {
 	padding-left: 30px;
 	font-size: var(--printout-fontsize);
 	overflow:  auto;
-	width: var(--printoutcontainer-width);
+	width: var(--filterpopup-width);
 	height: 85vh;
 	z-index: 9;
 	position: absolute;
@@ -563,4 +574,19 @@ body {
 #timertext {
 	font-size: var(--printoutcell-font-size);
 	margin-left:  var(--timertext-margin-left);
+}
+
+.filterbutton {
+	width: var(--filtermenubutton-width);
+	height: var(--filtermenubutton-height);
+	font-size:  var(--filtermenubutton-font-size);
+}
+
+.filterinput {
+	width: 500px;
+	height: 90px;
+	font-size: 100%;
+	width: var(--filterinput-width);
+	height: var(--filterinput-height);
+	font-size: var(--filterinput-font-size);
 }

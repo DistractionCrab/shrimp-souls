@@ -36,19 +36,19 @@ class Swordsman(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=20, vigor=20)
+		return cs.stat_map(p, base=100, level=9, vigor=5)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=25, dexterity=6)
+		return cs.stat_map(p, level=8, dexterity=1, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=25, dexterity=5)
+		return cs.stat_map(p, level=8, dexterity=2)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=22, dexterity=2)
+		return cs.stat_map(p, level=8, dexterity=2, strength=1)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=22, dexterity=4)
+		return cs.stat_map(p, level=8, dexterity=1, strength=2)
 
 
 	def duel_action(self, actor, env):
@@ -68,9 +68,17 @@ class Swordsman(ClassSpec):
 
 @dataclass
 class Action1(actions.DamageTarget):
-	statuses: tuple = ((ss.Statuses.evadown, 2),)
+	statuses: utils.FrozenDict = utils.FrozenDict({
+		ss.Statuses.evadown: lambda: random.randint(1,3)
+	})
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
+	dmgtype: actions.DamageType = actions.DamageType.Slash
 
 
 @dataclass
 class Target1(actions.DamageTarget):
-	statuses: tuple = field(default_factory=lambda:(ss.StatusEnum.bleed, random.randint(1,2)))
+	statuses: utils.FrozenDict = utils.FrozenDict({
+		ss.Statuses.evadown: lambda: random.randint(1,4)
+	})
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
+	dmgtype: actions.DamageType = actions.DamageType.Slash

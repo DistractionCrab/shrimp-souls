@@ -35,19 +35,19 @@ class Juggernaut(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=25, vigor=35)
+		return cs.stat_map(p, base=100, level=12, vigor=6)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=22, strength=2)
+		return cs.stat_map(p, level=8, strength=1, dexterity=1)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=22, strength=2)
+		return cs.stat_map(p, level=9, perception=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=35, strength=10)
+		return cs.stat_map(p, level=11, strength=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=35, strength=10)
+		return cs.stat_map(p, level=11, strength=2, vigor=1)
 
 
 	def duel_action(self, actor, env):
@@ -70,5 +70,10 @@ class Action1(actions.Action):
 
 @dataclass
 class Target1(actions.DamageTarget):
+	score_hit: tuple = utils.score_hit(m1=0.9)
 	score_dmg: tuple = utils.score_dmg(m1=1.3)
-	statuses: tuple = ((ss.StatusEnum.defdown, 3), )
+	statuses: utils.FrozenDict =  utils.FrozenDict({
+		ss.StatusEnum.defdown: lambda: random.randint(1, 4)
+	})
+	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
+	dmgtype: actions.DamageType = actions.DamageType.Strike

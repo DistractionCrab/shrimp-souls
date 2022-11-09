@@ -32,19 +32,19 @@ class Paladin(ClassSpec):
 	
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base = 100, level=25, vigor=30)
+		return cs.stat_map(p, base = 100, level=12, vigor=4)
 
 	def score_acc(self, p):
-		return cs.stat_map(p, level=22, strength=2)
+		return cs.stat_map(p, level=9, faith=1, perception=1)
 
 	def score_eva(self, p):
-		return cs.stat_map(p, level=22, strength=2)
+		return cs.stat_map(p, level=8, strength=1, dexterity=1)
 
 	def score_att(self, p):
-		return cs.stat_map(p, level=35, strength=8, faith=8)
+		return cs.stat_map(p, level=11, strength=2, faith=2)
 
 	def score_dfn(self, p):
-		return cs.stat_map(p, level=35, faith=10)
+		return cs.stat_map(p, level=11, faith=1, strength=2)
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:

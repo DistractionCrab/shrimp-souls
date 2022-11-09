@@ -97,9 +97,7 @@ class Server:
 		self.__i_time = time.time()
 
 	async def close(self):
-		self.__closed = True
-		#await self.__msgs.put(CloseServer)
-		
+		self.__closed = True	
 
 	@property
 	def closed(self):
@@ -129,11 +127,13 @@ class Server:
 					await self.__join(msg)
 				elif msg['msg'] == "respec":
 					await self.__respec(msg)
+		print(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
 		while not self.__closed:
 			await self.__msgs.put(Heartbeat)
 			await asyncio.sleep(10)
+		print(f"Exiting heartbeat loop for {self.__clientid}")
 
 	async def __heartbeat(self):
 		if len(self.__sockets) == 0:			
@@ -221,7 +221,9 @@ class Server:
 					player = self.__game.get_player(uname)
 					print(f"Connected received for c-id {self.__clientid} from {uname}")
 					if self.__game.is_joined(uname):
-						await self.__send_message(wsid, Messages.UPDATE(self.__game, ["Connected"], player))						
+						msg = Messages.UPDATE(self.__game, ["Connected"], player)
+						msg["tinfo"] = {"now": self.__last, "ttotal": STEP_FREQUENCY}
+						await self.__send_message(wsid, msg)						
 					else:
 						await self.__send_message(wsid, Messages.CONNECTONLY(self.__game, player))
 						
@@ -396,15 +398,8 @@ class Router:
 	async def main(self):
 		looping = True
 		while looping:
-			def filt(i, g):
-				if g.closed:
-					print(f'Game for channel {i} being closed down.')
-					return False
-				else:
-					return True
-			filter(lambda x: filt(*x), self.__games.items())
-
-			await asyncio.sleep(300)
+			self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
+			await asyncio.sleep(100)
 
 		
 
@@ -414,20 +409,16 @@ async def main(args):
 		print("Setting up local insecure server.")
 		async with websockets.serve(m, "localhost", 443):
 			await m.main()
-			pass
-			#await asyncio.gather(m.heartbeat(), m.server_loop())
 	elif args[0] == 'networked':
 		m = Router()
 		print("Setting up networked secure server.")
 		root = os.environ['SS_SSL_PATH']
 		s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
 		s.load_cert_chain(
-			#os.path.join(root, "My_CA_Bundle.ca-bundle"),
 			os.path.join(root, "concat.crt"), 
 			keyfile=os.path.join(root, "csr.key"))
 		async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
 			await m.main()
-			#await asyncio.gather(m.heartbeat(), m.server_loop())
 
 def update_ip():
 

@@ -11,6 +11,11 @@ def do_nothing(self):
 class NPCTags(enum.Enum):
 	Undead = enum.auto()
 
+	def tagged(self, p):
+		return p.has_tag(self)
+
+
+
 @dataclass
 class BaseNPC(ss.Entity):
 	commitfn: object = do_nothing
@@ -21,9 +26,13 @@ class BaseNPC(ss.Entity):
 	_weaknesses: frozenset = field(default_factory=frozenset)
 	_resists: frozenset = field(default_factory=frozenset)
 	_tags: frozenset = field(default_factory=frozenset)
+	_immunities: frozenset = field(default_factory=frozenset)
 
 	def weak(self, v):
 		return v in self._weaknesses
+
+	def immune(self, d):
+		return d in self._immunities
 
 	def resist(self, v):
 		return v in self._resists
@@ -86,12 +95,12 @@ class BaseNPC(ss.Entity):
 @dataclass
 class Goblin(BaseNPC):
 	xp:  int = 1
-	hp:  int = 100
-	max_hp: int = 100
-	_acc: int = 40
-	_eva: int = 35
-	_att: int = 45
-	_dfn: int = 40
+	hp:  int = 40
+	max_hp: int = 40
+	_acc: int = 30
+	_eva: int = 15
+	_att: int = 30
+	_dfn: int = 20
 
 	def __hash__(self):
 		return hash(self.name)
@@ -103,12 +112,12 @@ class Goblin(BaseNPC):
 @dataclass
 class Wolf(BaseNPC):
 	xp:  int = 3
-	hp:  int = 300
-	max_hp: int = 300
+	hp:  int = 70
+	max_hp: int = 70
 	_acc: int = 50
-	_eva: int = 45
-	_att: int = 35
-	_dfn: int = 50
+	_eva: int = 50
+	_att: int = 50
+	_dfn: int = 35
 
 	def __hash__(self):
 		return hash(self.name)
@@ -117,12 +126,12 @@ class Wolf(BaseNPC):
 @dataclass
 class GoblinPriest(BaseNPC):
 	xp:  int = 5
-	hp:  int = 400
-	max_hp: int = 400
-	_acc: int = 150
-	_eva: int = 210
-	_att: int = 100
-	_dfn: int = 180
+	hp:  int = 60
+	max_hp: int = 60
+	_acc: int = 70
+	_eva: int = 80
+	_att: int = 45
+	_dfn: int = 50
 
 	def __hash__(self):
 		return hash(self.name)
@@ -142,12 +151,12 @@ class GoblinPriest(BaseNPC):
 @dataclass
 class GoblinBrute(BaseNPC):
 	xp:  int = 7
-	hp:  int = 600
-	max_hp: int = 600
-	_acc: int = 180
-	_eva: int = 190
-	_att: int = 190
-	_dfn: int = 200
+	hp:  int = 90
+	max_hp: int = 90
+	_acc: int = 75
+	_eva: int = 70
+	_att: int = 85
+	_dfn: int = 70
 
 	def __hash__(self):
 		return hash(self.name)
@@ -156,12 +165,12 @@ class GoblinBrute(BaseNPC):
 @dataclass
 class OrcWarrior(BaseNPC):
 	xp:  int = 7
-	hp:  int = 1200
-	max_hp: int = 1200
-	_acc: int = 310
-	_eva: int = 300
-	_att: int = 380
-	_dfn: int = 300
+	hp:  int = 200
+	max_hp: int = 200
+	_acc: int = 120
+	_eva: int = 110
+	_att: int = 125
+	_dfn: int = 135
 
 	def __hash__(self):
 		return hash(self.name)
@@ -170,12 +179,12 @@ class OrcWarrior(BaseNPC):
 @dataclass
 class Ogre(BaseNPC):
 	xp:  int = 15
-	hp:  int = 2500
-	max_hp: int = 2500
-	_acc: int = 600
-	_eva: int = 300
-	_att: int = 600
-	_dfn: int = 450
+	hp:  int = 500
+	max_hp: int = 500
+	_acc: int = 160
+	_eva: int = 100
+	_att: int = 160
+	_dfn: int = 145
 
 	def __hash__(self):
 		return hash(self.name)
@@ -195,12 +204,12 @@ class Ogre(BaseNPC):
 @dataclass
 class Troll(BaseNPC):
 	xp:  int = 30
-	hp:  int = 400
-	max_hp: int = 400
-	_acc: int = 32
-	_eva: int = 29
-	_att: int = 86
-	_dfn: int = 70
+	hp:  int = 800
+	max_hp: int = 800
+	_acc: int = 180
+	_eva: int = 160
+	_att: int = 220
+	_dfn: int = 170
 	_weaknesses: frozenset = frozenset([actions.DamageType.Fire])
 
 	def __hash__(self):
@@ -216,4 +225,70 @@ class Troll(BaseNPC):
 			return [
 				actions.DamageTarget(attacker=self, defender=target[0]),
 				actions.DamageTarget(attacker=self, defender=target[1]),
-				actions.HealTarget(attacker=self, defender=self, dmg=20)]
+				actions.HealTarget(attacker=self, defender=self, mult=1/5)]
+
+
+@dataclass
+class Wraith(BaseNPC):
+	xp:  int = 30
+	hp:  int = 500
+	max_hp: int = 500
+	_acc: int = 180
+	_eva: int = 210
+	_att: int = 150
+	_dfn: int = 160
+	_weaknesses: frozenset = frozenset([actions.DamageType.Fire])
+	_resists: frozenset = frozenset([
+		actions.DamageType.Magic,
+		actions.DamageType.Strike,
+		actions.DamageType.Slash,])
+	_tags: frozenset = frozenset([NPCTags.Undead])
+
+	def __hash__(self):
+		return hash(self.name)
+
+	def duel_action(self, env):
+		target = env.find_valid_target(self, False, ss.Positions, True, amt=2)
+		if len(target) == 0:
+			return [actions.DoNothing(player=self)]
+		else:
+			return [actions.DamageTarget(
+				attacker=self, 
+				defender=target[0],
+				statuses=((ss.StatusEnum.poison, 2), (ss.StatusEnum.bleed, 3)))]
+
+
+@dataclass
+class OxTitan(BaseNPC):
+	xp:  int = 15
+	hp:  int = 8200
+	max_hp: int = 8200
+	_acc: int = 150
+	_eva: int = 100
+	_att: int = 170
+	_dfn: int = 160
+	_weaknesses: frozenset = frozenset([actions.DamageType.Pierce,])
+	_immunities: frozenset = frozenset([
+			ss.StatusEnum.charm,
+		])
+
+	def __hash__(self):
+		return hash(self.name)
+
+	def duel_action(self, env):
+		target = env.find_valid_target(self, False, ss.Positions, True, amt=2)
+		if len(target) == 0:
+			return [actions.DoNothing(player=self)]
+		elif len(target) == 1:
+			return [actions.DamageTarget(attacker=self, defender=target[0])]
+		else:
+			return [
+				actions.DamageTarget(attacker=self, defender=target[0]),
+				actions.DamageTarget(attacker=self, defender=target[1])]
+
+RANGES = {
+	range(1, 5): [Goblin, Wolf],
+	range(5, 10): [GoblinBrute, GoblinPriest],
+	range(10, 15): [OrcWarrior, Ogre, OxTitan],
+	range(15, 200): [Troll, Wraith],
+}

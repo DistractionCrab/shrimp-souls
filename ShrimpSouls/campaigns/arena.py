@@ -129,7 +129,7 @@ class WaitingRoom(BaseArena):
 
 
 	def use_ability(self, p, abi, targets):
-		return messages.Error(msg="Cannot use abilities in rest areas.")
+		return messages.Error(msg=["Cannot use abilities in rest areas."])
 
 
 
@@ -443,9 +443,13 @@ ENCOUNTERS = {
 		lambda i: npcs.GoblinBrute.generate(1, i) + npcs.GoblinPriest.generate(1, i, prob=0.7) ,
 	],
 
-	range(10, 100): [
+	range(10, 15): [
 		lambda i: npcs.OrcWarrior.generate(2, i, prob=0.5),
 		lambda i: npcs.OrcWarrior.generate(1, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
 		lambda i: npcs.Ogre.generate(2, i, prob=0.6),
+	],
+	range(15, 200): [
+		lambda i: npcs.Troll.generate(1, i, prob=0.5),
+		lambda i: npcs.Wraith.generate(1, i),
 	],
 }

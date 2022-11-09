@@ -5,6 +5,7 @@ import os
 import scipy
 import functools as ftools
 import ShrimpSouls as ss
+from scipy.special import expit
 
 ROLL_THRESHOLD = 30
 
@@ -62,35 +63,37 @@ def score_dmg(s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
+	v1 = math.ceil(s1/50)
+	v2 = math.ceil(s2/50)
 	
-	r = max(0.5, min(s1/s2, 2))
-	p = -0.3 * r**2 + 1.35 * r - 0.55
+	r = (s1 - s2)/(s1 + s2)
 
 	#rolls = s1//ROLL_THRESHOLD + 1
 	rolls = 1
 
 	total = []
 
-	return [random.random() < p/(d**1.5) for d in range(1, rolls+1)]
+	return [random.random() < expit(r * (v1 + v2))/(d**1.5) for d in range(1, rolls+1)]
 
 def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
 	s2 = m2*s2(d) + b2
+	v1 = math.ceil(s1/50)
+	v2 = math.ceil(s2/50)
+	
+	r = (s1 - s2)/(s1 + s2)
 
-	r = max(0.5, min(s1/s2, 2))
-	p = -0.3 * r**2 + 1.35 * r - 0.55
-
-
-	return random.random() < p
+	return random.random() < r
 
 def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
-	dfn = m2 * s2(d) + b2
-	att = m1 * s1(a) + b1
+	s1 = m1*s1(a) + b1
+	s2 = m2*s2(d) + b2
+	v1 = math.ceil(s1/50)
+	v2 = math.ceil(s2/50)
+	
+	r = (s1 - s2)/(s1 + s2)
 
-	r = max(0.5, min(att/dfn, 2))
-	p = (r**2)/(-3) + 1.5 * r - (2/3)
-
-	return math.ceil((att * p)/4)
+	return math.ceil(s1 * expit(r * (v1 + v2)))
 
 
 
@@ -114,3 +117,29 @@ class ListGuard:
 	def __str__(self):
 		return str(f"Guarded{self.__v}")
 
+
+
+class FrozenDict:
+	def __init__(self, d):
+		self.__d = d
+
+	def __get_item__(self, i):
+		return self.__d[i]
+
+	def items(self):
+		return self.__d.items()
+
+	def __iter__(self):
+		return iter(self.__d)
+
+	def __len__(self):
+		return len(self.__d)
+
+	def keys(self):
+		return self.__d.keys()
+
+	def values(self):
+		return self.__d.values()
+
+	def __str__(self):
+		return f"Frozen{self.__d}"
