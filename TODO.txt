@@ -15,6 +15,7 @@ IMPLEMENTATIONS
 BUGS:
 - Fix the class select option being too tall later.
 - Fix initial timer not being updated correctly when connecting.
+- fix always required login
 
 CLASSES
 new attack items:
