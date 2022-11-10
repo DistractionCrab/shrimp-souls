@@ -157,7 +157,7 @@ class Server:
 
 	async def __disconnect(self, msg):
 		i = msg['wsid']
-		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
+		
 		if i in self.__sockets:
 			s = self.__sockets[i]
 			del self.__sockets[i]
@@ -168,6 +168,7 @@ class Server:
 				pass
 		if i in self.__idmaps:
 			del self.__idmaps[i]
+			print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
 
 
 
