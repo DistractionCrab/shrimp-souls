@@ -132,7 +132,7 @@ class HealTarget(Action):
 	dmg: int = 0
 
 	def apply(self):
-		if npcs.NPCTags.Undead.tagged(self.defender):
+		if False and npcs.NPCTags.Undead.tagged(self.defender):
 			if not self.defender.dead:
 				amt = math.ceil(self.attacker.att*self.mult + self.base)
 				self.msg += f"{self.attacker.name} deals {amt} damage to {self.defender.name} (Undead)."
