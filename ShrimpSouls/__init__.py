@@ -165,7 +165,7 @@ class Entity(persistent.Persistent):
 			self.damage(random.randint(1, 2))
 		self.damage(self.bleed)
 		if self.bleed >= 10:
-			self.damage(Math.ceil(random.randint(1,10) * (1 + self.max_health//100)))
+			self.damage(math.ceil(random.randint(1,10) * (1 + self.max_health//100)))
 			self.use_bleed(amt=10)
 		else:
 			self.use_bleed()
