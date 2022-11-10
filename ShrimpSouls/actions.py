@@ -4,6 +4,7 @@ import functools as ftools
 from dataclasses import dataclass, field
 import ShrimpSouls.utils as utils
 import ShrimpSouls as ss
+import ShrimpSouls.npcs as npcs
 
 
 class DamageType(enum.Enum):
