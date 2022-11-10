@@ -115,9 +115,9 @@ class Server:
 			if msg is Heartbeat:
 				await self.__heartbeat()
 				if i == 0:
-					self.__game.campaign.clear_npcs()
-					self.__game.campaign.clear_players()
-					print("clearing.")
+					#self.__game.campaign.clear_npcs()
+					#self.__game.campaign.clear_players()
+					#print("clearing.")
 			else:
 				self.__i_time = time.time()
 				if msg['msg'] == "connect":
