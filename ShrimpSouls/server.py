@@ -164,8 +164,9 @@ class Server:
 			except:
 				pass
 		if i in self.__idmaps:
-			del self.__idmaps[i]
 			print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
+			del self.__idmaps[i]
+			
 
 
 
