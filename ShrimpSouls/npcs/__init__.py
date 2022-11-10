@@ -255,7 +255,7 @@ class Wraith(BaseNPC):
 			return [actions.DamageTarget(
 				attacker=self, 
 				defender=target[0],
-				statuses=((ss.StatusEnum.poison, 2), (ss.StatusEnum.bleed, 3)))]
+				statuses={ss.StatusEnum.poison:, ss.StatusEnum.bleed: 3})]
 
 
 @dataclass
