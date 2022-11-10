@@ -111,8 +111,12 @@ class Server:
 		while not self.__closed:
 			msg = await self.__msgs.get()
 
+			i = 0
 			if msg is Heartbeat:
 				await self.__heartbeat()
+				if i == 0:
+					self.__game.campaign.clear_npcs()
+					self.__game.campaign.clear_players()
 			else:
 				self.__i_time = time.time()
 				if msg['msg'] == "connect":

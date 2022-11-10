@@ -2,6 +2,8 @@ Next Steps:
 - implement charsheet tabs
 - Finish event system
 - setup back/front end new spellbook/action system (queued, rather tha ninstant)
+- change weaknesses to ignore defenses (some)
+- respond message
 
 IMPLEMENTATIONS
 - subclassing
