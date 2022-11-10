@@ -4,7 +4,7 @@ import functools as ftools
 from dataclasses import dataclass, field
 import ShrimpSouls.utils as utils
 import ShrimpSouls as ss
-import ShrimpSouls.npcs as npcs
+
 
 
 class DamageType(enum.Enum):
@@ -132,7 +132,8 @@ class HealTarget(Action):
 	dmg: int = 0
 
 	def apply(self):
-		if False and npcs.NPCTags.Undead.tagged(self.defender):
+		import ShrimpSouls.npcs as npcs
+		if npcs.NPCTags.Undead.tagged(self.defender):
 			if not self.defender.dead:
 				amt = math.ceil(self.attacker.att*self.mult + self.base)
 				self.msg += f"{self.attacker.name} deals {amt} damage to {self.defender.name} (Undead)."
