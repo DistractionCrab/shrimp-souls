@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Live (Broadcaster) Config Page</title>
+	<title>Viewer Page</title>
 	<link rel="stylesheet" href="styles/live_config.css">
 	<link rel="stylesheet" href="styles/main.css">
 	
@@ -29,7 +29,7 @@
 				<option value="priest" class="classoption">Priest</option>
 				<option value="pyromancer" class="classoption">Pyromancer</option>
 				<option value="sorcerer" class="classoption">Sorcerer</option>
-				<option value="spellblade" class="classoption">Swordsman</option>
+				<option value="spellblade" class="classoption">Spellblade</option>
 				<option value="swordsman" class="classoption">Swordsman</option>
 				<option value="thief" class="classoption">Thief</option>
 				<option value="warrior" class="classoption">Warrior</option>
@@ -40,13 +40,15 @@
 			<tr>
 				<td>HP: </td>
 				<td id="hp_value">?/?</td>
-			</tr>           
+			</tr>			
 		</table>
 		<div id="player_healthbar"></div>
 		<table>
-			<td>XP: </td>
-			<td id="xp_value">?/?</td>
-			<!--<td><div id="player_xpbar"></div></td>-->           
+			<tr>
+				<td>XP: </td>
+				<td id="xp_value">?/?</td>
+			</tr>
+			<!--<td><div id="player_xpbar"></div></td>-->			
 		</table>
 		<table style="margin-top: 10px;" id="playerstatus">
 			<tr>
@@ -137,15 +139,14 @@
 						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
 						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
 			</table>
-			<select id="targetselect" class="tselector" size=5 multiple >
-
-			</select>
-		</div>  
-		
+			<h2>Targeted: </h2>
+			<table id="targetlist">
+				
+			</table>
+		</div>			
 	</div>
 
 	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-	<script type="text/javascript" src="scripts/component.js"></script>
 	<script type="module"  src="scripts/main.js"></script>
 </body>
 </html>

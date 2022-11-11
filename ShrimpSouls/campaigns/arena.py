@@ -122,8 +122,7 @@ class WaitingRoom(BaseArena):
 				Arena(self.players), 
 				messages.Message(
 					msg=["The Arena is starting soon..."],
-					users=list(self.players.values()),
-					refreshEntities=True))
+					users=list(self.players.values())))
 				
 
 
@@ -256,7 +255,9 @@ class Arena(BaseArena):
 		for p in self.players.values():
 			p.allow_actions()
 
-		if self.finished:
+		f = self.finished 
+
+		if f:
 			if all(p.dead for p in self.players.values()):
 				total.append("The party has been defeated...")
 			if all(p.dead for p in self.npcs.values()):
@@ -265,7 +266,14 @@ class Arena(BaseArena):
 			total.append("The battle continues to rage.")
 
 
-		return messages.Message(msg=total, users=rec_p, npcs=rec_n)
+		if f:
+			return messages.Message(
+				msg=total, 
+				users=rec_p, 
+				npcs=rec_n, 
+				remove_npc=list(self.__npcs.keys()))
+		else:
+			return messages.Message(msg=total, users=rec_p, npcs=rec_n)
 
 	
 

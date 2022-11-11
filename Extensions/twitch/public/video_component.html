@@ -44,8 +44,10 @@
 		</table>
 		<div id="player_healthbar"></div>
 		<table>
-			<td>XP: </td>
-			<td id="xp_value">?/?</td>
+			<tr>
+				<td>XP: </td>
+				<td id="xp_value">?/?</td>
+			</tr>
 			<!--<td><div id="player_xpbar"></div></td>-->			
 		</table>
 		<table style="margin-top: 10px;" id="playerstatus">
@@ -137,18 +139,14 @@
 						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
 						<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
 			</table>
-			<select id="targetselect" class="tselector" size=5 multiple >
-
-			</select>
+			<h2>Targeted: </h2>
+			<table id="targetlist">
+				
+			</table>
 		</div>			
 	</div>
 
-	
-	
-
-
 	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-	<script type="text/javascript" src="scripts/component.js"></script>
 	<script type="module"  src="scripts/main.js"></script>
 </body>
 </html>

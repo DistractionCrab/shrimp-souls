@@ -143,3 +143,6 @@ class FrozenDict:
 
 	def __str__(self):
 		return f"Frozen{self.__d}"
+
+	def __contains__(self, a):
+		return a in self.__d

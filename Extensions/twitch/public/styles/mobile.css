@@ -2,7 +2,7 @@
 	--main-font: Arial Black;
 	
 	--hp-bar-width:  150px;
-	--hp-bar-height: 10px;
+	--hp-bar-height: 15px;
 	--player-bar-width:  300px;
 	--player-bar-height: 20px;
 	--tablinks-width: 16vh;
@@ -61,4 +61,11 @@
 	--filterinput-height:  20px;
 	--filterinput-font-size: 90%;
 	--filterpopup-width: 80vw;
+
+	--untarget-button-width:  50px;
+	--untarget-button-height:  50px;
+	--untarget-button-margin-left:  10px;
+	--target-button-width:  40px;
+	--target-button-height: 40px;
+	--target-button-margin-left: 10px;
 }

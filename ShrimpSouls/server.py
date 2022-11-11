@@ -257,8 +257,9 @@ class Server:
 				'charsheet': p.json,
 				'partyinfo': [u.json for u in msg.users],
 				'npcinfo': [u.json for u in msg.npcs],
-				'refreshEntities': msg.refreshEntities,
 				"joined": self.__game.is_joined(p),
+				'remove_npc': msg.remove_npc,
+				'remove_player': msg.remove_player,
 			}
 
 			if step:

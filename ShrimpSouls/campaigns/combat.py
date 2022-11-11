@@ -8,40 +8,24 @@ from ShrimpSouls import npcs
 
 import ShrimpSouls.utils as utils
 
+
 import os
 import atexit
 import ShrimpSouls as ss
 import ShrimpSouls.messages as messages
+import ShrimpSouls.campaigns as cps
 
 
-class Combat(persistent.Persistent):
-	def __init__(self, players, npc_gen):
-		self.__players = players
-		self.__npcs = persistent.mapping.PersistentMapping({
-				n: v for (n, v) in npc_gen(players)
-			})
+class Combat(cps.SubCampaign):
+	def __init__(self, parent):
+		super().__init__(parent)
+		self.__npcs = persistent.mapping.PersistentMapping()
+		self.__queued = {}
+		self._generate(self.players)
 	
+	def _generate(self, newplayers):
+		pass
 
-	def get_npc(self, name):
-		if isinstance(name, str):
-			if name in self.__npcs:
-				return self.__npcs[name]
-			else:
-				return None
-		else:
-			return name
-
-	def get_player(self, name):
-		if isinstance(name, str):
-			if name in self.__players:
-				return self.__players[name]
-			else:
-				return None
-		else:
-			if name.is_player:
-				return name
-			else:
-				return None
 
 	@property
 	def restarea(self):
@@ -53,7 +37,7 @@ class Combat(persistent.Persistent):
 
 	@property
 	def players(self):
-		return self.__players
+		return self.__restore.__players
 
 	def join(self, player):
 		if self.is_joined(player):
@@ -71,21 +55,19 @@ class Combat(persistent.Persistent):
 					msg += f"As {player.name} joins the arena so do {', '.join(fstring)} "
 			return msg
 
+
+
 	@property
 	def npcs(self):
-		return self.__npcs
+		return utils.FrozenDict(self.__npcs)
 
-	def add_npc(self, n):
+	def __add_npc(self, n):
 		self.__npcs[n.name] = n
-
-	def clear_npcs(self):
-		self.__npcs.clear()
-
-		
+	
 
 	def step(self):
 		if self.player_ct == 0:
-			return (self, messages.Message(msg=["No players available, click Join to participate!"]))
+			return (self.parent, messages.Message(msg=["No players available, exiting combat..."]))
 		elif len(self.__npcs) == 0:
 			while len(self.__npcs) == 0:
 				self.__setup_arena()
@@ -141,8 +123,12 @@ class Combat(persistent.Persistent):
 				break
 			if p.stun == 0:
 				actions = p.duel_action(self)
-				if not p.acted:
-					actions = p.random_action(p, self) + actions
+				if p.name in self.__queued:
+					(abi, targets) = self.__queued[p.name]
+					actions = p.use_ability(abi, targets, self)
+				else:
+					actions = p.random_action(p, self)
+					
 				for a in actions:
 					a.apply()
 					total.append(a.msg + " " + self.handle_dead_foes(a.receivers_npc))

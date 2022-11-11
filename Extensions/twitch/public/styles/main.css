@@ -590,3 +590,33 @@ body {
 	height: var(--filterinput-height);
 	font-size: var(--filterinput-font-size);
 }
+
+.targetbutton {
+	margin-left:  var(--target-button-margin-left);
+	width: var(--target-button-width);
+	height: var(--target-button-height);
+	background-image: url("../images/target.png");
+	background-size:  cover;
+	background-color: rgba(0, 0, 0, 0.0);
+	border:  none;
+}
+
+.untargetbutton {
+	margin-left:  var(--untarget-button-margin-left);
+	width: var(--untarget-button-width);
+	height: var(--untarget-button-height);
+	background-image: url("../images/cancel.png");
+	background-size:  cover;
+	background-color: rgba(0, 0, 0, 0.0);
+	border:  none;
+}
+
+.targetedcell {
+	border-color: rgb(25, 236, 67);
+	border-style: solid;
+	border-width: var(--bordered-width);
+}
+
+#targetlist {
+	font-size: var(--default-fontsize);
+}
