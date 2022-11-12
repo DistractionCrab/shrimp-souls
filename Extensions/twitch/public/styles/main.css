@@ -21,6 +21,16 @@ body {
 	padding-left: var(--hpamt-padding);
 }
 
+
+.tablinks {
+	height: var(--tablinks-height);
+	width: var(--tablinks-width);
+	font-size: var(--tablinks-fontsize);
+	font-weight: var(--default-fontweight);
+}
+
+
+
 #charsheet {
 	font-size: var(--charsheet-fontsize);
 }
@@ -131,12 +141,11 @@ body {
 	to {opacity: 1;}
 }
 
-.tablinks {
-	height: var(--tablinks-height);
-	width: var(--tablinks-width);
-	font-size: var(--tablinks-fontsize);
-	font-weight: var(--default-fontweight);
+#maintabsection {
+	border-bottom: var(--default-border-width) solid white;
+	margin-bottom: var(--default-margin);
 }
+
 
 .spellbutton {
 	height: 70px;
@@ -163,8 +172,8 @@ body {
 }
 
 #player_xpbar {
-	width: 400px;
-	height:  30px;
+	width: var(--player-bar-width);
+	height:  var(--player-bar-height);
 	background-repeat: no-repeat;
 	background-image: url("../images/xpbar foreground.png"), url("../images/xpbar background.png");
 	background-position: 0 0, 0 0;

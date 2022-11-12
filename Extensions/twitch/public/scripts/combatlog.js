@@ -1,5 +1,6 @@
 import { EVENTS } from "./events.js";
 import { set_text } from "./utils.js";
+import { MESSAGES }  from "./messages.js";
 
 export class CombatLog {
 	constructor() {
@@ -174,7 +175,9 @@ export class CombatLog {
 		const t1 = document.createTextNode("Click ");
 		const t2 = document.createTextNode(" to join the campaign and other chat members!");
 		b.classList.add("joinbutton");
-		b.addEventListener("click", function() { MANAGER.sendMessage(MESSAGES.join())});
+		b.addEventListener("click", function() {
+			EVENTS.alert("server_message", MESSAGES.join());
+		});
 		cell.appendChild(t1);
 		cell.appendChild(b);
 		cell.appendChild(t2);

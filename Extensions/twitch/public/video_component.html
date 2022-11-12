@@ -7,7 +7,7 @@
 	
 </head>
 <body>
-	<div>
+	<div id="maintabsection">
 		<button class="tablinks" id="charsheetheader">Stats</button>
 		<button class="tablinks" id="printoutheader">Log</button>
 		<button class="tablinks" id=partyheader>Party</button>
@@ -16,7 +16,14 @@
 	</div>
 	<div id="charsheet" class="tabcontent">
 		<div>
-			<select id="classselect">
+			<button class="tablinks" id="statusheader">Status</button>
+			<button class="tablinks" id="classheader">Class</button>
+			<button class="tablinks" id=attriheader>Attri.</button>
+		</div>
+		<div id="classpage">
+			<button id="respecbutton"></button>
+			<br>
+			<select id="classselect" size=5>
 				<option value="milquetoast" class="classoption">Milquetoast</option>
 				<option value="bard" class="classoption">Bard</option>
 				<option value="assassin" class="classoption">Assassin</option>
@@ -34,74 +41,79 @@
 				<option value="thief" class="classoption">Thief</option>
 				<option value="warrior" class="classoption">Warrior</option>
 			</select>
-			<button id="respecbutton"></button>
+			
 		</div>
-		<table>
-			<tr>
-				<td>HP: </td>
-				<td id="hp_value">?/?</td>
-			</tr>			
-		</table>
-		<div id="player_healthbar"></div>
-		<table>
-			<tr>
-				<td>XP: </td>
-				<td id="xp_value">?/?</td>
-			</tr>
-			<!--<td><div id="player_xpbar"></div></td>-->			
-		</table>
-		<table style="margin-top: 10px;" id="playerstatus">
-			<tr>
-				<td class="inactive-icon"></td>
-				<td class="inactive-icon"></td>
-			</tr>
-		</table>
-		<table id=stat-table>
-			<tr>
-				<td>Vigor: </td>
-				<td id="vigor_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-vigor"></button></td>
-				
-			</tr>
-			<tr>
-				<td>Endurance: </td>
-				<td id="endurance_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-endurance"></button></td>
-				
-			</tr>
-			<tr>
-				<td>Strength: </td>
-				<td id="strength_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-strength"></button></td>
-				
-			</tr>
-			<tr>
-				<td>Dexterity: </td>
-				<td id="dexterity_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-dexterity"></button></td>
-				
-			</tr>
-			<tr>
-				<td>Intelligence: </td>
-				<td id="intelligence_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-intelligence"></button></td>
-			</tr>
-			<tr>
-				<td>Faith: </td>
-				<td id="faith_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-faith"></button></td>
-			</tr>
-			<tr>
-				<td>Luck: </td>
-				<td id="luck_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-luck"></button></td>
-			</tr>
-			<tr>
-				<td>Perception: </td>
-				<td id="perception_value" class="statamt">?</td>
-				<td><button class=lvlup id="lvlup-perception"></button></td>
-			</tr>
-		</table>
+		<div id="status">
+			<div id="class_value">????</div>
+			<table>
+				<tr>
+					<td>HP: </td>
+					<td id="hp_value">?/?</td>
+				</tr>			
+			</table>
+			<div id="player_healthbar"></div>
+			<table>
+				<tr>
+					<td>XP: </td>
+					<td id="xp_value">?/?</td>
+				</tr>	
+			</table>
+			<div id="player_xpbar"></div>
+			<table style="margin-top: 10px;" id="playerstatus">
+				<tr>
+					<td class="inactive-icon"></td>
+					<td class="inactive-icon"></td>
+				</tr>
+			</table>
+		</div>
+		<div id="attributes">
+			<table id=stat-table>
+				<tr>
+					<td>Vigor: </td>
+					<td id="vigor_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-vigor"></button></td>
+					
+				</tr>
+				<tr>
+					<td>Endurance: </td>
+					<td id="endurance_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-endurance"></button></td>
+					
+				</tr>
+				<tr>
+					<td>Strength: </td>
+					<td id="strength_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-strength"></button></td>
+					
+				</tr>
+				<tr>
+					<td>Dexterity: </td>
+					<td id="dexterity_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-dexterity"></button></td>
+					
+				</tr>
+				<tr>
+					<td>Intelligence: </td>
+					<td id="intelligence_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-intelligence"></button></td>
+				</tr>
+				<tr>
+					<td>Faith: </td>
+					<td id="faith_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-faith"></button></td>
+				</tr>
+				<tr>
+					<td>Luck: </td>
+					<td id="luck_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-luck"></button></td>
+				</tr>
+				<tr>
+					<td>Perception: </td>
+					<td id="perception_value" class="statamt">?</td>
+					<td><button class=lvlup id="lvlup-perception"></button></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 
 	<div id="printouttab" class="tabcontent">

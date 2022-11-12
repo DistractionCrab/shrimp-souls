@@ -455,10 +455,14 @@ ENCOUNTERS = {
 		lambda i: npcs.OrcWarrior.generate(2, i, prob=0.5),
 		lambda i: npcs.OrcWarrior.generate(1, i) + npcs.GoblinPriest.generate(2, i, prob=0.5),
 		lambda i: npcs.Ogre.generate(2, i, prob=0.6),
-		lambda i: npcs.OxTitan.generate(1, i, prob=0.001),
+		
 	],
-	range(15, 200): [
+	range(15, 21): [
 		lambda i: npcs.Troll.generate(1, i, prob=0.5),
 		lambda i: npcs.Wraith.generate(1, i),
 	],
+	range(21, 27): [
+		lambda i: npcs.OxTitan.generate(1, i, prob=0.005),
+		lambda i: npcs.BloodGolem.generate(1, i, prob=0.5),
+	]
 }

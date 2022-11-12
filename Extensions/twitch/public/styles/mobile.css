@@ -1,5 +1,9 @@
 :root {
 	--main-font: Arial Black;
+	--default-fontsize: 100%;
+	--default-fontweight:  300;
+	--default-border-width: 5px;
+	--default-margin: 5px;
 	
 	--hp-bar-width:  150px;
 	--hp-bar-height: 15px;
@@ -8,7 +12,7 @@
 	--tablinks-width: 16vh;
 	--tablinks-height: 33px;
 	--tablinks-fontsize: 150%;
-	--default-fontsize: 100%;
+	
 	--charsheet-fontsize: 120%;
 	--body-fontsize: 100%;
 	--lvlup-icon-height: 30px;
@@ -16,7 +20,7 @@
 	--status-icon-width: 20px;
 	--status-icon-height: 20px;
 	--hpamt-padding: 10px;
-	--default-fontweight:  300;
+	
 	--spelltable-width: 300px;
 	--spelltable-font-size:  80%;
 	--spelltable-margin-left: 10px;
@@ -34,8 +38,8 @@
 	--joinbutton-width: 100px;
 	--joinbutton-height: 45px;
 
-	--class-select-width: 200px;
-	--class-select-height: 40px;
+	--class-select-width: 300px;
+	--class-select-height: 70vh;
 	--respec-button-width:  30px;
 	--respec-button-height:  30px;
 	--statamt-padding-left:  10px;

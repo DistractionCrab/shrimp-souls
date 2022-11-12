@@ -1,5 +1,8 @@
 :root {
 	--main-font: Arial Black;
+	--default-border-width: 5px;
+	--default-margin: 10px;
+
 
 	--hp-bar-width:  600px;
 	--hp-bar-height: 30px;

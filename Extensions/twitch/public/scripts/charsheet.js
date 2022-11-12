@@ -1,5 +1,29 @@
 import { EVENTS } from "./events.js";
-import { set_text } from "./utils.js";
+import { set_text, TabManager } from "./utils.js";
+
+const TABMANAGER = new TabManager({
+	status: {
+		header: "statusheader",
+		body: "status",
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	attri: {
+		header: "attriheader",
+		body: "attributes",
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	class: {
+		header: "classheader",
+		body: "classpage",
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+}, "status");
 
 export class CharSheet {
 	constructor() {
@@ -19,11 +43,11 @@ export class CharSheet {
 
 		this.hp_val = document.getElementById("hp_value");
 		this.xp_val = document.getElementById("xp_value");
-		this.class_val = document.getElementById("classselect");
+		this.class_val = document.getElementById("class_value");
 
 		this.hp_bar = document.getElementById("player_healthbar");
 		this.statusdisplay = document.getElementById("playerstatus");
-		//this.xp_bar = document.getElementById("player_xpbar");
+		this.xp_bar = document.getElementById("player_xpbar");
 
 		this.spell_table = document.getElementById("spelltable");
 
@@ -54,6 +78,7 @@ export class CharSheet {
 		var propx = Math.max(0, Math.min(100, Math.ceil(msg['xp']/msg['xp_req']*100)));
 
 		this.hp_bar.style.backgroundSize = `${prop}% 100%, 100% 100%`;
+		this.xp_bar.style.backgroundSize = `${propx}% 100%, 100% 100%`;
 
 		for (const b of document.getElementsByClassName("lvlup")) {
 			b.disabled = this.xp_cur < this.xp_req;
@@ -63,9 +88,11 @@ export class CharSheet {
 		this.update_status(msg);
 
 		// Update class value.
-		const obj = document.getElementById("classselect");
-		const i = [...obj.options].findIndex((v) => { return v.value == this.class_name});
-		this.class_val.selectedIndex = i;
+		//const obj = document.getElementById("classselect");
+		//const i = [...obj.options].findIndex((v) => { return v.value == this.class_name});
+		//this.class_val.selectedIndex = i;
+
+		set_text(this.class_val, msg["class"]);
 	}
 
 	update_status(data) {

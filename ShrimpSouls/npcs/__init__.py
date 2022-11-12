@@ -260,13 +260,13 @@ class Wraith(BaseNPC):
 
 @dataclass
 class OxTitan(BaseNPC):
-	xp:  int = 15
-	hp:  int = 8200
-	max_hp: int = 8200
-	_acc: int = 150
-	_eva: int = 100
-	_att: int = 170
-	_dfn: int = 160
+	xp:  int = 100
+	hp:  int = 22000
+	max_hp: int = 22000
+	_acc: int = 250
+	_eva: int = 210
+	_att: int = 320
+	_dfn: int = 220
 	_weaknesses: frozenset = frozenset([actions.DamageType.Pierce,])
 	_immunities: frozenset = frozenset([
 			ss.StatusEnum.charm,
@@ -286,9 +286,44 @@ class OxTitan(BaseNPC):
 				actions.DamageTarget(attacker=self, defender=target[0]),
 				actions.DamageTarget(attacker=self, defender=target[1])]
 
-RANGES = {
-	range(1, 5): [Goblin, Wolf],
-	range(5, 10): [GoblinBrute, GoblinPriest],
-	range(10, 15): [OrcWarrior, Ogre, OxTitan],
-	range(15, 200): [Troll, Wraith],
-}
+@dataclass
+class BloodGolem(BaseNPC):
+	xp:  int = 40
+	hp:  int = 2000
+	max_hp: int = 2000
+	_acc: int = 250
+	_eva: int = 190
+	_att: int = 190
+	_dfn: int = 310
+	_weaknesses: frozenset = frozenset([
+		actions.DamageType.Pierce,
+		actions.DamageType.Strike,
+		actions.DamageType.Blood,
+		actions.DamageType.Magic,
+		actions.DamageType.Dark,
+		actions.DamageType.Nature,])
+
+	_immunities: frozenset = frozenset([
+			ss.StatusEnum.charm,
+			ss.StatusEnum.bleed,
+			ss.StatusEnum.poison,
+			ss.StatusEnum.defdown,
+		])
+
+	def __hash__(self):
+		return hash(self.name)
+
+	def duel_action(self, env):
+		target = env.find_valid_target(self, False, ss.Positions, True)
+		if target is None:
+			return [actions.DoNothing(player=self)]
+		else:
+			return [actions.DamageTarget(
+				attacker=self, 
+				defender=target,
+				statuses={
+					ss.StatusEnum.poison: lambda: 2, 
+					ss.StatusEnum.bleed: lambda: 2,
+					ss.StatusEnum.defdown: lambda: 2,
+					ss.StatusEnum.attdown: lambda: 1,
+				})]

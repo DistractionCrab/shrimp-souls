@@ -1,4 +1,4 @@
-const TESTING = false;
+const TESTING = true;
 
 import { EVENTS } from "./events.js";
 import { set_text, TabManager } from "./utils.js";
@@ -184,7 +184,7 @@ function confirm_level(att) {
 }
 
 
-document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
+//document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
 //document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
 document.getElementById("respecbutton").addEventListener("click", () => { respec(); });
 document.getElementById("lvlup-vigor").addEventListener("click", () => { MANAGER.level("vigor"); });
@@ -196,6 +196,7 @@ document.getElementById("lvlup-faith").addEventListener("click", () => { MANAGER
 document.getElementById("lvlup-luck").addEventListener("click", () => { MANAGER.level("luck"); });
 document.getElementById("lvlup-perception").addEventListener("click", () => { MANAGER.level("perception"); });
 
+/*
 // Setup click listeners for class options to close selection menus.
 for (const c of document.getElementsByClassName("classoption")) {
 	c.addEventListener("click", function(event) {
@@ -206,7 +207,7 @@ for (const c of document.getElementsByClassName("classoption")) {
 			p.style.height="var(--class-select-height)";
 		}
 	});
-}
+}*/
 
 /*
 setInterval(function() {

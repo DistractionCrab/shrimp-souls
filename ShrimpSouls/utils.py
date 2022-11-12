@@ -59,6 +59,16 @@ def score_hit(s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 def score_dmg(s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 	return (s1, s2, b1, b2, m1, m2)
 
+def compute_prob(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
+	s1 = m1*s1(a) + b1
+	s2 = m2*s2(d) + b2
+	v1 = math.ceil(s1/50)
+	v2 = math.ceil(s2/50)
+	
+	r = (s1 - s2)/(s1 + s2)
+
+	return expit(r * (v1 + v2))
+
 
 def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
@@ -83,7 +93,7 @@ def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=
 	
 	r = (s1 - s2)/(s1 + s2)
 
-	return random.random() < r
+	return random.random() < expit(r * (v1 + v2))
 
 def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 	s1 = m1*s1(a) + b1
