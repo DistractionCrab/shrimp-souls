@@ -14,24 +14,25 @@ def prayer(u, targets, env):
 		actions.HealTarget(
 			attacker=u, 
 			defender=t, 
-			dmg=random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)) for t in targets
+			mult=1/10)
 	]
 	
 
 def heal(u, targets, env):
 	if len(targets) == 0:
 		t = env.find_valid_target(u, True, ss.Positions, True)
-		if t is None:
+		if len(t) == 0:
 			return [actions.Error(info="No targets could be found...")]
+		t = t[0]
 	else:
 		t = env.get_target(targets[0])
 
 	if t.dead:
 		amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.ReviveTarget(attacker=u, defender=t, dmg=amt)]
+		return [actions.ReviveTarget(attacker=u, defender=t, mult=1/15)]
 	else:
 		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.HealTarget(attacker=u, defender=t, dmg=amt)]
+		return [actions.HealTarget(attacker=u, defender=t, mult=1/15)]
 
 ABI_MAP = {
 	"prayer": prayer,
@@ -71,7 +72,7 @@ class Priest(ClassSpec):
 		heal = sum(random.randint(1, 10)  for _ in range((1 + actor.attributes.faith//HEAL_DICE_THRESHOLD)))
 		target = min(party, key=lambda p: p.hp)
 		return [
-			actions.HealTarget(attacker=actor, defender=target, dmg=heal)
+			actions.HealTarget(attacker=actor, defender=target, mult=1/10)
 			]
 
 	@property

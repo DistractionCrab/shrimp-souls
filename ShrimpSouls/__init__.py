@@ -1,6 +1,5 @@
 import os
 import ast
-import requests
 import enum
 import json
 import random

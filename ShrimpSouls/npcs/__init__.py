@@ -73,9 +73,9 @@ class BaseNPC(ss.Entity):
 
 	def duel_action(self, env):
 		target = env.find_valid_target(self, False, [ss.Positions.FRONT], True)
-		if target is None:
+		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
-		return [actions.DamageTarget(attacker=self, defender=target)]
+		return [actions.DamageTarget(attacker=self, defender=target[0])]
 
 	def __hash__(self):
 		return hash(self.name)
@@ -298,7 +298,7 @@ class BloodGolem(BaseNPC):
 	_weaknesses: frozenset = frozenset([
 		actions.DamageType.Pierce,
 		actions.DamageType.Strike,
-		actions.DamageType.Blood,
+		actions.DamageType.Slash,
 		actions.DamageType.Magic,
 		actions.DamageType.Dark,
 		actions.DamageType.Nature,])
@@ -315,15 +315,15 @@ class BloodGolem(BaseNPC):
 
 	def duel_action(self, env):
 		target = env.find_valid_target(self, False, ss.Positions, True)
-		if target is None:
+		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		else:
 			return [actions.DamageTarget(
 				attacker=self, 
-				defender=target,
+				defender=target[0],
 				statuses={
 					ss.StatusEnum.poison: lambda: 2, 
 					ss.StatusEnum.bleed: lambda: 2,
 					ss.StatusEnum.defdown: lambda: 2,
-					ss.StatusEnum.attdown: lambda: 1,
+					ss.StatusEnum.attdown: lambda: 2,
 				})]

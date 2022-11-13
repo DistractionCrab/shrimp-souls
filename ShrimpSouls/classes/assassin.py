@@ -16,8 +16,9 @@ def poison_blade(u, targets, env):
 			t = env.find_valid_target(u, False, ss.Positions, True)
 		else:
 			t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
-		if t is None:
+		if len(t) == 0:
 			return [actions.Error(info="No targets could be found...")]
+		t = t[0]
 	else:
 		t = env.get_target(targets[0])
 
@@ -53,10 +54,9 @@ class Assassin(ClassSpec):
 
 	def duel_action(self, actor, env):
 		if actor.invis == 0:
-			target = env.find_valid_target(actor, False, [ss.Positions.FRONT], True)
-			return [actions.DamageTarget(attacker=actor, defender=target)]
-		else:
-			return []
+			return [
+				actions.DamageTarget(attacker=actor, defender=t) 
+				for t in env.find_valid_target(actor, False, [ss.Positions.FRONT], True)]
 
 
 	@property

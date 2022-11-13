@@ -126,7 +126,7 @@ class HealTarget(Action):
 	attacker: object
 	defender: object
 	base: int = 1
-	mult: int = 1/4
+	mult: int = 1/5
 	
 	msg: str = ''
 	dmg: int = 0

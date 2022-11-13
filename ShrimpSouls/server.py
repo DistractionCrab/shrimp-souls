@@ -4,7 +4,6 @@ import queue
 import json
 import websockets
 import ssl
-import requests
 import aiohttp
 import time
 import enum
@@ -97,7 +96,13 @@ class Server:
 		self.__i_time = time.time()
 
 	async def close(self):
-		self.__closed = True	
+		self.__closed = True
+
+		for s in self.__sockets.values():
+			try:
+				s.close()
+			except:
+				pass
 
 	@property
 	def closed(self):
@@ -109,25 +114,32 @@ class Server:
 
 	async def server_loop(self):
 		while not self.__closed:
-			msg = await self.__msgs.get()
+			try:
+				msg = await self.__msgs.get()
 
-			i = 0
-			if msg is Heartbeat:
-				await self.__heartbeat()
-			else:
-				self.__i_time = time.time()
-				if msg['msg'] == "connect":
-					await self.__connect(msg)
-				elif msg['msg'] == 'ability':
-					await self.__do_ability(msg)
-				elif msg['msg'] == 'levelup':
-					await self.__level_up(msg)
-				elif msg['msg'] == "disconnect":
-					await self.__disconnect(msg)					
-				elif msg['msg'] == "join":
-					await self.__join(msg)
-				elif msg['msg'] == "respec":
-					await self.__respec(msg)
+				i = 0
+				if msg is Heartbeat:
+					await self.__heartbeat()
+				else:
+					self.__i_time = time.time()
+					if msg['msg'] == "connect":
+						await self.__connect(msg)
+					elif msg['msg'] == 'ability':
+						await self.__do_ability(msg)
+					elif msg['msg'] == 'levelup':
+						await self.__level_up(msg)
+					elif msg['msg'] == "disconnect":
+						await self.__disconnect(msg)					
+					elif msg['msg'] == "join":
+						await self.__join(msg)
+					elif msg['msg'] == "respec":
+						await self.__respec(msg)
+			except KeyboardInterrupt as ex:
+				print("Exiting server loop...  (Interrupted)")
+				self.close()
+			except Exception as ex:
+				print(f"Error in main thread happens: {ex}")
+				raise ex
 		print(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
@@ -240,12 +252,12 @@ class Server:
 
 		if m.is_err:
 			await self.__send_message(msg['wsid'], {
-					"log": [m.msg]
+					"log": m.msg
 				})
 		else:
 			await self.__send_message(msg['wsid'], {
 					"charsheet": p.json,
-					"log": [m.msg]
+					"log": m.msg
 				})
 			
 	async def __handle_update(self, msg, step=False):

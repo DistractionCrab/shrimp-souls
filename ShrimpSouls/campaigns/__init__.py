@@ -7,30 +7,50 @@ from dataclasses import dataclass
 import persistent.list as listing
 import persistent.mapping as mapping
 import ShrimpSouls.messages as messages
+import ShrimpSouls.utils as utils
 
 class BaseCampaign(persistent.Persistent):
-	def __init__(self):
+	def __init__(self, name):
+		self.__name = name
 		self.__players = mapping.PersistentMapping()
+		self.__npcs = mapping.PersistentMapping()
 
-	def is_joined(self, p):
+	def location(self, p):
+		if p.name in self.__players:
+			return self
+		else:
+			return None
+
+	@property
+	def name(self):
+		return self.__name
+	
+
+	def __contains__(self, p):
+		if isinstance(p, str):
+			return p in self.__players
+
 		return p.name in self.__players
 
-	def join(self, player):
-		if self.is_joined(player):
-			return messages.Message(
-				msg=[f"{player.name} has already joined the campaign."])
-		else:
-			player.revive()
-			player.reset_status()
-			
-			self.__players[player.name] = player
-
-			return message.Message(
-				msg=[f"{player.name} has joined the campaign"],
-				users=[player])
-
 	def step(self):
-		return (self, messages.Message())
+		return
+		yield
+
+	def action(self, src, msg):
+		return
+		yield
+
+	def add_player(self, p):
+		if p.name not in self.__players:
+			self.__players[p.name] = p
+
+	def add_npc(self, p):
+		if p.name not in self.__npcs:
+			self.__npcs[p.name] = p
+
+	@property
+	def finished(self):
+		return False	
 
 	@property
 	def players(self):
@@ -38,97 +58,80 @@ class BaseCampaign(persistent.Persistent):
 	
 	@property
 	def npcs(self):
-		return {}
-
-
-	def enter(self, previous):
-		pass
-
-	def exit(self):
-		pass
-
+		return utils.FrozenDict(self.__npcs)
 
 	def find_valid_target(self, att, dfn, evn, pos, amt=1):
-		return []
+		return tuple()
 
 	def get_npc(self, name):
-		if isinstance(name, str):
-			if name in self.npcs:
-				return self.npcs[name]
-			else:
-				return None
-		else:
-			return name
+		return None
 
-	def get_player(self, name):
-		if isinstance(name, str):
-			if name in self.players:
-				return self.players[name]
-			else:
-				return None
-		else:
-			if name.is_player:
-				return name
-			else:
-				return None
+	@property
+	def actions(self):
+		return tuple()
 
+	def use_ability(self, p, abi, targets):
+		yield messages.Respond(msg=[f"Cannot use abilities in {type(self)}"])
 
-class SubCampaign(persistent.Persistent):
-	def __init__(self, parent):
-		self.__parent = parent
+	@property
+	def restarea(self):
+		return True
 
-	def is_joined(self, p):
-		return self.__parent.is_joined(p)
+class RootCampaign(BaseCampaign):
+	def __init__(self, name):
+		super().__init__(name)
+		self.__subs = mapping.PersistentMapping()
 
-	def join(self, player):
-		self.__parent.is_joined(player)
-		
+	def __setitem__(self, index, value):
+		self.__subs[index] = value
 
 	def step(self):
-		return (self, messages.Message())
+		yield from self._step()
+		for s in self.__subs:
+			yield from s.step()
 
-	@property
-	def players(self):
-		return self.__parent.players
-	
-	@property
-	def npcs(self):
-		return self.__parent.npcs
+	def _step(self):
+		return
+		yield
 
-
-	def enter(self, previous):
-		pass
-
-	def exit(self):
-		pass
-
-
-	def find_valid_target(self, att, dfn, evn, pos, amt=1):
-		return []
-
-	@property
-	def parent(self):
-		return self.__parent
-
-
-	def get_npc(self, name):
-		if isinstance(name, str):
-			if name in self.npcs:
-				return self.npcs[name]
-			else:
-				return None
+	def use_ability(self, p, abi, targets):
+		if self.resides(p):
+			yield from self._use_ability(p, abi, targets)
 		else:
-			return name
+			for s in self.__subs.values():
+				if src in s:
+					yield from s.use_ability(p, abi, targets)
 
-	def get_player(self, name):
-		if isinstance(name, str):
-			if name in self.players:
-				return self.players[name]
-			else:
-				return None
+		
+
+	def _use_ability(self, p, abi, targets):
+		return
+		yield
+
+	def action(self, src, msg):
+		if self.resides(src):
+			yield from self._action(msg)
 		else:
-			if name.is_player:
-				return name
-			else:
-				return None
-	
+			for s in self.__subs.values():
+				if src in s:
+					yield from s.action(src, msg)
+
+		
+
+	def _action(self, msg):
+		return
+		yield
+
+	def resides(self, p):
+		return p in self and all(p not in s for s in self.__subs)
+
+	def location(self, p):
+		for s in self.__subs:
+			if p in s:
+				return s.location(p)
+		return p in self
+
+		
+
+
+		

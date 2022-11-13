@@ -156,3 +156,19 @@ class FrozenDict:
 
 	def __contains__(self, a):
 		return a in self.__d
+
+
+class ConcatList:
+	def __init__(self):
+		self.__lists = []
+
+	def __add__(self, other):
+		if type(other) == ConcatList:
+			self.__lists += other.__lists
+		else:
+			self.__lists += other
+
+	def __iter__(self):
+		for l in self.__lists:
+			for e in l:
+				yield e

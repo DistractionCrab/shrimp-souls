@@ -16,28 +16,18 @@ import ShrimpSouls.messages as messages
 import ShrimpSouls.campaigns as cps
 
 
-class Combat(cps.SubCampaign):
-	def __init__(self, parent):
-		super().__init__(parent)
-		self.__npcs = persistent.mapping.PersistentMapping()
-		self.__queued = {}
+class Combat(cps.BaseCampaign):
+	def __init__(self):
+		super().__init__()
+		self.__queued = mapping.PersistentMapping()
 		self._generate(self.players)
 	
 	def _generate(self, newplayers):
 		pass
 
-
 	@property
 	def restarea(self):
 		return False
-
-	@property
-	def npc_ct(self):
-		return len(self.__npcs)
-
-	@property
-	def players(self):
-		return self.__restore.__players
 
 	def join(self, player):
 		if self.is_joined(player):
@@ -56,55 +46,14 @@ class Combat(cps.SubCampaign):
 			return msg
 
 
-
-	@property
-	def npcs(self):
-		return utils.FrozenDict(self.__npcs)
-
-	def __add_npc(self, n):
-		self.__npcs[n.name] = n
-	
-
 	def step(self):
-		if self.player_ct == 0:
-			return (self.parent, messages.Message(msg=["No players available, exiting combat..."]))
-		elif len(self.__npcs) == 0:
-			while len(self.__npcs) == 0:
-				self.__setup_arena()
-			return (self, messages.Message(
-				msg=["The Arena has started!!!"],
-				users=list(self.players.values()),
-				npcs=list(self.npcs.values()),
-				refreshEntities=True))
+		if len(self.players) == 0:
+			yield  messages.Message(msg=["No players available, exiting combat..."])
+		else if len(self.npcs) == 0:
+			yield  messages.Message(msg=["No enemies available, exiting combat..."])
 		else:
-			v = self.__do_combat()
-			if self.finished:
-				return (WaitingRoom(self.players), v)
-			else:
-				return (self, v)
+			yield self.__do_combat()
 
-	
-	def __setup_arena(self):
-		for p in self.players.values():
-			p.revive()
-			p.reset_status()
-			p.allow_actions()
-
-		
-			f = self.__add_foes(p)	
-			#print(f"Foes added for {p.name} = {[f.name for f in f]}")
-		#print(self.foes())
-
-
-	def __add_foes(self, p):
-		k = next(k for k in ENCOUNTERS.keys() if p.level in k)
-		foes = random.choices(ENCOUNTERS[k])[0](len(self.__npcs))
-		#print(f"foes = {[f.name for f in foes]}")
-		for n in foes:
-			self.add_npc(n)
-
-
-		return foes
 
 	def __do_combat(self):
 		party = list(self.players.values())
@@ -125,9 +74,11 @@ class Combat(cps.SubCampaign):
 				actions = p.duel_action(self)
 				if p.name in self.__queued:
 					(abi, targets) = self.__queued[p.name]
+					targets = targets if p.charm == 0 else tuple()
 					actions = p.use_ability(abi, targets, self)
 				else:
-					actions = p.random_action(p, self)
+					if p.invis == 0:
+						actions = p.random_action(p, self)
 					
 				for a in actions:
 					a.apply()
@@ -135,14 +86,9 @@ class Combat(cps.SubCampaign):
 					rec_p.update(a.receivers)
 					rec_n.update(a.receivers_npc)
 
-
-
 		for p in order:
 			if not p.dead:
 				p.tick()
-
-		for p in self.players.values():
-			p.allow_actions()
 
 		if self.finished:
 			if all(p.dead for p in self.players.values()):
@@ -180,25 +126,6 @@ class Combat(cps.SubCampaign):
 			
 		else:
 			return ''
-
-
-		
-	def get_action(self, entity):
-		tt = entity.get_taunt_target()
-		if entity.is_player:
-			if tt is not None:
-				return entity.duel_action(entity, self)
-			elif entity.charm > 0:
-				return entity.duel_action(entity, self.npcs, self.players)			
-			else:
-				return entity.duel_action(entity, self.players, self.npcs)
-		else:
-			if tt is not None:
-				return entity.duel_action(entity, self.npcs, [self.get_target(tt)])
-			elif entity.charm > 0:
-				return entity.duel_action(entity, self.players, self.npcs)
-			else:
-				return entity.duel_action(entity, self.npcs, self.players)
 
 
 	@property
@@ -259,44 +186,9 @@ class Combat(cps.SubCampaign):
 			pool))
 		pool = list(set(random.sample(pool, k=min(amt, len(pool)))))
 
-		if amt == 1:
-			if len(pool) == 0:
-				return None
-			else:
-				return pool[0]
-		else:
-			return pool
+		return pool
 
 	def use_ability(self, p, abi, targets):
-		if not self.is_joined(p.name):
-			return messages.Error(msg=[f"{p.name} is not in the campaign. !join to join!"])
-		else:
-			if p.acted:				
-				return messages.Error(msg=[f"{p.name} has already acted this turn."])
-			elif p.dead:
-				return messages.Error(msg=[f"{p.name} cannot perform actions while dead. Deadge"])
-			elif p.status.stun > 0:
-				return messages.Error(msg=[f"{p.name} cannot perform actions while stunned."])
-			else:
-				try:
-					rec = set()
-					rec_n = set()
-					total = []
-					targets = list(filter(lambda x: x is not None, [self.get_target(t) for t in targets]))
-					actions = p.myclass.use_ability(p, abi, targets, self)
-					#print(actions)
-					for a in actions:
-						a.apply()
-						total.append(a.msg)
-						dd = self.handle_dead_foes(a.receivers_npc)
-						if len(dd) > 0:
-							total.append(dd)
-						rec.update(a.receivers)
-						rec_n.update(a.receivers_npc)
-
-					p.did_act()
-					return messages.Message(msg=total, users=rec, npcs=rec_n)
-				except Exception as ex:
-					raise ex
-					return messages.Error(msg=[str(ex)])
+		self.__queued[p.name] = (abi, targets)
+		yield messages.Respons(msg=[f"You have readied {abi} for the next turn."])
 

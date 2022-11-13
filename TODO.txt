@@ -1,10 +1,8 @@
 Next Steps:
-- implement charsheet tabs
-- Finish event system
+- setup levelup submit message to reduce spam/overhead
 - setup back/front end new spellbook/action system (queued, rather tha ninstant)
 - change weaknesses to ignore defenses (some)
 - respond message
-- sort SS alphabetically, use party/NPC to do targeting now (sort with targets first.) List targets in spell book
 - Reimplement charm mechanics in combat
 
 IMPLEMENTATIONS

@@ -1,5 +1,49 @@
 from dataclasses import dataclass, field
 
+
+
+class EmptyMessage:
+	@property
+	def is_empty(self):
+		return True
+	
+
+	@property
+	def is_err(self):
+		return False
+
+	@property
+	def is_response(self):
+		return False
+	
+
+	def __getitem__(self, i):
+		return None
+
+EMPTY = EmptyMessage()
+
+@dataclass
+class Response:
+	msg: list[str] = field(default_factory=list)
+
+	@property
+	def is_err(self):
+		return False
+
+	@property
+	def is_response(self):
+		return True
+	
+
+	def __getitem__(self, i):
+		return self.msg[i]
+
+	@property
+	def is_empty(self):
+		return False
+
+
+
 @dataclass
 class Message:
 	msg: list[str] = field(default_factory=list)
@@ -16,10 +60,26 @@ class Message:
 	def __getitem__(self, i):
 		return self.msg[i]
 
+	@property
+	def is_response(self):
+		return False
+
+	@property
+	def is_empty(self):
+		return False
+
 
 @dataclass
-class Error(Message):
+class Error:
 	@property
 	def is_err(self):
 		return True
+
+	@property
+	def is_response(self):
+		return False
+
+	@property
+	def is_empty(self):
+		return False
 	

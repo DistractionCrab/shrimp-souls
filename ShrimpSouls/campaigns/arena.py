@@ -379,13 +379,7 @@ class Arena(BaseArena):
 			pool))
 		pool = list(set(random.sample(pool, k=min(amt, len(pool)))))
 
-		if amt == 1:
-			if len(pool) == 0:
-				return None
-			else:
-				return pool[0]
-		else:
-			return pool
+		return pool
 
 	def use_ability(self, p, abi, targets):
 		if not self.is_joined(p.name):
@@ -464,5 +458,5 @@ ENCOUNTERS = {
 	range(21, 27): [
 		lambda i: npcs.OxTitan.generate(1, i, prob=0.005),
 		lambda i: npcs.BloodGolem.generate(1, i, prob=0.5),
-	]
+	],
 }
