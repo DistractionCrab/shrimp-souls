@@ -242,7 +242,11 @@ class Arena(BaseArena):
 					ract = p.random_action(p, self)
 					if ract is None:
 						print(f"None action for {p.name}")
-					actions = p.random_action(p, self) + actions
+						ract = []
+					if actions is None:
+						print(f"None actions for {p.name}")
+						actions = []
+					actions = ract + actions
 				for a in actions:
 					a.apply()
 					total.append(a.msg + " " + self.handle_dead_foes(a.receivers_npc))
