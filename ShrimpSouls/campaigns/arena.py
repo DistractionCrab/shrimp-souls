@@ -243,6 +243,8 @@ class Arena(BaseArena):
 					if ract is None:
 						print(f"None action for {p.name}")
 						ract = []
+				else:
+					ract = []
 				if actions is None:
 					print(f"None actions for {p.name}")
 					actions = []
