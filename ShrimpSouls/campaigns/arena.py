@@ -239,6 +239,9 @@ class Arena(BaseArena):
 			if p.stun == 0:
 				actions = p.duel_action(self)
 				if not p.acted:
+					ract = p.random_action(p, self)
+					if ract is None:
+						print(f"None action for {p.name}")
 					actions = p.random_action(p, self) + actions
 				for a in actions:
 					a.apply()
