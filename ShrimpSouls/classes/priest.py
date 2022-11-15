@@ -15,6 +15,7 @@ def prayer(u, targets, env):
 			attacker=u, 
 			defender=t, 
 			mult=1/10)
+		for t in targets
 	]
 	
 
