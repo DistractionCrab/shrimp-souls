@@ -90,6 +90,7 @@ class Server:
 		self.__connections = {}
 		self.__last = time.time()		
 		self.__idmaps = {}
+		self.__unames = {}
 		self.__wsid_ct = 0
 		self.__game = game
 		self.__closed = False
@@ -189,6 +190,14 @@ class Server:
 		except:
 			pass
 
+	async def __handle_message(self, m):
+		for n in m.recv:
+			if n in self.__unames:
+				t = m.json
+				t["charsheet"] = self.__game.get_player(n).json
+				await self.__sockets[self.__unames[n]].send(json.dumps(t))
+
+
 	async def __get_uname(self, wsid):
 		return self.__idmaps[wsid]
 
@@ -233,6 +242,7 @@ class Server:
 				else:
 					uname = r["data"][0]["login"]
 					self.__idmaps[wsid] = uname
+					self.__unames[uname] = wsid
 					player = self.__game.get_player(uname)
 					print(f"Connected received for c-id {self.__clientid} from {uname}")
 					if self.__game.is_joined(uname):

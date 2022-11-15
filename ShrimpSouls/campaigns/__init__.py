@@ -10,10 +10,10 @@ import ShrimpSouls.messages as messages
 import ShrimpSouls.utils as utils
 
 class BaseCampaign(persistent.Persistent):
-	def __init__(self, name):
+	def __init__(self, name, players=None, npcs=None):
 		self.__name = name
-		self.__players = mapping.PersistentMapping()
-		self.__npcs = mapping.PersistentMapping()
+		self.__players = mapping.PersistentMapping() if players is None else players
+		self.__npcs = mapping.PersistentMapping() if npcs is None else npcs
 
 	def location(self, p):
 		if p.name in self.__players:
@@ -21,9 +21,23 @@ class BaseCampaign(persistent.Persistent):
 		else:
 			return None
 
+	def resting(self, name):
+		if name in self.__players:
+			return self.restarea
+		else:
+			None
+
+
+	@property
+	def areaname(self):
+		return "Unnamed Area - BaseCampaign"	
+
 	@property
 	def name(self):
 		return self.__name
+
+	def resides(self, p):
+		return p in self
 	
 
 	def __contains__(self, p):
@@ -31,6 +45,23 @@ class BaseCampaign(persistent.Persistent):
 			return p in self.__players
 
 		return p.name in self.__players
+
+	def __delitem__(self, index):
+		if isinstance(index, str):
+			if index in self.__players:
+				del self.__players[index]
+			if index in self.__npcs:
+				del self.__npcs[index]
+		else:
+			if index in self.__players:
+				del self.__players[index.name]
+			if index in self.__npcs:
+				del self.__npcs[index.name]
+
+	def broadcast(self, **kwds):
+		return messages.Message(
+			recv=tuple(p for p in self.players if self.resides(p)),
+			**kwds)
 
 	def step(self):
 		return
@@ -44,9 +75,21 @@ class BaseCampaign(persistent.Persistent):
 		if p.name not in self.__players:
 			self.__players[p.name] = p
 
+		self._add_player(p)
+
+	def _add_player(self, p):
+		return
+		yield
+
 	def add_npc(self, p):
 		if p.name not in self.__npcs:
 			self.__npcs[p.name] = p
+
+		self._add_npc(p)
+
+	def _add_npc(self, p):
+		return 
+		yield
 
 	@property
 	def finished(self):
@@ -66,24 +109,35 @@ class BaseCampaign(persistent.Persistent):
 	def get_npc(self, name):
 		return None
 
-	@property
-	def actions(self):
-		return tuple()
 
 	def use_ability(self, p, abi, targets):
-		yield messages.Respond(msg=[f"Cannot use abilities in {type(self)}"])
+		yield messages.Respond(msg=(f"Cannot use abilities in {type(self)}",))
 
 	@property
 	def restarea(self):
 		return True
 
+
 class RootCampaign(BaseCampaign):
-	def __init__(self, name):
+	def __init__(self, name, players=None, npcs=None):
 		super().__init__(name)
 		self.__subs = mapping.PersistentMapping()
 
 	def __setitem__(self, index, value):
 		self.__subs[index] = value
+
+	def __getitem__(self, index):
+		return self.__subs[index]
+
+	def __delitem__(self, index):
+		if isinstance(index, str):
+			if index in self.__subs:
+				del self.__subs[index]
+		super().__delitem__(index)
+
+
+	def __len__(self):
+		return len(self.__subs)
 
 	def step(self):
 		yield from self._step()
@@ -108,17 +162,23 @@ class RootCampaign(BaseCampaign):
 		return
 		yield
 
+	@property
+	def act_always(self):
+		return False
+
 	def action(self, src, msg):
 		if self.resides(src):
 			yield from self._action(msg)
 		else:
+			if self.act_always:
+				yield from self._action(msg)
 			for s in self.__subs.values():
 				if src in s:
 					yield from s.action(src, msg)
 
 		
 
-	def _action(self, msg):
+	def _action(self, arc, msg):
 		return
 		yield
 
@@ -130,6 +190,16 @@ class RootCampaign(BaseCampaign):
 			if p in s:
 				return s.location(p)
 		return p in self
+
+	def resting(self, name):
+		if self.resides(name):
+			return self.restarea
+		else:
+			for s in self.__subs:
+				v = s.resting(name)
+				if v is not None:
+					return v
+			return None
 
 		
 

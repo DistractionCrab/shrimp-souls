@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import json
 
 
 
@@ -24,7 +25,8 @@ EMPTY = EmptyMessage()
 
 @dataclass
 class Response:
-	msg: list[str] = field(default_factory=list)
+	msg: tuple[str] = field(default_factory=tuple)
+	campinfo: dict = field(default_factory=dict)
 
 	@property
 	def is_err(self):
@@ -46,12 +48,22 @@ class Response:
 
 @dataclass
 class Message:
-	msg: list[str] = field(default_factory=list)
-	users: list = field(default_factory=list)
-	npcs: list = field(default_factory=list)
-	remove_player: list = field(default_factory=list)
-	remove_npc: list = field(default_factory=list)
+	msg: tuple[str] = field(default_factory=tuple)
+	recv: tuple[str] = field(default_factory=tuple)
+	users: tuple = field(default_factory=tuple)
+	npcs: tuple = field(default_factory=tuple)
+	remove_player: tuple = field(default_factory=tuple)
+	remove_npc: tuple = field(default_factory=tuple)
 	refreshEntities: bool = False
+	campinfo: dict = field(default_factory=dict)
+
+	@property
+	def json(self):
+		return {
+			"log": self.msg,
+			"campinfo": self.campinfo
+		}
+	
 
 	@property
 	def is_err(self):
@@ -71,6 +83,8 @@ class Message:
 
 @dataclass
 class Error:
+	msg: tuple[str] = field(default_factory=tuple)
+	
 	@property
 	def is_err(self):
 		return True

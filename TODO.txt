@@ -1,9 +1,6 @@
 Next Steps:
 - setup levelup submit message to reduce spam/overhead
-- setup back/front end new spellbook/action system (queued, rather tha ninstant)
-- change weaknesses to ignore defenses (some)
 - respond message
-- Reimplement charm mechanics in combat
 
 IMPLEMENTATIONS
 - subclassing
@@ -11,11 +8,6 @@ IMPLEMENTATIONS
 - management panel for live_config (reset arena/campaign/remove users)
 - put block/taunt on the buffs icons
 - event system for listening to things
-
-BUGS:
-- Fix the class select option being too tall later.
-- Fix initial timer not being updated correctly when connecting.
-- fix always required login
 
 CLASSES
 new attack items:

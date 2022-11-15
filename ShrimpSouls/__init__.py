@@ -655,6 +655,47 @@ class Player(Entity):
 			msg=f"{self.name} has updated their class to {self.myclass.cl_string}!!!",
 			users=[self])
 
+class GameManagerNew(persistent.Persistent):
+	def __init__(self):
+		import ShrimpSouls.campaigns.hub as hub
+		self.__root = hub.Hub()
+		self.__players = persistent.mapping.PersistentMapping()
+
+	def step(self):
+		yield from self.__root.step()
+
+	def add_player(self, name):
+		if name not in self.__players:
+			p = Player(name=name)
+			self.__players[name] = p
+			return p
+		else:
+			return self.__players[name]
+
+	def action(self, src, msg):
+		if isinstance(src, str):
+			src = self.__players[src]
+
+		yield from self.__root.action(src, msg)
+
+
+	def use_ability(self, name, abi, targets):
+		yield from self.__root.use_ability(self.get_player(name), abi, targets)
+
+
+	def respec(self, p, cl):
+		if isinstance(p, str):
+			p = self.get_player(p)
+
+		if self.__root.resting(p):
+			p.update_class(cl)
+			p.respec()
+			yield messages.Message(
+				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
+				users=[p])
+		else:
+			yield messages.Response(msg=[f"{p.name} cannot respec in a non-resting arena."])
+
 
 class GameManager(persistent.Persistent):
 	def __init__(self):

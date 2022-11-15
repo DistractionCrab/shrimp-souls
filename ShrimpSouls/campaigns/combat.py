@@ -17,33 +17,20 @@ import ShrimpSouls.campaigns as cps
 
 
 class Combat(cps.BaseCampaign):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, name, players):
+		super().__init__(name, players=p)
 		self.__queued = mapping.PersistentMapping()
-		self._generate(self.players)
+		self.generate()
 	
-	def _generate(self, newplayers):
+	def generate(self):
 		pass
 
 	@property
 	def restarea(self):
 		return False
 
-	def join(self, player):
-		if self.is_joined(player):
-			return f"{player.name} is already in the arena! "
-		else:
-			player.revive()
-			player.reset_status()
-			self.add_player(player)
-
-			msg = f"{player.name} has joined the arena! "
-			if not self.finished:
-				npcs = self.__add_foes(player)				
-				if len(npcs) > 0:
-					fstring = (f.name for f in npcs)
-					msg += f"As {player.name} joins the arena so do {', '.join(fstring)} "
-			return msg
+	def _add_player(self, player):
+		pass	
 
 
 	def step(self):
@@ -53,6 +40,19 @@ class Combat(cps.BaseCampaign):
 			yield  messages.Message(msg=["No enemies available, exiting combat..."])
 		else:
 			yield self.__do_combat()
+
+	def campinfo(self):
+		return {
+			"name": self.name,
+			"type": "Combat"
+			"party": [v for v in self.players.values()],
+			"npcs": [v for v in self.npcs.values()],
+		}
+
+	def start(self):
+		return messages.Message(
+			msg=["Combat has begun...  "],
+			campinfo=self.campinfo())
 
 
 	def __do_combat(self):
@@ -99,7 +99,7 @@ class Combat(cps.BaseCampaign):
 			total.append("The battle continues to rage.")
 
 
-		return messages.Message(msg=total, users=rec_p, npcs=rec_n)
+		return messages.Message(msg=total, campinfo=self.campinfo())
 
 	
 
