@@ -137,7 +137,7 @@ export class CombatLog {
 		var cell = this.insertCell({type: "stepend", msg: "** The Turn has Ended **"});
 	}
 
-	addlog(msg, step=false) {
+	addlog(msg) {
 		//TABMANAGER.update_tab("printout");
 		EVENTS.alert("update_tab", "printout");
 		

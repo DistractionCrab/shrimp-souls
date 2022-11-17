@@ -27,6 +27,7 @@ class BaseNPC(ss.Entity):
 	_resists: frozenset = field(default_factory=frozenset)
 	_tags: frozenset = field(default_factory=frozenset)
 	_immunities: frozenset = field(default_factory=frozenset)
+	bossq: bool = False
 
 	def weak(self, v):
 		return v in self._weaknesses
@@ -38,12 +39,7 @@ class BaseNPC(ss.Entity):
 		return v in self._resists
 
 	def has_tag(self, t):
-		return t in self._tags
-
-	@property
-	def position(self):
-		return ss.Positions.FRONT	
-	
+		return t in self._tags	
 
 	def commit(self):
 		self.commitfn(self)
@@ -53,6 +49,10 @@ class BaseNPC(ss.Entity):
 		return tuple(
 			cls(name=f"{cls.__name__}[{i}]",commitfn=commitfn)
 			for i in range(s, s+n) if random.random() < prob)
+
+	@classmethod
+	def make(cls, i):
+		return cls(name=f"{cls.__name__}[{i}]")
 
 	def labeled(self, l):
 		try:
@@ -68,14 +68,15 @@ class BaseNPC(ss.Entity):
 		except:
 			return False
 
-	def random_action(self, u, env):
-		return []
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, [ss.Positions.FRONT], True)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		return [actions.DamageTarget(attacker=self, defender=target[0])]
+
+	def use_ability(self, abi, targets, env):
+		return self.random_action(env)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -97,10 +98,10 @@ class Goblin(BaseNPC):
 	xp:  int = 1
 	hp:  int = 40
 	max_hp: int = 40
-	_acc: int = 30
-	_eva: int = 15
-	_att: int = 30
-	_dfn: int = 20
+	_acc: int = 25
+	_eva: int = 10
+	_att: int = 25
+	_dfn: int = 10
 
 	def __hash__(self):
 		return hash(self.name)
@@ -114,10 +115,10 @@ class Wolf(BaseNPC):
 	xp:  int = 3
 	hp:  int = 70
 	max_hp: int = 70
-	_acc: int = 50
+	_acc: int = 35
 	_eva: int = 50
-	_att: int = 50
-	_dfn: int = 35
+	_att: int = 35
+	_dfn: int = 20
 
 	def __hash__(self):
 		return hash(self.name)
@@ -136,12 +137,9 @@ class GoblinPriest(BaseNPC):
 	def __hash__(self):
 		return hash(self.name)
 
-	@property
-	def position(self):
-		return ss.Positions.BACK
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, True, ss.Positions, True, amt=3)
+	def random_action(self, env):
+		target = env.find_valid_target(self, True, True, amt=3)
 		return [
 			actions.HealTarget(attacker=self, defender=t, dmg=random.randint(1, 6)) 
 			for t in target]
@@ -189,8 +187,8 @@ class Ogre(BaseNPC):
 	def __hash__(self):
 		return hash(self.name)
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, [ss.Positions.FRONT], True, amt=2)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True, amt=2)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		elif len(target) == 1:
@@ -215,8 +213,8 @@ class Troll(BaseNPC):
 	def __hash__(self):
 		return hash(self.name)
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, [ss.Positions.FRONT], True, amt=2)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True, amt=2)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		elif len(target) == 1:
@@ -226,6 +224,8 @@ class Troll(BaseNPC):
 				actions.DamageTarget(attacker=self, defender=target[0]),
 				actions.DamageTarget(attacker=self, defender=target[1]),
 				actions.HealTarget(attacker=self, defender=self, mult=1/5)]
+
+
 
 
 @dataclass
@@ -247,8 +247,8 @@ class Wraith(BaseNPC):
 	def __hash__(self):
 		return hash(self.name)
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, ss.Positions, True, amt=2)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True, amt=2)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		else:
@@ -271,12 +271,13 @@ class OxTitan(BaseNPC):
 	_immunities: frozenset = frozenset([
 			ss.StatusEnum.charm,
 		])
+	bossq: bool = True
 
 	def __hash__(self):
 		return hash(self.name)
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, ss.Positions, True, amt=2)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True, amt=2)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		elif len(target) == 1:
@@ -313,8 +314,8 @@ class BloodGolem(BaseNPC):
 	def __hash__(self):
 		return hash(self.name)
 
-	def duel_action(self, env):
-		target = env.find_valid_target(self, False, ss.Positions, True)
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True)
 		if len(target) == 0:
 			return [actions.DoNothing(player=self)]
 		else:

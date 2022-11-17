@@ -10,22 +10,19 @@ import math
 STEAL_BONUS_THRESHOLD = 10
 
 def steal(u, targets, env):
-	t = env.find_valid_target(u, False, ss.Positions, True)
+	t = env.find_valid_target(u, False, True)
 	return [Action1(attacker=u, defender=r) for r in t]
 
 
 def poach(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
-	
-	return [Target1(attacker=u, defender=t)]
+		return [Target1(attacker=u, defender=t[0])]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"steal": steal,
 	"poach": poach,
 }

@@ -7,7 +7,7 @@ import random
 import math
 
 def prayer(u, targets, env):
-	targets = env.find_valid_target(u, True, ss.Positions, True, amt=3)
+	targets = env.find_valid_target(u, True, True, amt=3)
 
 
 	return [
@@ -21,7 +21,7 @@ def prayer(u, targets, env):
 
 def heal(u, targets, env):
 	if len(targets) == 0:
-		t = env.find_valid_target(u, True, ss.Positions, True)
+		t = env.find_valid_target(u, True, True)
 		if len(t) == 0:
 			return [actions.Error(info="No targets could be found...")]
 		t = t[0]
@@ -36,6 +36,7 @@ def heal(u, targets, env):
 		return [actions.HealTarget(attacker=u, defender=t, mult=1/15)]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"prayer": prayer,
 	"heal": heal,
 }

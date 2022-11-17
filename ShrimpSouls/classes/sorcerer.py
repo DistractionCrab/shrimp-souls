@@ -11,16 +11,14 @@ def soulmass(u, targets, env):
 	return [Action1(attacker=u, defender=u)]
 
 def soulspear(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, False, ss.Positions, True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
-	return [Target1(attacker=u, defender=t)]
+		return [Target1(attacker=u, defender=t[0])]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"soulmass": soulmass,
 	"soulspear": soulspear,
 }
@@ -30,10 +28,6 @@ class Sorcerer(ClassSpec):
 	@property
 	def abi_map(self):
 		return ABI_MAP
-		
-	@property
-	def position(self):
-		return ss.Positions.BACK
 		
 	def max_hp(self, p):
 		return cs.stat_map(p, base=100, level=8, vigor=3)

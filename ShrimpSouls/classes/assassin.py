@@ -11,20 +11,14 @@ def invis(u, targets, env):
 	return [Action1(attacker=u, defender=u)]
 
 def poison_blade(u, targets, env):
-	if len(targets) == 0:
-		if u.invis > 0:
-			t = env.find_valid_target(u, False, ss.Positions, True)
-		else:
-			t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
-
-	return [Target1(attacker=u, defender=t)]
+		return [Target1(attacker=u, defender=t[0])]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"invis": invis,
 	"poison_blade": poison_blade,
 }
@@ -57,6 +51,8 @@ class Assassin(ClassSpec):
 			return [
 				actions.DamageTarget(attacker=actor, defender=t) 
 				for t in env.find_valid_target(actor, False, [ss.Positions.FRONT], True)]
+		else:
+			return []
 
 
 	@property

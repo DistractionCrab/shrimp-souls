@@ -17,10 +17,6 @@ function compare(a, b) {
 
 
 function sort_table(table, target_q) {
-	//for (const r of table.rows) {
-	//	console.log(r.name);
-	//}
-	//console.log("---------------------------");
 	const elems = [].slice.call(table.rows);
 	elems.sort((r1, r2) => {
 		if (target_q.has(r1.name) && target_q.has(r2.name)) {
@@ -34,22 +30,16 @@ function sort_table(table, target_q) {
 		}
 	});
 
-	//for (const r of table.rows) {
-	//	console.log(r.name);
-	//}
-	//console.log("---------------------------");
-
 	table.replaceChildren(...elems);
 }
 
 class Entity {
-	constructor(data, player) {
+	constructor(data) {
 		this.data = data;
 		this.status_table = document.createElement("table");
 		this.data_table = document.createElement("table");
 		this.entity_table = document.createElement("table");
 		this.name = data["name"];
-		this.player = player;
 
 		this.init_table();		
 	}
@@ -139,61 +129,20 @@ class Entity {
 }
 
 export class EntityManager {
-	constructor() {
-		this.playerdisplay = document.getElementById("partytable");
-		this.npcdisplay = document.getElementById("npctable");
+	constructor(display) {
+		this.playerdisplay = display
 		this.players = {};
-		this.npcs = {};
-		this.p_index = [];
-		this.n_index = [];
 		this.targeted = {};
-
 		this.target_q = new Set();
 		this.containers = {}
 
-
-		EVENTS.addEventListener("partyinfo", (data) => {
-			this.updatePlayers(data);
-		});
-
-		EVENTS.addEventListener("npcinfo", (data) => {
-			this.updateNPCS(data);
-		});
-
-		EVENTS.addEventListener("remove_npc", (data) => {
-			this.remove(data);
-		});
-
-		EVENTS.addEventListener("remove_player", (data) => {
-			this.remove(data);
-		});
-
-		EVENTS.addEventListener("toggle_target", (e) => {
-			
+		EVENTS.addEventListener("toggle_target", (e) => {			
 			for (const en of e) {
 				this.toggle_target(en, en.name in this.players);
-			}
-			
+			}			
 		})
 	}
 
-	is_player(name) {
-		return name in this.players;
-	}
-
-	is_npc(name) {
-		return name in this.npcs;
-	}
-
-	get_structs(name) {
-		if (name in this.npcs) {
-			return [this.n_index, this.npcs, this.npcdisplay];
-		} else if (name in this.players) {
-			return [this.p_index, this.players, this.playerdisplay];
-		} else {
-			return null;
-		}
-	}
 
 	remove(names) {
 		for (var i = this.playerdisplay.rows.length - 1; i >= 0; -- i) {
@@ -202,15 +151,6 @@ export class EntityManager {
 			if (names.includes(n)) {
 				this.playerdisplay.deleteRow(i);
 				delete this.players[n];
-				delete this.containers[n]
-			}
-		}
-
-		for (var i = this.npcdisplay.rows.length - 1; i >= 0; -- i) {
-			const n = this.npcdisplay.rows[i].name;
-			if (names.includes(n)) {
-				this.npcdisplay.deleteRow(i);
-				delete this.npcs[n];
 				delete this.containers[n]
 			}
 		}
@@ -239,16 +179,12 @@ export class EntityManager {
 
 	clear() {
 		this.players = {};
-		this.npcs = {}
-		this.p_index = [];
-		this.n_index = []
 		this.playerdisplay.innerHTML = "";
-		this.npcdisplay.innerHTML = "";
 	}
 
-	insert_row(p, player) {
-		const en = new Entity(p, player);
-		const t = player ? this.playerdisplay : this.npcdisplay;
+	insert_row(p) {
+		const en = new Entity(p);
+		const t = this.playerdisplay;
 
 		var row = t.insertRow(t.rows.length);
 		row.name = p.name;
@@ -267,30 +203,15 @@ export class EntityManager {
 	}
 	
 
-	updateNPCS(npcs) {
-		for (const p of npcs) {
-			if (!(p.name in this.npcs)) {
-				//this.insert_row(this.npcdisplay, this.npcs, this.n_index, p, false);
-				this.npcs[p.name] = this.insert_row(p, false);
-			} else {
-				this.npcs[p.name].update(p);
-			}
-		}
-
-		sort_table(this.npcdisplay, this.target_q);
-	}
-
-	updatePlayers(players) {
+	update(players) {
 		for (const p of players) {
 			if (!(p.name in this.players)) {
 				this.players[p.name] = this.insert_row(p, true);
-				//this.insert_row(this.playerdisplay, this.players, this.p_index, p, true);
 			} else {
 				this.players[p.name].update(p);
 			}
 		}
-		sort_table(this.playerdisplay, this.target_q);
-		
+		sort_table(this.playerdisplay, this.target_q);		
 	}
 		
 }

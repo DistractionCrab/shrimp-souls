@@ -49,7 +49,14 @@ def stat_map(
 		+ p.attributes.luck * luck
 		+ p.attributes.perception * perception)
 
-	
+def autoattack(actor, targets, env):
+	return [
+		actions.DamageTarget(attacker=actor, defender=t) 
+		for t in env.find_valid_target(actor, False, True, targets=targets)]
+
+ABI_MAP = {
+	"autoattack": autoattack
+}
 
 class ClassSpec:
 	def max_hp(self, p):
@@ -57,15 +64,11 @@ class ClassSpec:
 
 	@property
 	def abi_map(self):
-		return {}
+		return ABI_MAP
 
 	@property
 	def ability_list(self):
 		return tuple(self.abi_map.keys())
-
-	@property
-	def position(self):
-		return ss.Positions.FRONT	
 
 	def score_eva(self, p):
 		return stat_map(p, level=20)

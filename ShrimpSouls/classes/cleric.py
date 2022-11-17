@@ -7,21 +7,18 @@ import random
 import math
 
 def blessing(u, targets, env):
-	t = env.find_valid_target(u, True, ss.Positions, True, amt=3)
+	t = env.find_valid_target(u, True, True, amt=3, targets=targets)
 	return [Action1(attacker=u, defender=r) for r in t]
 
 def cleanse(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, True, ss.Positions, True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
-
-	return [Target1(attacker=u, defender=t)]
+		return [Target1(attacker=u, defender=t[0])]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"blessing": blessing,
 	"cleanse": cleanse,
 }

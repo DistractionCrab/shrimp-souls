@@ -11,17 +11,14 @@ def enchant(u, targets, env):
 	return [Action1(attacker=u,defender=u)]
 
 def magic_cover(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, True, ss.Positions, True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, True, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
-
-	return [Target1(attacker=u,defender=t)]
+		return [Target1(attacker=u, defender=t[0])]
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"enchant": enchant,
 	"magic_cover": magic_cover,
 }

@@ -117,8 +117,6 @@ class Server:
 		while not self.__closed:
 			try:
 				msg = await self.__msgs.get()
-
-				i = 0
 				if msg is Heartbeat:
 					await self.__heartbeat()
 				else:
@@ -160,9 +158,15 @@ class Server:
 			if now - self.__last >= STEP_FREQUENCY:
 
 				self.__last = now
-				msg = self.__game.step()
-				
-				await self.__handle_update(msg, step=True)
+				for m in self.__game.step():
+					await self.__handle_message(m)
+
+
+				await self.__handle_message(
+						messages.TimeInfo(
+							now=self.__last, 
+							length=STEP_FREQUENCY,
+							recv=tuple(self.__game.players)))
 
 
 	async def __disconnect(self, msg):
@@ -179,12 +183,10 @@ class Server:
 		if i in self.__idmaps:
 			print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
 			del self.__idmaps[i]
-			
-
 
 
 	async def __send_message(self, wsid, m):
-		s = await self.__get_sock(wsid)
+		s = self.__sockets[wsid]
 		try:
 			await s.send(json.dumps(m))
 		except:
@@ -194,36 +196,23 @@ class Server:
 		for n in m.recv:
 			if n in self.__unames:
 				t = m.json
-				t["charsheet"] = self.__game.get_player(n).json
 				await self.__sockets[self.__unames[n]].send(json.dumps(t))
 
 
-	async def __get_uname(self, wsid):
-		return self.__idmaps[wsid]
-
 	async def __join(self, msg):
-		try:
-			name = self.__idmaps[msg['wsid']]
-			self.__game.join(name)
-			await self.__handle_update(
-				messages.Message(msg=[f"{name} has joined the party!"], 
-				users=self.__game.party,
-				npcs=self.__game.npcs))
-		except Exception as ex:
-			await self.__send_message(msg['wsid'], {"log": f"Error on joining: {ex}"})
+		name = self.__idmaps[msg['wsid']]
+		
+		for m in self.__game.join(name):
+			await self.__handle_message(m)
 
 
 	async def __respec(self, msg):
 		wsid = msg['wsid']
 		cl = msg['data']
 		p = self.__game.get_player(self.__idmaps[wsid])
-		m = self.__game.respec(p, cl)
 
-		if m.is_err:
-			await self.__send_message(wsid, {"log": m.msg})
-		else:			
-			await self.__handle_update(m)
-
+		for m in self.__game.respec(p, cl):
+			await self.__handle_message(m)
 
 	async def __connect(self, msg):
 		wsid = msg['wsid']
@@ -243,79 +232,34 @@ class Server:
 					uname = r["data"][0]["login"]
 					self.__idmaps[wsid] = uname
 					self.__unames[uname] = wsid
-					player = self.__game.get_player(uname)
 					print(f"Connected received for c-id {self.__clientid} from {uname}")
-					if self.__game.is_joined(uname):
-						msg = Messages.UPDATE(self.__game, ["Connected"], player)
-						msg["tinfo"] = {"now": self.__last, "ttotal": STEP_FREQUENCY}
-						await self.__send_message(wsid, msg)						
-					else:
-						await self.__send_message(wsid, Messages.CONNECTONLY(self.__game, player))
+					for m in self.__game.connect(uname):
+						await self.__handle_message(m)
+					await self.__handle_message(
+						messages.TimeInfo(
+							now=self.__last, 
+							length=STEP_FREQUENCY,
+							recv=(uname,)))
 						
 			else:
 				await self.__send_message(wsid, {"requestid": True})
 
 
+
 	async def __level_up(self, msg):
 		p = self.__game.get_player(self.__idmaps[msg['wsid']])
-		m = p.level_up(msg['att'])
-
-		if m.is_err:
-			await self.__send_message(msg['wsid'], {
-					"log": m.msg
-				})
-		else:
-			await self.__send_message(msg['wsid'], {
-					"charsheet": p.json,
-					"log": m.msg
-				})
-			
-	async def __handle_update(self, msg, step=False):
-		items = list(self.__idmaps.items())
-		for (wsid, r) in items:
-			p = self.__game.get_player(r)
-			send = {
-				'log': msg.msg,
-				'charsheet': p.json,
-				'partyinfo': [u.json for u in msg.users],
-				'npcinfo': [u.json for u in msg.npcs],
-				"joined": self.__game.is_joined(p),
-				'remove_npc': msg.remove_npc,
-				'remove_player': msg.remove_player,
-			}
-
-			if step:
-				send["tinfo"] = {"now": self.__last, "ttotal": STEP_FREQUENCY}
-				send["step"] = True
-
-			await self.__send_message(wsid, send)
+		for m in p.level_up(msg['att']):
+			await self.__handle_message(m)
 
 
 	async def __do_ability(self, msg):
 		wsid = msg['wsid']
 		name = self.__idmaps[wsid]
-		msg = self.__game.use_ability(name, msg['ability'], msg['targets'])
-		if msg.is_err:
-			await self.__send_message(wsid, {"log": msg.msg})
-		else:
-			await self.__handle_update(msg)
+		for m in self.__game.use_ability(name, msg['ability'], msg['targets']):
+			await self.__handle_message(m)
 
-
-
-	async def __add_sock(self, ws):
-		index = 0 if len(self.__sockets) == 0 else max(self.__sockets.keys()) + 1
-		self.__sockets[index] = ws
-
-		return index
-
-	async def __get_sock(self, wsid):
-		if wsid in self.__sockets:
-			return self.__sockets[wsid]
-		else:
-			return None
 
 	async def __call__(self, ws):
-		#wsid = await self.__add_sock(ws)
 		wsid = self.__wsid_ct
 		self.__wsid_ct += 1
 		reading = True
@@ -420,6 +364,7 @@ class Router:
 			await ws.close()
 		except Exception as ex:
 			print(f"Generic Connection Error: {ex}")
+			raise ex
 
 	async def main(self):
 		looping = True

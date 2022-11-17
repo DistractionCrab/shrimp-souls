@@ -11,17 +11,16 @@ def sharpen(u, targets, env):
 	return [Action1(attacker=u, defender=u)]
 
 def armor_break(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, False, [ss.Positions.FRONT], True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
+	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
+	if len(t) == 0:
+		return []
 	else:
-		t = env.get_target(targets[0])
+		return [Target1(attacker=u, defender=t[0])]
 
-	return [Target1(attacker=u, defender=t)]
+	
 
 ABI_MAP = {
+	"autoattack": cs.autoattack,
 	"sharpen": sharpen,
 	"armor_break": armor_break,
 }

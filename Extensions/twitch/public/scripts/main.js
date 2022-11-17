@@ -7,6 +7,7 @@ import { SpellBook } from "./spellbook.js";
 import { CharSheet } from "./charsheet.js";
 import { EntityManager } from "./entity_manager.js";
 import { MESSAGES } from "./messages.js";
+import { CampaignManager } from "./campaign/init.js";
 
 class PageManager {
 	constructor(testing) {		
@@ -16,8 +17,8 @@ class PageManager {
 		// Parts of the page to update the statuses.
 		this.csheet = new CharSheet();
 		this.printout = new CombatLog();
-		this.entities = new EntityManager();
 		this.spellbook = new SpellBook();
+		this.campaign = new CampaignManager();
 
 		this.reconnect = null;
 		this.websocket = null;
@@ -99,7 +100,7 @@ class PageManager {
 	}
 
 	opened() {
-		this.printout.addlog(["Established connection to game server."]);
+		//this.printout.addlog(["Established connection to game server."]);
 		if (this.reconnect !== null) {
 			clearTimeout(this.reconnect);
 		}
@@ -128,23 +129,16 @@ const TABMANAGER = new TabManager({
 		active_fn: () => { MANAGER.printout.focus_recent() },
 		deactive_fn: () => {},
 	},
-	party: { 
-		header: "partyheader", 
-		body: "partytab", 
-		active: false, 
-		active_fn: () => {},
-		deactive_fn: () => {},
-	},
-	npcs: { 
-		header: "npcheader", 
-		body: "npctab", 
-		active: false, 
-		active_fn: () => {},
-		deactive_fn: () => {},
-	},
 	skills: { 
 		header: "abilityheader", 
 		body: "abilitytab", 
+		active: false, 
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
+	world: { 
+		header: "worldheader", 
+		body: "worldtab", 
 		active: false, 
 		active_fn: () => {},
 		deactive_fn: () => {},
@@ -153,35 +147,11 @@ const TABMANAGER = new TabManager({
 "printout");
 
 
-function expand_select(obj) {
-	if (obj.size == 0) {
-		obj.setAttribute("size", 5);
-		obj.style.height="var(--classselect-opened)";
-	} else {
-		obj.size=0;
-		obj.style.height="var(--class-select-height)";
-	}
-	
-	//obj.click();
-
-	//log("Expanding");
-}
-
-function blur_select(obj) {
-	obj.size=0;
-	obj.style.height="var(--class-select-height)";
-}
-
 function respec() {
 	const obj = document.getElementById("classselect");
 	MANAGER.sendMessage(MESSAGES.respec(obj.options[obj.selectedIndex].value))
 }
 
-function confirm_level(att) {
-	if (confirm(`Do you wish to level ${att}?`)) {
-		MANAGER.level(att);	
-	}
-}
 
 
 //document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
@@ -196,18 +166,6 @@ document.getElementById("lvlup-faith").addEventListener("click", () => { MANAGER
 document.getElementById("lvlup-luck").addEventListener("click", () => { MANAGER.level("luck"); });
 document.getElementById("lvlup-perception").addEventListener("click", () => { MANAGER.level("perception"); });
 
-/*
-// Setup click listeners for class options to close selection menus.
-for (const c of document.getElementsByClassName("classoption")) {
-	c.addEventListener("click", function(event) {
-		const p = event.currentTarget.parentElement
-
-		if (p.size > 0) {
-			p.size=0;
-			p.style.height="var(--class-select-height)";
-		}
-	});
-}*/
 
 /*
 setInterval(function() {

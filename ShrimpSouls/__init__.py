@@ -40,9 +40,7 @@ class Scores(enum.Enum):
 	Att = lambda x: x.att
 	Acc = lambda x: x.acc
 
-class Positions(enum.Enum):
-	FRONT = enum.auto()
-	BACK = enum.auto()
+
 
 class StatusEnum(enum.Enum):
 	block = enum.auto()
@@ -519,6 +517,8 @@ class Player(Entity):
 	attributes: Attributes = field(default_factory=Attributes)
 	myclass: classes.ClassSpec = classes.ClassSpec()
 
+	def __post_init__(self):
+		self.hp = self.max_hp
 
 	def __hash__(self):
 		return hash(self.name)
@@ -550,10 +550,16 @@ class Player(Entity):
 			try:
 				self.attributes.increment(att)
 			except:
-				return messages.Error(msg=[f"{att} does not exist to level up???"])
-			return messages.Message(msg=[f"{self.name} has leveled up {att}!!!"])
+				yield messages.Message(
+					msg=[f"{att} does not exist to level up???"],
+					recv=(self.name,))
+			yield messages.Message(
+				msg=[f"{self.name} has leveled up {att}!!!"],
+				recv=(self.name,))
 		else:
-			return messages.Error([f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})"])
+			yield messages.Message(
+				msg=[f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})"],
+				recv=(self.name,))
 
 	def get_xp_req(self):
 		return xp_req(self.level)
@@ -625,13 +631,13 @@ class Player(Entity):
 	def max_hp(self):
 		return self.myclass.max_hp(self)
 
-	@property
-	def position(self):
-		return self.myclass.position
 
 
-	def random_action(self, u, env):
-		return self.myclass.random_action(u, env)
+	def random_action(self, env):
+		return self.myclass.random_action(self, env)
+
+	def use_ability(self, abi, targets, env):
+		return self.myclass.use_ability(self, abi, targets, env)
 
 	@property
 	def is_npc(self):
@@ -651,18 +657,26 @@ class Player(Entity):
 	def update_class(self, name):
 		self.myclass = classes.Classes[name.lower().capitalize()].value
 		self.hp = min(self.hp, self.max_hp)
-		return messages.Message(
-			msg=f"{self.name} has updated their class to {self.myclass.cl_string}!!!",
-			users=[self])
+		yield messages.Response(
+			msg=[f"{self.name} has updated their class to {self.myclass.cl_string}!!!"],
+			recv=[self.name])
 
-class GameManagerNew(persistent.Persistent):
+	
+
+class GameManager(persistent.Persistent):
 	def __init__(self):
-		import ShrimpSouls.campaigns.hub as hub
-		self.__root = hub.Hub()
+		import ShrimpSouls.campaigns.arena as arena
+		self.__root = arena.Arena()
 		self.__players = persistent.mapping.PersistentMapping()
+
 
 	def step(self):
 		yield from self.__root.step()
+
+	@property
+	def players(self):
+		return self.__root.players
+	
 
 	def add_player(self, name):
 		if name not in self.__players:
@@ -671,6 +685,42 @@ class GameManagerNew(persistent.Persistent):
 			return p
 		else:
 			return self.__players[name]
+
+	def get_player(self, name):
+		if isinstance(name, str):
+			if name in self.__players:
+				return self.__players[name]
+			else:
+				return self.add_player(name)
+		else:
+			return name
+		
+
+	def connect(self, p):
+		p = self.get_player(p)
+
+		yield messages.CharInfo(info=p, recv=(p.name,))
+
+		if p in self.__root:
+			
+			yield messages.Message(
+				msg=["Connected to Game Server."],
+				campinfo=self.__root.campinfo(),
+				recv=(p.name,))
+		else:
+			yield messages.Connected(recv=(p.name,))
+			
+
+	def join(self, p):
+		p = self.get_player(p)
+
+		if p in self.__root:
+			yield messages.Message(
+				msg=["You have already joined the campaign."],
+				reciv=(p.name,))
+		else:
+			yield from self.__root.add_player(p)
+
 
 	def action(self, src, msg):
 		if isinstance(src, str):
@@ -687,97 +737,19 @@ class GameManagerNew(persistent.Persistent):
 		if isinstance(p, str):
 			p = self.get_player(p)
 
-		if self.__root.resting(p):
-			p.update_class(cl)
+		if self.__root.resting(p) or True:			
 			p.respec()
-			yield messages.Message(
+			yield messages.Response(
 				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
-				users=[p])
+				recv=[p.name])
+			yield from p.update_class(cl)
+			yield messages.CharInfo(
+				info=p,
+				recv=[p.name])
 		else:
-			yield messages.Response(msg=[f"{p.name} cannot respec in a non-resting arena."])
-
-
-class GameManager(persistent.Persistent):
-	def __init__(self):
-		import ShrimpSouls.campaigns.arena as cps
-		self.__campaign = cps.WaitingRoom()
-		self.__players = persistent.mapping.PersistentMapping()
-
-	def step(self):
-		(n, msg) = self.__campaign.step()
-		if n is not self.__campaign:
-			self.__campaign = n
-
-		return msg
-
-	def add_player(self, name):
-		if name not in self.__players:
-			p = Player(name=name)
-			self.__players[name] = p
-			return p
-		else:
-			return self.__players[name]
-
-	def temp_add_player(self, p):
-		self.__players[p.name] = p
-
-	def join(self, name):		
-		return self.__campaign.join(self.add_player(name))
-
-	def is_joined(self, name):
-		return self.__campaign.is_joined(name)
-
-	@property
-	def party(self):
-		return list(self.campaign.players.values())
-	
-	@property
-	def players(self):
-		return list(self.__players.values())
-
-	@property
-	def joined_players(self):
-		return self.__campaign.players
-
-	def get_player(self, name):
-		name = name.lower()
-		return self.add_player(name)
-
-	def get_npc(self, name):
-		return self.__campaign.get_npc(name)
-
-	@property
-	def npcs(self):
-		return list(self.__campaign.npcs.values())
-
-
-	def use_ability(self, name, abi, targets):
-		return self.__campaign.use_ability(self.get_player(name), abi, targets)
-
-	@property
-	def campaign(self):
-		return self.__campaign
-
-	def reset_campaign(self):
-		import ShrimpSouls.campaigns.arena as cps
-		self.__campaign = cps.WaitingRoom()
-
-	def resting(self, p):
-		return True
-		return self.__campaign.restarea or not self.__campaign.is_joined(p)
-
-	def respec(self, p, cl):
-		if isinstance(p, str):
-			p = self.get_player(p)
-
-		if self.resting(p):
-			p.update_class(cl)
-			p.respec()
-			return messages.Message(
-				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
-				users=[p])
-		else:
-			return messages.Error(msg=[f"{p.name} cannot respec in a non-resting arena."])
+			yield messages.Response(
+				msg=[f"{p.name} cannot respec in a non-resting arena."],
+				recv=[p.name])
 	
 
 import ShrimpSouls.utils as utils
