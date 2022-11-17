@@ -1,6 +1,5 @@
 Next Steps:
 - setup levelup submit message to reduce spam/overhead
-- respond message
 
 IMPLEMENTATIONS
 - subclassing
