@@ -728,7 +728,7 @@ class GameManager(persistent.Persistent):
 		if p in self.__root:
 			yield messages.Message(
 				msg=["You have already joined the campaign."],
-				reciv=(p.name,))
+				recv=(p.name,))
 		else:
 			yield from self.__root.add_player(p)
 
