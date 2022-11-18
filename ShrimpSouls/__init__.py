@@ -672,12 +672,6 @@ class GameManager(persistent.Persistent):
 		self.__root = arena.Arena()
 		self.__players = persistent.mapping.PersistentMapping()
 
-	def __migrate_fn(self):
-		import ShrimpSouls.campaigns.arena as arena
-		try:
-			a = self.__root
-		except:
-			self.__root = arena.Arena()
 
 	def step(self):
 		yield from self.__root.step()
@@ -706,7 +700,6 @@ class GameManager(persistent.Persistent):
 		
 
 	def connect(self, p):
-		self.__migrate_fn()
 		p = self.get_player(p)
 
 		yield messages.CharInfo(info=p)
@@ -721,8 +714,7 @@ class GameManager(persistent.Persistent):
 			yield messages.Connected(recv=(p.name,))
 			
 
-	def join(self, p):
-		self.__migrate_fn()
+	def join(self, p):	
 		p = self.get_player(p)
 
 		if p in self.__root:
@@ -734,7 +726,6 @@ class GameManager(persistent.Persistent):
 
 
 	def action(self, src, msg):
-		self.__migrate_fn()
 		if isinstance(src, str):
 			src = self.__players[src]
 
@@ -742,12 +733,10 @@ class GameManager(persistent.Persistent):
 
 
 	def use_ability(self, name, abi, targets):
-		self.__migrate_fn()
 		yield from self.__root.use_ability(self.get_player(name), abi, targets)
 
 
 	def respec(self, p, cl):
-		self.__migrate_fn()
 		if isinstance(p, str):
 			p = self.get_player(p)
 
