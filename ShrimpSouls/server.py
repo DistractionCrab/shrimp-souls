@@ -136,8 +136,7 @@ class Server:
 			except KeyboardInterrupt as ex:
 				print("Exiting server loop...  (Interrupted)")
 				self.close()
-			except Exception as ex:
-				print(f"Error in main thread happens: {ex}")
+							
 		print(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
@@ -367,7 +366,6 @@ class Router:
 			await ws.close()
 		except Exception as ex:
 			print(f"Generic Connection Error: {ex}")
-			raise ex
 
 	async def main(self):
 		looping = True
