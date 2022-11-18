@@ -28,7 +28,7 @@ class CharInfo:
 
 	@property
 	def recv(self):
-		yield info.name
+		yield self.info.name
 	
 	
 
