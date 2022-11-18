@@ -39,7 +39,7 @@ class Combat(cps.BaseCampaign):
 		else:
 			yield self.__do_combat()
 			for p in self.players.values():
-				yield messages.CharInfo(info=p, recv=[p.name])
+				yield messages.CharInfo(info=p)
 
 	def _campinfo(self):
 		if self.finished:
