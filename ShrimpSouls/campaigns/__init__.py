@@ -95,7 +95,7 @@ class BaseCampaign(persistent.Persistent):
 	def find_valid_target(self, att, dfn, evn, **kwds):
 		return tuple()
 
-	def get_npc(self, name):
+	def get_player(self, name):
 		return self.__players[name] if name in self.__players else None
 
 	def get_npc(self, name):
