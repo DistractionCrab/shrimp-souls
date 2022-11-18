@@ -17,7 +17,7 @@ class Connected(RootMessage):
 		}
 
 @dataclass
-class CharInfo(RootMessage):
+class CharInfo:
 	info: object 
 
 	@property
@@ -25,6 +25,11 @@ class CharInfo(RootMessage):
 		return {
 			"charsheet": self.info.json
 		}
+
+	@property
+	def recv(self):
+		yield info.name
+	
 	
 
 @dataclass

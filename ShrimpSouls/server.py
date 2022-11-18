@@ -138,7 +138,6 @@ class Server:
 				self.close()
 			except Exception as ex:
 				print(f"Error in main thread happens: {ex}")
-				raise ex
 		print(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
@@ -182,7 +181,11 @@ class Server:
 				pass
 		if i in self.__idmaps:
 			print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
+			del self.__unames[self.__idmaps[i]]
 			del self.__idmaps[i]
+
+
+
 
 
 	async def __send_message(self, wsid, m):

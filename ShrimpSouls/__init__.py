@@ -549,13 +549,16 @@ class Player(Entity):
 			self.xp -= req
 			try:
 				self.attributes.increment(att)
+				yield messages.CharInfo(info=self)
+				yield messages.Message(
+					msg=[f"{self.name} has leveled up {att}!!!"],
+					recv=(self.name,))
+				
 			except:
 				yield messages.Message(
 					msg=[f"{att} does not exist to level up???"],
 					recv=(self.name,))
-			yield messages.Message(
-				msg=[f"{self.name} has leveled up {att}!!!"],
-				recv=(self.name,))
+			
 		else:
 			yield messages.Message(
 				msg=[f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})"],
@@ -706,7 +709,7 @@ class GameManager(persistent.Persistent):
 		self.__migrate_fn()
 		p = self.get_player(p)
 
-		yield messages.CharInfo(info=p, recv=(p.name,))
+		yield messages.CharInfo(info=p)
 
 		if p in self.__root:
 			
@@ -754,9 +757,7 @@ class GameManager(persistent.Persistent):
 				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
 				recv=[p.name])
 			yield from p.update_class(cl)
-			yield messages.CharInfo(
-				info=p,
-				recv=[p.name])
+			yield messages.CharInfo(info=p)
 		else:
 			yield messages.Response(
 				msg=[f"{p.name} cannot respec in a non-resting arena."],
