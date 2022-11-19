@@ -16,6 +16,10 @@ class Connected(RootMessage):
 			"joined": self.joined
 		}
 
+	@property
+	def msg(self):
+		return tuple()
+
 @dataclass
 class CharInfo:
 	info: object 
@@ -29,6 +33,11 @@ class CharInfo:
 	@property
 	def recv(self):
 		yield self.info.name
+
+	@property
+	def msg(self):
+		return tuple()
+	
 	
 	
 
@@ -45,6 +54,10 @@ class TimeInfo(RootMessage):
 				"ttotal": self.length
 			}
 		}
+
+	@property
+	def msg(self):
+		return tuple()
 
 @dataclass
 class Response(RootMessage):

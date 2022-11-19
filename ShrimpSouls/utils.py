@@ -11,47 +11,17 @@ import persistent
 ROLL_THRESHOLD = 30
 
 def acc_scale(self, base):
-	if self.accup > 0:
-		base *= 1.2
-	if self.accdown > 0:
-		base *= 0.8
-	if self.encourage > 0:
-		base *= 1.2
-	if self.poison > 0:
-		base *= 0.7
-
 	return math.ceil(base)
 
 
 def att_scale(self, base):
-	if self.attup > 0:
-		base *= 1.2
-	if self.attdown > 0:
-		base *= 0.8
-	if self.encourage > 0:
-		base *= 1.1
-	if self.poison > 0:
-		base *= 0.7
-
 	return math.ceil(base)
 
 def eva_scale(self, base):
-	if self.evaup > 0:
-		base *= 1.2
-	if self.evadown > 0:
-		base *= 0.8
-	if self.status.stun > 0:
-		base *= 0.4
-
 	return math.ceil(base)
 
 def def_scale(self, base):
-		if self.defup > 0:
-			base *= 1.2
-		if self.defdown > 0:
-			base *= 0.8
-
-		return math.ceil(base)
+	return math.ceil(base)
 
 
 def score_hit(s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
@@ -61,50 +31,28 @@ def score_dmg(s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
 	return (s1, s2, b1, b2, m1, m2)
 
 def compute_prob(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
-	s1 = m1*s1(a) + b1
-	s2 = m2*s2(d) + b2
-	v1 = math.ceil(s1/50)
-	v2 = math.ceil(s2/50)
-	
-	r = (s1 - s2)/(s1 + s2)
-
-	return expit(r * (v1 + v2))
+	r = (s1/s2 - 1)*((s1 + s2)/100)
+	return expit(r)
 
 
 def compute_bool_many(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
-	s1 = m1*s1(a) + b1
-	s2 = m2*s2(d) + b2
-	v1 = math.ceil(s1/50)
-	v2 = math.ceil(s2/50)
-	
-	r = (s1 - s2)/(s1 + s2)
-
-	#rolls = s1//ROLL_THRESHOLD + 1
+	p = compute_prob(a, d, s1=s1, s2=s2, b1=b1, b2=b2, m1=m1, m2=m2)
 	rolls = 1
 
 	total = []
 
-	return [random.random() < expit(r * (v1 + v2))/(d**1.5) for d in range(1, rolls+1)]
+	return [random.random() < p/(d**1.5) for d in range(1, rolls+1)]
 
 def compute_bool(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
-	s1 = m1*s1(a) + b1
-	s2 = m2*s2(d) + b2
-	v1 = math.ceil(s1/50)
-	v2 = math.ceil(s2/50)
-	
-	r = (s1 - s2)/(s1 + s2)
+	p = compute_prob(a, d, s1=s1, s2=s2, b1=b1, b2=b2, m1=m1, m2=m2)
 
-	return random.random() < expit(r * (v1 + v2))
+	return random.random() < p
 
 def compute_dmg(a, d, s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
+	p = compute_prob(a, d, s1=s1, s2=s2, b1=b1, b2=b2, m1=m1, m2=m2)
 	s1 = m1*s1(a) + b1
-	s2 = m2*s2(d) + b2
-	v1 = math.ceil(s1/50)
-	v2 = math.ceil(s2/50)
-	
-	r = (s1 - s2)/(s1 + s2)
 
-	return math.ceil(s1 * expit(r * (v1 + v2)))
+	return math.ceil(s1 * p)
 
 
 

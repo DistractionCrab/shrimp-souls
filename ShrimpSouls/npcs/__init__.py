@@ -153,7 +153,7 @@ class GoblinBrute(BaseNPC):
 	max_hp: int = 90
 	_acc: int = 75
 	_eva: int = 70
-	_att: int = 85
+	_att: int = 120
 	_dfn: int = 70
 
 	def __hash__(self):
@@ -167,7 +167,7 @@ class OrcWarrior(BaseNPC):
 	max_hp: int = 200
 	_acc: int = 120
 	_eva: int = 110
-	_att: int = 125
+	_att: int = 140
 	_dfn: int = 135
 
 	def __hash__(self):
@@ -181,7 +181,7 @@ class Ogre(BaseNPC):
 	max_hp: int = 500
 	_acc: int = 160
 	_eva: int = 100
-	_att: int = 160
+	_att: int = 170
 	_dfn: int = 145
 
 	def __hash__(self):

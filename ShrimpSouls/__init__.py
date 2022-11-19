@@ -126,6 +126,10 @@ class Attributes:
 		f = next(f for f in fields(self) if f.name == att)
 		setattr(self, f.name, getattr(self, f.name) + 1)
 
+	@property
+	def json(self):
+		return dict(self.__dict__)
+
 
 @dataclass
 class Entity(persistent.Persistent):
@@ -542,7 +546,6 @@ class Player(Entity):
 
 		return sum(getattr(self.attributes, f.name) for f in fs) - (len(fs) - 1)
 
-	@auto_commit
 	def level_up(self, att):
 		req = self.get_xp_req()
 		if self.xp >= req:
@@ -563,6 +566,36 @@ class Player(Entity):
 			yield messages.Message(
 				msg=[f"{self.name} does not have enough xp to level up. (Has {self.xp}, needs {req})"],
 				recv=(self.name,))
+
+	def level_up_many(self, atts):
+		totals = {a: 0 for a in atts}
+		for (att, amt) in atts.items():
+			for _ in range(amt):
+				try:
+					if self.xp >= self.get_xp_req():
+						self.xp -= self.get_xp_req()
+						self.attributes.increment(att)
+						totals[att] += 1			
+					else:
+						yield messages.Message(
+							msg=[f"{self.name} does not have enough xp to level up further. (Has {self.xp}, needs {req})"],
+							recv=(self.name,))
+						break 
+				except:
+					yield messages.Message(
+						msg=[f"No such attribute: {att}"],
+						recv=(self.name,))
+					break 
+
+		yield messages.CharInfo(info=self)
+		for att, amt in totals.items():
+			if amt > 0:
+				yield messages.Message(
+					msg=[f"{self.name} has leveled up {att} {amt} times!!!"],
+					recv=(self.name,))
+		
+
+			
 
 	def get_xp_req(self):
 		return xp_req(self.level)

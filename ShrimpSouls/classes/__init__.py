@@ -71,25 +71,25 @@ class ClassSpec:
 		return tuple(self.abi_map.keys())
 
 	def score_eva(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_acc(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_att(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_dfn(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_will(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_char(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 	def score_fort(self, p):
-		return stat_map(p, level=20)
+		return stat_map(p, level=9)
 
 
 	def duel_action(self, actor, env):
