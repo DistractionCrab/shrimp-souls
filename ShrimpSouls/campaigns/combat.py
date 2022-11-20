@@ -178,7 +178,7 @@ class Combat(cps.BaseCampaign):
 		else:
 			amt = amt - len(targets)
 			pool = self.allies(att) if ally else self.opponents(att)
-			pool = pool if not aliveq else filter(lambda x: not x.dead, pool)
+			pool = pool if not aliveq else filter(lambda x: x is not None not x.dead, pool)
 			pool = tuple(p for p in pool if p.invis == 0 or random.random() < 0.1)
 			pool = tuple(set(random.sample(pool, k=min(amt, len(pool)))))
 
