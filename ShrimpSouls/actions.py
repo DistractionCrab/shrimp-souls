@@ -405,7 +405,7 @@ class StatusAction(Action):
 				if self.defender.immune(s):
 					self.msg += f"{self.defender.name} is immune to {s.name}."
 				else:
-					if utils.compute_bool(self.attacker, self.defender, *self.score_hit):
+					if self.attacker is self.defender or utils.compute_bool(self.attacker, self.defender, *self.score_hit):
 						a = amt()
 						s.stack(self.defender, amt=a)
 						self.msg += f"{self.attacker.name} afflicted {s.name} on {self.defender.name} for {a} turns. "

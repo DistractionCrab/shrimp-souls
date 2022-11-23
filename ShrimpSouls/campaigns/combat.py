@@ -76,14 +76,14 @@ class Combat(cps.BaseCampaign):
 			if p.stun == 0 and not p.dead:
 				for a in p.tick():
 					total.append(a)
+					
 				actions = []
-				if p.name in self.__queued:
-					(abi, targets) = self.__queued[p.name]
-					targets = targets if p.charm == 0 else tuple()
-					actions = p.use_ability(abi, targets, self)
+				if p.name in self.__queued:					
+					actions = self.__queued[p.name].act(p, self)
 				else:
 					if p.invis == 0:
 						actions = p.random_action(self)
+
 				for a in actions:
 					a.apply()
 					total.append(a.msg + " " + self.handle_dead_foes(a.receivers_npc))
@@ -191,7 +191,35 @@ class Combat(cps.BaseCampaign):
 
 	def use_ability(self, p, abi, targets):
 		self.__queued[p.name] = (abi, targets)
+		self.__queued[p.name] = UseAbility(abi, targets)
 		yield messages.Message(
 			msg=[f"You have readied {abi} for the next turn aimed at {', '.join(targets)}"],
 			recv=(p.name,))
+
+	def use_item(self, p, index, targets):
+		pass
+
+
+class UseAbility:
+	def __init__(self, abi, targets):
+		self.__targets = targets
+		self.__abi = abi
+
+	def act(self, p, env):
+		if p.status.charm == 0:
+			return p.use_ability(self.__abi, self.__targets, env)
+		else:
+			return p.random_action(env)
+
+		
+
+class UseItem:
+	def __init__(self, index, targets):
+		self.__targets = targets
+		self.__index = index
+
+	def act(self, p, env):
+		return tuple()
+
+
 
