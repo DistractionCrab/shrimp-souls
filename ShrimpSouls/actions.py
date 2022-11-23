@@ -52,9 +52,17 @@ class AbilityRange(enum.Enum):
 	def can_soulmass(self):
 		return self == AbilityRange.Touch or self == AbilityRange.Close or self == AbilityRange.Medium
 
+	@property
+	def can_deflect(self):
+		return (
+			self == AbilityRange.Medium or
+			self == AbilityRange.Long
+		)
+
 class Tags(enum.Enum):
 	Unblockable = enum.auto()
 	Unparriable = enum.auto()
+
 
 
 
@@ -63,6 +71,9 @@ class Action:
 	attacker: object
 	defender: object
 	msg: str = ''
+
+	def apply(self):
+		pass
 
 	def on_hit(self):
 		pass
@@ -95,7 +106,6 @@ class Action:
 
 		else:
 			return tuple()
-
 
 
 @dataclass
@@ -264,6 +274,11 @@ class DamageTarget(Action):
 			self.__apply_status()
 			self.on_hit()
 
+			if self.attacker.sealing > 0:
+				self.defender.stack_stun(1)
+			if self.defender.status.briar:
+				self.__handle_briars()
+
 	def soulmass_scenario(self):
 		totals = [
 			utils.compute_bool(self.defender, self.attacker, *self.score_hit) 
@@ -306,6 +321,16 @@ class DamageTarget(Action):
 
 	def on_miss(self):
 		pass
+
+	def __handle_briars(self):
+		if self.dmgtype == AbilityRange.Close or self.dmgtype == AbilityRange.Touch:
+			dmg = utils.compute_dmg(
+				self.defender,
+				self.attacker,
+				s1=ss.Scores.Def,
+				m1=self.defender.status.briar*0.05 + 0.5)
+			self.msg += f"{self.attacker.name} is damaged by {self.defender.name}'s briars for {dmg} damage."
+			self.attacker.damage(dmg)
 
 	def __apply_status(self):
 		for (s, a) in self.statuses.items():

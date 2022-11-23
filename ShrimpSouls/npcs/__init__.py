@@ -96,8 +96,8 @@ class BaseNPC(ss.Entity):
 @dataclass
 class Goblin(BaseNPC):
 	xp:  int = 1
-	hp:  int = 40
-	max_hp: int = 40
+	hp:  int = 200
+	max_hp: int = 200
 	_acc: int = 25
 	_eva: int = 10
 	_att: int = 25
@@ -113,8 +113,8 @@ class Goblin(BaseNPC):
 @dataclass
 class Wolf(BaseNPC):
 	xp:  int = 3
-	hp:  int = 70
-	max_hp: int = 70
+	hp:  int = 350
+	max_hp: int = 350
 	_acc: int = 35
 	_eva: int = 50
 	_att: int = 35
@@ -127,8 +127,8 @@ class Wolf(BaseNPC):
 @dataclass
 class GoblinPriest(BaseNPC):
 	xp:  int = 5
-	hp:  int = 60
-	max_hp: int = 60
+	hp:  int = 300
+	max_hp: int = 300
 	_acc: int = 70
 	_eva: int = 80
 	_att: int = 45
@@ -149,8 +149,8 @@ class GoblinPriest(BaseNPC):
 @dataclass
 class GoblinBrute(BaseNPC):
 	xp:  int = 7
-	hp:  int = 90
-	max_hp: int = 90
+	hp:  int = 450
+	max_hp: int = 450
 	_acc: int = 75
 	_eva: int = 70
 	_att: int = 120
@@ -163,8 +163,8 @@ class GoblinBrute(BaseNPC):
 @dataclass
 class OrcWarrior(BaseNPC):
 	xp:  int = 7
-	hp:  int = 200
-	max_hp: int = 200
+	hp:  int = 1000
+	max_hp: int = 1000
 	_acc: int = 120
 	_eva: int = 110
 	_att: int = 140
@@ -177,8 +177,8 @@ class OrcWarrior(BaseNPC):
 @dataclass
 class Ogre(BaseNPC):
 	xp:  int = 15
-	hp:  int = 500
-	max_hp: int = 500
+	hp:  int = 2500
+	max_hp: int = 2500
 	_acc: int = 160
 	_eva: int = 100
 	_att: int = 170
@@ -202,8 +202,8 @@ class Ogre(BaseNPC):
 @dataclass
 class Troll(BaseNPC):
 	xp:  int = 30
-	hp:  int = 800
-	max_hp: int = 800
+	hp:  int = 4000
+	max_hp: int = 4000
 	_acc: int = 180
 	_eva: int = 160
 	_att: int = 220
@@ -231,8 +231,8 @@ class Troll(BaseNPC):
 @dataclass
 class Wraith(BaseNPC):
 	xp:  int = 30
-	hp:  int = 500
-	max_hp: int = 500
+	hp:  int = 2500
+	max_hp: int = 2500
 	_acc: int = 180
 	_eva: int = 210
 	_att: int = 150
@@ -261,8 +261,8 @@ class Wraith(BaseNPC):
 @dataclass
 class OxTitan(BaseNPC):
 	xp:  int = 100
-	hp:  int = 22000
-	max_hp: int = 22000
+	hp:  int = 110000
+	max_hp: int = 110000
 	_acc: int = 250
 	_eva: int = 210
 	_att: int = 320
@@ -290,8 +290,8 @@ class OxTitan(BaseNPC):
 @dataclass
 class BloodGolem(BaseNPC):
 	xp:  int = 40
-	hp:  int = 2000
-	max_hp: int = 2000
+	hp:  int = 10000
+	max_hp: int = 10000
 	_acc: int = 250
 	_eva: int = 190
 	_att: int = 190

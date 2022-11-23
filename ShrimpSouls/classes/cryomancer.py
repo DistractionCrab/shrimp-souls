@@ -18,10 +18,23 @@ def freeze(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Carapace(cs.Ability):
+	t_amt: int = 0
+
+	def act(self, u, targets, env):
+		return [
+			actions.StatusAction(
+				attacker=u,
+				defender=u,
+				statuses={ss.StatusEnum.briar: lambda: 3})
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"chill": chill,
 	"freeze": freeze,
+	"carapace": Carapace(),
 }
 
 class Cryomancer(ClassSpec):
@@ -30,7 +43,7 @@ class Cryomancer(ClassSpec):
 		return ABI_MAP
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=8, vigor=3)
+		return cs.stat_map(p, mult=5, base=100, level=8, vigor=3)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=10, faith=1, perception=1)

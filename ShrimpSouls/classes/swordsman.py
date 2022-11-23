@@ -18,10 +18,25 @@ def slice(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Flurry(cs.Ability):
+	t_amt: int = 1
+
+	def act(self, u, t, env):
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				statuses={ss.StatusEnum.bleed: lambda: 1},
+				score_dmg=utils.score_dmg(m1=0.2))
+			for _ in range(4)
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"hamstring": hamstring,
 	"slice": slice,
+	"flurry": Flurry(),
 }
 
 class Swordsman(ClassSpec):
@@ -31,7 +46,7 @@ class Swordsman(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=9, vigor=5)
+		return cs.stat_map(p, mult=5, base=100, level=9, vigor=5)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=8, dexterity=1, perception=1)

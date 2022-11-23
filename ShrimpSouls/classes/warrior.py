@@ -17,12 +17,27 @@ def armor_break(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Whirlwind(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				statuses={ss.StatusEnum.bleed: lambda: 3},
+				score_dmg=utils.score_dmg(m1=0.5))
+			for t in targets
+		]
+
 	
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"sharpen": sharpen,
 	"armor_break": armor_break,
+	"whirlwind": Whirlwind(),
 }
 
 class Warrior(ClassSpec):
@@ -31,7 +46,7 @@ class Warrior(ClassSpec):
 		return ABI_MAP
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=11, vigor=4)
+		return cs.stat_map(p, mult=5, base=100, level=11, vigor=4)
 		
 	def score_eva(self, p):
 		return cs.stat_map(p, level=10, dexterity=1)

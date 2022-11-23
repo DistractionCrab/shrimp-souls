@@ -8,6 +8,35 @@ from dataclasses import dataclass
 
 SOULMASS_THRESHOLD = 10
 
+@dataclass
+class Ability:
+	t_amt: int = 1
+	allyq: bool = False
+	aliveq: bool = True
+
+	def __call__(self, u, targets, env):
+		if self.t_amt == 0:
+			return self.act(u, u, env)
+		else:
+			targets = env.find_valid_target(
+				u,
+				self.allyq, 
+				self.aliveq, 
+				targets=targets, 
+				amt=self.t_amt)
+
+			if len(targets) == 0:
+				return tuple()
+			else:
+				if self.t_amt == 1:
+					return self.act(u, targets[0], env)
+				else:
+					return self.act(u, targets, env)
+
+	def act(self, u, targets, env):
+		return tuple()
+
+
 
 def score_wrap(p, **kwds):
 	return lambda p: stat_map(p, **kwds)
@@ -26,7 +55,8 @@ def def_wrap(p, **kwds):
 
 def stat_map(
 	p,
-	base=0, 
+	base=0,
+	mult=1,
 	level=0,
 	vigor=0,
 	endurance=0,
@@ -38,16 +68,17 @@ def stat_map(
 	perception=0):
 	
 	return math.ceil(
-		base 
-		+ level * p.level
-		+ p.attributes.vigor * vigor
-		+ p.attributes.endurance * endurance
-		+ p.attributes.strength * strength
-		+ p.attributes.dexterity * dexterity
-		+ p.attributes.intelligence * intelligence
-		+ p.attributes.faith * faith
-		+ p.attributes.luck * luck
-		+ p.attributes.perception * perception)
+		mult*(
+			base 
+			+ level * p.level
+			+ p.attributes.vigor * vigor
+			+ p.attributes.endurance * endurance
+			+ p.attributes.strength * strength
+			+ p.attributes.dexterity * dexterity
+			+ p.attributes.intelligence * intelligence
+			+ p.attributes.faith * faith
+			+ p.attributes.luck * luck
+			+ p.attributes.perception * perception))
 
 def autoattack(actor, targets, env):
 	return [

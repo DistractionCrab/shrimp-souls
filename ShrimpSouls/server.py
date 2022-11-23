@@ -169,23 +169,17 @@ class Server:
 
 	async def __disconnect(self, msg):
 		i = msg['wsid']
-		
-		if i in self.__sockets:
-			s = self.__sockets[i]
-			del self.__sockets[i]
+		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
+		s = self.__sockets.pop(i, None)
+		self.__unames.pop(self.__idmaps.get(i), None)
+		self.__idmaps.pop(i, None)
+
+		if s is not None:
 			try:
 				if s.connected:
 					s.close()
 			except:
 				pass
-		if i in self.__idmaps:
-			print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
-			del self.__unames[self.__idmaps[i]]
-			del self.__idmaps[i]
-
-
-
-
 
 	async def __send_message(self, wsid, m):
 		s = self.__sockets[wsid]

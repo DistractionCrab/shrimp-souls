@@ -21,10 +21,29 @@ def poach(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+
+@dataclass
+class ThrowingDagger(cs.Ability):
+	t_amt: int = 1
+
+	def act(self, u, targets, env):		
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				statuses={
+					ss.StatusEnum.bleed: lambda: random.randint(1, 3),
+					ss.StatusEnum.attdown: lambda: random.randint(1, 3)
+				},
+				score_dmg=utils.score_dmg(m1=1.2))
+		]
+
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"steal": steal,
 	"poach": poach,
+	"throwingknife": ThrowingDagger(),
 }
 
 class Thief(ClassSpec):
@@ -33,7 +52,7 @@ class Thief(ClassSpec):
 		return ABI_MAP	
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=10, vigor=5)
+		return cs.stat_map(p, mult=5, base=100, level=10, vigor=5)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=11, dexterity=1, luck=1, perception=1)

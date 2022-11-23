@@ -11,16 +11,46 @@ import persistent
 ROLL_THRESHOLD = 30
 
 def acc_scale(self, base):
+	if self.accup > 0:
+		base *= 1.1
+	if self.accdown > 0:
+		base *= 0.9
+	if self.encourage > 0:
+		base *= 1.1
+	if self.poison > 0:
+		base *= 1.0 - (self.poison * 0.02)
+
 	return math.ceil(base)
 
 
 def att_scale(self, base):
+	if self.attup > 0:
+		base *= 1.1
+	if self.attdown > 0:
+		base *= 0.9
+	if self.encourage > 0:
+		base *= 1.05
+	if self.poison > 0:
+		base *= 1.0 - (self.poison * 0.02)
+
 	return math.ceil(base)
 
 def eva_scale(self, base):
+	if self.evaup > 0:
+		base *= 1.1
+	if self.evadown > 0:
+		base *= 0.9
+	if self.status.stun > 0:
+		base *= 0.4
+
 	return math.ceil(base)
 
 def def_scale(self, base):
+	if self.defup > 0:
+		base *= 1.1
+	if self.defdown > 0:
+		base *= 0.9
+		
 	return math.ceil(base)
 
 

@@ -1,5 +1,6 @@
 Next Steps:
 - setup levelup submit message to reduce spam/overhead
+- set ticking to give messages for burns and etc
 
 IMPLEMENTATIONS
 - subclassing
@@ -14,7 +15,7 @@ new attack items:
 	Knight: Riposte stance (fewer stacks than fencer)
 	Juggernaut: Earthquake (enemy party-wide damage.)
 	Warrior: Whirlwind decreasing AoE damage and inflict bleed.
-	Swordsman: Sparking Blades (adds fire damage to attacks)
+	Swordsman: Flurry (fast multi-strikes)
 	Fencer: Fan of Blades (AOE damage and debuff)
 	Sorcerer: Twisted Wall of Light
 	Spellblade: Soul Greatsword

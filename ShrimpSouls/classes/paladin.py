@@ -17,10 +17,24 @@ def censure(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Judgement(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.StatusAction(
+				attacker=u,
+				defender=t,
+				statuses={ss.StatusEnum.stun: lambda: 1})
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"sealing": sealing,
 	"censure": censure,
+	"judgement": Judgement(),
 }
 
 class Paladin(ClassSpec):
@@ -30,7 +44,7 @@ class Paladin(ClassSpec):
 	
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base = 100, level=12, vigor=4)
+		return cs.stat_map(p, mult=5, base = 100, level=12, vigor=4)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=9, faith=1, perception=1)

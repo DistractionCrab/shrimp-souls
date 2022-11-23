@@ -18,10 +18,25 @@ def shatter(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Earthquake(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				dmgtype=actions.DamageType.Strike,
+				score_dmg=utils.score_dmg(m1=0.5))
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"warcry": warcry,
 	"shatter": shatter,
+	"earthquake": Earthquake(),
 }
 
 BONUS_THRESHOLD = 10
@@ -33,7 +48,7 @@ class Juggernaut(ClassSpec):
 
 	
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=12, vigor=6)
+		return cs.stat_map(p, mult=5, base=100, level=12, vigor=6)
 
 	def score_eva(self, p):
 		return cs.stat_map(p, level=8, strength=1, dexterity=1)

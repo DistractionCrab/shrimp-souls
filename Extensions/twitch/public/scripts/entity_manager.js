@@ -163,6 +163,9 @@ export class EntityManager {
 	}
 
 	toggle_target(e, player) {
+		if (!(e.name in this.containers)) {
+			return;
+		}
 		
 		if (this.target_q.has(e.name)) {
 			this.target_q.delete(e.name);

@@ -5,13 +5,13 @@
 	--default-border-width: 5px;
 	--default-margin: 20px;
 
-	--hp-bar-width:  600px;
+	--hp-bar-width:  60vw;
 	--hp-bar-height: 30px;
 
-	--player-bar-width:  900px;
+	--player-bar-width:  90vw;
 	--player-bar-height: 50px;
 
-	--tablinks-width: 230px;
+	--tablinks-width: 20vw;
 	--tablinks-height: 90px;
 	--tablinks-fontsize: 50px;
 

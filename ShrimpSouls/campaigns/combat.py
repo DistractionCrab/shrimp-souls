@@ -74,6 +74,8 @@ class Combat(cps.BaseCampaign):
 			if self.finished:
 				break
 			if p.stun == 0 and not p.dead:
+				for a in p.tick():
+					total.append(a)
 				actions = []
 				if p.name in self.__queued:
 					(abi, targets) = self.__queued[p.name]
@@ -85,10 +87,13 @@ class Combat(cps.BaseCampaign):
 				for a in actions:
 					a.apply()
 					total.append(a.msg + " " + self.handle_dead_foes(a.receivers_npc))
+			elif p.stun > 0 and not p.dead:
+				for a in p.tick():
+					total.append(a)
 
-		for p in order:
-			if not p.dead:
-				p.tick()
+		self.__queued.clear()
+
+		
 
 		if self.finished:
 			if all(p.dead for p in self.players.values()):
@@ -187,6 +192,6 @@ class Combat(cps.BaseCampaign):
 	def use_ability(self, p, abi, targets):
 		self.__queued[p.name] = (abi, targets)
 		yield messages.Message(
-			msg=[f"You have readied {abi} for the next turn."],
+			msg=[f"You have readied {abi} for the next turn aimed at {', '.join(targets)}"],
 			recv=(p.name,))
 

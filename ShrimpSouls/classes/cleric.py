@@ -3,6 +3,7 @@ import ShrimpSouls.classes as cs
 from ShrimpSouls.classes import ClassSpec
 from dataclasses import dataclass
 import ShrimpSouls.actions as actions
+import ShrimpSouls.utils as utils
 import random
 import math
 
@@ -17,10 +18,25 @@ def cleanse(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class HolyGavel(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				statuses={ss.StatusEnum.evadown: lambda: 3},
+				score_dmg=utils.score_dmg(m1=0.3))
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"blessing": blessing,
 	"cleanse": cleanse,
+	"holygavel": HolyGavel(),
 }
 
 class Cleric(ClassSpec):
@@ -29,7 +45,7 @@ class Cleric(ClassSpec):
 		return ABI_MAP
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=10, vigor=5)
+		return cs.stat_map(p, mult=5, base=100, level=10, vigor=5)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=10, faith=1, perception=1)
@@ -42,11 +58,6 @@ class Cleric(ClassSpec):
 
 	def score_dfn(self, p):
 		return cs.stat_map(p, level=10, faith=1, strength=1)
-
-	def duel_action(self, actor, env):
-		return [
-			actions.DamageTarget(attacker=actor, defender=t) 
-			for t in env.find_valid_target(actor, False, [ss.Positions.FRONT], True)]
 
 	@property
 	def cl_string(self):

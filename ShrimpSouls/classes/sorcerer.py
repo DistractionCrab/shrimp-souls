@@ -17,10 +17,25 @@ def soulspear(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class Lightwall(cs.Ability):
+	t_amt: int = 3
+	allyq: bool = True
+
+	def act(self, u, targets, env):
+		return [
+			actions.StatusAction(
+				attacker=u,
+				defender=t,
+				statuses={ss.StatusEnum.lightwall: lambda: 2})
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"soulmass": soulmass,
 	"soulspear": soulspear,
+	"lightwall": Lightwall(),
 }
 
 
@@ -30,7 +45,7 @@ class Sorcerer(ClassSpec):
 		return ABI_MAP
 		
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=8, vigor=3)
+		return cs.stat_map(p, mult=5, base=100, level=8, vigor=3)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=10, intelligence=1, perception=1)

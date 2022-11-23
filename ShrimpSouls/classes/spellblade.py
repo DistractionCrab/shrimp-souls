@@ -17,10 +17,25 @@ def magic_cover(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class MagicGreatsword(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageAction(
+				attacker=u,
+				defender=t,
+				dmgtype=actions.DamageType.Magic,
+				score_dmg=utils.score_dmg(m1=0.5))
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"enchant": enchant,
 	"magic_cover": magic_cover,
+	"magic_greatsword": MagicGreatsword(),
 }
 
 class SpellBlade(ClassSpec):
@@ -30,7 +45,7 @@ class SpellBlade(ClassSpec):
 
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base=100, level=10, vigor=5)
+		return cs.stat_map(p, mult=5, base=100, level=10, vigor=5)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=10, intelligence=1, perception=1)
@@ -58,8 +73,8 @@ class SpellBlade(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_attup(amt=2)
-		self.attacker.stack_defup(amt=2)
+		self.attacker.stack_attup(amt=5)
+		self.attacker.stack_defup(amt=5)
 		self.msg += f"{self.attacker.name} enchants their sword and shield, enhancing their attack and defense."
 
 

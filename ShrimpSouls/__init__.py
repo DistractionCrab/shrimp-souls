@@ -15,23 +15,11 @@ import ShrimpSouls.messages as messages
 
 from dataclasses import dataclass, fields, field
 
-
-
-
 def xp_req(l):
 	if l < 1:
 		return 100
 	else:
 		return int(100 * (1.2 ** (l - 1)))
-
-def auto_commit(f):
-	def wrapper(ref, *args, **kwds):
-		v = f(ref, *args, **kwds)
-		ref.commit()
-		return v
-
-	return wrapper
-
 
 
 class Scores(enum.Enum):
@@ -63,6 +51,8 @@ class StatusEnum(enum.Enum):
 	charm = enum.auto()
 	taunt = enum.auto()
 	bleed = enum.auto()
+	lightwall = enum.auto()
+	briar = enum.auto()
 
 	def stack(self, p, amt=1):
 		setattr(p.status, self.name, max(0, amt + getattr(p.status, self.name)))
@@ -97,6 +87,8 @@ class Statuses:
 	charm: int = 0
 	taunt: str = None
 	bleed: int = 0
+	lightwall: int = 0
+	briar: int = 0
 
 class AttriEnum(enum.Enum):
 	Vigor = "vigor"
@@ -158,12 +150,17 @@ class Entity(persistent.Persistent):
 	
 
 	def tick(self):
-		if self.burn > 0:
+		if self.burn > 0:			
+			amt = math.ceil(self.att/10) * math.ceil(self.burn/10)
 			self.use_burn()
-			self.damage(random.randint(1, 4))
+			self.damage(amt)
+			yield f"{self.name} suffered {amt} damage from burns."
 		if self.poison > 0:
+			amt = math.ceil(self.dfn/10) * math.ceil(self.poison/10)
 			self.use_poison()
-			self.damage(random.randint(1, 2))
+			self.damage(amt)
+			yield f"{self.name} suffered {amt} damage from poison."
+			
 		self.damage(self.bleed)
 		if self.bleed >= 10:
 			self.damage(math.ceil(random.randint(1,10) * (1 + self.max_hp//100)))
@@ -185,6 +182,7 @@ class Entity(persistent.Persistent):
 		self.use_sealing()
 		self.use_encourage()
 		self.use_charm()
+		StatusEnum.briar.use(self)
 
 
 	@property
@@ -197,6 +195,7 @@ class Entity(persistent.Persistent):
 	def att(self):
 		base = float(self._att)
 		return utils.att_scale(self, base)
+
 	@property
 	def eva(self):
 		base = float(self._eva)
@@ -211,8 +210,6 @@ class Entity(persistent.Persistent):
 	def duel_action(self, env):
 		return actions.DoNothing(player=self)
 
-
-	@auto_commit
 	def damage(self, v):
 		self.hp = min(max(self.hp - v, 0), self.max_hp)
 
@@ -221,11 +218,11 @@ class Entity(persistent.Persistent):
 	def block(self):
 		return self.status.block
 
-	@auto_commit
+	
 	def stack_block(self, amt=1):
 		self.status.block += 1
 
-	@auto_commit
+	
 	def use_block(self, amt=1):
 		self.status.block = max(0, self.status.block - amt)
 
@@ -233,11 +230,11 @@ class Entity(persistent.Persistent):
 	def attdown(self):
 		return self.status.attdown
 
-	@auto_commit
+	
 	def stack_attdown(self, amt=1):
 		self.status.attdown += 1
 
-	@auto_commit
+	
 	def use_attdown(self, amt=1):
 		self.status.attdown = max(0, self.status.attdown - amt)
 	
@@ -245,11 +242,11 @@ class Entity(persistent.Persistent):
 	def attup(self):
 		return self.status.attup
 
-	@auto_commit
+	
 	def stack_attup(self, amt=1):
 		self.status.attup += 1
 
-	@auto_commit
+	
 	def use_attup(self, amt=1):
 		self.status.attup = max(0, self.status.attup - amt)
 
@@ -258,11 +255,11 @@ class Entity(persistent.Persistent):
 		return self.status.defup
 
 
-	@auto_commit
+	
 	def stack_defup(self, amt=1):
 		self.status.defup += 1
 
-	@auto_commit
+	
 	def use_defup(self, amt=1):
 		self.status.defup = max(0, self.status.defup - amt)
 
@@ -270,11 +267,11 @@ class Entity(persistent.Persistent):
 	def defdown(self):
 		return self.status.defdown
 
-	@auto_commit
+	
 	def stack_defdown(self, amt=1):
 		self.status.defdown += 1
 
-	@auto_commit
+	
 	def use_defdown(self, amt=1):
 		self.status.defdown = max(0, self.status.defdown - amt)
 
@@ -282,11 +279,11 @@ class Entity(persistent.Persistent):
 	def evaup(self):
 		return self.status.evaup
 
-	@auto_commit
+	
 	def stack_evaup(self, amt=1):
 		self.status.evaup += 1
 
-	@auto_commit
+	
 	def use_evaup(self, amt=1):
 		self.status.evaup = max(0, self.status.evaup - amt)
 
@@ -294,11 +291,11 @@ class Entity(persistent.Persistent):
 	def evadown(self):
 		return self.status.evadown
 
-	@auto_commit
+	
 	def stack_evadown(self, amt=1):
 		self.status.evadown += 1
 
-	@auto_commit
+	
 	def use_evadown(self, amt=1):
 		self.status.evadown = max(0, self.status.evadown - amt)
 
@@ -307,11 +304,11 @@ class Entity(persistent.Persistent):
 		return self.status.accup
 
 
-	@auto_commit
+	
 	def stack_accup(self, amt=1):
 		self.status.accup += 1
 
-	@auto_commit
+	
 	def use_accup(self, amt=1):
 		self.status.accup = max(0, self.status.accup - amt)
 
@@ -319,11 +316,11 @@ class Entity(persistent.Persistent):
 	def accdown(self):
 		return self.status.accdown
 
-	@auto_commit
+	
 	def stack_accdown(self, amt=1):
 		self.status.accdown += 1
 
-	@auto_commit
+	
 	def use_accdown(self, amt=1):
 		self.status.accdown = max(0, self.status.accdown - amt)
 
@@ -332,11 +329,11 @@ class Entity(persistent.Persistent):
 	def ripstance(self):
 		return self.status.ripstance
 
-	@auto_commit
+	
 	def stack_ripstance(self, amt=1):
 		self.status.ripstance += 1
 
-	@auto_commit
+	
 	def use_ripstance(self, amt=1):
 		self.status.ripstance = max(0, self.status.ripstance - amt)
 
@@ -344,11 +341,11 @@ class Entity(persistent.Persistent):
 	def soulmass(self):
 		return self.status.soulmass
 
-	@auto_commit
+	
 	def stack_soulmass(self, amt=1):
 		self.status.soulmass += amt
 
-	@auto_commit
+	
 	def use_soulmass(self, amt=1):
 		self.status.soulmass = max(0, self.status.soulmass - amt)
 
@@ -356,7 +353,7 @@ class Entity(persistent.Persistent):
 	def burn(self):
 		return self.status.burn
 
-	@auto_commit
+	
 	def stack_burn(self, amt=1):
 		self.status.burn += amt
 
@@ -367,11 +364,11 @@ class Entity(persistent.Persistent):
 	def poison(self):
 		return self.status.poison
 
-	@auto_commit
+	
 	def stack_poison(self, amt=1):
 		self.status.poison += amt
 
-	@auto_commit
+	
 	def use_poison(self, amt=1):
 		self.status.poison = max(0, self.status.poison - amt)
 
@@ -379,11 +376,11 @@ class Entity(persistent.Persistent):
 	def bleed(self):
 		return self.status.bleed
 
-	@auto_commit
+	
 	def stack_bleed(self, amt=1):
 		self.status.bleed += amt
 
-	@auto_commit
+	
 	def use_bleed(self, amt=1):
 		self.status.bleed = max(0, self.status.bleed - amt)
 
@@ -391,11 +388,11 @@ class Entity(persistent.Persistent):
 	def sealing(self):
 		return self.status.sealing
 
-	@auto_commit
+	
 	def stack_sealing(self, amt=1):
 		self.status.sealing += amt
 
-	@auto_commit
+	
 	def use_sealing(self, amt=1):
 		self.status.sealing = max(0, self.status.sealing - amt)
 
@@ -403,11 +400,11 @@ class Entity(persistent.Persistent):
 	def stun(self):
 		return self.status.stun
 
-	@auto_commit
+	
 	def stack_stun(self, amt=1):
 		self.status.stun += amt
 
-	@auto_commit
+	
 	def use_stun(self, amt=1):
 		self.status.stun = max(0, self.status.stun - amt)
 
@@ -416,11 +413,11 @@ class Entity(persistent.Persistent):
 	def invis(self):
 		return self.status.invis
 
-	@auto_commit
+	
 	def stack_invis(self, amt=1):
 		self.status.invis += amt
 
-	@auto_commit
+	
 	def use_invis(self, amt=1):
 		self.status.invis = max(0, self.status.invis - amt)
 
@@ -428,11 +425,11 @@ class Entity(persistent.Persistent):
 	def encourage(self):
 		return self.status.encourage
 
-	@auto_commit
+	
 	def stack_encourage(self, amt=1):
 		self.status.encourage += amt
 
-	@auto_commit
+	
 	def use_encourage(self, amt=1):
 		self.status.encourage = max(0, self.status.encourage - amt)
 
@@ -440,11 +437,11 @@ class Entity(persistent.Persistent):
 	def charm(self):
 		return self.status.charm
 
-	@auto_commit
+	
 	def stack_charm(self, amt=1):
 		self.status.charm += amt
 
-	@auto_commit
+	
 	def use_charm(self, amt=1):
 		self.status.charm = max(0, self.status.charm - amt)
 
@@ -452,11 +449,11 @@ class Entity(persistent.Persistent):
 
 		return self.status.taunt
 
-	@auto_commit
+	
 	def taunt_target(self, target):
 		self.status.taunt = target.name
 
-	@auto_commit
+	
 	def end_taunt(self):
 		self.status.taunt = None
 	
@@ -483,11 +480,11 @@ class Entity(persistent.Persistent):
 		return False
 	
 
-	@auto_commit
+	
 	def revive(self):
 		self.hp = self.max_hp
 
-	@auto_commit
+	
 	def reset_status(self):
 		self.status = Statuses()
 
@@ -640,26 +637,26 @@ class Player(Entity):
 	def is_player(self):
 		return True
 
-	@auto_commit
+	
 	def add_shrimp(self, amt):
 		self.xp += amt
 
 	def soulmass_count(self):
 		return self.myclass.soulmass_count(self)
 
-	@auto_commit
+	
 	def act(self, env):
 		return self.myclass.basic_action(self, env)
 
-	@auto_commit
+	
 	def target(self, target, env):
 		return self.myclass.targeted_action(self, target, env)
 
-	@auto_commit
+	
 	def allow_actions(self):
 		self.acted = False
 
-	@auto_commit
+	
 	def did_act(self):
 		self.acted = True
 
@@ -679,7 +676,7 @@ class Player(Entity):
 	def is_npc(self):
 		return False
 
-	@auto_commit
+	
 	def respec(self):
 		l = self.level
 		self.attributes = Attributes()

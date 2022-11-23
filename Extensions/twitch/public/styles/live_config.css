@@ -4,12 +4,15 @@
 	--default-margin: 10px;
 
 
-	--hp-bar-width:  600px;
+	--hp-bar-width:  60vw;
 	--hp-bar-height: 30px;
-	--player-bar-width:  150px;
+
+	--player-bar-width:  90vw;
 	--player-bar-height: 15px;
-	--tablinks-width: 60px;
+
+	--tablinks-width: 20vw;
 	--tablinks-height: 30px;
+	
 	--tablinks-fontsize: 100%;
 	--default-fontsize: 110%;
 	--body-fontsize: 120%;

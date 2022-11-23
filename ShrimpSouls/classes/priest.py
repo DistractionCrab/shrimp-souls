@@ -35,10 +35,25 @@ def heal(u, targets, env):
 		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
 		return [actions.HealTarget(attacker=u, defender=t, mult=1/15)]
 
+@dataclass
+class LightningStorm(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageAction(
+				attacker=u,
+				defender=t,
+				dmgtype=actions.DamageType.Lightning,
+				score_dmg=utils.score_dmg(m1=0.5))
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"prayer": prayer,
 	"heal": heal,
+	"lightningstorm": LightningStorm(),
 }
 
 HEAL_DICE_THRESHOLD = 10
@@ -54,7 +69,7 @@ class Priest(ClassSpec):
 
 
 	def max_hp(self, p):
-		return cs.stat_map(p, base=50, level=8, vigor=3)
+		return cs.stat_map(p, mult=5, base=50, level=8, vigor=3)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=10, perception=1)

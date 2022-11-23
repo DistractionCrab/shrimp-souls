@@ -17,10 +17,39 @@ def taunt(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+@dataclass
+class RipStance(cs.Ability):
+	t_amt: int = 0
+
+	def act(self, u, targets, env):
+		return [
+			actions.StatusAction(
+				attacker=u,
+				defender=u,
+				statuses={ss.StatusEnum.ripstance: lambda: 4})
+		]
+
+@dataclass
+class FanOfBlades(cs.Ability):
+	t_amt: int = 3
+
+	def act(self, u, targets, env):
+		return [
+			actions.DamageTarget(
+				attacker=u,
+				defender=t,
+				dmgtype=actions.DamageType.Pierce,
+				abilityrange=actions.AbilityRange.Long,
+				statuses={ss.StatusEnum.evadown: lambda: 1},
+				score_dmg=utils.score_dmg(m1=0.5))
+			for t in targets
+		]
+
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"ripstance": ripstance,
+	"ripstance": RipStance(),
 	"taunt": taunt,
+	"fanofblades": FanOfBlades(),
 }
 
 class Fencer(ClassSpec):
@@ -31,7 +60,7 @@ class Fencer(ClassSpec):
 
 	def max_hp(self, p):
 		
-		return cs.stat_map(p, base=100, level=8, vigor=4)
+		return cs.stat_map(p, mult=5, base=100, level=8, vigor=4)
 
 	def score_acc(self, p):
 		return cs.stat_map(p, level=12, perception=1, dexterity=1)
