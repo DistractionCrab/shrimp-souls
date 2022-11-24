@@ -24,8 +24,8 @@
 	--lvlup-icon-height: 60px;
 	--lvlup-icon-width: 60px;
 
-	--status-icon-width: 60px;
-	--status-icon-height: 60px;
+	--status-icon-width: 120px;
+	--status-icon-height: 120px;
 
 	--hpamt-padding:  50px;
 	
@@ -78,5 +78,17 @@
 	--target-button-height: 60px;
 	--target-button-margin-left: 40px;
 
+	--confirmpop-font-size: 48px;
+	--confirmpopup-padding: 20px;
+	--abiconfirm-height: 4vh;
+	--confirmpopup-margin: -10px;
+
+	--padded-padding: 30px;
+
+	--status-icon-large-width: 120px;
+	--status-icon-large-height: 120px;
+
+	--status-icon-small-width: 60px;
+	--status-icon-small-height: 60px;
 }
 

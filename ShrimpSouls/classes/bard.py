@@ -32,7 +32,8 @@ class Inspire(cs.Ability):
 				statuses={
 					ss.StatusEnum.accup: lambda: 3,
 					ss.StatusEnum.evaup: lambda: 3,
-				})
+				},
+				ignore_res=True)
 			for t in targets
 		]
 
@@ -85,7 +86,7 @@ class Bard(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.defender.stack_encourage(amt=3)
+		ss.StatusEnnum.encourage(self.defender, amt=3)
 		self.msg += f"{self.attacker.name}'s ballad encourages {self.defender.name}."
 
 
@@ -96,11 +97,11 @@ class Target1(actions.EffectAction):
 		if self.defender.immune(ss.StatusEnum.charm):
 			self.msg += f"{self.defender.name} is immune to being charmed."
 		elif self.defender.is_player:
-			self.defender.use_charm(amt=1)
+			ss.StatusEnnum.charm.use(self.defender, amt=1)
 			print(f"{self.attacker.name} has weakened the charm magic on {self.defender.name}.")
 		elif self.defender.is_npc:
 			t = random.randint(1,4)
-			self.defender.stack_charm(amt=t)
+			ss.StatusEnnum.charm.stack(self.defender, amt=t)
 			self.msg += f"{self.attacker.name} has charmed {self.defender.name} for {t} turns."
 			
 	def on_miss(self):

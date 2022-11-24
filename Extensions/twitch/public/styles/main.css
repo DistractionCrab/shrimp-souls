@@ -4,17 +4,17 @@ body {
 	font-family: var(--main-font);
 	font-size: var(--body-fontsize);
 	/*font-weight: 100;*/
-	color: white;
-	background-color: #575757;
-
+	color: white;	
 	background: linear-gradient(
 			rgba(0, 0, 0, 0.5),
 			rgba(0, 0, 0, 0.5)
 		), url("../images/background.png") no-repeat center center fixed;
-	will-change: transform;
-
 	text-shadow: 0 0 3px rgba(0,0,0,0.3);
 	overflow: hidden;
+}
+
+#mainsection {
+	position: absolute;
 }
 
 .hpamt {
@@ -93,6 +93,7 @@ body {
 #partytab {
 	overflow:  auto;
 	height: 85vh;
+	width: 90vw;
 	font-size: 120%;
 }
 
@@ -100,6 +101,7 @@ body {
 #npctab {
 	overflow:  auto;
 	height: 85vh;
+	width: 90vw;
 	font-size: 120%;
 }
 
@@ -134,6 +136,7 @@ body {
 	display: none;
 	padding: 6px 12px;
 	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+	width: 100vw;
 }
 
 @keyframes fadeEffect {
@@ -217,153 +220,152 @@ body {
 	outline:  none;
 }
 
-.accupicon {
-	background-image: url("../images/status icons/accup.png");
-	width: var(--lvlup-icon-width);
-	height:  var(--lvlup-icon-height);
+.briaricon {
+	background-image: url("../images/status icons/briar.png");
+	width:  var(--status-icon-width);
+	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
+}
+
+.statusiconlarge {
+	width:  var(--status-icon-large-width);
+	height: var(--status-icon-large-height);
+}
+
+.statusiconsmall {
+	width:  var(--status-icon-small-width);
+	height: var(--status-icon-small-height);
+}
+
+.accupicon {
+	background-image: url("../images/status icons/accup.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .accdownicon {
 	background-image: url("../images/status icons/accdown.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .attupicon {
 	background-image: url("../images/status icons/attup.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .attdownicon {
 	background-image: url("../images/status icons/attdown.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .defupicon {
 	background-image: url("../images/status icons/defup.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .defdownicon {
 	background-image: url("../images/status icons/defdown.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .evaupicon {
 	background-image: url("../images/status icons/evaup.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .evadownicon {
 	background-image: url("../images/status icons/evadown.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .burnicon {
 	background-image: url("../images/status icons/burn.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .stunicon {
 	background-image: url("../images/status icons/stunicon.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .invisicon {
 	background-image: url("../images/status icons/invis.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .poisonicon {
 	background-image: url("../images/status icons/poison.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .bleedicon {
 	background-image: url("../images/status icons/bleed.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .soulmassicon {
 	background-image: url("../images/status icons/soulmassicon.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .sealingicon {
 	background-image: url("../images/status icons/sealingicon.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .charmicon {
 	background-image: url("../images/status icons/charmicon.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .ripstanceicon {
 	background-image: url("../images/status icons/ripstanceicon.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .encourageicon {
 	background-image: url("../images/status icons/encourage.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
 }
 
 .inactive-icon {
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-color: rgba(0, 0, 0, 0);
@@ -506,74 +508,6 @@ body {
 	margin-right: 30px;
 }
 
-/* Popup container */
-.popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  position: absolute;
-}
-
-/* The actual popup (appears on top) */
-.popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Toggle this class when clicking on the popup container (hide and show the popup) */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-}
-
-@keyframes glowing {
-	0% {
-		background-color: #2ba805;
-		box-shadow: 0 0 5px #2ba805;
-	}
-	50% {
-		background-color: #49e819;
-		box-shadow: 0 0 5px #49e819;
-	}
-	100% {
-		background-color: #2ba805;
-		box-shadow: 0 0 5px #2ba805;
-	}
-}
 
 .alerttab {
 	background-color:  green;
@@ -628,4 +562,33 @@ body {
 
 #targetlist {
 	font-size: var(--default-fontsize);
+}
+
+.confirmpopup {
+	top: 0;
+	left: 0;
+	z-index: 1;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(35, 35, 35, 0.95);
+	font-size: var(--confirmpop-font-size);
+}
+
+.abiconfirmbuttons {
+	width: 90vw;
+	height: var(--abiconfirm-height);
+	font-size: 38px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.centered {
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+.padded {
+	padding: var(--padded-padding);
 }

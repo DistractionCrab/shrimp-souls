@@ -14,7 +14,7 @@ def prayer(u, targets, env):
 		actions.HealTarget(
 			attacker=u, 
 			defender=t, 
-			mult=1/10)
+			score=utils.RawScore(m1=0.1))
 		for t in targets
 	]
 	
@@ -30,10 +30,10 @@ def heal(u, targets, env):
 
 	if t.dead:
 		amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.ReviveTarget(attacker=u, defender=t, mult=1/15)]
+		return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m1=1/15))]
 	else:
 		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.HealTarget(attacker=u, defender=t, mult=1/15)]
+		return [actions.HealTarget(attacker=u, defender=t, score=utils.RawScore(m1=1/5))]
 
 @dataclass
 class LightningStorm(cs.Ability):

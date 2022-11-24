@@ -27,7 +27,8 @@ class Lightwall(cs.Ability):
 			actions.StatusAction(
 				attacker=u,
 				defender=t,
-				statuses={ss.StatusEnum.lightwall: lambda: 2})
+				statuses={ss.StatusEnum.lightwall: lambda: 2},
+				ignore_Res=True)
 			for t in targets
 		]
 
@@ -73,12 +74,12 @@ class Sorcerer(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_soulmass(amt=2)
+		ss.StatusEnum.soulmass.stack(self.attacker, amt=2)
 		self.msg += f"{self.attacker.name} summons a phalanx of soulmasses to defend themselves."
 
 
 @dataclass
 class Target1(actions.DamageTarget):
-	score_dmg: tuple = utils.score_dmg(m1=1.5)
+	score_dmg: tuple = utils.ScoreDamage(m1=1.5)
 	abilityrange: actions.AbilityRange = actions.AbilityRange.Long
 	dmgtype: actions.DamageType = actions.DamageType.Magic

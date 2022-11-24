@@ -23,10 +23,18 @@ const TABMANAGER = new TabManager({
 		active_fn: () => {},
 		deactive_fn: () => {},
 	},
+	scores: {
+		header: "scoreheader",
+		body: "scorepage",
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
 }, "status");
 
 export class CharSheet {
 	constructor() {
+		this.score_table = document.getElementById("scoretable");
 		this.xp_cur = 0;
 		this.xp_req = 1;
 
@@ -86,13 +94,13 @@ export class CharSheet {
 
 
 		this.update_status(msg);
-
-		// Update class value.
-		//const obj = document.getElementById("classselect");
-		//const i = [...obj.options].findIndex((v) => { return v.value == this.class_name});
-		//this.class_val.selectedIndex = i;
-
 		set_text(this.class_val, msg["class"]);
+
+		// Update the score table
+		for (const r of this.score_table.rows) {
+			const c = r.cells[1];
+			set_text(c, msg.scores[c.getAttribute("name")]);
+		}
 	}
 
 	update_status(data) {
@@ -104,7 +112,7 @@ export class CharSheet {
 		var ct = 0;
 		var row = this.statusdisplay.insertRow(0);
 		for (const [k, v] of kv) {
-			if (ct > 8) {
+			if (ct > 6) {
 				row = this.statusdisplay.insertRow(0);
 			}
 			if (k == "taunt") {			
@@ -115,6 +123,8 @@ export class CharSheet {
 				if (v > 0) {
 					var cell = row.insertCell(0);
 					cell.classList.add(`${k}icon`);
+					cell.classList.add("statusiconlarge");
+					set_text(cell, v);
 					ct += 1;
 				}
 			}		

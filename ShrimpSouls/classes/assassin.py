@@ -80,7 +80,7 @@ class Assassin(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_invis(amt=2)
+		ss.StatusEnum.invis.stack(self.attacker, amt=2)
 		self.msg += f"{self.attacker.name} hides in the shadows."
 
 
@@ -93,4 +93,4 @@ class Target1(actions.DamageTarget):
 	dmgtype: actions.DamageType = actions.DamageType.Pierce
 
 	def __post_init__(self):
-		self.score_dmg = utils.score_dmg(m1=2) if self.attacker.invis > 0 else utils.score_dmg()
+		self.score_dmg = utils.ScoreDamage(m1=2) if self.attacker.status.invis > 0 else utils.ScoreDamage()

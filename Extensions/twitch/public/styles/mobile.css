@@ -5,7 +5,7 @@
 	--default-border-width: 5px;
 	--default-margin: 5px;
 	
-	--hp-bar-width:  150px;
+	--hp-bar-width:  180px;
 	--hp-bar-height: 15px;
 	--player-bar-width:  300px;
 	--player-bar-height: 20px;
@@ -17,8 +17,8 @@
 	--body-fontsize: 100%;
 	--lvlup-icon-height: 30px;
 	--lvlup-icon-width: 30px;
-	--status-icon-width: 20px;
-	--status-icon-height: 20px;
+	--status-icon-width: 50px;
+	--status-icon-height: 50px;
 	--hpamt-padding: 10px;
 	
 	--spelltable-width: 300px;
@@ -72,4 +72,16 @@
 	--target-button-width:  40px;
 	--target-button-height: 40px;
 	--target-button-margin-left: 10px;
+
+	--confirmpop-font-size: 16px;
+	--abiconfirm-height: 8vh;
+	--confirmpopup-padding: 10px;
+
+	--padded-padding: 15px;
+
+	--status-icon-large-width: 50px;
+	--status-icon-large-height: 50px;
+
+	--status-icon-small-width: 20px;
+	--status-icon-small-height: 20px;
 }

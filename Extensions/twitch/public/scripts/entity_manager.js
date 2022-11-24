@@ -67,13 +67,16 @@ class Entity {
 		}
 		
 		var t = row1.insertCell(1);
-		var button = document.createElement("button");
-		button.classList.add("targetbutton");
-		t.appendChild(button);
-		button.addEventListener("click", () => {
+		//var button = document.createElement("button");
+		//button.classList.add("targetbutton");
+		//t.appendChild(button);
+		//button.addEventListener("click", () => {
+		//	EVENTS.alert("toggle_target", [this.data]);
+		//})
+
+		this.entity_table.addEventListener("click", () => {
 			EVENTS.alert("toggle_target", [this.data]);
 		})
-
 
 		row1 = this.data_table.insertRow(1);
 		var hpbar = row1.insertCell(0);
@@ -109,7 +112,7 @@ class Entity {
 		var ct = 0;
 		var row = this.status_table.insertRow(0);
 		for (const [k, v] of kv) {
-			if (ct > 8) {
+			if (ct > 6) {
 				row = this.status_table.insertRow(0);
 			}
 
@@ -121,6 +124,7 @@ class Entity {
 				if (v > 0) {
 					var cell = row.insertCell(0);
 					cell.classList.add(`${k}icon`);
+					cell.classList.add("statusiconsmall");
 					ct += 1;
 				}
 			}		

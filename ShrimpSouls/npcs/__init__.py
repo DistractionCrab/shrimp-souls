@@ -23,6 +23,10 @@ class BaseNPC(ss.Entity):
 	_eva: int = 1
 	_att: int = 1
 	_dfn: int = 1
+	_will: int = 1
+	_vit: int = 1
+	_char: int = 1
+	_fort: int = 1
 	_weaknesses: frozenset = field(default_factory=frozenset)
 	_resists: frozenset = field(default_factory=frozenset)
 	_tags: frozenset = field(default_factory=frozenset)
@@ -153,7 +157,7 @@ class GoblinBrute(BaseNPC):
 	max_hp: int = 450
 	_acc: int = 75
 	_eva: int = 70
-	_att: int = 120
+	_att: int = 90
 	_dfn: int = 70
 
 	def __hash__(self):

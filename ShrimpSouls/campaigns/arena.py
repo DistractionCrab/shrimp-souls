@@ -11,9 +11,12 @@ import ShrimpSouls.campaigns.combat as combat
 import ShrimpSouls.npcs as npcs
 
 class Arena(cps.BaseCampaign):
+	__leave = plist.PersistentList()
 	def __init__(self):
 		super().__init__("arena")
-		self.__combat = None	
+		self.__leave = plist.PersistentList()
+		self.__combat = None
+
 
 	def resting(self, name):
 		return self.__combat is None
@@ -43,6 +46,18 @@ class Arena(cps.BaseCampaign):
 
 			if self.__combat.finished:
 				self.__combat = None
+				
+				for p in self.__leave:
+					del self[p]
+
+				self.__leave.clear()
+
+	def action(self, src, msg):
+		if msg["action"] == "leave":
+			yield messages.Response(
+				msg=("You will leave the arena when combat has finished.",),
+				recv=(src,))
+
 
 
 	def _add_player(self, p):

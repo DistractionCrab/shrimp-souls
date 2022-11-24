@@ -73,7 +73,7 @@ class Combat(cps.BaseCampaign):
 		for p in order:
 			if self.finished:
 				break
-			if p.stun == 0 and not p.dead:
+			if p.status.stun == 0 and not p.dead:
 				for a in p.tick():
 					total.append(a)
 					
@@ -81,13 +81,13 @@ class Combat(cps.BaseCampaign):
 				if p.name in self.__queued:					
 					actions = self.__queued[p.name].act(p, self)
 				else:
-					if p.invis == 0:
+					if p.status.invis == 0:
 						actions = p.random_action(self)
 
 				for a in actions:
 					a.apply()
 					total.append(a.msg + " " + self.handle_dead_foes(a.receivers_npc))
-			elif p.stun > 0 and not p.dead:
+			elif p.status.stun > 0 and not p.dead:
 				for a in p.tick():
 					total.append(a)
 
@@ -146,33 +146,33 @@ class Combat(cps.BaseCampaign):
 		if att.is_player:
 			if tt is not None:
 				return [self.get_target(tt)]
-			elif att.charm > 0:
+			elif att.status.charm > 0:
 				return self.players
 			else:
 				return self.npcs.values()
 		else:
 			if tt is not None:
 				return [self.get_target(tt)]
-			if att.charm == 0:
+			if att.status.charm == 0:
 				return self.players.values()
 			else:
 				return self.npcs.values()
 
 	def allies(self, att):
 		if att.is_player:
-			if att.charm == 0:
+			if att.status.charm == 0:
 				return self.players.values()
 			else:
 				return self.npcs.values()
 		else:
-			if att.charm > 0:
+			if att.status.charm > 0:
 				return self.players.values()
 			else:
 				return self.npcs.values()
 
 
 	def find_valid_target(self, att, ally, aliveq, amt=1, targets=tuple(), **kwds):
-		if att.charm == 0:
+		if att.status.charm == 0:
 			targets = (self.get_target(n) for n in targets)
 			targets = tuple(p for p in targets if not p.dead)
 		else:
@@ -184,7 +184,7 @@ class Combat(cps.BaseCampaign):
 			amt = amt - len(targets)
 			pool = self.allies(att) if ally else self.opponents(att)
 			pool = pool if not aliveq else filter(lambda x: x is not None and not x.dead, pool)
-			pool = tuple(p for p in pool if p.invis == 0 or random.random() < 0.1)
+			pool = tuple(p for p in pool if p.status.invis == 0 or random.random() < 0.1)
 			pool = tuple(set(random.sample(pool, k=min(amt, len(pool)))))
 
 			return pool + targets
@@ -192,7 +192,7 @@ class Combat(cps.BaseCampaign):
 	def use_ability(self, p, abi, targets):
 		self.__queued[p.name] = (abi, targets)
 		self.__queued[p.name] = UseAbility(abi, targets)
-		yield messages.Message(
+		yield messages.Response(
 			msg=[f"You have readied {abi} for the next turn aimed at {', '.join(targets)}"],
 			recv=(p.name,))
 

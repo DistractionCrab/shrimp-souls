@@ -21,6 +21,17 @@ class Connected(RootMessage):
 		return tuple()
 
 @dataclass
+class LeaveCamp:
+	name: list[str]
+
+	@property
+	def json(self):
+		return {
+			"camp_leave": self.name
+		}
+	
+
+@dataclass
 class CharInfo:
 	info: object 
 

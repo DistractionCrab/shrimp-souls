@@ -76,7 +76,7 @@ class Action1(actions.StatusAction):
 
 @dataclass
 class Target1(actions.DamageTarget):
-	score_dmg: tuple = utils.score_dmg(m1=1.3)
+	score_dmg: tuple = utils.ScoreDamage(m1=1.3)
 	statuses: utils.FrozenDict = utils.FrozenDict({
 		ss.StatusEnum.burn:  lambda: 2
 	})

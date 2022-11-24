@@ -9,19 +9,9 @@ import ShrimpSouls.utils as utils
 
 
 
-class Hub(cps.RootCampaign):
+class Hub(cps.BaseCampaign):
 	def __init__(self):
 		super().__init__("Shrimplink Shrine")
-		self["arena"] = arena.Arena()
-
-	@property
-	def areaname(self):
-		return "Shrimplink Hub"
-
-
-	def _action(self, src, msg):
-		match msg:
-			case {"arena": True, **objs}: print(f"{src.name} has gone to the arena.")
-			case _: print(f"Unrecognized action: {msg}")
+		self.__stashes = mapping.PersistentMapping()
 
 

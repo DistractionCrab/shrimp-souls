@@ -35,7 +35,7 @@ class ThrowingDagger(cs.Ability):
 					ss.StatusEnum.bleed: lambda: random.randint(1, 3),
 					ss.StatusEnum.attdown: lambda: random.randint(1, 3)
 				},
-				score_dmg=utils.score_dmg(m1=1.2))
+				score_dmg=utils.ScoreDamage(m1=1.2))
 		]
 
 
@@ -86,13 +86,13 @@ class Action1(actions.Action):
 			self.msg += f"{self.attacker.name} manages to steal {amt} shrimp from {self.defender.name}. "
 			# See if you pilfer armor.
 			if utils.compute_bool(self.attacker, self.defender):
-				self.defender.stack_defdown()
-				self.attacker.stack_defup()
+				ss.StatusEnum.defdown.stack(self.defender)
+				ss.StatusEnum.defup.stack(self.attacker)
 				self.msg += f"{self.attacker.name} pilfers armor from {self.defender.name}. "
 
 			if utils.compute_bool(self.attacker, self.defender):
-				self.defender.stack_attdown()
-				self.attacker.stack_attup()
+				ss.StatusEnum.attdown.stack(self.defender)
+				ss.StatusEnum.attup.stack(self.attacker)
 				self.msg += f"{self.attacker.name} pilfers the weapon from {self.defender.name}. "
 		else:
 			self.msg += f"{self.attacker.name} failed to steal any shrimp. "

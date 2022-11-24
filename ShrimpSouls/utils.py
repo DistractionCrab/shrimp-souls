@@ -7,38 +7,39 @@ import functools as ftools
 import ShrimpSouls as ss
 from scipy.special import expit
 import persistent
+from dataclasses import dataclass
 
 ROLL_THRESHOLD = 30
 
 def acc_scale(self, base):
-	if self.accup > 0:
+	if self.status.accup > 0:
 		base *= 1.1
-	if self.accdown > 0:
+	if self.status.accdown > 0:
 		base *= 0.9
-	if self.encourage > 0:
+	if self.status.encourage > 0:
 		base *= 1.1
-	if self.poison > 0:
-		base *= 1.0 - (self.poison * 0.02)
+	if self.status.poison > 0:
+		base *= 1.0 - (self.status.poison * 0.02)
 
 	return math.ceil(base)
 
 
 def att_scale(self, base):
-	if self.attup > 0:
+	if self.status.attup > 0:
 		base *= 1.1
-	if self.attdown > 0:
+	if self.status.attdown > 0:
 		base *= 0.9
-	if self.encourage > 0:
+	if self.status.encourage > 0:
 		base *= 1.05
-	if self.poison > 0:
-		base *= 1.0 - (self.poison * 0.02)
+	if self.status.poison > 0:
+		base *= 1.0 - (self.status.poison * 0.02)
 
 	return math.ceil(base)
 
 def eva_scale(self, base):
-	if self.evaup > 0:
+	if self.status.evaup > 0:
 		base *= 1.1
-	if self.evadown > 0:
+	if self.status.evadown > 0:
 		base *= 0.9
 	if self.status.stun > 0:
 		base *= 0.4
@@ -46,25 +47,65 @@ def eva_scale(self, base):
 	return math.ceil(base)
 
 def def_scale(self, base):
-	if self.defup > 0:
+	if self.status.defup > 0:
 		base *= 1.1
-	if self.defdown > 0:
+	if self.status.defdown > 0:
 		base *= 0.9
 		
 	return math.ceil(base)
 
+def will_scale(self, base):
+	return math.ceil(base)
 
-def score_hit(s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
-	return (s1, s2, b1, b2, m1, m2)
+def fort_scale(self, base):
+	return math.ceil(base)
 
-def score_dmg(s1=ss.Scores.Att, s2=ss.Scores.Def, b1=0, b2=0, m1=1, m2=1):
-	return (s1, s2, b1, b2, m1, m2)
+def char_scale(self, base):
+	return math.ceil(base)
+
+def vit_scale(self, base):
+	return math.ceil(base)
+
+@dataclass(frozen=True)
+class DualScore:
+	s1: ss.Scores = ss.Scores.Acc
+	s2: ss.Scores = ss.Scores.Eva
+	m1: float = 1.0
+	m2: float = 1.0
+	b1: float = 0
+	b2: float = 0
+
+@dataclass(frozen=True)
+class ScoreHit(DualScore):
+	def __call__(self, a, d):
+		return compute_prob(a, d, self.s1, self.s2, self.b1, self.b2, self.m1, self.m2)
+
+@dataclass(frozen=True)
+class ScoreDamage(DualScore):
+	s1: ss.Scores = ss.Scores.Att
+	s2: ss.Scores = ss.Scores.Def
+
+	def __call__(self, a, d):
+		v = self.m1 * self.s1(a) + self.b1
+		p = compute_prob(a, d, self.s1, self.s2, self.b1, self.b2, self.m1, self.m2)
+
+		return math.ceil(p * v)
+
+@dataclass(frozen=True)
+class RawScore:
+	s: ss.Scores = ss.Scores.Att
+	m: float = 1.0
+	b: float = 0
+
+	def __call__(self, p):
+		return self.m * self.s(p) + self.b
+
 
 def compute_prob(a, d, s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):
 	s1 = b1 + m1*s1(a)
 	s2 = b2 + m2*s2(a)
 	
-	r = (s1/s2 - 1)*((s1 + s2)/100)
+	r = (s1/s2 - 1)*((s1 + s2)/10)
 	return expit(r)
 
 

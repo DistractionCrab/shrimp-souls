@@ -27,7 +27,7 @@ class MagicGreatsword(cs.Ability):
 				attacker=u,
 				defender=t,
 				dmgtype=actions.DamageType.Magic,
-				score_dmg=utils.score_dmg(m1=0.5))
+				score_dmg=utils.ScoreDamage(m1=0.5))
 			for t in targets
 		]
 
@@ -73,17 +73,15 @@ class SpellBlade(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_attup(amt=5)
-		self.attacker.stack_defup(amt=5)
+		ss.StatusEnum.attup.stack(self.attacker, amt=5)
+		ss.StatusEnum.defup.stack(self.attacker, amt=5)
 		self.msg += f"{self.attacker.name} enchants their sword and shield, enhancing their attack and defense."
 
 
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		self.defender.stack_block()
-		self.defender.stack_soulmass()
-		self.attacker.stack_defdown()
-		self.attacker.stack_evadown()
+		ss.StatusEnum.block.stack(self.defender)
+		ss.StatusEnum.soulmass.stack(self.defender)
 
 		self.msg += f"{self.attacker.name} is covering {self.defender.name} with a magical defense."

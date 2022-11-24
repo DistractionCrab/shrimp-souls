@@ -122,6 +122,9 @@ class ClassSpec:
 	def score_fort(self, p):
 		return stat_map(p, level=9)
 
+	def score_vit(self, p):
+		return stat_map(p, level=9)
+
 
 	def duel_action(self, actor, env):
 		return [actions.DoNothing(player=actor)]

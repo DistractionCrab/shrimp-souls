@@ -1,32 +1,15 @@
 Next Steps:
-- setup levelup submit message to reduce spam/overhead
-- set ticking to give messages for burns and etc
+- pop ups on important things (like leveling, queueed actions, confirmations)
+- leave arena to respec
+- new scores added
+- add more sorting options (HP for ss)
+- Fix parry stat checks
 
 IMPLEMENTATIONS
 - subclassing
 - elemental combos
 - management panel for live_config (reset arena/campaign/remove users)
 - put block/taunt on the buffs icons
-- event system for listening to things
-
-CLASSES
-new attack items:
-	Milquetoast: Nothing
-	Knight: Riposte stance (fewer stacks than fencer)
-	Juggernaut: Earthquake (enemy party-wide damage.)
-	Warrior: Whirlwind decreasing AoE damage and inflict bleed.
-	Swordsman: Flurry (fast multi-strikes)
-	Fencer: Fan of Blades (AOE damage and debuff)
-	Sorcerer: Twisted Wall of Light
-	Spellblade: Soul Greatsword
-	Pyromancer: Smoke Screen
-	Cryomancer: Retaliation spikes and increased defense
-	Priest: AoE Lightning Strike
-	Cleric: Holy Gavel (deals damage and reduces eva)
-	Paladin: Judgement (AoE stun)
-	Thief: Gambler (roll dice for effects)
-	Assassin: Smoke bomb - grants invis to party
-	Bard: inspiration Full party acc and eva scores up
 
 Dark Knight Str/Vig scaling
 Attack scaling Str 2* Vigor 3* Defense scaling Str 3* Vigor 3*

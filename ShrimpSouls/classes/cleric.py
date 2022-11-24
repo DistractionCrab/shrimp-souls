@@ -28,7 +28,7 @@ class HolyGavel(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.evadown: lambda: 3},
-				score_dmg=utils.score_dmg(m1=0.3))
+				score_dmg=utils.ScoreDamage(m1=0.3))
 			for t in targets
 		]
 
@@ -67,19 +67,19 @@ class Cleric(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.defender.stack_defup(amt=3)
+		ss.StatusEnum.defup.stack(self.defender, amt=3)
 		self.msg += f"{self.attacker.name} prayer bolster's {self.defender.name}'s defense. "
 
 
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		self.defender.use_burn(self.defender.burn)
-		self.defender.use_attdown(self.defender.attdown)
-		self.defender.use_evadown(self.defender.evadown)
-		self.defender.use_accdown(self.defender.accdown)
-		self.defender.use_defdown(self.defender.defdown)
-		self.defender.use_poison(self.defender.poison)
-		self.defender.use_stun(self.defender.stun)
+		ss.StatusEnum.burn.use(self.defender, self.defender.status.burn)
+		ss.StatusEnum.attdown.use(self.defender,self.defender.status.attdown)
+		ss.StatusEnum.evadown.use(self.defender,self.defender.status.evadown)
+		ss.StatusEnum.accdown.use(self.defender,self.defender.status.accdown)
+		ss.StatusEnum.defdown.use(self.defender,self.defender.status.defdown)
+		ss.StatusEnum.poison.use(self.defender,self.defender.status.poison)
+		ss.StatusEnum.stun.use(self.defender,self.defender.status.stun)
 
 		self.msg += f"{self.attacker.name} has cleansed {self.defender.name} of their debuffs."

@@ -70,15 +70,13 @@ class Knight(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_block(amt=3)
+		ss.StatusEnum.block.stack(self.attacker, amt=3)
 		self.msg += f"{self.attacker.name} readies their shield to block attacks."
 
 
 @dataclass
 class Target1(actions.Action):
 	def apply(self):
-		self.defender.stack_block()
-		self.attacker.stack_defdown()
-		self.attacker.stack_attdown()
+		ss.StatusEnum.block.stack(self.defender)
 
 		self.msg += f"{self.attacker.name} is covering {self.defender.name}."

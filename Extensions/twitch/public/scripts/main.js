@@ -1,4 +1,4 @@
-const TESTING = true;
+const TESTING = false;
 
 import { EVENTS } from "./events.js";
 import { set_text, TabManager } from "./utils.js";
@@ -8,6 +8,8 @@ import { CharSheet } from "./charsheet.js";
 import { EntityManager } from "./entity_manager.js";
 import { MESSAGES } from "./messages.js";
 import { CampaignManager } from "./campaign/init.js";
+
+
 
 class PageManager {
 	constructor(testing) {		

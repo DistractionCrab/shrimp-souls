@@ -135,17 +135,17 @@ class DoNothing:
 class HealTarget(Action):
 	attacker: object
 	defender: object
-	base: int = 1
-	mult: int = 1/5
+	score: utils.RawScore = utils.RawScore()
+	ignore_undead: bool = False
 	
 	msg: str = ''
 	dmg: int = 0
 
 	def apply(self):
 		import ShrimpSouls.npcs as npcs
-		if npcs.NPCTags.Undead.tagged(self.defender):
+		if npcs.NPCTags.Undead.tagged(self.defender) and not self.ignore_undead:
 			if not self.defender.dead:
-				amt = math.ceil(self.attacker.att*self.mult + self.base)
+				amt = self.score(self.attacker)
 				self.msg += f"{self.attacker.name} deals {amt} damage to {self.defender.name} (Undead)."
 				self.defender.damage(amt)	
 				
@@ -153,7 +153,7 @@ class HealTarget(Action):
 				self.msg += f"{self.attacker.name} could not damage dead target {self.defender.name}."
 		else:
 			if not self.defender.dead:
-				amt = math.ceil(self.attacker.att*self.mult + self.base)
+				amt = self.score(self.attacker)
 				self.msg += f"{self.attacker.name} heals {amt} life to {self.defender.name}."
 				self.defender.damage(-amt)	
 				
@@ -209,8 +209,8 @@ class Error:
 class DamageTarget(Action):
 	attacker: object
 	defender: object
-	score_hit: tuple = utils.score_hit()
-	score_dmg: tuple = utils.score_dmg()
+	score_hit: utils.DualScore = utils.ScoreHit()
+	score_dmg: utils.DualScore = utils.ScoreDamage()
 	dmgtype: DamageType = DamageType.Slash
 	abilityrange: AbilityRange = AbilityRange.Close
 	msg: str = ""
@@ -227,14 +227,16 @@ class DamageTarget(Action):
 			self.msg = f"{self.attacker.name} cannot attack while dead."
 		elif self.defender.dead:
 			self.msg = f"{self.defender.name} cannot be attacked while dead."
-		elif self.attacker.stun > 0:
+		elif self.attacker.status.stun > 0:
 			self.msg = f"{self.attacker.name} was stunned and could not act."
 		else:
 			self.applied = True
 
-			if self.defender.ripstance > 0 and self.abilityrange.can_riposte():
+			if self.defender.status.lightwall > 0 and self.abilityrange.can_deflect():
+				self.msg += f"{self.defender.name}'s attack was deflected by {self.attacker.name}'s Wall of Solid Light."
+			elif self.defender.status.ripstance > 0 and self.abilityrange.can_riposte():
 				self.parry_scenario()
-			elif self.defender.soulmass > 0 and self.abilityrange.can_soulmass():
+			elif self.defender.status.soulmass > 0 and self.abilityrange.can_soulmass():
 				self.soulmass_scenario()
 			else:
 				self.standard_scenario()				
@@ -249,39 +251,33 @@ class DamageTarget(Action):
 		return self.msg
 
 	def standard_scenario(self):
-		hits = utils.compute_bool_many(self.attacker, self.defender, *self.score_hit)
-
-		total = 0
-		for h in hits:
-			if h:
-				d = utils.compute_dmg(self.attacker, self.defender, *self.score_dmg)
-				dmg = d if self.defender.block == 0 else math.ceil(d * 0.25)
-				total += dmg
-
+		hit = self.score_hit(self.attacker, self.defender)
 				
-		if total == 0:
-			self.msg += f"{self.attacker.name} missed {self.defender.name}."
-		else:
-			
-			
+		if hit:
+			dmg = self.score_dmg(self.attacker, self.defender)
 			if self.defender.weak(self.dmgtype):
-				total = math.ceil(1.5 * total)
+				dmg = math.ceil(1.5 * dmg)
 			if self.defender.resist(self.dmgtype):
-				total = math.ceil(0.5 * total)
+				dmg = math.ceil(0.5 * dmg)
 
-			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {total} damage. "
-			self.defender.damage(total)
+			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {dmg} damage. "
+			self.defender.damage(dmg)
 			self.__apply_status()
 			self.on_hit()
 
-			if self.attacker.sealing > 0:
+			if self.attacker.status.sealing > 0:
 				self.defender.stack_stun(1)
 			if self.defender.status.briar:
-				self.__handle_briars()
+				self.__handle_briars()			
+		else:
+			self.msg += f"{self.attacker.name} missed {self.defender.name}."
+			
+			
+			
 
 	def soulmass_scenario(self):
 		totals = [
-			utils.compute_bool(self.defender, self.attacker, *self.score_hit) 
+			utils.compute_bool(self.defender, self.attacker, *utils.score_hit()) 
 			for _ in range(self.defender.soulmass_count())]
 		dmg = sum(
 			utils.compute_dmg(self.defender, self.attacker, *self.score_dmg)
@@ -298,17 +294,17 @@ class DamageTarget(Action):
 		self.standard_scenario()
 
 	def parry_scenario(self):
-		parry = utils.compute_bool(self.defender, self.attacker, *self.score_hit)
+		parry = utils.compute_bool(self.defender, self.attacker)
 		if parry:
-			riposte = utils.compute_bool(self.defender, self.attacker, *self.score_hit)
+			riposte = utils.compute_bool(self.defender, self.attacker)
 			if riposte:
-				d = utils.compute_dmg(self.defender, self.attacker, *self.score_dmg)
+				d = utils.compute_dmg(self.defender, self.attacker)
 				self.attacker.damage(d)
 				self.msg += f"{self.defender.name} parries and ripostes {self.attacker.name} for {d} damage."
 			else:
-				h = utils.compute_bool(self.attacker, self.defender, *self.score_hit)
+				h = utils.compute_bool(self.attacker, self.defender)
 				if h:
-					d = utils.compute_dmg(self.attacker, self.defender, *self.score_dmg)//2
+					d = utils.compute_dmg(self.attacker, self.defender)//2
 					self.defender.damage(d)
 					self.msg += f"{self.defender.name} manages to partially parry {self.attacker.name}'s attack, and suffers {d} damage."
 				else:
@@ -347,7 +343,7 @@ class DamageTarget(Action):
 class EffectAction(Action):
 	attacker: object
 	defender: object
-	score_hit: tuple = utils.score_hit()
+	score_hit: utils.DualScore = utils.ScoreHit()
 	abilityrange: AbilityRange = AbilityRange.Close
 	msg: str = ""
 	applied: bool = False
@@ -361,10 +357,10 @@ class EffectAction(Action):
 			self.msg = f"{self.attacker.name} cannot attack while dead."
 		elif self.defender.dead:
 			self.msg = f"{self.defender.name} cannot be attacked while dead."
-		elif self.attacker.stun > 0:
+		elif self.attacker.status.stun > 0:
 			self.msg = f"{self.attacker.name} was stunned and could not act."
 		else:
-			if utils.compute_bool(self.attacker, self.defender, *self.score_hit):
+			if self.score_hit(self.attacker, self.defender):
 				self.on_hit()
 			else:
 				self.on_miss()
@@ -381,11 +377,12 @@ class EffectAction(Action):
 class StatusAction(Action):
 	attacker: object
 	defender: object
-	score_hit: tuple = utils.score_hit()
+	score_hit: utils.DualScore = utils.ScoreHit()
 	abilityrange: AbilityRange = AbilityRange.Close
 	statuses: utils.FrozenDict = utils.FrozenDict({})
 	msg: str = ""
 	applied: bool = False
+	ignore_res: bool = False
 
 	def apply(self):
 		if self.applied:
@@ -396,7 +393,7 @@ class StatusAction(Action):
 			self.msg = f"{self.attacker.name} cannot attack while dead."
 		elif self.defender.dead:
 			self.msg = f"{self.defender.name} cannot be attacked while dead."
-		elif self.attacker.stun > 0:
+		elif self.attacker.status.stun > 0:
 			self.msg = f"{self.attacker.name} was stunned and could not act."
 		else:
 			self.applied = True
@@ -405,7 +402,9 @@ class StatusAction(Action):
 				if self.defender.immune(s):
 					self.msg += f"{self.defender.name} is immune to {s.name}."
 				else:
-					if self.attacker is self.defender or utils.compute_bool(self.attacker, self.defender, *self.score_hit):
+					c1 = self.attacker is self.defender
+					c2 = self.score_hit(self.attacker, self.defender)
+					if self.ignore_res or c1 or c2:
 						a = amt()
 						s.stack(self.defender, amt=a)
 						self.msg += f"{self.attacker.name} afflicted {s.name} on {self.defender.name} for {a} turns. "

@@ -64,5 +64,23 @@
 	--filterinput-height:  90px;
 	--filterinput-font-size: 100%;
 	--filterpopup-width: 93vw;
+
+	--untarget-button-width:  80px;
+	--untarget-button-height:  80px;
+	--untarget-button-margin-left:  40px;
+	--target-button-width:  60px;
+	--target-button-height: 60px;
+	--target-button-margin-left: 40px;
+
+	--confirmpop-font-size: 48px;
+	--abiconfirm-height: 4vh;
+
+	--padded-padding: 30px;
+
+	--status-icon-large-width: 120px;
+	--status-icon-large-height: 120px;
+
+	--status-icon-small-width: 60px;
+	--status-icon-small-height: 60px;
 }
 

@@ -27,7 +27,7 @@ class Whirlwind(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.bleed: lambda: 3},
-				score_dmg=utils.score_dmg(m1=0.5))
+				score_dmg=utils.ScoreDamage(m1=0.5))
 			for t in targets
 		]
 
@@ -72,19 +72,19 @@ class Warrior(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_attup(amt=3)
+		ss.StatusEnum.attup.stack(self.attacker, amt=3)
 		self.msg += f"{self.attacker.name} sharpens their blade, increasing their attack."
 
 
 @dataclass
 class Target1(actions.DamageTarget):
-	score_dmg: tuple = utils.score_dmg(m1=1.2)
+	score_dmg: tuple = utils.ScoreDamage(m1=1.2)
 	abilityrange: actions.AbilityRange = actions.AbilityRange.Close
 	dmgtype: actions.DamageType = actions.DamageType.Slash
 
 	def on_hit(self):
-		self.defender.use_defup(self.defender.defup)
-		self.defender.use_evaup(self.defender.evaup)
+		ss.StatusEnum.defup.use(self.defender, self.defender.status.defup)
+		ss.StatusEnum.evaup.use(self.defender, self.defender.status.evaup)
 
 		self.msg += f"{self.attacker.name}'s armor break removed {self.defender.name}'s defensive buffs."
 		

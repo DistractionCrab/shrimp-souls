@@ -70,17 +70,17 @@ class Paladin(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		self.attacker.stack_sealing(amt=3)
+		ss.StatusEnum.sealing(self.attacker, amt=3)
 		self.msg += f"{self.attacker.name} casts a prayer on their blade to seal their foes."
 
 
 @dataclass
 class Target1(actions.EffectAction):
 	def on_hit(self):
-		self.defender.stack_attdown(amt=2)
-		self.defender.stack_evadown(amt=2)
-		self.defender.stack_defdown(amt=2)
-		self.defender.stack_accdown(amt=2)
+		ss.StatusEnum.attdown.stack(self.defender, amt=2)
+		ss.StatusEnum.evadown.stack(self.defender, amt=2)
+		ss.StatusEnum.defdown.stack(self.defender, amt=2)
+		ss.StatusEnum.accdown.stack(self.defender, amt=2)
 
 		self.msg += f"{self.attacker.name} has weakened {self.defender.name} with a holy censure."
 

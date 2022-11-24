@@ -27,6 +27,10 @@ class Scores(enum.Enum):
 	Def = lambda x: x.dfn
 	Att = lambda x: x.att
 	Acc = lambda x: x.acc
+	Will = lambda x: x.will
+	Fort = lambda x: x.fort
+	Char = lambda x: x.char
+	Vit = lambda x: x.vit
 
 
 
@@ -127,6 +131,7 @@ class Attributes:
 class Entity(persistent.Persistent):
 	name: str
 	status: Statuses = field(default_factory=Statuses)
+	inventory: list = field(default_factory=list)
 	acted: bool = False
 
 	
@@ -150,38 +155,38 @@ class Entity(persistent.Persistent):
 	
 
 	def tick(self):
-		if self.burn > 0:			
-			amt = math.ceil(self.att/10) * math.ceil(self.burn/10)
-			self.use_burn()
+		if self.status.burn > 0:			
+			amt = math.ceil(self.att/10) * math.ceil(self.status.burn/10)
+			StatusEnum.burn.use(self)
 			self.damage(amt)
 			yield f"{self.name} suffered {amt} damage from burns."
-		if self.poison > 0:
-			amt = math.ceil(self.dfn/10) * math.ceil(self.poison/10)
-			self.use_poison()
+		if self.status.poison > 0:
+			amt = math.ceil(self.dfn/10) * math.ceil(self.status.poison/10)
+			StatusEnum.poison.use(self)
 			self.damage(amt)
 			yield f"{self.name} suffered {amt} damage from poison."
 			
-		self.damage(self.bleed)
-		if self.bleed >= 10:
+		self.damage(self.status.bleed)
+		if self.status.bleed >= 10:
 			self.damage(math.ceil(random.randint(1,10) * (1 + self.max_hp//100)))
-			self.use_bleed(amt=10)
+			StatusEnum.bleed.use(self, amt=10)
 		else:
-			self.use_bleed()
+			StatusEnum.bleed.use(self)
 
-		self.use_stun()
-		self.use_invis()
-		self.use_attup()
-		self.use_attdown()
-		self.use_accup()
-		self.use_accdown()
-		self.use_evadown()
-		self.use_evaup()
-		self.use_defdown()
-		self.use_defup()
-		self.use_ripstance()
-		self.use_sealing()
-		self.use_encourage()
-		self.use_charm()
+		StatusEnum.stun.use(self)
+		StatusEnum.invis.use(self)
+		StatusEnum.attup.use(self)
+		StatusEnum.attdown.use(self)
+		StatusEnum.accup.use(self)
+		StatusEnum.accdown.use(self)
+		StatusEnum.evadown.use(self)
+		StatusEnum.evaup.use(self)
+		StatusEnum.defdown.use(self)
+		StatusEnum.defup.use(self)
+		StatusEnum.ripstance.use(self)
+		StatusEnum.sealing.use(self)
+		StatusEnum.encourage.use(self)
+		StatusEnum.charm.use(self)
 		StatusEnum.briar.use(self)
 
 
@@ -206,6 +211,26 @@ class Entity(persistent.Persistent):
 		base = float(self._dfn)
 		return utils.def_scale(self, base)
 
+	@property
+	def will(self):
+		base = float(self._will)
+		return utils.will_scale(self, base)
+
+	@property
+	def vit(self):
+		base = float(self._vit)
+		return utils.vit_scale(self, base)
+
+	@property
+	def char(self):
+		base = float(self._char)
+		return utils.char_scale(self, base)
+
+	@property
+	def fort(self):
+		base = float(self._fort)
+		return utils.fort_scale(self, base)
+
 
 	def duel_action(self, env):
 		return actions.DoNothing(player=self)
@@ -213,237 +238,6 @@ class Entity(persistent.Persistent):
 	def damage(self, v):
 		self.hp = min(max(self.hp - v, 0), self.max_hp)
 
-
-	@property
-	def block(self):
-		return self.status.block
-
-	
-	def stack_block(self, amt=1):
-		self.status.block += 1
-
-	
-	def use_block(self, amt=1):
-		self.status.block = max(0, self.status.block - amt)
-
-	@property
-	def attdown(self):
-		return self.status.attdown
-
-	
-	def stack_attdown(self, amt=1):
-		self.status.attdown += 1
-
-	
-	def use_attdown(self, amt=1):
-		self.status.attdown = max(0, self.status.attdown - amt)
-	
-	@property
-	def attup(self):
-		return self.status.attup
-
-	
-	def stack_attup(self, amt=1):
-		self.status.attup += 1
-
-	
-	def use_attup(self, amt=1):
-		self.status.attup = max(0, self.status.attup - amt)
-
-	@property
-	def defup(self):
-		return self.status.defup
-
-
-	
-	def stack_defup(self, amt=1):
-		self.status.defup += 1
-
-	
-	def use_defup(self, amt=1):
-		self.status.defup = max(0, self.status.defup - amt)
-
-	@property
-	def defdown(self):
-		return self.status.defdown
-
-	
-	def stack_defdown(self, amt=1):
-		self.status.defdown += 1
-
-	
-	def use_defdown(self, amt=1):
-		self.status.defdown = max(0, self.status.defdown - amt)
-
-	@property
-	def evaup(self):
-		return self.status.evaup
-
-	
-	def stack_evaup(self, amt=1):
-		self.status.evaup += 1
-
-	
-	def use_evaup(self, amt=1):
-		self.status.evaup = max(0, self.status.evaup - amt)
-
-	@property
-	def evadown(self):
-		return self.status.evadown
-
-	
-	def stack_evadown(self, amt=1):
-		self.status.evadown += 1
-
-	
-	def use_evadown(self, amt=1):
-		self.status.evadown = max(0, self.status.evadown - amt)
-
-	@property
-	def accup(self):
-		return self.status.accup
-
-
-	
-	def stack_accup(self, amt=1):
-		self.status.accup += 1
-
-	
-	def use_accup(self, amt=1):
-		self.status.accup = max(0, self.status.accup - amt)
-
-	@property
-	def accdown(self):
-		return self.status.accdown
-
-	
-	def stack_accdown(self, amt=1):
-		self.status.accdown += 1
-
-	
-	def use_accdown(self, amt=1):
-		self.status.accdown = max(0, self.status.accdown - amt)
-
-
-	@property
-	def ripstance(self):
-		return self.status.ripstance
-
-	
-	def stack_ripstance(self, amt=1):
-		self.status.ripstance += 1
-
-	
-	def use_ripstance(self, amt=1):
-		self.status.ripstance = max(0, self.status.ripstance - amt)
-
-	@property
-	def soulmass(self):
-		return self.status.soulmass
-
-	
-	def stack_soulmass(self, amt=1):
-		self.status.soulmass += amt
-
-	
-	def use_soulmass(self, amt=1):
-		self.status.soulmass = max(0, self.status.soulmass - amt)
-
-	@property
-	def burn(self):
-		return self.status.burn
-
-	
-	def stack_burn(self, amt=1):
-		self.status.burn += amt
-
-	def use_burn(self, amt=1):
-		self.status.burn = max(0, self.status.burn - amt)
-
-	@property
-	def poison(self):
-		return self.status.poison
-
-	
-	def stack_poison(self, amt=1):
-		self.status.poison += amt
-
-	
-	def use_poison(self, amt=1):
-		self.status.poison = max(0, self.status.poison - amt)
-
-	@property
-	def bleed(self):
-		return self.status.bleed
-
-	
-	def stack_bleed(self, amt=1):
-		self.status.bleed += amt
-
-	
-	def use_bleed(self, amt=1):
-		self.status.bleed = max(0, self.status.bleed - amt)
-
-	@property
-	def sealing(self):
-		return self.status.sealing
-
-	
-	def stack_sealing(self, amt=1):
-		self.status.sealing += amt
-
-	
-	def use_sealing(self, amt=1):
-		self.status.sealing = max(0, self.status.sealing - amt)
-
-	@property
-	def stun(self):
-		return self.status.stun
-
-	
-	def stack_stun(self, amt=1):
-		self.status.stun += amt
-
-	
-	def use_stun(self, amt=1):
-		self.status.stun = max(0, self.status.stun - amt)
-
-
-	@property
-	def invis(self):
-		return self.status.invis
-
-	
-	def stack_invis(self, amt=1):
-		self.status.invis += amt
-
-	
-	def use_invis(self, amt=1):
-		self.status.invis = max(0, self.status.invis - amt)
-
-	@property
-	def encourage(self):
-		return self.status.encourage
-
-	
-	def stack_encourage(self, amt=1):
-		self.status.encourage += amt
-
-	
-	def use_encourage(self, amt=1):
-		self.status.encourage = max(0, self.status.encourage - amt)
-
-	@property
-	def charm(self):
-		return self.status.charm
-
-	
-	def stack_charm(self, amt=1):
-		self.status.charm += amt
-
-	
-	def use_charm(self, amt=1):
-		self.status.charm = max(0, self.status.charm - amt)
 
 	def get_taunt_target(self):
 
@@ -479,8 +273,6 @@ class Entity(persistent.Persistent):
 	def immune(self, d):
 		return False
 	
-
-	
 	def revive(self):
 		self.hp = self.max_hp
 
@@ -497,17 +289,6 @@ class Entity(persistent.Persistent):
 
 		return False
 
-	
-
-
-_MODIFIED = set()
-def commit_changed():
-	for p in _MODIFIED:
-		PLAYER_CACHE[p.name] = p
-
-
-
-atexit.register(commit_changed)
 
 import ShrimpSouls.classes as classes
 
@@ -534,7 +315,17 @@ class Player(Entity):
 				'xp_req': self.get_xp_req(),
 				'class': self.myclass.cl_string,
 				'attributes': self.attributes.__dict__,
-				'status': self.status.__dict__
+				'status': self.status.__dict__,
+				'scores': {
+					"att": self.att,
+					"dfn": self.dfn,
+					"eva": self.eva,
+					"acc": self.acc,
+					"will": self.will,
+					"fort": self.fort,
+					"char": self.char,
+					"vit": self.vit,
+				}
 			}
 
 	@property
@@ -630,8 +421,21 @@ class Player(Entity):
 	def _dfn(self):
 		return self.myclass.score_dfn(self)
 
-	def duel_action(self, env):
-		return self.myclass.duel_action(self, env)
+	@property
+	def _will(self):
+		return self.myclass.score_will(self)
+
+	@property
+	def _fort(self):
+		return self.myclass.score_fort(self)
+
+	@property
+	def _vit(self):
+		return self.myclass.score_vit(self)
+
+	@property
+	def _char(self):
+		return self.myclass.score_char(self)
 
 	@property
 	def is_player(self):
