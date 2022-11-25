@@ -60,3 +60,36 @@ export class TabManager {
 		}
 	}
 }
+
+
+export class AlternatingCell {
+	constructor(row) {
+		this.cell = row.insertCell(row.cells.length);
+		this.text = [];
+		this.index = 0;
+
+		this.cell.addEventListener("click", () => {
+			console.log("click");
+			if (this.text.length > 0) {
+				this.text[this.index].classList.toggle("hidden", true);
+				this.index = (this.index + 1) % this.text.length;
+				this.text[this.index].classList.toggle("hidden", false);
+			}
+		});
+	}
+
+	add_text(txt) {
+		const elem = document.createElement("div");
+		set_text(elem, txt);
+
+		this.text.push(elem);
+
+		if (this.text.length === 1) {
+			elem.classList.toggle("hidden", false);
+		} else {
+			elem.classList.toggle("hidden", true);
+		}
+
+		this.cell.appendChild(elem);
+	}
+}

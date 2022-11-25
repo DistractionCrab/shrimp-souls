@@ -10,7 +10,8 @@ import sys
 import pathlib
 import atexit
 import persistent
-import persistent.mapping
+import persistent.mapping as mapping
+import persistent.list as plist
 import ShrimpSouls.messages as messages
 
 from dataclasses import dataclass, fields, field
@@ -135,8 +136,14 @@ class Entity(persistent.Persistent):
 	acted: bool = False
 
 	
-	def commit(self):
-		pass
+	def add_item(self, i):
+		self.inventory.append(i)
+
+	def remove_item(self, i):
+		try:
+			self.inventory.remove(i)
+		except:
+			pass
 
 	def weak(self, v):
 		return False
@@ -307,6 +314,7 @@ class Player(Entity):
 
 	@property
 	def json(self):
+		self.inventory = plist.PersistentList()
 		return {
 				'name': self.name,
 				'hp': self.hp,
@@ -325,7 +333,8 @@ class Player(Entity):
 					"fort": self.fort,
 					"char": self.char,
 					"vit": self.vit,
-				}
+				},
+				"inventory": [i.display for i in self.inventory]
 			}
 
 	@property

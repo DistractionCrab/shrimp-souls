@@ -9,6 +9,13 @@ export const MESSAGES = {
 			targets: targets,
 		}
 	},
+	item: (index, targets) => { 
+		return { 
+			msg: "item",
+			index: index,
+			targets: targets,
+		}
+	},
 	level: (att) => {
 		return {
 			msg: "levelup",

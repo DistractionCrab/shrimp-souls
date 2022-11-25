@@ -9,6 +9,10 @@ import ShrimpSouls.campaigns as cps
 import ShrimpSouls.utils as utils
 import ShrimpSouls.campaigns.combat as combat
 import ShrimpSouls.npcs as npcs
+import ShrimpSouls.items as items
+
+def count_potions(p):
+	return sum(1 if isinstance(i, items.MinorHealingPotion) else 0 for i in p.inventory)
 
 class Arena(cps.BaseCampaign):
 	__leave = plist.PersistentList()
@@ -38,6 +42,11 @@ class Arena(cps.BaseCampaign):
 				p.reset_status()
 				for _ in self.__combat.add_player(p):
 					pass
+
+				ct = count_potions(p)
+				for _ in range(ct, 3):
+					p.add_item(items.MinorHealingPotion())
+
 			yield self.broadcast(
 				msg=["The Arena will be starting soon!"],
 				campinfo=self.campinfo())
@@ -81,6 +90,14 @@ class Arena(cps.BaseCampaign):
 				recv=(p.name,))
 		else:
 			yield from self.__combat.use_ability(p, abi, targets)
+
+	def use_item(self, p, index, targets):
+		if self.__combat is None:
+			yield messages.Message(
+				msg=(f"Cannot use items in while waiting on the arena...",),
+				recv=(p.name,))
+		else:
+			yield from self.__combat.use_item(p, index, targets)
 
 
 import ShrimpSouls.campaigns.combat as combat

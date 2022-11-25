@@ -190,14 +190,22 @@ class Combat(cps.BaseCampaign):
 			return pool + targets
 
 	def use_ability(self, p, abi, targets):
-		self.__queued[p.name] = (abi, targets)
 		self.__queued[p.name] = UseAbility(abi, targets)
 		yield messages.Response(
 			msg=[f"You have readied {abi} for the next turn aimed at {', '.join(targets)}"],
 			recv=(p.name,))
 
 	def use_item(self, p, index, targets):
-		pass
+		if index < len(p.inventory):
+			self.__queued[p.name] = UseItem(index, targets)
+
+			yield messages.Response(
+				msg=[f"You have readied {p.inventory[i].display} for the next turn aimed at {', '.join(targets)}"],
+				recv=(p.name,))
+		else:
+			yield messages.Response(
+				msg=[f"You do not have an item in the {index} slot."],
+				recv=(p.name,))
 
 
 class UseAbility:
@@ -219,7 +227,14 @@ class UseItem:
 		self.__index = index
 
 	def act(self, p, env):
-		return tuple()
+		if self.__index < len(p.inventory):
+			item = p.inventory[self.__index]
+			if p.status.charm == 0:
+				return item.apply(p, self.__targets, env)
+			else:
+				return p.random_action(env)
+		else:
+			return tuple()
 
 
 

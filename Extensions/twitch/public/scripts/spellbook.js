@@ -1,5 +1,5 @@
 import { EVENTS } from "./events.js";
-import { set_text } from "./utils.js";
+import { set_text, AlternatingCell } from "./utils.js";
 import { ABILITY_DATA } from "./classdata.js";
 import { MESSAGES } from "./messages.js";
 
@@ -90,9 +90,14 @@ export class SpellBook {
 			icell.appendChild(button);
 			button.classList.add("default_abilityicon");
 
-			var ncell = row.insertCell(1);
-			ncell.classList.add("spellname");
-			set_text(ncell, d.displayName);
+			const ncell = new AlternatingCell(row);
+			//row.appendChild(ncell.cell);
+			ncell.add_text(d.displayName);
+			ncell.add_text(d.desc);
+			ncell.text[0].classList.add("spellname");
+			//var ncell = row.insertCell(1);
+			//ncell.classList.add("spellname");
+			//set_text(ncell, d.displayName);
 
 			button.addEventListener("click", () => {
 				//EVENTS.alert("server_message", MESSAGES.ability(d.name, this.targeted))

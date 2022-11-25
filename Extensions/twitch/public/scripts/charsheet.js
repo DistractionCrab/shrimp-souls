@@ -1,5 +1,6 @@
 import { EVENTS } from "./events.js";
 import { set_text, TabManager } from "./utils.js";
+import { Inventory } from "./inventory.js";
 
 const TABMANAGER = new TabManager({
 	status: {
@@ -30,10 +31,18 @@ const TABMANAGER = new TabManager({
 		active_fn: () => {},
 		deactive_fn: () => {},
 	},
+	inventory: {
+		header: "inventheader",
+		body: "inventorypage",
+		active: false,
+		active_fn: () => {},
+		deactive_fn: () => {},
+	},
 }, "status");
 
 export class CharSheet {
 	constructor() {
+		this.inventory = new Inventory();
 		this.score_table = document.getElementById("scoretable");
 		this.xp_cur = 0;
 		this.xp_req = 1;

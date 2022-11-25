@@ -137,6 +137,8 @@ body {
 	padding: 6px 12px;
 	animation: fadeEffect 1s; /* Fading effect takes 1 second */
 	width: 100vw;
+	padding: 0px;
+	margin: 0px;
 }
 
 @keyframes fadeEffect {
@@ -220,24 +222,26 @@ body {
 	outline:  none;
 }
 
-.briaricon {
-	background-image: url("../images/status icons/briar.png");
-	width:  var(--status-icon-width);
-	height: var(--status-icon-height);
-	background-size: contain;
-	background-repeat: no-repeat;
-	text-shadow: 0 0 3px black;
-}
-
 .statusiconlarge {
 	width:  var(--status-icon-large-width);
 	height: var(--status-icon-large-height);
+	mix-blend-mode: darken;
 }
 
 .statusiconsmall {
 	width:  var(--status-icon-small-width);
 	height: var(--status-icon-small-height);
+	mix-blend-mode: darken;
 }
+
+.briaricon {
+	background-image: url("../images/status icons/briar.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	text-shadow: 0 0 3px black;
+}
+
+
 
 .accupicon {
 	background-image: url("../images/status icons/accup.png");

@@ -6,12 +6,20 @@ from dataclasses import dataclass
 class Item:
 	display: str = "Garbage"
 	applicable: bool = False
+	uses: int = 1
 
 	def act(self, p, targets, env):
 		if self.applicable and len(targets) > 0:
-			return self.apply(p, targets, env)
+			v = self.apply(p, targets, env)
 		else:
-			return self.use(p, env)
+			v = self.use(p, env)
+			
+		self.uses -= 1
+		if self.uses == 0:
+			p.remove_item(self)
+
+		return v
+
 
 	def use(self, p, env):
 		return []
@@ -24,8 +32,8 @@ class Item:
 class MinorHealingPotion(Item):
 	display: str = "Minor Healing Potion"
 
-	def use(self, p, env):
+	def use(self, p, env):		
 		return [actions.HealTarget(
 			attacker=p,
 			defender=p,
-			score=utils.RawScore(s=ss.Scores.Vig))]
+			score=utils.RawScore(s=ss.Scores.Vig,m=0.1))]
