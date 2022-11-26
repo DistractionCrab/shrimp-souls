@@ -227,7 +227,7 @@ class Troll(BaseNPC):
 			return [
 				actions.DamageTarget(attacker=self, defender=target[0]),
 				actions.DamageTarget(attacker=self, defender=target[1]),
-				actions.HealTarget(attacker=self, defender=self, mult=1/5)]
+				actions.HealTarget(attacker=self, defender=self)]
 
 
 

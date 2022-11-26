@@ -232,7 +232,7 @@ class DamageTarget(Action):
 		else:
 			self.applied = True
 
-			if self.defender.status.lightwall > 0 and self.abilityrange.can_deflect():
+			if self.defender.status.lightwall > 0 and self.abilityrange.can_deflect:
 				self.msg += f"{self.defender.name}'s attack was deflected by {self.attacker.name}'s Wall of Solid Light."
 			elif self.defender.status.ripstance > 0 and self.abilityrange.can_riposte():
 				self.parry_scenario()
@@ -251,6 +251,8 @@ class DamageTarget(Action):
 		return self.msg
 
 	def standard_scenario(self):
+		print(self.attacker.name)
+		print(self.defender.name)
 		hit = self.score_hit(self.attacker, self.defender)
 				
 		if hit:
@@ -280,10 +282,10 @@ class DamageTarget(Action):
 			utils.compute_bool(self.defender, self.attacker, *utils.score_hit()) 
 			for _ in range(self.defender.soulmass_count())]
 		dmg = sum(
-			utils.compute_dmg(self.defender, self.attacker, *self.score_dmg)
+			utils.compute_dmg(self.defender, self.attacker, *utils.score_dmg())
 			for t in totals if t)
 		self.attacker.damage(dmg)
-		self.defender.use_soulmass(amt=1)
+		ss.StatusEnum.soulmass.use(self.defender)
 
 		if dmg > 0:
 			if self.defender.weak(DamageType.Magic):

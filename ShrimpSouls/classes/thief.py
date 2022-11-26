@@ -30,7 +30,7 @@ class ThrowingDagger(cs.Ability):
 		return [
 			actions.DamageTarget(
 				attacker=u,
-				defender=t,
+				defender=targets,
 				statuses={
 					ss.StatusEnum.bleed: lambda: random.randint(1, 3),
 					ss.StatusEnum.attdown: lambda: random.randint(1, 3)

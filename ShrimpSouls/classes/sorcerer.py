@@ -28,7 +28,7 @@ class Lightwall(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.lightwall: lambda: 2},
-				ignore_Res=True)
+				ignore_res=True)
 			for t in targets
 		]
 

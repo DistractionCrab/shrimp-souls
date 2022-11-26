@@ -5,6 +5,8 @@ from dataclasses import dataclass
 import ShrimpSouls.actions as actions
 import random
 import math
+import ShrimpSouls.utils as utils
+
 
 def prayer(u, targets, env):
 	targets = env.find_valid_target(u, True, True, amt=3)
@@ -14,7 +16,7 @@ def prayer(u, targets, env):
 		actions.HealTarget(
 			attacker=u, 
 			defender=t, 
-			score=utils.RawScore(m1=0.1))
+			score=utils.RawScore(m=0.1))
 		for t in targets
 	]
 	
@@ -30,10 +32,10 @@ def heal(u, targets, env):
 
 	if t.dead:
 		amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m1=1/15))]
+		return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m=1/15))]
 	else:
 		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.HealTarget(attacker=u, defender=t, score=utils.RawScore(m1=1/5))]
+		return [actions.HealTarget(attacker=u, defender=t, score=utils.RawScore(m=1/5))]
 
 @dataclass
 class LightningStorm(cs.Ability):
@@ -41,11 +43,11 @@ class LightningStorm(cs.Ability):
 
 	def act(self, u, targets, env):
 		return [
-			actions.DamageAction(
+			actions.DamageTarget(
 				attacker=u,
 				defender=t,
 				dmgtype=actions.DamageType.Lightning,
-				score_dmg=utils.score_dmg(m1=0.5))
+				score_dmg=utils.ScoreDamage(m1=0.5))
 			for t in targets
 		]
 

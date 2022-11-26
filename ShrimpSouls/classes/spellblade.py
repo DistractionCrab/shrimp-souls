@@ -5,6 +5,7 @@ import ShrimpSouls.actions as actions
 from dataclasses import dataclass
 import random
 import math
+import ShrimpSouls.utils as utils
 
 
 def enchant(u, targets, env):		
@@ -23,7 +24,7 @@ class MagicGreatsword(cs.Ability):
 
 	def act(self, u, targets, env):
 		return [
-			actions.DamageAction(
+			actions.DamageTarget(
 				attacker=u,
 				defender=t,
 				dmgtype=actions.DamageType.Magic,
