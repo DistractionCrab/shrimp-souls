@@ -35,7 +35,7 @@ class ThrowingDagger(cs.Ability):
 					ss.StatusEnum.bleed: lambda: random.randint(1, 3),
 					ss.StatusEnum.attdown: lambda: random.randint(1, 3)
 				},
-				score_dmg=utils.ScoreDamage(m1=1.2))
+				score_dmg=utils.ScoreDamage(m1=1.1))
 		]
 
 

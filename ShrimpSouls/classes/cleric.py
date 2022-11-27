@@ -28,7 +28,7 @@ class HolyGavel(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.evadown: lambda: 3},
-				score_dmg=utils.ScoreDamage(m1=0.3))
+				score_dmg=utils.ScoreDamage(scale=0.3))
 			for t in targets
 		]
 

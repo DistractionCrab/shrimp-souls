@@ -135,6 +135,72 @@
       "orientation": "Portrait",
       "type": "mobile",
       "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "265737932",
+      "configurationAnchor": "component",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "id": "11",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "510270271",
+      "orientation": "Portrait",
+      "type": "component",
+      "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "265737932",
+      "configurationAnchor": "component",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 375,
+        "height": 822
+      },
+      "id": "12",
+      "isPopout": false,
+      "label": "sabashjon",
+      "linked": true,
+      "linkedUserId": "555603608",
+      "orientation": "Portrait",
+      "type": "mobile",
+      "viewerType": "Logged-In Viewer"
+    },
+    {
+      "channelId": "265737932",
+      "configurationAnchor": "component",
+      "displayChannelName": "distractioncrab",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 375,
+        "height": 822
+      },
+      "id": "13",
+      "isPopout": false,
+      "label": "rmorrin",
+      "linked": true,
+      "linkedUserId": "59815975",
+      "orientation": "Portrait",
+      "type": "mobile",
+      "viewerType": "Logged-In Viewer"
     }
   ],
   "manifest": {

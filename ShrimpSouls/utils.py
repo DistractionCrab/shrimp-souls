@@ -84,12 +84,13 @@ class ScoreHit(DualScore):
 class ScoreDamage(DualScore):
 	s1: ss.Scores = ss.Scores.Att
 	s2: ss.Scores = ss.Scores.Def
+	scale: float = 1.0
 
 	def __call__(self, a, d):
 		v = self.m1 * self.s1(a) + self.b1
 		p = compute_prob(a, d, self.s1, self.s2, self.b1, self.b2, self.m1, self.m2)
 
-		return math.ceil(p * v)
+		return math.ceil(self.scale * p * v)
 
 @dataclass(frozen=True)
 class RawScore:
@@ -98,7 +99,7 @@ class RawScore:
 	b: float = 0
 
 	def __call__(self, p):
-		return self.m * self.s(p) + self.b
+		return math.ceil(self.m * self.s(p) + self.b)
 
 
 def score_hit(s1=ss.Scores.Acc, s2=ss.Scores.Eva, b1=0, b2=0, m1=1, m2=1):

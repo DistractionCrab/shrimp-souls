@@ -10,7 +10,6 @@ export class SpellBook {
 		this.target_list = document.getElementById("targetlist");
 		this.class_name = "default";
 		this.targeted = [];
-		this.confirm = new UseConfirm();
 
 		EVENTS.addEventListener("charsheet", (data) => {
 			const c = data['class'];
@@ -101,13 +100,13 @@ export class SpellBook {
 
 			button.addEventListener("click", () => {
 				//EVENTS.alert("server_message", MESSAGES.ability(d.name, this.targeted))
-				this.confirm.confirm(d.name, d.displayName, this.targeted)
+				CONFIRM.confirm(d.name, d.displayName, this.targeted, true)
 			});
 		}
 	}
 }
 
-class UseConfirm {
+export class UseConfirm {
 	constructor() {
 		this.page = document.getElementById("abilityconfirm");
 		this.targets = document.getElementById("confirmtargetlist");
@@ -115,12 +114,18 @@ class UseConfirm {
 		this.abi_confirm = document.getElementById("abilityconfirmbutton");
 		this.abi_cancel = document.getElementById("abilitycancelbutton");
 		this.page.classList.toggle("hidden");
+		this.abi_or_item = true;
 
 		this.abi_key = null;
 		this.targets_list = [];
 
 		this.abi_confirm.addEventListener("click", () => {
-			EVENTS.alert("server_message", MESSAGES.ability(this.abi_key, this.targets_list))
+			if (this.abi_or_item) {
+				EVENTS.alert("server_message", MESSAGES.ability(this.abi_key, this.targets_list))
+			} else {
+				EVENTS.alert("server_message", MESSAGES.item(this.abi_key, this.targets_list))
+			}
+			
 			this.page.classList.toggle("hidden");
 		});
 
@@ -131,8 +136,7 @@ class UseConfirm {
 		});
 	}
 
-	confirm(abi, displayName, ts) {
-		console.log(ts);
+	confirm(abi, displayName, ts, aori) {
 		this.abi_key = abi;
 		this.targets_list = ts;
 		this.page.classList.toggle("hidden");
@@ -146,5 +150,9 @@ class UseConfirm {
 			set_text(e, t);
 			this.targets.appendChild(e);
 		}
+
+		this.abi_or_item = aori;
 	}
 }
+
+export const CONFIRM = new UseConfirm();

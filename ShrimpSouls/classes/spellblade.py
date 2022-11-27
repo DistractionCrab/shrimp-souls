@@ -28,7 +28,7 @@ class MagicGreatsword(cs.Ability):
 				attacker=u,
 				defender=t,
 				dmgtype=actions.DamageType.Magic,
-				score_dmg=utils.ScoreDamage(m1=0.5))
+				score_dmg=utils.ScoreDamage(scale=0.5))
 			for t in targets
 		]
 

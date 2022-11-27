@@ -109,18 +109,10 @@ class ArenaCombat(combat.Combat):
 		p.revive()
 		p.reset_status()
 		added = []
-		for (r, ns) in ENCOUNTERS.items():
-			if p.level in r:
-				c = ns[random.randint(0, len(ns)-1)]
-				if c.bossq:
-					if random.random() < 0.005:
-						n = c.make(len(self.npcs))
-						self.add_npc(n)
-						added.append(n)
-				else:
-					n = c.make(len(self.npcs))
-					self.add_npc(n)
-					added.append(n)
+		added = npcs.get_enemy(p.level, len(self.npcs))
+
+		for n in added:
+			self.add_npc(n)
 						
 		yield messages.Message(
 			msg=[f"{p.name} has joined the battle, and so do {', '.join(n.name for n in added)}"],

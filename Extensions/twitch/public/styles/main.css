@@ -225,13 +225,11 @@ body {
 .statusiconlarge {
 	width:  var(--status-icon-large-width);
 	height: var(--status-icon-large-height);
-	mix-blend-mode: darken;
 }
 
 .statusiconsmall {
 	width:  var(--status-icon-small-width);
 	height: var(--status-icon-small-height);
-	mix-blend-mode: darken;
 }
 
 .briaricon {

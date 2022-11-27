@@ -93,4 +93,4 @@ class Target1(actions.DamageTarget):
 	dmgtype: actions.DamageType = actions.DamageType.Pierce
 
 	def __post_init__(self):
-		self.score_dmg = utils.ScoreDamage(m1=2) if self.attacker.status.invis > 0 else utils.ScoreDamage()
+		self.score_dmg = utils.ScoreDamage(m1=1.7) if self.attacker.status.invis > 0 else utils.ScoreDamage()

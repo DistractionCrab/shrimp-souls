@@ -181,12 +181,12 @@ class Combat(cps.BaseCampaign):
 		if len(targets) >= amt:
 			return tuple(random.sample(targets, k=amt))
 		else:
+
 			amt = amt - len(targets)
 			pool = self.allies(att) if ally else self.opponents(att)
 			pool = pool if not aliveq else filter(lambda x: x is not None and not x.dead, pool)
 			pool = tuple(p for p in pool if p.status.invis == 0 or random.random() < 0.1)
 			pool = tuple(set(random.sample(pool, k=min(amt, len(pool)))))
-
 			return pool + targets
 
 	def use_ability(self, p, abi, targets):
@@ -197,10 +197,11 @@ class Combat(cps.BaseCampaign):
 
 	def use_item(self, p, index, targets):
 		if index < len(p.inventory):
-			self.__queued[p.name] = UseItem(index, targets)
+			self.__queued[p.name] = UseItem(p.inventory[index], targets)
 
+			#print(p.inventory[index])
 			yield messages.Response(
-				msg=[f"You have readied {p.inventory[i].display} for the next turn aimed at {', '.join(targets)}"],
+				msg=[f"You have readied {p.inventory[index].display} for the next turn aimed at {', '.join(targets)}"],
 				recv=(p.name,))
 		else:
 			yield messages.Response(
@@ -222,19 +223,15 @@ class UseAbility:
 		
 
 class UseItem:
-	def __init__(self, index, targets):
+	def __init__(self, item, targets):
 		self.__targets = targets
-		self.__index = index
+		self.__item = item
 
 	def act(self, p, env):
-		if self.__index < len(p.inventory):
-			item = p.inventory[self.__index]
-			if p.status.charm == 0:
-				return item.apply(p, self.__targets, env)
-			else:
-				return p.random_action(env)
+		if p.status.charm == 0:
+			return self.__item.apply(p, self.__targets, env)
 		else:
-			return tuple()
+			return p.random_action(env)
 
 
 

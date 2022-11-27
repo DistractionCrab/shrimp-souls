@@ -125,6 +125,8 @@ class Server:
 						await self.__connect(msg)
 					elif msg['msg'] == 'ability':
 						await self.__do_ability(msg)
+					elif msg['msg'] == 'item':
+						await self.__do_item(msg)
 					elif msg['msg'] == 'levelup':
 						await self.__level_up(msg)
 					elif msg['msg'] == "disconnect":
@@ -254,6 +256,11 @@ class Server:
 		for m in self.__game.use_ability(name, msg['ability'], msg['targets']):
 			await self.__handle_message(m)
 
+	async def __do_item(self, msg):
+		wsid = msg['wsid']
+		name = self.__idmaps[wsid]
+		for m in self.__game.use_item(name, msg['index'], msg['targets']):
+			await self.__handle_message(m)
 
 	async def __call__(self, ws):
 		wsid = self.__wsid_ct

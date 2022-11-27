@@ -93,3 +93,21 @@ export class AlternatingCell {
 		this.cell.appendChild(elem);
 	}
 }
+
+export class TargetWatcher {
+	constructor() {
+		this.targeted = [];
+
+		EVENTS.addEventListener("toggle_target", (en) => {
+			for (const e of en) {
+				const index = this.targeted.indexOf(e.name);
+
+				if (index === -1) {
+					this.targeted.push(e.name);
+				} else {
+					this.targeted.splice(index, 1);
+				}
+			}			
+		});
+	}
+}

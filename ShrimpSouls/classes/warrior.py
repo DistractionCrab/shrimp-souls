@@ -27,7 +27,7 @@ class Whirlwind(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.bleed: lambda: 3},
-				score_dmg=utils.ScoreDamage(m1=0.5))
+				score_dmg=utils.ScoreDamage(scale=0.5))
 			for t in targets
 		]
 

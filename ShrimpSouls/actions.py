@@ -16,6 +16,7 @@ class DamageType(enum.Enum):
 	Lightning = enum.auto()
 	Dark = enum.auto()
 	Nature = enum.auto()
+	Holy = enum.auto()
 
 	@property
 	def physical(self):
@@ -62,9 +63,6 @@ class AbilityRange(enum.Enum):
 class Tags(enum.Enum):
 	Unblockable = enum.auto()
 	Unparriable = enum.auto()
-
-
-
 
 @dataclass
 class Action:
@@ -251,8 +249,6 @@ class DamageTarget(Action):
 		return self.msg
 
 	def standard_scenario(self):
-		print(self.attacker.name)
-		print(self.defender.name)
 		hit = self.score_hit(self.attacker, self.defender)
 				
 		if hit:

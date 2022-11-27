@@ -32,6 +32,7 @@ class BaseNPC(ss.Entity):
 	_tags: frozenset = field(default_factory=frozenset)
 	_immunities: frozenset = field(default_factory=frozenset)
 	bossq: bool = False
+	lvrange: range = range(1, 1000000)
 
 	def weak(self, v):
 		return v in self._weaknesses
@@ -102,10 +103,11 @@ class Goblin(BaseNPC):
 	xp:  int = 1
 	hp:  int = 200
 	max_hp: int = 200
-	_acc: int = 25
+	_acc: int = 10
 	_eva: int = 10
-	_att: int = 25
+	_att: int = 10
 	_dfn: int = 10
+	lvrange: range = range(1, 4)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -120,13 +122,31 @@ class Wolf(BaseNPC):
 	hp:  int = 350
 	max_hp: int = 350
 	_acc: int = 35
-	_eva: int = 50
+	_eva: int = 20
 	_att: int = 35
-	_dfn: int = 20
+	_dfn: int = 10
+	lvrange: range = range(1, 4)
 
 	def __hash__(self):
 		return hash(self.name)
 
+@dataclass
+class SkeletonArcher(BaseNPC):
+	xp:  int = 5
+	hp:  int = 245
+	max_hp: int = 245
+	_acc: int = 50
+	_eva: int = 25
+	_att: int = 40
+	_dfn: int = 30
+	lvrange: range = range(3, 7)
+	_weaknesses: frozenset = frozenset([
+		actions.DamageType.Holy, 
+		actions.DamageType.Strike])
+	_tags: frozenset = frozenset([NPCTags.Undead])
+
+	def __hash__(self):
+		return hash(self.name)
 
 @dataclass
 class GoblinPriest(BaseNPC):
@@ -137,6 +157,7 @@ class GoblinPriest(BaseNPC):
 	_eva: int = 80
 	_att: int = 45
 	_dfn: int = 50
+	lvrange: range = range(5, 10)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -159,6 +180,33 @@ class GoblinBrute(BaseNPC):
 	_eva: int = 70
 	_att: int = 90
 	_dfn: int = 70
+	lvrange: range = range(5, 10)
+	
+
+	def __hash__(self):
+		return hash(self.name)
+
+
+@dataclass
+class StoneGolem(BaseNPC):
+	xp:  int = 10
+	hp:  int = 450
+	max_hp: int = 450
+	_acc: int = 90
+	_eva: int = 60
+	_att: int = 100
+	_dfn: int = 110
+	lvrange: range = range(7, 12)
+	_resists: frozenset = frozenset([
+		actions.DamageType.Magic,
+		actions.DamageType.Pierce,
+		actions.DamageType.Slash,
+		actions.DamageType.Fire,
+		actions.DamageType.Lightning,])
+	_weaknesses: frozenset = frozenset([
+		actions.DamageType.Magic, 
+		actions.DamageType.Strike])
+	_tags: frozenset = frozenset([NPCTags.Undead])
 
 	def __hash__(self):
 		return hash(self.name)
@@ -166,13 +214,14 @@ class GoblinBrute(BaseNPC):
 
 @dataclass
 class OrcWarrior(BaseNPC):
-	xp:  int = 7
+	xp:  int = 11
 	hp:  int = 1000
 	max_hp: int = 1000
 	_acc: int = 120
 	_eva: int = 110
 	_att: int = 140
 	_dfn: int = 135
+	lvrange: range = range(10, 15)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -187,6 +236,7 @@ class Ogre(BaseNPC):
 	_eva: int = 100
 	_att: int = 170
 	_dfn: int = 145
+	lvrange: range = range(10, 15)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -204,6 +254,30 @@ class Ogre(BaseNPC):
 
 
 @dataclass
+class Cockatrice(BaseNPC):
+	xp:  int = 12
+	hp:  int = 1000
+	max_hp: int = 1000
+	_acc: int = 120
+	_eva: int = 110
+	_att: int = 140
+	_dfn: int = 135
+	lvrange: range = range(13, 17)
+
+	def __hash__(self):
+		return hash(self.name)
+
+	def random_action(self, env):
+		target = env.find_valid_target(self, False, True, amt=2)
+		if len(target) == 0:
+			return [actions.DoNothing(player=self)]
+		else:
+			return [actions.DamageTarget(
+				attacker=self, 
+				defender=target[0],
+				statuses={ss.StatusEnum.stun: lambda: 1})]
+
+@dataclass
 class Troll(BaseNPC):
 	xp:  int = 30
 	hp:  int = 4000
@@ -213,6 +287,7 @@ class Troll(BaseNPC):
 	_att: int = 220
 	_dfn: int = 170
 	_weaknesses: frozenset = frozenset([actions.DamageType.Fire])
+	lvrange: range = range(15, 20)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -247,6 +322,7 @@ class Wraith(BaseNPC):
 		actions.DamageType.Strike,
 		actions.DamageType.Slash,])
 	_tags: frozenset = frozenset([NPCTags.Undead])
+	lvrange: range = range(15, 20)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -276,6 +352,7 @@ class OxTitan(BaseNPC):
 			ss.StatusEnum.charm,
 		])
 	bossq: bool = True
+	lvrange: range = range(20, 26)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -300,6 +377,7 @@ class BloodGolem(BaseNPC):
 	_eva: int = 190
 	_att: int = 190
 	_dfn: int = 310
+	lvrange: range = range(20, 26)
 	_weaknesses: frozenset = frozenset([
 		actions.DamageType.Pierce,
 		actions.DamageType.Strike,
@@ -326,9 +404,27 @@ class BloodGolem(BaseNPC):
 			return [actions.DamageTarget(
 				attacker=self, 
 				defender=target[0],
+				abilityrange=actions.AbilityRange.Medium,
 				statuses={
 					ss.StatusEnum.poison: lambda: 2, 
 					ss.StatusEnum.bleed: lambda: 2,
 					ss.StatusEnum.defdown: lambda: 2,
 					ss.StatusEnum.attdown: lambda: 2,
 				})]
+
+def __check(a):
+	return isinstance(a, type) and issubclass(a, BaseNPC) and a != BaseNPC
+
+import sys
+NPCS = list(a for a in sys.modules[__name__].__dict__.values() if __check(a))
+NPCS = {
+	r: [n for n in NPCS if n.lvrange == r]
+	for r in (n.lvrange for n in NPCS)
+}
+
+
+def get_enemy(level, sindex, amt=1):
+	valid = tuple(r for r in NPCS.keys() if level in r)
+
+	choice = random.choices(valid, k=1)[0]
+	return [c.make(sindex + i) for (i, c) in enumerate(random.choices(NPCS[choice], k=amt))]

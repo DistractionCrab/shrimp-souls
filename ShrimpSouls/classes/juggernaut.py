@@ -28,7 +28,7 @@ class Earthquake(cs.Ability):
 				attacker=u,
 				defender=t,
 				dmgtype=actions.DamageType.Strike,
-				score_dmg=utils.ScoreDamage(m1=0.5))
+				score_dmg=utils.ScoreDamage(scale=0.5))
 			for t in targets
 		]
 
@@ -82,7 +82,7 @@ class Action1(actions.Action):
 @dataclass
 class Target1(actions.DamageTarget):
 	score_hit: tuple = utils.ScoreHit(m1=0.9)
-	score_dmg: tuple = utils.ScoreDamage(m1=1.3)
+	score_dmg: tuple = utils.ScoreDamage(m1=1.2)
 	statuses: utils.FrozenDict =  utils.FrozenDict({
 		ss.StatusEnum.defdown: lambda: random.randint(1, 4)
 	})

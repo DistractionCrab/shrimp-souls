@@ -314,7 +314,6 @@ class Player(Entity):
 
 	@property
 	def json(self):
-		self.inventory = plist.PersistentList()
 		return {
 				'name': self.name,
 				'hp': self.hp,
@@ -395,6 +394,7 @@ class Player(Entity):
 			
 
 	def get_xp_req(self):
+		return 0;
 		return xp_req(self.level)
 
 	@property
@@ -577,6 +577,9 @@ class GameManager(persistent.Persistent):
 
 	def use_ability(self, name, abi, targets):
 		yield from self.__root.use_ability(self.get_player(name), abi, targets)
+
+	def use_item(self, name, index, targets):
+		yield from self.__root.use_item(self.get_player(name), index, targets)
 
 
 	def respec(self, p, cl):

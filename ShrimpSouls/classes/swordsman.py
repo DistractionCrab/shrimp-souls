@@ -28,7 +28,7 @@ class Flurry(cs.Ability):
 				attacker=u,
 				defender=t,
 				statuses={ss.StatusEnum.bleed: lambda: 1},
-				score_dmg=utils.ScoreDamage(m1=0.2))
+				score_dmg=utils.ScoreDamage(scale=0.2))
 			for _ in range(4)
 		]
 

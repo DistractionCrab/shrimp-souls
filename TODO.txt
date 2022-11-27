@@ -1,5 +1,4 @@
 Next Steps:
-- pop ups on important things (like leveling, queueed actions, confirmations)
 - leave arena to respec
 - new scores added
 - add more sorting options (HP for ss)
