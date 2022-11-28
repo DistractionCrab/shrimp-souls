@@ -7,15 +7,17 @@ import random
 import math
 import ShrimpSouls.utils as utils
 
-def invis(u, targets, env):
-	return [Action1(attacker=u, defender=u)]
 
-def poison_blade(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Hide(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=u)]
+
+@dataclass
+class PoisonedBlade(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class SmokeBomb(cs.Ability):
@@ -35,8 +37,8 @@ class SmokeBomb(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"invis": invis,
-	"poison_blade": poison_blade,
+	"invis": Hide(),
+	"poison_blade": PoisonedBlade(),
 	"smokebomb": SmokeBomb()
 }
 

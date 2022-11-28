@@ -229,7 +229,7 @@ class UseItem:
 
 	def act(self, p, env):
 		if p.status.charm == 0:
-			return self.__item.apply(p, self.__targets, env)
+			return self.__item.act(p, self.__targets, env)
 		else:
 			return p.random_action(env)
 

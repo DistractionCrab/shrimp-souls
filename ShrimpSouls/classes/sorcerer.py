@@ -7,15 +7,17 @@ import ShrimpSouls.actions as actions
 import random
 import math
 
-def soulmass(u, targets, env):
-	return [Action1(attacker=u, defender=u)]
+@dataclass
+class Soulmass(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):
+		return [Action1(attacker=u, defender=u)]
 
-def soulspear(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class SoulSpear(cs.Ability):
+	def act(self, u, t, env):
+		return [Target1(attacker=u, defender=t)]
+
 
 @dataclass
 class Lightwall(cs.Ability):
@@ -34,8 +36,8 @@ class Lightwall(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"soulmass": soulmass,
-	"soulspear": soulspear,
+	"soulmass": Soulmass(),
+	"soulspear": SoulSpear(),
 	"lightwall": Lightwall(),
 }
 

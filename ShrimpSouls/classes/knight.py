@@ -17,6 +17,18 @@ def cover(u, targets, env):
 		return [Target1(attacker=u, defender=t[0])]
 
 @dataclass
+class Block(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=u)]
+
+@dataclass
+class Cover(cs.Ability):
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
+
+@dataclass
 class RipStance(cs.Ability):
 	t_amt: int = 0
 
@@ -30,8 +42,8 @@ class RipStance(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"block": block,
-	"cover": cover,
+	"block": Block(),
+	"cover": Cover(),
 	"ripstance": RipStance(),
 }
 

@@ -1,3 +1,4 @@
+import ShrimpSouls as ss
 import ShrimpSouls.actions as actions
 import ShrimpSouls.utils as utils
 from dataclasses import dataclass
@@ -32,8 +33,8 @@ class Item:
 class MinorHealingPotion(Item):
 	display: str = "Minor Healing Potion"
 
-	def use(self, p, env):		
+	def use(self, p, env):
 		return [actions.HealTarget(
 			attacker=p,
 			defender=p,
-			score=utils.RawScore(s=ss.Scores.Vig,m=0.1))]
+			score=utils.RawScore(s=ss.Scores.Vit,m=2))]

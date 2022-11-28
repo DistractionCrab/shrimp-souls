@@ -8,34 +8,29 @@ import math
 import ShrimpSouls.utils as utils
 
 
-def prayer(u, targets, env):
-	targets = env.find_valid_target(u, True, True, amt=3)
+@dataclass
+class Heal(cs.Ability):
+	allyq: bool = True
+	aliveq: bool = False
 
+	def act(self, u, t, env):		
+		if t.dead:
+			return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m=0.1))]
+		else:
+			return [actions.HealTarget(attacker=u, defender=t)]
 
-	return [
-		actions.HealTarget(
-			attacker=u, 
-			defender=t, 
-			score=utils.RawScore(m=0.1))
-		for t in targets
-	]
-	
-
-def heal(u, targets, env):
-	if len(targets) == 0:
-		t = env.find_valid_target(u, True, True)
-		if len(t) == 0:
-			return [actions.Error(info="No targets could be found...")]
-		t = t[0]
-	else:
-		t = env.get_target(targets[0])
-
-	if t.dead:
-		amt = random.randint(1, 4)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m=1/15))]
-	else:
-		amt = random.randint(10, 20)*(1 + u.attributes.faith//HEAL_DICE_THRESHOLD)
-		return [actions.HealTarget(attacker=u, defender=t, score=utils.RawScore(m=1/5))]
+@dataclass
+class Prayer(cs.Ability):	
+	t_amt: int = 3
+	ally: bool = True
+	def act(self, u, t, env):		
+		return [
+			actions.HealTarget(
+				attacker=u, 
+				defender=t, 
+				score=utils.RawScore(m=0.5))
+			for t in targets
+		]
 
 @dataclass
 class LightningStorm(cs.Ability):
@@ -53,8 +48,8 @@ class LightningStorm(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"prayer": prayer,
-	"heal": heal,
+	"prayer": Prayer(),
+	"heal": Heal(),
 	"lightningstorm": LightningStorm(),
 }
 

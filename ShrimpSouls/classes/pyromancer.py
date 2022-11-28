@@ -7,16 +7,17 @@ import ShrimpSouls.actions as actions
 import random
 import math
 
-def pyroclasm(u, targets, env):
-	t = env.find_valid_target(u, False, True, amt=3)
-	return [Action1(attacker=u, defender=r) for r in t]
 
-def fireball(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Pyroclasm(cs.Ability):
+	t_amt: int = 3
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=r) for r in t]
+
+@dataclass
+class Fireball(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class SmokeScreen(cs.Ability):
@@ -33,8 +34,8 @@ class SmokeScreen(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"pyroclasm": pyroclasm,
-	"fireball": fireball,
+	"pyroclasm": Pyroclasm(),
+	"fireball": Fireball(),
 	"smokescreen": SmokeScreen(),
 }
 

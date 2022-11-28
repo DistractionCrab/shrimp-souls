@@ -7,17 +7,17 @@ import ShrimpSouls.actions as actions
 import random
 import math
 
-def encourage(u, targets, env):
-	t = env.find_valid_target(u, True, True, amt=3, targets=targets)
-	return [Action1(attacker=u, defender=r) for r in t]
+@dataclass
+class Encourage(cs.Ability):
+	t_amt: int = 3
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=r) for r in t]
 
-
-def charm(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Charm(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class Inspire(cs.Ability):
@@ -39,8 +39,8 @@ class Inspire(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"encourage": encourage,
-	"charm": charm,
+	"encourage": Encourage(),
+	"charm": Charm(),
 	"inspire": Inspire(),
 }
 

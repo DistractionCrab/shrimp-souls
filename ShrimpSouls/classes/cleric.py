@@ -7,16 +7,18 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def blessing(u, targets, env):
-	t = env.find_valid_target(u, True, True, amt=3, targets=targets)
-	return [Action1(attacker=u, defender=r) for r in t]
+@dataclass
+class Blessing(cs.Ability):
+	t_amt: int = 3
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=r) for r in t]
 
-def cleanse(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Cleanse(cs.Ability):
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class HolyGavel(cs.Ability):
@@ -34,8 +36,8 @@ class HolyGavel(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"blessing": blessing,
-	"cleanse": cleanse,
+	"blessing": Blessing(),
+	"cleanse": Cleanse(),
 	"holygavel": HolyGavel(),
 }
 

@@ -7,15 +7,18 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def sharpen(u, targets, env):
-	return [Action1(attacker=u, defender=u)]
 
-def armor_break(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Sharpen(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=u)]
+
+@dataclass
+class ArmorBreak(cs.Ability):
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class Whirlwind(cs.Ability):
@@ -35,8 +38,8 @@ class Whirlwind(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"sharpen": sharpen,
-	"armor_break": armor_break,
+	"sharpen": Sharpen(),
+	"armor_break": ArmorBreak(),
 	"whirlwind": Whirlwind(),
 }
 

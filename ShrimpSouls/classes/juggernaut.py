@@ -18,6 +18,19 @@ def shatter(u, targets, env):
 	else:
 		return [Target1(attacker=u, defender=t[0])]
 
+
+@dataclass
+class Warcry(cs.Ability):
+	t_amt: int = 3
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=r) for r in t]
+
+@dataclass
+class Shatter(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
+
 @dataclass
 class Earthquake(cs.Ability):
 	t_amt: int = 3
@@ -34,8 +47,8 @@ class Earthquake(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"warcry": warcry,
-	"shatter": shatter,
+	"warcry": Warcry(),
+	"shatter": Shatter(),
 	"earthquake": Earthquake(),
 }
 

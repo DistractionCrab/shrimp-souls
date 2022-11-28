@@ -1,14 +1,13 @@
 Next Steps:
 - leave arena to respec
 - new scores added
-- add more sorting options (HP for ss)
 - Fix parry stat checks
 
 IMPLEMENTATIONS
 - subclassing
 - elemental combos
 - management panel for live_config (reset arena/campaign/remove users)
-- put block/taunt on the buffs icons
+- put taunt on the buffs icons
 
 Dark Knight Str/Vig scaling
 Attack scaling Str 2* Vigor 3* Defense scaling Str 3* Vigor 3*

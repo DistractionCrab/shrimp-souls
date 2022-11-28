@@ -7,15 +7,10 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def ripstance(u, targets, env):
-	return [Action1(attacker=u,defender=u)]
-
-def taunt(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Taunt(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class RipStance(cs.Ability):
@@ -48,7 +43,7 @@ class FanOfBlades(cs.Ability):
 ABI_MAP = {
 	"autoattack": cs.autoattack,
 	"ripstance": RipStance(),
-	"taunt": taunt,
+	"taunt": Taunt(),
 	"fanofblades": FanOfBlades(),
 }
 

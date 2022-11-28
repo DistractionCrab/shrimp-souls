@@ -7,16 +7,17 @@ import random
 import math
 import ShrimpSouls.utils as utils
 
+@dataclass
+class Enchant(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=u)]
 
-def enchant(u, targets, env):		
-	return [Action1(attacker=u,defender=u)]
-
-def magic_cover(u, targets, env):
-	t = env.find_valid_target(u, True, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Cover(cs.Ability):
+	allyq: bool = True
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class MagicGreatsword(cs.Ability):
@@ -34,8 +35,8 @@ class MagicGreatsword(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"enchant": enchant,
-	"magic_cover": magic_cover,
+	"enchant": Enchant(),
+	"magic_cover": Cover(),
 	"magic_greatsword": MagicGreatsword(),
 }
 

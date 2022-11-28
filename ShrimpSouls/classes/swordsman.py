@@ -7,16 +7,15 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def hamstring(u, targets, env):
-	t = env.find_valid_target(u, False, True, amt=3)
-	return [Action1(attacker=u, defender=r) for r in t]
+@dataclass
+class Hamstring(cs.Ability):
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=t)]
 
-def slice(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Slice(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class Flurry(cs.Ability):
@@ -34,8 +33,8 @@ class Flurry(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"hamstring": hamstring,
-	"slice": slice,
+	"hamstring": Hamstring(),
+	"slice": Slice(),
 	"flurry": Flurry(),
 }
 

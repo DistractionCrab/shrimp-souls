@@ -7,15 +7,16 @@ import ShrimpSouls.utils as utils
 import random
 import math
 
-def sealing(u, targets, env):
-	return [Action1(attacker=u, defender=u)]
+@dataclass
+class Seal(cs.Ability):
+	t_amt: int = 0
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=u)]
 
-def censure(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
+@dataclass
+class Censure(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class Judgement(cs.Ability):
@@ -32,8 +33,8 @@ class Judgement(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"sealing": sealing,
-	"censure": censure,
+	"sealing": Seal(),
+	"censure": Censure(),
 	"judgement": Judgement(),
 }
 

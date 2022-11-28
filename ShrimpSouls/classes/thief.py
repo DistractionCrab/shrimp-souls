@@ -13,19 +13,18 @@ def steal(u, targets, env):
 	t = env.find_valid_target(u, False, True)
 	return [Action1(attacker=u, defender=r) for r in t]
 
+@dataclass
+class Steal(cs.Ability):
+	def act(self, u, t, env):		
+		return [Action1(attacker=u, defender=t)]
 
-def poach(u, targets, env):
-	t = env.find_valid_target(u, False, True, targets=targets, amt=1)
-	if len(t) == 0:
-		return []
-	else:
-		return [Target1(attacker=u, defender=t[0])]
-
+@dataclass
+class Poach(cs.Ability):
+	def act(self, u, t, env):		
+		return [Target1(attacker=u, defender=t)]
 
 @dataclass
 class ThrowingDagger(cs.Ability):
-	t_amt: int = 1
-
 	def act(self, u, targets, env):		
 		return [
 			actions.DamageTarget(
@@ -41,8 +40,8 @@ class ThrowingDagger(cs.Ability):
 
 ABI_MAP = {
 	"autoattack": cs.autoattack,
-	"steal": steal,
-	"poach": poach,
+	"steal": Steal(),
+	"poach": Poach(),
 	"throwingknife": ThrowingDagger(),
 }
 
