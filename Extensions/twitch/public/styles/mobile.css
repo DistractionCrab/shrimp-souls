@@ -1,6 +1,6 @@
 :root {
 	--main-font: Arial Black;
-	--default-fontsize: 100%;
+	--default-fontsize: 24px;
 	--default-fontweight:  300;
 	--default-border-width: 5px;
 	--default-margin: 5px;
@@ -9,12 +9,13 @@
 	--hp-bar-height: 15px;
 	--player-bar-width:  300px;
 	--player-bar-height: 20px;
+
 	--tablinks-width: 16vh;
 	--tablinks-height: 33px;
-	--tablinks-fontsize: 150%;
+	--tablinks-fontsize: 24px;
 	
-	--charsheet-fontsize: 120%;
-	--body-fontsize: 100%;
+	--charsheet-fontsize: 24px;
+	--body-fontsize: 24px;
 	--lvlup-icon-height: 30px;
 	--lvlup-icon-width: 30px;
 	--status-icon-width: 50px;
@@ -32,8 +33,7 @@
 
 	--tar-select-fontsize: 24px;
 	--lvlup-margin:  50px;
-	--printout-fontsize:  100%;
-
+	
 	
 	--joinbutton-width: 100px;
 	--joinbutton-height: 45px;
@@ -47,13 +47,18 @@
 	--classselect-opened: 100px;
 
 	--bordered-width:  5px;
-	--printout-fontsize:  120%;
-	--spellname-fontsize:  175%;
+	
+	--spellname-fontsize:  24px;
 
 	--filterbutton-width:  30px;
 	--filterbutton-height:  30px;
-	--printoutcontainer-width: 90vw;
+
+
+	--printoutcontainer-width: 93vw;
 	--printoutcell-font-size: 80%;
+	--printout-fontsize:  24px;
+	--printoutcell-width: 88vw;
+
 
 	--timertext-margin-left: 10px;
 

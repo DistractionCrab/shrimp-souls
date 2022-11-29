@@ -29,7 +29,7 @@ class Prayer(cs.Ability):
 				attacker=u, 
 				defender=t, 
 				score=utils.RawScore(m=0.5))
-			for t in targets
+			for t in t
 		]
 
 @dataclass

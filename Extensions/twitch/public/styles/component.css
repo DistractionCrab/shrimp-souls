@@ -1,7 +1,7 @@
 :root {
 	--main-font: Arial Black;
 	--default-fontweight:  300;
-	--default-fontsize: 150%;
+	--default-fontsize: 48px;
 	--default-border-width: 5px;
 	--default-margin: 20px;
 
@@ -11,14 +11,14 @@
 	--player-bar-width:  90vw;
 	--player-bar-height: 50px;
 
-	--tablinks-width: 20vw;
+	--tablinks-width: 200px;
 	--tablinks-height: 90px;
 	--tablinks-fontsize: 50px;
 
 	
-	--body-fontsize: 200%;
+	--body-fontsize: 48px;
 
-	--charsheet-fontsize: 250%;
+	--charsheet-fontsize: 64px;
 
 
 	--lvlup-icon-height: 60px;
@@ -41,7 +41,7 @@
 	--lvlup-margin: 50px;
 	--printout-fontsize: 120%;
 	--spelltable-margin-left:  60px;
-	--spelltable-font-size:  120%;
+	--spelltable-font-size:  48px;
 	--joinbutton-width: 200px;
 	--joinbutton-height: 70px;
 	--class-select-height: 70vh;
@@ -51,14 +51,15 @@
 	--statamt-padding-left:  50px;
 	--classselect-opened: 700px;
 	--bordered-width: 8px;
-	--printout-fontsize:  120%;
-	--spellname-fontsize:  175%;
+	--printout-fontsize:  48px;
+	--spellname-fontsize:  48px;
 
 	--filterbutton-width:  90px;
 	--filterbutton-height:  90px;
 
 	--printoutcontainer-width: 93vw;
-	--printoutcell-font-size: 120%;
+	--printoutcell-font-size: 48px;
+	--printoutcell-width: 90vw;
 
 	--timertext-margin-left: 20px;
 

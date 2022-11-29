@@ -19,6 +19,7 @@ export class Inventory extends TargetWatcher {
 			var index = 0;
 			for (const a of data.inventory) {
 				const r = this.table.insertRow(this.table.rows.length);
+				r.classList.add("spellrow")
 				var icell = r.insertCell(0);
 				var button = document.createElement("button");
 				icell.appendChild(button);
@@ -31,6 +32,7 @@ export class Inventory extends TargetWatcher {
 
 				const c = new AlternatingCell(r);
 				c.add_text(a);
+				c.text[0].classList.add("spellname");
 				index += 1;
 
 			}

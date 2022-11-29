@@ -9,6 +9,8 @@ import { EntityManager } from "./entity_manager.js";
 import { MESSAGES } from "./messages.js";
 import { CampaignManager } from "./campaign/init.js";
 
+console.log(document.documentElement.clientWidth);
+console.log(document.documentElement.clientHeight);
 
 
 class PageManager {

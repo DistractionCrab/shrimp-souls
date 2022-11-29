@@ -394,7 +394,6 @@ class Player(Entity):
 			
 
 	def get_xp_req(self):
-		return 0;
 		return xp_req(self.level)
 
 	@property

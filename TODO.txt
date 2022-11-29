@@ -2,6 +2,7 @@ Next Steps:
 - leave arena to respec
 - new scores added
 - Fix parry stat checks
+- Look into scaling durations (decrease duration by 10% instead of 1 to compensate)
 
 IMPLEMENTATIONS
 - subclassing

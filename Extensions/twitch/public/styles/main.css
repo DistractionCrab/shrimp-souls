@@ -13,12 +13,14 @@ body {
 	overflow: hidden;
 }
 
+
 #mainsection {
 	position: absolute;
 }
 
 .hpamt {
 	padding-left: var(--hpamt-padding);
+	width: 50vw;
 }
 
 
@@ -77,6 +79,7 @@ body {
 	word-wrap: break-word;
 	font-size: var(--printoutcell-font-size);
 	border: var(--bordered-width) solid;
+	width: var(--printoutcell-width);
 	border-color: rgb(148, 148, 148);
 }
 
@@ -93,16 +96,14 @@ body {
 #partytab {
 	overflow:  auto;
 	height: 85vh;
-	width: 90vw;
-	font-size: 120%;
+	width: 97vw;
 }
 
 
 #npctab {
 	overflow:  auto;
 	height: 85vh;
-	width: 90vw;
-	font-size: 120%;
+	width: 97vw;
 }
 
 /* Style the tab */
@@ -403,6 +404,7 @@ body {
 
 .spellname {
 	font-size: var(--spellname-fontsize);
+	width: 75vw;
 }
 
 .spelldesc {
@@ -433,6 +435,12 @@ body {
 }
 
 #spelltable {
+	width: var(--spelltable-width);
+	margin-left: var(--spelltable-margin-left);
+	font-size:  var(--spelltable-font-size);
+}
+
+#inventory {
 	width: var(--spelltable-width);
 	margin-left: var(--spelltable-margin-left);
 	font-size:  var(--spelltable-font-size);
