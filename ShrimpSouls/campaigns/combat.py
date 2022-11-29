@@ -174,7 +174,7 @@ class Combat(cps.BaseCampaign):
 	def find_valid_target(self, att, ally, aliveq, amt=1, targets=tuple(), **kwds):
 		if att.status.charm == 0:
 			targets = (self.get_target(n) for n in targets)
-			targets = tuple(p for p in targets if not p.dead)
+			targets = tuple(p for p in targets if p is not None and not p.dead)
 		else:
 			targets = tuple()
 
