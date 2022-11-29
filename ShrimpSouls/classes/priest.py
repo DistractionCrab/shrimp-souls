@@ -15,7 +15,7 @@ class Heal(cs.Ability):
 
 	def act(self, u, t, env):		
 		if t.dead:
-			return [actions.ReviveTarget(attacker=u, defender=t, score=utils.RawScore(m=0.1))]
+			return [actions.ReviveTarget(attacker=u, defender=t)]
 		else:
 			return [actions.HealTarget(attacker=u, defender=t)]
 

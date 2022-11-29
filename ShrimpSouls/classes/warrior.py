@@ -16,7 +16,6 @@ class Sharpen(cs.Ability):
 
 @dataclass
 class ArmorBreak(cs.Ability):
-	allyq: bool = True
 	def act(self, u, t, env):		
 		return [Target1(attacker=u, defender=t)]
 
