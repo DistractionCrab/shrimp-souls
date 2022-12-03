@@ -514,7 +514,6 @@ class GameManager(persistent.Persistent):
 		self.__root = arena.Arena()
 		self.__players = persistent.mapping.PersistentMapping()
 
-
 	def step(self):
 		yield from self.__root.step()
 

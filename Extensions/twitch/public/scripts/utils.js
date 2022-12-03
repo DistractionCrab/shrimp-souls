@@ -7,8 +7,11 @@ export function clear_node(n) {
 
 export function set_text(n, s) {
 	n.innerHTML = "";
-	n.appendChild(document.createTextNode(s));
-	return n;
+	const sp = document.createElement("span");
+	const t = document.createTextNode(s);
+	sp.appendChild(t)
+	n.appendChild(sp);
+	return sp;
 } 
 
 export class TabManager {

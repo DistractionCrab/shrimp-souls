@@ -1,4 +1,4 @@
-const TESTING = true;
+const TESTING = (window.Twitch.ext.rig !== null);
 
 import { EVENTS } from "./events.js";
 import { set_text, TabManager } from "./utils.js";
@@ -8,10 +8,6 @@ import { CharSheet } from "./charsheet.js";
 import { EntityManager } from "./entity_manager.js";
 import { MESSAGES } from "./messages.js";
 import { CampaignManager } from "./campaign/init.js";
-
-console.log(document.documentElement.clientWidth);
-console.log(document.documentElement.clientHeight);
-
 
 class PageManager {
 	constructor(testing) {		
@@ -80,8 +76,10 @@ class PageManager {
 	}
 
 	sendMessage(msg) {
-		var s = JSON.stringify(msg)
-		this.websocket.send(s);		
+		if (this.websocket !== null) {
+			var s = JSON.stringify(msg)
+			this.websocket.send(s);
+		}		
 	}
 
 	receive(msg) {
@@ -151,16 +149,16 @@ const TABMANAGER = new TabManager({
 "printout");
 
 
-function respec() {
-	const obj = document.getElementById("classselect");
-	MANAGER.sendMessage(MESSAGES.respec(obj.options[obj.selectedIndex].value))
+function respec(value) {
+	console.log("Respecing: " + value);
+	MANAGER.sendMessage(MESSAGES.respec(value));
 }
 
 
 
 //document.getElementById("classselect").addEventListener("mousedown", (event) => { expand_select(event.target); });
 //document.getElementById("classselect").addEventListener("change", (event) => { blur_select(event.target); });
-document.getElementById("respecbutton").addEventListener("click", () => { respec(); });
+//document.getElementById("respecbutton").addEventListener("click", () => { respec(); });
 document.getElementById("lvlup-vigor").addEventListener("click", () => { MANAGER.level("vigor"); });
 document.getElementById("lvlup-endurance").addEventListener("click", () => { MANAGER.level("endurance"); });
 document.getElementById("lvlup-strength").addEventListener("click", () => { MANAGER.level("strength"); });
@@ -181,3 +179,7 @@ setInterval(function() {
 document.getElementById("filterbutton").addEventListener("click", () => {
 	document.getElementById("filterpopup").classList.toggle("hidden");
 });
+
+for (const e of document.getElementsByClassName("respecicon")) {
+	e.addEventListener("click", () => { respec(e.getAttribute("name")); });
+}

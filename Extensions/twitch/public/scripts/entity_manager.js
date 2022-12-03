@@ -44,6 +44,17 @@ class Entity {
 		this.init_table();		
 	}
 
+	get_level() {
+		if ("attributes" in this.data) {
+			var t = 1;
+			for (const [_, a] of Object.entries(this.data.attributes)) {
+				t += a - 1;
+			}
+			return t;
+		} else {
+			return 0;
+		}
+	}
 
 	init_table() {
 		var row = this.entity_table.insertRow(0);
@@ -59,14 +70,14 @@ class Entity {
 		var row1 = this.data_table.insertRow(0);
 
 		var name = row1.insertCell(0);
-		name.classList.add("name-cell");
-		if (this.player) {
-			set_text(name, `${this.data.name} (${this.data["class"]})`)
+		//name.classList.add("name-cell");
+		if ("class" in this.data) {
+			set_text(name, `${this.data.name} [Lv.${this.get_level()} ${this.data["class"]}]`)
 		} else {
 			set_text(name, this.data.name);
 		}
 		
-		var t = row1.insertCell(1);
+		//var t = row1.insertCell(1);
 		//var button = document.createElement("button");
 		//button.classList.add("targetbutton");
 		//t.appendChild(button);
@@ -78,7 +89,18 @@ class Entity {
 			EVENTS.alert("toggle_target", [this.data]);
 		})
 
+		// Setting HP Text
 		row1 = this.data_table.insertRow(1);
+
+		var hpamt = row1.insertCell(0);
+		hpamt.classList.add("hpamt");
+		
+		set_text(hpamt, `HP: ${this.data.hp} / ${this.data.max_hp}`);
+
+		
+
+		// Setting HP Display
+		row1 = this.data_table.insertRow(2);
 		var hpbar = row1.insertCell(0);
 		
 		var d = document.createElement("div");
@@ -86,11 +108,6 @@ class Entity {
 		var prop = Math.max(0, Math.min(100, Math.ceil(this.data.hp/this.data.max_hp*100)));
 		d.classList.add("healthbar");
 		d.style.backgroundSize = `${prop}% 100%, 100% 100%`;
-
-		var hpamt = row1.insertCell(1);
-		hpamt.classList.add("hpamt");
-		
-		set_text(hpamt, `${this.data.hp} / ${this.data.max_hp}`);
 
 		this.hp_bar = d;
 		this.hp_display = hpamt;
@@ -101,7 +118,7 @@ class Entity {
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(this.data.hp/this.data.max_hp*100)));
 		this.hp_bar.style.backgroundSize = `${prop}% 100%, 100% 100%`;
-		set_text(this.hp_display, `${this.data.hp} / ${this.data.max_hp}`);
+		set_text(this.hp_display, `HP: ${this.data.hp} / ${this.data.max_hp}`);
 
 		// Update status
 		while (this.status_table.rows.length > 0) {

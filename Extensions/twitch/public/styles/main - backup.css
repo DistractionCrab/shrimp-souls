@@ -1,11 +1,9 @@
-:root {
-	--default-font-size: 6vw;
-	--main-font: Arial Black;
-}
+
 
 body {
 	font-family: var(--main-font);
-	font-size: var(--default-font-size);
+	font-size: var(--body-fontsize);
+	/*font-weight: 100;*/
 	color: white;	
 	background: linear-gradient(
 			rgba(0, 0, 0, 0.5),
@@ -20,124 +18,131 @@ body {
 	position: absolute;
 	flex-wrap: wrap;
 	overflow: hidden;
-	height: 100vh;
-	width: 100vw;
-	padding: 0px;
-	margin: 0px;
 }
 
-#tabsection {
-	height: 5vh;
-	text-align: center;
-	padding-bottom: 1vh;
-	border-bottom: 0.2vh solid white;
-	margin-bottom: 1vh;
+.hpamt {
+	padding-left: var(--hpamt-padding);
+	width: 50vw;
 }
+
 
 .tablinks {
-	height: 100%;
-	width: 20vw;
-	font-size: var(--default-font-size);
+	height: var(--tablinks-height);
+	width: var(--tablinks-width);
+	font-size: var(--tablinks-fontsize);
+	font-weight: var(--default-fontweight);
 }
 
-.tabcontent {
-	display: none;
-	padding: 6px 12px;
-	animation: fadeEffect 1s; /* Fading effect takes 1 second */
-	width: 100vw;
-	height: 93vh;
-	padding: 0px;
-	margin: 0px;
-	scroll-y: auto;
-}
 
-#csheettabsection {
-	text-align: center;
-	padding-bottom: 0.2vh;
-	border-bottom: 0.2vh solid white;
-	margin-bottom: 1vh;
-}
 
-.csheetcontent {
-	display: none;
-	padding: 6px 12px;
-	animation: fadeEffect 1s; /* Fading effect takes 1 second */
-	width: 100vw;
-	height: 84vh;
-	padding: 0px;
-	margin: 0px;
-	overflow-y: auto;
-}
-
-.mixed-text {
-	text-shadow: 7px 7px 15px black;
+#charsheet {
+	font-size: var(--charsheet-fontsize);
 }
 
 .hidden {
 	visibility: hidden;
 	display: none;
-	padding: 0;
-	margin: 0;
 }
 
 .spacedtable {
+	font-size: 120%;
 	border-collapse: separate;
-	border-spacing: 0 2vh;
-	margin-left: auto;
-	margin-right: auto;
-	width: 90%;
-}
-
-.centeredtable {
-	margin-right: auto;
-	width: 90%;
+	border-spacing: 0 15px;
 }
 
 .borderedcell {
-	border: 1vw solid;
+	border: var(--bordered-width) solid;
 	border-color: rgb(148, 148, 148);
 }
 
-#printoutcontainer {
-	height: 82vh;
-	overflow-y: auto;
-	position: absolute;
+#printouttab {
+	height: 85vh;
+	font-size: var(--printout-fontsize);
+	
+}
 
+#printoutcontainer {
+	overflow-y: auto;
+	overflow-x: hidden;
+	
+	height: 80vh;
+	width: var(--printoutcontainer-width);
+	position: absolute;
 }
 
 #printout {
-	position: relative;
+	font-size: var(--printout-fontsize);
+	border-collapse: separate;
+	border-spacing: 0 15px;
+	
 }
 
 .printoutcell {
-	font-size: var(--default-font-size);
-	border: 1vw solid;
+	word-wrap: break-word;
+	font-size: var(--printoutcell-font-size);
+	border: var(--bordered-width) solid;
+	width: var(--printoutcell-width);
 	border-color: rgb(148, 148, 148);
 }
 
 .stependcell {
-	border: 1vw solid;
+	border: var(--bordered-width) solid;
 	border-color: rgb(79, 0, 224);
 }
 
 .errorcell {
-	border: 1vw solid;
+	border: var(--bordered-width) solid;
 	border-color: rgb(209, 188, 0);
 }
 
 #partytab {
-	font-size: 75%;
 	overflow:  auto;
-	height: 84vh;
-	width: 100%;
+	height: 85vh;
+	width: 97vw;
 }
 
 
 #npctab {
-	font-size: 75%;
 	overflow:  auto;
 	height: 85vh;
-	width: 100%;
+	width: 97vw;
+}
+
+/* Style the tab */
+.tab {
+	overflow: hidden;
+	background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+	background-color: inherit;
+	float: left;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+	width: 100vw;
+	padding: 0px;
+	margin: 0px;
+	scroll-y: auto;
 }
 
 @keyframes fadeEffect {
@@ -145,76 +150,50 @@ body {
 	to {opacity: 1;}
 }
 
-.icontab {
-	width: 10vw;
-	height: 10vw;
+.tabsection {
+	border-bottom: var(--default-border-width) solid white;
+	margin-bottom: var(--default-margin);
 }
 
-#statusheader {
-	background-image: url("../images/tab icons/status.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}
 
-#attriheader {
-	background-image: url("../images/tab icons/attributes.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
+.spellbutton {
+	height: 70px;
+	width: 180px;
+	font-size: 150%;
 }
-
-#scoreheader {
-	background-image: url("../images/tab icons/scores.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}
-
-#respecheader {
-	background-image: url("../images/tab icons/respec.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}
-
-#inventheader {
-	background-image: url("../images/tab icons/inventory.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}
-
 
 #player_healthbar {
-	width: 95vw;
-	height: 2.5vh;
+	width: var(--player-bar-width);
+	height:  var(--player-bar-height);
 	background-repeat: no-repeat;
 	background-image: url("../images/healthbar foreground.png"), url("../images/healthbar background.png");
 	background-position: 0 0, 0 0;
 	background-size: 50% 100%, 100% 100%;
 }
 
-
+.healthbar {
+	width: var(--hp-bar-width);
+	height:  var(--hp-bar-height);
+	background-repeat: no-repeat;
+	background-image: url("../images/healthbar foreground.png"), url("../images/healthbar background.png");
+	background-position: 0 0, 0 0;
+	background-size: 50% 100%, 100% 100%;
+}
 
 #player_xpbar {
-	width: 95vw;
-	height: 2.5vh;
+	width: var(--player-bar-width);
+	height:  var(--player-bar-height);
 	background-repeat: no-repeat;
 	background-image: url("../images/xpbar foreground.png"), url("../images/xpbar background.png");
 	background-position: 0 0, 0 0;
 	background-size: 50% 100%, 100% 100%;
 }
 
-.healthbar {
-	width: 90vw;
-	height: 2.5vh;
-	background-repeat: no-repeat;
-	background-image: url("../images/healthbar foreground.png"), url("../images/healthbar background.png");
-	background-position: 0 0, 0 0;
-	background-size: 50% 100%, 100% 100%;
-	margin-bottom: 1vh;
-}
 
 .lvlup {
-	margin-left: 10vw;
-	width: 10vw;
-	height: 10vw;
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
 	background-image: url("../images/plus icon.png");
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -224,9 +203,9 @@ body {
 }
 
 .lvlup:hover {
-	margin-left: 10vw;
-	width: 10vw;
-	height: 10vw;
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
 	background-image: url("../images/plus icon hover.png");
 	background-color: rbga(0,0,0,0);
 	background-size: contain;
@@ -236,9 +215,9 @@ body {
 }
 
 .lvlup:active {
-	margin-left: 10vw;
-	width: 10vw;
-	height: 10vw;
+	margin-left: var(--lvlup-margin);
+	width: var(--lvlup-icon-width);
+	height:  var(--lvlup-icon-height);
 	background-color: rbga(0,0,0,0);
 	background-image: url("../images/plus icon clicked.png");
 	background-size: contain;
@@ -248,13 +227,13 @@ body {
 }
 
 .statusiconlarge {
-	width:  15vw;
-	height: 15vw;
+	width:  var(--status-icon-large-width);
+	height: var(--status-icon-large-height);
 }
 
 .statusiconsmall {
-	width:  8vw;
-	height: 8vw;
+	width:  var(--status-icon-small-width);
+	height: var(--status-icon-small-height);
 }
 
 .briaricon {
@@ -398,36 +377,98 @@ body {
 	background-color: rgba(0, 0, 0, 0);
 }
 
-.spellname {
-	font-size: var(--default-font-size);
-	padding: none;
-	margin: none;
-}
-
 .default_abilityicon {
 	background-image: url("../images/abilities/default.png");
-	width:  10vw;
-	height: 10vw;
+	width:  var(--ability-icon-width);
+	height: var(--ability-icon-height);
 	background-size: contain;
 	background-repeat: no-repeat;
-	margin: 0px;
-	border: none;
-	outline: none;
+}
+
+.tselector {
+	width: var(--tar-select-width);
+	height: var(--tar-select-height);
+	font-size: var(--tar-select-fontsize);
+
+    overflow-y :auto; 
+}
+
+#targetselect {
+	border-color: white;
+	border-style: solid;
+	border-width: 5px;
+	background-color: rgba(171, 171, 171, 0.8);
+}
+
+.name-cell {
+	overflow:  hidden;
+	width: var(--hp-bar-width);
+}
+
+.spellname {
+	font-size: var(--spellname-fontsize);
+	width: 75vw;
+}
+
+.spelldesc {
+	width: 500px;
+	font-size: 175%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.scrollfit {
+	height:  80vh;
+	overflow-y: auto;
+}
+
+.playertarget {
+	font-size: var(--tar-select-fontsize);
+	background-color: rgba(124, 255, 116, 0.8);
+}
+
+.enemytarget {
+	font-size: var(--tar-select-fontsize);
+	background-color: rgba(255, 95, 95, 0.8);
 }
 
 .spellrow {
-	outline: 1vw solid;
+	outline: var(--bordered-width) solid;
 	outline-color: rgb(148, 148, 148);
 }
 
-#abilitytab {
-	overflow-y: auto;
+#spelltable {
+	width: var(--spelltable-width);
+	margin-left: var(--spelltable-margin-left);
+	font-size:  var(--spelltable-font-size);
+}
+
+#inventory {
+	width: var(--spelltable-width);
+	margin-left: var(--spelltable-margin-left);
+	font-size:  var(--spelltable-font-size);
 }
 
 .joinbutton {
 	width: var(--joinbutton-width);
 	height: var(--joinbutton-height);
 	font-size: var(--printout-fontsize);
+}
+
+#classselect {
+	color: white;
+	font-size: 120%;
+	width: var(--class-select-width);
+	height: var(--class-select-height);
+	background-color: rgba(0, 0, 0, 0);
+	border:  none;
+}
+
+.classoption {
+	/*font-family: var(--main-font)*/
+	color:  white;
+	width:  300px;
+	background-color: rgba(0, 0, 0, 0);
 }
 
 #respecbutton {
@@ -440,8 +481,7 @@ body {
 }
 
 .statamt {
-	width: 15vw;
-	text-align: right;
+	padding-left: var(--statamt-padding-left);
 }
 
 
@@ -452,33 +492,35 @@ body {
 */
 
 #filterpopup {
-	border: 1vw solid white;
-	padding-top: 5vw;
+	border: 5px solid white;
+	margin-top: 18px;
+	padding-top: 30px;
+	padding-left: 30px;
+	font-size: var(--printout-fontsize);
 	overflow:  auto;
-	width: 95%;
-	height: 60vw;
+	width: var(--filterpopup-width);
+	height: 85vh;
 	z-index: 9;
 	position: absolute;
 	background-color: rgba(69, 69, 69, 0.9);
-	font-size: var(--default-font-size);
+	font-size: var(--printoutcell-font-size);
 }
 
 #filterbutton {
-	width: 10vw;
-	height: 10vw;
+	width: var(--filterbutton-width);
+	height: var(--filterbutton-height);
 	background-image: url("../images/filter-setting-icon.png");
 	background-size: contain;
 	border-radius: 10px;
-	margin-bottom: 1vh;
-	margin-left: 4vw;
 
 }
 
-#filterapplybutton {
-	width: 30vw;
-	height: 5vh;
-	font-size: var(--default-font-size);
+.filtercheck {
+	width: 60px;
+	height: 60px;
+	margin-right: 30px;
 }
+
 
 .alerttab {
 	background-color:  green;
@@ -486,9 +528,15 @@ body {
 }
 
 #timertext {
-	margin-left:  4vw;
+	font-size: var(--printoutcell-font-size);
+	margin-left:  var(--timertext-margin-left);
 }
 
+.filterbutton {
+	width: var(--filtermenubutton-width);
+	height: var(--filtermenubutton-height);
+	font-size:  var(--filtermenubutton-font-size);
+}
 
 .filterinput {
 	width: 500px;
@@ -499,15 +547,34 @@ body {
 	font-size: var(--filterinput-font-size);
 }
 
+.targetbutton {
+	margin-left:  var(--target-button-margin-left);
+	width: var(--target-button-width);
+	height: var(--target-button-height);
+	background-image: url("../images/target.png");
+	background-size:  cover;
+	background-color: rgba(0, 0, 0, 0.0);
+	border:  none;
+}
+
+.untargetbutton {
+	margin-left:  var(--untarget-button-margin-left);
+	width: var(--untarget-button-width);
+	height: var(--untarget-button-height);
+	background-image: url("../images/cancel.png");
+	background-size:  cover;
+	background-color: rgba(0, 0, 0, 0.0);
+	border:  none;
+}
+
 .targetedcell {
 	border-color: rgb(25, 236, 67);
 	border-style: solid;
-	border-width: 1vw;
+	border-width: var(--bordered-width);
 }
 
 #targetlist {
 	font-size: var(--default-fontsize);
-	margin-bottom: 5vh;
 }
 
 .confirmpopup {
@@ -539,20 +606,18 @@ body {
 	padding: var(--padded-padding);
 }
 
-.respecicon {
-	width: 10vw;
-	height: 10vw;
-	background-size: contain;
-}
-
 #bardrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
-	
+	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
 	border:  none;
 }
 
 #assassinrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -560,6 +625,8 @@ body {
 }
 
 #clericrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -567,6 +634,8 @@ body {
 }
 
 #cryomancerrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -574,6 +643,8 @@ body {
 }
 
 #fencerrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -581,6 +652,8 @@ body {
 }
 
 #warriorrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -588,6 +661,8 @@ body {
 }
 
 #swordsmanrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -595,6 +670,8 @@ body {
 }
 
 #thiefrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -602,6 +679,8 @@ body {
 }
 
 #juggernautrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -609,6 +688,8 @@ body {
 }
 
 #spellbladerespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -616,6 +697,8 @@ body {
 }
 
 #sorcererrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -623,6 +706,8 @@ body {
 }
 
 #pyromancerrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -630,6 +715,8 @@ body {
 }
 
 #priestrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -637,6 +724,8 @@ body {
 }
 
 #paladinrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -644,6 +733,8 @@ body {
 }
 
 #knightrespecicon {
+	width: var(--respec-button-width);
+	height: var(--respec-button-height);
 	background-image: url("../images/respec.png");
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
@@ -652,14 +743,7 @@ body {
 
 #classrespectable {
 	text-align: center;
-}
-
-.untargetbutton {
-	margin-left:  10vw;
-	width: 10vw;
-	height: 10vw;
-	background-image: url("../images/cancel.png");
-	background-size:  cover;
-	background-color: rgba(0, 0, 0, 0.0);
-	border:  none;
+	width: var(--spelltable-width);
+	margin-left: var(--spelltable-margin-left);
+	font-size:  var(--spelltable-font-size);
 }

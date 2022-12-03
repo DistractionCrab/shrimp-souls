@@ -22,7 +22,7 @@ class Heal(cs.Ability):
 @dataclass
 class Prayer(cs.Ability):	
 	t_amt: int = 3
-	ally: bool = True
+	allyq: bool = True
 	def act(self, u, t, env):		
 		return [
 			actions.HealTarget(

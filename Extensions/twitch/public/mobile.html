@@ -8,27 +8,28 @@
 </head>
 <body>
 	<div id="mainsection">
-		<div class="tabsection">
-			<button class="tablinks" id="charsheetheader">Stats</button>
+		<div id="tabsection">
+			<button class="tablinks" id="charsheetheader" title="charsheet">Stats</button>
 			<button class="tablinks" id="printoutheader">Log</button>
 			<button class="tablinks" id="abilityheader">Skills</button>
 			<button class="tablinks" id="worldheader">World</button>
 		</div>
 		<div id="charsheet" class="tabcontent">
-			<div>
-				<button class="tablinks" id="statusheader">Status</button>
-				<button class="tablinks" id=attriheader>Attri.</button>
-				<button class="tablinks" id=scoreheader>Scores</button>
-				<button class="tablinks" id=inventheader>Items</button>
-				<button class="tablinks" id="classheader">Respec</button>		
+			<div id="csheettabsection">
+				<button class="icontab" id="statusheader" title="Status"></button>
+				<button class="icontab" id="attriheader" title="Attributes"></button>
+				<button class="icontab" id=scoreheader title="Scores"></button>
+				<button class="icontab" id=inventheader title="Inventory"></button>
+				<button class="icontab" id="respecheader" title="Respec"></button>
+				
 			</div>
-			<div id="inventorypage">
-				<table id="inventory">
+			<div id="inventorypage" class="csheetcontent">
+				<table id="inventory" class="spacedtable">
 					
 				</table>
 			</div>
-			<div id="scorepage">
-				<table id="scoretable">
+			<div id="scorepage" class="csheetcontent">
+				<table id="scoretable" class="centeredtable">
 					<tr>
 						<td>Attack: </td><td name="att" class="statamt">?</td>
 					</tr>
@@ -55,30 +56,71 @@
 					</tr>
 				</table>
 			</div>
-			<div id="classpage">
-				<button id="respecbutton"></button>
-				<br>
-				<select id="classselect" size=5>
-					<option value="milquetoast" class="classoption">Milquetoast</option>
-					<option value="bard" class="classoption">Bard</option>
-					<option value="assassin" class="classoption">Assassin</option>
-					<option value="cleric" class="classoption">Cleric</option>
-					<option value="cryomancer" class="classoption">Cryomancer</option>
-					<option value="fencer" class="classoption">Fencer</option>
-					<option value="juggernaut" class="classoption">Juggernaut</option>
-					<option value="knight" class="classoption">Knight</option>
-					<option value="paladin" class="classoption">Paladin</option>
-					<option value="priest" class="classoption">Priest</option>
-					<option value="pyromancer" class="classoption">Pyromancer</option>
-					<option value="sorcerer" class="classoption">Sorcerer</option>
-					<option value="spellblade" class="classoption">Spellblade</option>
-					<option value="swordsman" class="classoption">Swordsman</option>
-					<option value="thief" class="classoption">Thief</option>
-					<option value="warrior" class="classoption">Warrior</option>
-				</select>
-				
+			<div id="classpage" class="csheetcontent">
+				<table id="classrespectable" class="spacedtable">
+					<tr class="spellrow">
+						<td id="assassinrespecicon" class="respecicon" name="assassin"></td>
+						<td class="spellname">Assassin</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="bardrespecicon" class="respecicon" name="bard"></td>
+						<td class="spellname">Bard</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="clericrespecicon" class="respecicon" name="cleric"></td>
+						<td class="spellname">Cleric</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="cryomancerrespecicon" class="respecicon" name="cryomancer"></td>
+						<td class="spellname">Cryomancer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="fencerrespecicon" class="respecicon" name="fencer"></td>
+						<td class="spellname">Fencer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="juggernautrespecicon" class="respecicon" name="juggernaut"></td>
+						<td class="spellname">Juggernaut</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="knightrespecicon" class="respecicon" name="knight"></td>
+						<td class="spellname">Knight</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="paladinrespecicon" class="respecicon" name="paladin"></td>
+						<td class="spellname">Paladin</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="priestrespecicon" class="respecicon" name="priest"></td>
+						<td class="spellname">Priest</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="pyromancerrespecicon" class="respecicon" name="pyromancer"></td>
+						<td class="spellname">Pyromancer</td>
+					</tr>					
+					<tr class="spellrow">
+						<td id="sorcererrespecicon" class="respecicon" name="sorcerer"></td>
+						<td class="spellname">Sorcerer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="spellbladerespecicon" class="respecicon" name="spellblade"></td>
+						<td class="spellname">Spellblade</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="swordsmanrespecicon" class="respecicon" name="swordsman"></td>
+						<td class="spellname">Swordsman</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="thiefrespecicon" class="respecicon" name="thief"></td>
+						<td class="spellname">Thief</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="warriorrespecicon" class="respecicon" name="warrior"></td>
+						<td class="spellname">Warrior</td>
+					</tr>
+				</table>				
 			</div>
-			<div id="status">
+			<div id="status" class="csheetcontent">
 				<div id="class_value">????</div>
 				<table>
 					<tr>
@@ -101,8 +143,8 @@
 					</tr>
 				</table>
 			</div>
-			<div id="attributes">
-				<table id=stat-table>
+			<div id="attributes" class="csheetcontent">
+				<table id=stat-table class="centeredtable">
 					<tr>
 						<td>Vigor: </td>
 						<td id="vigor_value" class="statamt">?</td>
@@ -166,7 +208,7 @@
 			</div>
 		</div>
 
-		<div id="abilitytab" class="tabcontent" style="vertical-align: top;">
+		<div id="abilitytab" class="tabcontent">
 			<div class="scrollfit">
 				<table id="spelltable" class="spacedtable" >
 							<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
@@ -178,7 +220,7 @@
 				<table id="targetlist">
 					
 				</table>
-			</div>		
+			</div>			
 		</div>
 
 		<div id="worldtab" class="tabcontent">
@@ -189,6 +231,7 @@
 	<div class="confirmpopup" id ="abilityconfirm">
 		<div class="centered">
 			<button id="abilityconfirmbutton" class=abiconfirmbuttons>CONFIRM</button>
+			<br>
 			<button id="abilitycancelbutton" class=abiconfirmbuttons>CANCEL</button>
 		</div>
 		<div class="padded">
@@ -202,7 +245,7 @@
 				<li>a</li>
 				<li>a</li>
 			</ul>
-		</div>		
+		</div>	
 	</div>
 
 	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>

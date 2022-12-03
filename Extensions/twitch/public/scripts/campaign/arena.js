@@ -2,7 +2,7 @@ import { TabManager } from "../utils.js";
 import { EntityManager } from "../entity_manager.js";
 
 const HTML = `
-<div class="tabsection">
+<div class="centered">
 	<button class="tablinks" id="homeheader">Home</button>
 	<button class="tablinks" id="partyheader">Party</button>
 	<button class="tablinks" id="npcheader">NPCs</button>
@@ -12,12 +12,12 @@ const HTML = `
 	things are made. 
 </div>
 <div id="partytab">
-	<table id="partytable">
+	<table id="partytable" class="spacedtable">
 
 	</table>
 </div>
 <div id="npctab">
-	<table id="npctable">
+	<table id="npctable" class="spacedtable">
 
 	</table>
 </div>

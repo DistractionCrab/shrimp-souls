@@ -113,9 +113,6 @@ class Goblin(BaseNPC):
 		return hash(self.name)
 
 
-	
-
-
 @dataclass
 class Wolf(BaseNPC):
 	xp:  int = 3
@@ -125,7 +122,7 @@ class Wolf(BaseNPC):
 	_eva: int = 20
 	_att: int = 35
 	_dfn: int = 10
-	lvrange: range = range(1, 4)
+	lvrange: range = range(2, 4)
 
 	def __hash__(self):
 		return hash(self.name)
@@ -413,7 +410,7 @@ class BloodGolem(BaseNPC):
 				})]
 
 def __check(a):
-	return isinstance(a, type) and issubclass(a, BaseNPC) and a != BaseNPC
+	return isinstance(a, type) and issubclass(a, BaseNPC) and a != BaseNPC and not a.bossq
 
 import sys
 NPCS = list(a for a in sys.modules[__name__].__dict__.values() if __check(a))

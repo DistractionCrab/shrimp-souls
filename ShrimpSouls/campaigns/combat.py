@@ -179,7 +179,7 @@ class Combat(cps.BaseCampaign):
 			targets = tuple()
 
 		if len(targets) >= amt:
-			return tuple(random.sample(targets, k=amt))
+			return targets[:amt]
 		else:
 
 			amt = amt - len(targets)
@@ -199,7 +199,6 @@ class Combat(cps.BaseCampaign):
 		if index < len(p.inventory):
 			self.__queued[p.name] = UseItem(p.inventory[index], targets)
 
-			#print(p.inventory[index])
 			yield messages.Response(
 				msg=[f"You have readied {p.inventory[index].display} for the next turn aimed at {', '.join(targets)}"],
 				recv=(p.name,))

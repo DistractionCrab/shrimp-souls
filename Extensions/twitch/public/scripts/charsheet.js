@@ -18,7 +18,7 @@ const TABMANAGER = new TabManager({
 		deactive_fn: () => {},
 	},
 	class: {
-		header: "classheader",
+		header: "respecheader",
 		body: "classpage",
 		active: false,
 		active_fn: () => {},
@@ -133,7 +133,8 @@ export class CharSheet {
 					var cell = row.insertCell(0);
 					cell.classList.add(`${k}icon`);
 					cell.classList.add("statusiconlarge");
-					set_text(cell, v);
+					const n = set_text(cell, v);
+					n.classList.add("mixed-text");
 					ct += 1;
 				}
 			}		

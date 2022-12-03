@@ -21,6 +21,8 @@ from dataclasses import dataclass
 
 
 STEP_FREQUENCY = 180
+DEACTIVE_TIME = 300
+ROUTER_FREQUENCY = 1800
 
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
@@ -83,9 +85,10 @@ class Messages(enum.Enum):
 
 
 class Server:
-	def __init__(self, game, clientid):
+	def __init__(self, game, clientid, db):
 		self.__msgs = asyncio.Queue()
 		self.__clientid = clientid
+		self.__db = db
 		self.__sockets = {}
 		self.__connections = {}
 		self.__last = time.time()		
@@ -116,40 +119,44 @@ class Server:
 	async def server_loop(self):
 		while not self.__closed:
 			try:
-				msg = await self.__msgs.get()
-				if msg is Heartbeat:
-					await self.__heartbeat()
-				else:
-					self.__i_time = time.time()
-					if msg['msg'] == "connect":
-						await self.__connect(msg)
-					elif msg['msg'] == 'ability':
-						await self.__do_ability(msg)
-					elif msg['msg'] == 'item':
-						await self.__do_item(msg)
-					elif msg['msg'] == 'levelup':
-						await self.__level_up(msg)
-					elif msg['msg'] == "disconnect":
-						await self.__disconnect(msg)					
-					elif msg['msg'] == "join":
-						await self.__join(msg)
-					elif msg['msg'] == "respec":
-						await self.__respec(msg)
+				with self.__db.transaction():
+					msg = await self.__msgs.get()
+					if msg is Heartbeat:
+						await self.__heartbeat()
+					else:
+						self.__i_time = time.time()
+						if msg['msg'] == "connect":
+							await self.__connect(msg)
+						elif msg['msg'] == 'ability':
+							await self.__do_ability(msg)
+						elif msg['msg'] == 'item':
+							await self.__do_item(msg)
+						elif msg['msg'] == 'levelup':
+							await self.__level_up(msg)
+						elif msg['msg'] == "disconnect":
+							await self.__disconnect(msg)					
+						elif msg['msg'] == "join":
+							await self.__join(msg)
+						elif msg['msg'] == "respec":
+							await self.__respec(msg)
 			except KeyboardInterrupt as ex:
-				print("Exiting server loop...  (Interrupted)")
+				print(f"Exiting server loop for {self.__clientid}...  (Interrupted)")
 				self.close()
 							
 		print(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
-		while not self.__closed:
-			await self.__msgs.put(Heartbeat)
-			await asyncio.sleep(10)
+		try:
+			while not self.__closed:
+				await self.__msgs.put(Heartbeat)
+				await asyncio.sleep(10)
+		except KeyboardInterrupt:
+			print("Keyboard interrupt on heartbeat.")
 		print(f"Exiting heartbeat loop for {self.__clientid}")
 
 	async def __heartbeat(self):
 		if len(self.__sockets) == 0:			
-			if time.time() - self.__i_time > 300:
+			if time.time() - self.__i_time > DEACTIVE_TIME:
 				print(f"Shutting down a server for {self.__clientid}")
 				await self.close()
 		else:
@@ -171,7 +178,7 @@ class Server:
 
 	async def __disconnect(self, msg):
 		i = msg['wsid']
-		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}")
+		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}. Reason: {msg['reason']}")
 		s = self.__sockets.pop(i, None)
 		self.__unames.pop(self.__idmaps.get(i), None)
 		self.__idmaps.pop(i, None)
@@ -267,6 +274,7 @@ class Server:
 		self.__wsid_ct += 1
 		reading = True
 		while reading:
+			reason = None
 			try:
 				message = await ws.recv()
 				message = json.loads(message)
@@ -274,38 +282,44 @@ class Server:
 				message['socket'] = ws
 				await self.__msgs.put(message)
 			except asyncio.CancelledError:
-				print("Program Exited closing socket.")
+				reason = "CancelledError: closing socket."
 				reading = False
 			except websockets.exceptions.ConnectionClosedError:
-				print(f"Connection closed: {wsid}")
+				reason = f"ConnectionClosedError: {wsid}"
 				reading = False
 			except ConnectionResetError:
-				print(f"Connection closed: {wsid}")
+				reason = f"ConnectionResetError"
 				reading = False
 			except websockets.exceptions.ConnectionClosedOK:
-				print(f"Connection closed {wsid}")
 				reading = False
 			except ValueError as ex:
-				print(f"Client sent invalid path for connection: {ex}")
+				reason = f"Client sent invalid path for connection: {ex}"
 				reading = False
 			except Exception as ex:
-				print(f"Generic Connection Error: {ex}")
+				reason = f"Generic Connection Error: {ex}"
 				reading = False
 
 
-		await self.__msgs.put({"msg": "disconnect", "wsid": wsid})
+		await self.__msgs.put({
+			"msg": "disconnect", 
+			"wsid": wsid,
+			"reason": reason})
 
 class Router:
 	def __init__(self, test=False):
 		self.__test = test
 		self.__games = {}
-		self.__db = self.__init_db()
+		(self.__dbroot, self.__db) = self.__init_db()
 
 		atexit.register(self.__close)
 
 		if self.__test:
 			global STEP_FREQUENCY
+			global DEACTIVE_TIME
+			global ROUTER_FREQUENCY
 			STEP_FREQUENCY = 30
+			DEACTIVE_TIME = 30
+			ROUTER_FREQUENCY = 30
 
 
 	def __close(self):
@@ -325,7 +339,7 @@ class Router:
 		if "clients" not in cn.root():
 			cn.root.clients = persistent.mapping.PersistentMapping()
 
-		return cn
+		return (db, cn)
 	
 
 
@@ -337,61 +351,71 @@ class Router:
 			self.__db.root.clients[i] = s
 			return s
 
+	async def __init_server(self, i):
+		g = self.__get_game(i)
+		s = Server(g, i, self.__dbroot)
+		self.__games[i] = s
+
+		asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
+		asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")
+
+		return s
+
+
 	async def __call__(self, ws, path):
+		match path.split("/"):
+			case ["", ""]: print(f"Root path received from {ws.remote_address}")
+			case ["", i]: await self.__route_ws(ws, i)
+			case _: print(f"Received unknown route: {path}")
+
+	async def __route_ws(self, ws, i):
 		try:
-			i = int(path[1:])
+			i = int(i)
 
 			if i not in self.__games:
-				g = self.__get_game(i)
-				s = Server(g, i)
-				self.__games[i] = s
-
-				asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
-				asyncio.create_task(s.server_loop(), name=f"Server({i}) Main Loop")			
+				s = await self.__init_server(i)
 			else:
 				s = self.__games[i]
+				if s.closed:
+					s = await self.__init_server(i)
 
 			
 			await s(ws)
 
-		except asyncio.CancelledError:
-			print("Program Exited closing socket.")
-		except websockets.exceptions.ConnectionClosedError:
-			print(f"Connection closed: {wsid}")
-		except ConnectionResetError:
-			print(f"Connection closed: {wsid}")
-		except websockets.exceptions.ConnectionClosedOK:
-			print(f"Connection closed {wsid}")
 		except ValueError as ex:
 			print(f"Client sent invalid path for connection: {ex}")
 			await ws.close()
-		except Exception as ex:
-			print(f"Generic Connection Error: {ex}")
+		except KeyboardInterrupt:
+			print(f"Keyboard interrupted socket call.")
 
 	async def main(self):
 		looping = True
 		while looping:
 			self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
-			await asyncio.sleep(100)
+			transaction.commit()
+			await asyncio.sleep(ROUTER_FREQUENCY)
 
 		
 
 async def main(args):
-	if len(args) == 0 or args[0] == 'local':
-		m = Router(test=True)
-		print("Setting up local insecure server.")
-		async with websockets.serve(m, "localhost", 443):
-			await m.main()
-	elif args[0] == 'networked':
-		m = Router()
-		print("Setting up networked secure server.")
-		root = os.environ['SS_SSL_PATH']
-		s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
-		s.load_cert_chain(
-			os.path.join(root, "concat.crt"), 
-			keyfile=os.path.join(root, "csr.key"))
-		async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
-			await m.main()
+	try:
+		if len(args) == 0 or args[0] == 'local':
+			m = Router(test=True)
+			print("Setting up local insecure server.")
+			async with websockets.serve(m, "localhost", 443):
+				await m.main()
+		elif args[0] == 'networked':
+			m = Router()
+			print("Setting up networked secure server.")
+			root = os.environ['SS_SSL_PATH']
+			s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
+			s.load_cert_chain(
+				os.path.join(root, "concat.crt"), 
+				keyfile=os.path.join(root, "csr.key"))
+			async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
+				await m.main()
+	except asyncio.CancelledError as ex:
+		print("Server shutting down: CancelledError")
 
 def update_ip():
 
