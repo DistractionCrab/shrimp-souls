@@ -70,10 +70,9 @@ class Arena(cps.BaseCampaign):
 
 
 	def _add_player(self, p):
-		if self.__combat is None:
-			yield self.broadcast(msg=[f"{p.name} has joined the arena!!!"])
-		else:
-			yield self.broadcast(msg=[f"{p.name} has joined the arena!!! They will join combat when the next match starts."])
+		if self.__combat is not None:
+			self.__combat.add_player(p)
+		yield self.broadcast(msg=[f"{p.name} has joined the arena!!!"])
 
 
 	def _add_npc(self, p):
