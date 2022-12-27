@@ -42,8 +42,6 @@ def parse_jwt(msg):
 	except:
 		return None
 
-
-
 async def get_username(i):
 	try:
 		async with aiohttp.ClientSession() as session:
@@ -177,11 +175,11 @@ class Server:
 
 
 	async def __disconnect(self, msg):
-		i = msg['wsid']
-		print(f"Disconnecting socket for conn {i} and uname {self.__idmaps[i]}. Reason: {msg['reason']}")
+		i = msg['wsid']			
 		s = self.__sockets.pop(i, None)
-		self.__unames.pop(self.__idmaps.get(i), None)
+		v = self.__unames.pop(self.__idmaps.get(i), None)
 		self.__idmaps.pop(i, None)
+		r = msg.get('reason', None)
 
 		if s is not None:
 			try:
@@ -189,6 +187,7 @@ class Server:
 					s.close()
 			except:
 				pass
+		print(f"Disconnecting socket for conn {i} and uname {v}. Reason: {r}")
 
 	async def __send_message(self, wsid, m):
 		s = self.__sockets[wsid]
@@ -234,17 +233,25 @@ class Server:
 						"error": ["Could not retrieve username from Twitch."],
 						"requestid": True})
 				else:
-					uname = r["data"][0]["login"]
-					self.__idmaps[wsid] = uname
-					self.__unames[uname] = wsid
-					print(f"Connected received for c-id {self.__clientid} from {uname}")
-					for m in self.__game.connect(uname):
-						await self.__handle_message(m)
-					await self.__handle_message(
-						messages.TimeInfo(
-							now=self.__last, 
-							length=STEP_FREQUENCY,
-							recv=(uname,)))
+					try:
+						uname = r["data"][0]["login"]
+						self.__idmaps[wsid] = uname
+						self.__unames[uname] = wsid
+						print(f"Connected received for c-id {self.__clientid} from {uname}")
+						for m in self.__game.connect(uname):
+							await self.__handle_message(m)
+						await self.__handle_message(
+							messages.TimeInfo(
+								now=self.__last, 
+								length=STEP_FREQUENCY,
+								recv=(uname,)))
+					except KeyError:
+						print(f"Error no data given for login: {r}")
+						try:
+							msg["socket"].close()
+						except:
+							pass
+
 						
 			else:
 				await self.__send_message(wsid, {"requestid": True})
