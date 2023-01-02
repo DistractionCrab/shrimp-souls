@@ -12,6 +12,7 @@ import base64
 import ZODB
 import transaction
 import atexit
+import requests
 import persistent
 import persistent.mapping
 import ShrimpSouls as ss
@@ -27,6 +28,20 @@ ROUTER_FREQUENCY = 1800
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
 	SECRETS = json.loads(read.read())
+
+
+
+def get_oauth():
+	# Headers used for HTTPS requests on the Twitch API
+	HEADERS = {
+		'Content-Type': "application/x-www-form-urlencoded"
+	}
+	DATA = f"client_id={CLIENT_ID}&client_secret={server_secret()}&grant_type=client_credentials"
+	REQUEST_URL ='https://id.twitch.tv/oauth2/token'
+	r = requests.post(REQUEST_URL, headers=HEADERS, data=DATA)
+
+	return json.loads(r.text)
+
 
 
 def server_secret():
@@ -200,7 +215,10 @@ class Server:
 		for n in m.recv:
 			if n in self.__unames:
 				t = m.json
-				await self.__sockets[self.__unames[n]].send(json.dumps(t))
+				try:
+					await self.__sockets[self.__unames[n]].send(json.dumps(t))
+				except:
+					pass
 
 
 	async def __join(self, msg):
@@ -248,7 +266,7 @@ class Server:
 					except KeyError:
 						print(f"Error no data given for login: {r}")
 						try:
-							msg["socket"].close()
+							await msg["socket"].close()
 						except:
 							pass
 
