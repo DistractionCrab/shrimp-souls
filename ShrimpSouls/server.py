@@ -108,7 +108,7 @@ class SocketWrapper:
 			self.__dc_reason = "CancelledError: closing socket."
 			self.__live = False
 		except websockets.exceptions.ConnectionClosedError:
-			self.__dc_reason = f"ConnectionClosedError: {wsid}"
+			self.__dc_reason = f"ConnectionClosedError: {self.__uid}"
 			self.__live = False
 		except ConnectionResetError:
 			self.__dc_reason = f"ConnectionResetError"
@@ -119,9 +119,6 @@ class SocketWrapper:
 		except Exception as ex:
 			self.__dc_reason = f"Generic Connection Error: {ex}"
 			self.__live = False
-
-	def __validate_username(self):
-		pass
 
 	async def run(self):
 		while self.__live:
@@ -172,7 +169,7 @@ class SocketWrapper:
 					logging.log(f"Connected received for c-id {self.__parent.client_id} from {self.__uname}")
 					await self.__parent.connect(self)					
 			else:
-				await self.send(wsid, {"requestid": True})
+				await self.send({"requestid": True})
 
 class Server:
 	def __init__(self, game, clientid, db):
@@ -300,24 +297,19 @@ class Server:
 					await ws.send(m.json)
 
 
-	async def __join(self, msg):
-		name = self.__idmaps[msg['wsid']]
-		
-		for m in self.__game.join(name):
+	async def __join(self, msg):		
+		for m in self.__game.join(msg["socket"].uname):
 			await self.__handle_message(m)
 
 
 	async def __respec(self, msg):
-		wsid = msg['wsid']
 		cl = msg['data']
-		p = self.__game.get_player(self.__idmaps[wsid])
+		p = self.__game.get_player(msg['socket'].uname)
 
 		for m in self.__game.respec(p, cl):
 			await self.__handle_message(m)
 
 	async def connect(self, ws):
-		
-
 		if ws.uid in self.__idmaps:
 			self.__idmap[ws.uid].append(ws)
 		else:
@@ -338,21 +330,17 @@ class Server:
 				recv=(ws.uname,)))
 
 	async def __level_up(self, msg):
-		p = self.__game.get_player(self.__idmaps[msg['wsid']])
+		p = self.__game.get_player(msg['socket'].uname)
 		for m in p.level_up(msg['att']):
 			await self.__handle_message(m)
 
 
 	async def __do_ability(self, msg):
-		wsid = msg['wsid']
-		name = self.__idmaps[wsid]
-		for m in self.__game.use_ability(name, msg['ability'], msg['targets']):
+		for m in self.__game.use_ability(msg['socket'].uname, msg['ability'], msg['targets']):
 			await self.__handle_message(m)
 
 	async def __do_item(self, msg):
-		wsid = msg['wsid']
-		name = self.__idmaps[wsid]
-		for m in self.__game.use_item(name, msg['index'], msg['targets']):
+		for m in self.__game.use_item(msg['socket'].uname, msg['index'], msg['targets']):
 			await self.__handle_message(m)
 
 class Router:
