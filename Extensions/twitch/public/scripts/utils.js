@@ -15,17 +15,21 @@ export function set_text(n, s) {
 } 
 
 export class TabManager {
-	constructor(tabs, dtab) {
+	constructor(tabs, dtab=null) {
 		this.tabs = tabs;
 		this.init();
-		this.tabs[dtab].button.click();
+		if (dtab !== null) {
+			this.tabs[dtab].button.click();
+		}
 
 		EVENTS.addEventListener("update_tab", (name) => this.update_tab(name));
 	}
 
 	init() {
-		for (const [_, e] of Object.entries(this.tabs)) {
+		for (const [name, e] of Object.entries(this.tabs)) {
+			this.add_tab(name, e);
 
+			/*
 			e.button = document.getElementById(e.header);
 			e.button.addEventListener("click", (event) => {
 				this.hide_tabs();
@@ -36,9 +40,46 @@ export class TabManager {
 				e.active_fn();
 			});
 			e.content = document.getElementById(e.body);
+			*/
+		}
+	}
+
+	get_tab(name) {
+		return this.tabs[name];
+	}
+
+	rem_tab(name) {
+		this.tabs[name].content.remove();
+		this.tabs[name].button.remove();
+		delete this.tabs[name];
+	}
+
+	add_tab(name, data) {
+		data.active = false;
+
+		if (!("button" in data)) {
+			data.button = document.getElementById(data.header);						
+		} 
+
+		data.button.addEventListener("click", (event) => {
+			this.hide_tabs();
+			data.content.style.display = "block";
+			data.active = true;
+
+			data.button.classList.toggle("alerttab", false);
+			data.active_fn();
+		});
+
+
+		if (!("content" in data)) {
+			data.content = document.getElementById(data.body)
 		}
 
+		this.tabs[name] = data;
+	}
 
+	has_tab(name) {
+		return name in this.tabs;
 	}
 
 	hide_tabs() {

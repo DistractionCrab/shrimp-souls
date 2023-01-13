@@ -1,27 +1,47 @@
 import { EVENTS } from "../events.js";
-import { Arena } from "./arena.js";
+import { TabManager } from "../utils.js";
+import { Party, NPCs } from "./party.js";
 
-const C_MAPS = {
-	"arena": Arena,
-};
-
+const DATA_MAP = {
+	party: Party,
+	npcs: NPCs
+}
 
 export class CampaignManager {
 	constructor() {
 		this.panel = document.getElementById("worldtab");
-		this.current = null;
+		this.tabs = document.getElementById("worldtabsections");
+		this.manager = new TabManager({});
+		
 		EVENTS.addEventListener("campinfo", (data) => this.update(data));
 
 	}
 
 	update(data) {
-		if (this.current === null || data.name !== this.current.name) {
-			const c = C_MAPS[data.name];
-			this.current = new c(this.panel);
-			
+		for (const [k, v] of Object.entries(data)) {
+			//console.log(`[${k}, ${JSON.stringify(v)}] is the data`)
+			if (k in DATA_MAP) {
+				this.convey(k, v);
+			}
 		}
-		if (this.current !== null) {
-			this.current.update(data);	
+	}
+
+	convey(name, data) {
+		if (data === null) {
+			this.manager.rem_tab(name);
+		} else {
+			if (!this.manager.has_tab(name)) {
+				const obj = new DATA_MAP[name]();
+				this.manager.add_tab(name, obj.tab());
+				const data = this.manager.get_tab(name);
+
+				this.tabs.appendChild(data.button);
+				this.panel.appendChild(data.content);
+			}
+
+			const t = this.manager.get_tab(name);
+			t.campaign_view.update(data);	
 		}
+		
 	}
 }

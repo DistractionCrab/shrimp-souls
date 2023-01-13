@@ -25,9 +25,10 @@ class Arena(cps.BaseCampaign):
 	def resting(self, name):
 		return self.__combat is None
 
-	def _campinfo(self):
+	def campinfo(self):
 		if self.__combat is None:
 			return {
+				"name": "arena"
 				"party": list(p.json for p in self.players.values()),
 			}
 		else:
@@ -110,7 +111,6 @@ class ArenaCombat(combat.Combat):
 	def _add_player(self, p):
 		p.revive()
 		p.reset_status()
-		added = []
 		added = npcs.get_enemy(p.level, len(self.npcs))
 
 		for n in added:

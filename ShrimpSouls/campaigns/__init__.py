@@ -19,14 +19,6 @@ class BaseCampaign(persistent.Persistent):
 		return True
 
 	def campinfo(self):
-		b = {
-			"name": self.__name
-		}
-
-		return self._campinfo() | b		
-
-
-	def _campinfo(self):
 		return {}
 
 	@property

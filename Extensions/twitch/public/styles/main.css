@@ -34,6 +34,14 @@ body {
 	margin-bottom: 1vh;
 }
 
+.tabheader {
+	height: 5vh;
+	text-align: center;
+	padding-bottom: 1vh;
+	border-bottom: 0.2vh solid white;
+	margin-bottom: 1vh;
+}
+
 .tablinks {
 	height: 100%;
 	width: 20vw;
@@ -48,6 +56,7 @@ body {
 	height: 93vh;
 	padding: 0px;
 	margin: 0px;
+	overflow-y: auto;
 	scroll-y: auto;
 }
 

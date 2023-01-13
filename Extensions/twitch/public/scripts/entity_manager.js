@@ -40,6 +40,7 @@ class Entity {
 		this.data_table = document.createElement("table");
 		this.entity_table = document.createElement("table");
 		this.name = data["name"];
+		this.name_cell = null;
 
 		this.init_table();		
 	}
@@ -76,6 +77,8 @@ class Entity {
 		} else {
 			set_text(name, this.data.name);
 		}
+
+		this.name_cell = name;
 		
 		//var t = row1.insertCell(1);
 		//var button = document.createElement("button");
@@ -115,6 +118,12 @@ class Entity {
 
 	update(data) {
 		this.data = data;
+
+		if ("class" in this.data) {
+			set_text(this.name_cell, `${this.data.name} [Lv.${this.get_level()} ${this.data["class"]}]`)
+		} else {
+			set_text(this.name_cell, this.data.name);
+		}
 
 		var prop = Math.max(0, Math.min(100, Math.ceil(this.data.hp/this.data.max_hp*100)));
 		this.hp_bar.style.backgroundSize = `${prop}% 100%, 100% 100%`;
@@ -209,7 +218,7 @@ export class EntityManager {
 	insert_row(p) {
 		const en = new Entity(p);
 		const t = this.playerdisplay;
-
+		
 		var row = t.insertRow(t.rows.length);
 		row.name = p.name;
 		var cell = row.insertCell(0);
@@ -228,6 +237,7 @@ export class EntityManager {
 	
 
 	update(players) {
+		console.log(players);
 		for (const p of players) {
 			if (!(p.name in this.players)) {
 				this.players[p.name] = this.insert_row(p, true);

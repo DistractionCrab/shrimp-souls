@@ -150,7 +150,6 @@ const TABMANAGER = new TabManager({
 
 
 function respec(value) {
-	console.log("Respecing: " + value);
 	MANAGER.sendMessage(MESSAGES.respec(value));
 }
 

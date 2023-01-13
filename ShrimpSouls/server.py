@@ -18,58 +18,14 @@ import persistent.mapping
 import ShrimpSouls as ss
 import ShrimpSouls.campaigns as cps
 import ShrimpSouls.messages as messages
+import ShrimpSouls.oauth as oauth
+import ShrimpSouls.logging as logging
 from dataclasses import dataclass
 
 
 STEP_FREQUENCY = 180
 DEACTIVE_TIME = 300
 ROUTER_FREQUENCY = 1800
-
-CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
-with open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r') as read:
-	SECRETS = json.loads(read.read())
-
-
-
-def get_oauth():
-	# Headers used for HTTPS requests on the Twitch API
-	HEADERS = {
-		'Content-Type': "application/x-www-form-urlencoded"
-	}
-	DATA = f"client_id={CLIENT_ID}&client_secret={server_secret()}&grant_type=client_credentials"
-	REQUEST_URL ='https://id.twitch.tv/oauth2/token'
-	r = requests.post(REQUEST_URL, headers=HEADERS, data=DATA)
-
-	return json.loads(r.text)
-
-
-
-def server_secret():
-	return SECRETS["server_secret"]
-
-def jwt_secret():
-	return base64.b64decode(SECRETS["jwt_secret"])
-
-def parse_jwt(msg):
-	s = jwt_secret()
-	try:
-		return jwt.decode(msg['token'], jwt_secret(), algorithms=["HS256"])
-	except:
-		return None
-
-async def get_username(i):
-	try:
-		async with aiohttp.ClientSession() as session:
-			url = f'https://api.twitch.tv/helix/users?id={i}'
-			headers = {
-				"Authorization": "Bearer " + SECRETS['oauth_token'],
-				"Client-ID": CLIENT_ID,
-			}
-			r = await session.get(url, headers=headers)
-			return json.loads(await r.text())
-	except:
-		return None
-
 
 
 # Basic marker class used to keep the server flowing.
@@ -78,8 +34,6 @@ class Heartbeat:
 
 class CloseServer:
 	pass
-
-
 
 class Messages(enum.Enum):
 	CONNECTONLY = (lambda g, p: {
@@ -95,19 +49,141 @@ class Messages(enum.Enum):
 		})
 	ERROR = (lambda msg: {"msg": "error", "data": f"ERROR: {msg}"})
 
+class SocketWrapper:
+	def __init__(self, ws, parent):
+		self.__ws = ws
+		self.__parent = parent
+		self.__uname = None
+		self.__live = True
+		self.__dc_reason = None
+		self.__uid = None
 
+	@property
+	def uname(self):
+		return self.__uname
+
+	@property
+	def uid(self):
+		return self.__uid
+	
+
+
+	async def close(self):
+		try:
+			await self.__ws.close()
+			self.__live = False
+		except:
+			pass
+
+	async def send(self, msg):
+		if not self.__live:
+			return
+		try:
+			if type(msg) is not str:
+				msg = json.dumps(msg)
+			await self.__ws.send(msg)
+		except asyncio.CancelledError:
+			self.__dc_reason = "CancelledError: closing socket."
+			self.__live = False
+		except websockets.exceptions.ConnectionClosedError:
+			self.__dc_reason = f"ConnectionClosedError: {self.uid}"
+			self.__live = False
+		except ConnectionResetError:
+			self.__dc_reason = f"ConnectionResetError"
+			self.__live = False
+		except websockets.exceptions.ConnectionClosedOK:
+			self.__live = False
+			self.__dc_reason = "Standard disconnection: OK."
+		except Exception as ex:
+			self.__dc_reason = f"Generic Connection Error: {ex}"
+			self.__live = False
+
+	async def recv(self):
+		if not self.__live:
+			return None
+			
+		try:
+			return await self.__ws.recv()
+		except asyncio.CancelledError:
+			self.__dc_reason = "CancelledError: closing socket."
+			self.__live = False
+		except websockets.exceptions.ConnectionClosedError:
+			self.__dc_reason = f"ConnectionClosedError: {wsid}"
+			self.__live = False
+		except ConnectionResetError:
+			self.__dc_reason = f"ConnectionResetError"
+			self.__live = False
+		except websockets.exceptions.ConnectionClosedOK:
+			self.__live = False
+			self.__dc_reason = "Standard disconnection: OK."
+		except Exception as ex:
+			self.__dc_reason = f"Generic Connection Error: {ex}"
+			self.__live = False
+
+	def __validate_username(self):
+		pass
+
+	async def run(self):
+		while self.__live:
+			try:
+				message = await self.recv()
+				if message is not None:
+					message = json.loads(message)
+					if self.__uid is None:
+						await self.__connect(message)						
+					else:							
+						message['socket'] = self
+						await self.__parent.message(message)
+				else:
+					#self.__dc_reason = "No message received on connection."
+					await self.close()
+			except Exception as ex:
+				await self.close()
+				self.__dc_reason = f"ERROR in socket: {ex}"
+
+
+		await self.__parent.message({
+			"msg": "disconnect", 
+			"socket": self,
+			"reason": self.__dc_reason})
+
+	async def __error(self, reason):
+		await self.close()
+		self.__dc_reason = reason
+
+	async def __connect(self, msg):
+		payload = oauth.parse_jwt(msg['jwt'])
+
+		if payload is None:			
+			await self.send({
+				"error": "Malformed JWT."
+			})
+			await self.__error("Malformed JWT.")
+		else:
+			if 'user_id' in payload:
+				self.__uid = payload["user_id"]
+				r = await oauth.OAUTH.get_username(self.__uid)
+				if r is None:
+					await self.send({
+						"error": ["Could not retrieve username from Twitch."],
+						"requestid": True})
+				else:
+					self.__uname = r["data"][0]["login"]
+					logging.log(f"Connected received for c-id {self.__parent.client_id} from {self.__uname}")
+					await self.__parent.connect(self)					
+			else:
+				await self.send(wsid, {"requestid": True})
 
 class Server:
 	def __init__(self, game, clientid, db):
 		self.__msgs = asyncio.Queue()
 		self.__clientid = clientid
 		self.__db = db
-		self.__sockets = {}
-		self.__connections = {}
-		self.__last = time.time()		
+		self.__last = time.time()
+		# Maps from UID to socket	
 		self.__idmaps = {}
+		# Maps from Uname to socket
 		self.__unames = {}
-		self.__wsid_ct = 0
 		self.__game = game
 		self.__closed = False
 		self.__i_time = time.time()
@@ -122,12 +198,19 @@ class Server:
 				pass
 
 	@property
+	def client_id(self):
+		return self.__clientid
+	
+
+	@property
 	def closed(self):
 		return self.__closed
 	
 	async def __len__(self):
 		return len(self.__sockets)
 
+	async def message(self, msg):
+		await self.__msgs.put(msg)
 
 	async def server_loop(self):
 		while not self.__closed:
@@ -153,10 +236,10 @@ class Server:
 						elif msg['msg'] == "respec":
 							await self.__respec(msg)
 			except KeyboardInterrupt as ex:
-				print(f"Exiting server loop for {self.__clientid}...  (Interrupted)")
-				self.close()
+				logging.log(f"Exiting server loop for {self.__clientid}...  (Interrupted)")
+				await self.close()
 							
-		print(f"Exiting main loop for {self.__clientid}")
+		logging.log(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
 		try:
@@ -164,13 +247,13 @@ class Server:
 				await self.__msgs.put(Heartbeat)
 				await asyncio.sleep(10)
 		except KeyboardInterrupt:
-			print("Keyboard interrupt on heartbeat.")
-		print(f"Exiting heartbeat loop for {self.__clientid}")
+			logging.log("Keyboard interrupt on heartbeat.")
+		logging.log(f"Exiting heartbeat loop for {self.__clientid}")
 
 	async def __heartbeat(self):
-		if len(self.__sockets) == 0:			
+		if len(self.__idmaps) == 0:			
 			if time.time() - self.__i_time > DEACTIVE_TIME:
-				print(f"Shutting down a server for {self.__clientid}")
+				logging.log(f"Shutting down a server for {self.__clientid}")
 				await self.close()
 		else:
 			self.__i_time = time.time()
@@ -190,10 +273,9 @@ class Server:
 
 
 	async def __disconnect(self, msg):
-		i = msg['wsid']			
-		s = self.__sockets.pop(i, None)
-		v = self.__unames.pop(self.__idmaps.get(i), None)
-		self.__idmaps.pop(i, None)
+		s = msg['socket']
+		self.__unames.pop(s.uname, None)
+		self.__idmaps.pop(s.uid, None)
 		r = msg.get('reason', None)
 
 		if s is not None:
@@ -202,7 +284,7 @@ class Server:
 					s.close()
 			except:
 				pass
-		print(f"Disconnecting socket for conn {i} and uname {v}. Reason: {r}")
+		logging.log(f"{s.uname} has disconnected. Reason: {r}")
 
 	async def __send_message(self, wsid, m):
 		s = self.__sockets[wsid]
@@ -212,13 +294,10 @@ class Server:
 			pass
 
 	async def __handle_message(self, m):
-		for n in m.recv:
-			if n in self.__unames:
-				t = m.json
-				try:
-					await self.__sockets[self.__unames[n]].send(json.dumps(t))
-				except:
-					pass
+		for (uname, s) in self.__unames.items():
+			if uname in m.recv:
+				for ws in s:
+					await ws.send(m.json)
 
 
 	async def __join(self, msg):
@@ -236,45 +315,27 @@ class Server:
 		for m in self.__game.respec(p, cl):
 			await self.__handle_message(m)
 
-	async def __connect(self, msg):
-		wsid = msg['wsid']
-		self.__sockets[wsid] = msg["socket"]
-		payload = parse_jwt(msg['jwt'])
+	async def connect(self, ws):
+		
 
-		if payload is None:
-			await self.__send_message(wsid, {"error": "Malformed JWT."})
+		if ws.uid in self.__idmaps:
+			self.__idmap[ws.uid].append(ws)
 		else:
-			if 'user_id' in payload:
-				r = await get_username(payload['user_id'])
-				if r is None:
-					await self.__send_message(wsid, {
-						"error": ["Could not retrieve username from Twitch."],
-						"requestid": True})
-				else:
-					try:
-						uname = r["data"][0]["login"]
-						self.__idmaps[wsid] = uname
-						self.__unames[uname] = wsid
-						print(f"Connected received for c-id {self.__clientid} from {uname}")
-						for m in self.__game.connect(uname):
-							await self.__handle_message(m)
-						await self.__handle_message(
-							messages.TimeInfo(
-								now=self.__last, 
-								length=STEP_FREQUENCY,
-								recv=(uname,)))
-					except KeyError:
-						print(f"Error no data given for login: {r}")
-						try:
-							await msg["socket"].close()
-						except:
-							pass
+			self.__idmaps[ws.uid] = [ws]
 
-						
-			else:
-				await self.__send_message(wsid, {"requestid": True})
+		if ws.uname in self.__unames:
+			self.__unames[ws.uname].append(ws)
+		else:
+			self.__unames[ws.uname] = [ws]
 
+		for m in self.__game.connect(ws.uname):
+			await self.__handle_message(m)
 
+		await self.__handle_message(
+			messages.TimeInfo(
+				now=self.__last, 
+				length=STEP_FREQUENCY,
+				recv=(ws.uname,)))
 
 	async def __level_up(self, msg):
 		p = self.__game.get_player(self.__idmaps[msg['wsid']])
@@ -293,42 +354,6 @@ class Server:
 		name = self.__idmaps[wsid]
 		for m in self.__game.use_item(name, msg['index'], msg['targets']):
 			await self.__handle_message(m)
-
-	async def __call__(self, ws):
-		wsid = self.__wsid_ct
-		self.__wsid_ct += 1
-		reading = True
-		while reading:
-			reason = None
-			try:
-				message = await ws.recv()
-				message = json.loads(message)
-				message['wsid'] = wsid
-				message['socket'] = ws
-				await self.__msgs.put(message)
-			except asyncio.CancelledError:
-				reason = "CancelledError: closing socket."
-				reading = False
-			except websockets.exceptions.ConnectionClosedError:
-				reason = f"ConnectionClosedError: {wsid}"
-				reading = False
-			except ConnectionResetError:
-				reason = f"ConnectionResetError"
-				reading = False
-			except websockets.exceptions.ConnectionClosedOK:
-				reading = False
-			except ValueError as ex:
-				reason = f"Client sent invalid path for connection: {ex}"
-				reading = False
-			except Exception as ex:
-				reason = f"Generic Connection Error: {ex}"
-				reading = False
-
-
-		await self.__msgs.put({
-			"msg": "disconnect", 
-			"wsid": wsid,
-			"reason": reason})
 
 class Router:
 	def __init__(self, test=False):
@@ -389,34 +414,30 @@ class Router:
 
 	async def __call__(self, ws, path):
 		match path.split("/"):
-			case ["", ""]: print(f"Root path received from {ws.remote_address}")
+			case ["", ""]: logging.log(f"Root path received from {ws.remote_address}")
 			case ["", i]: await self.__route_ws(ws, i)
-			case _: print(f"Received unknown route: {path}")
+			case _: logging.log(f"Received unknown route: {path}")
 
 	async def __route_ws(self, ws, i):
 		try:
 			i = int(i)
-
-			if i not in self.__games:
-				s = await self.__init_server(i)
-			else:
+			if i in self.__games:
 				s = self.__games[i]
-				if s.closed:
-					s = await self.__init_server(i)
-
-			
-			await s(ws)
+			else:
+				s = await self.__init_server(i)
+			ws = SocketWrapper(ws, s)
+			await ws.run()
 
 		except ValueError as ex:
-			print(f"Client sent invalid path for connection: {ex}")
+			logging.log(f"Client sent invalid path for connection: {ex}")
 			await ws.close()
 		except KeyboardInterrupt:
-			print(f"Keyboard interrupted socket call.")
+			logging.log(f"Keyboard interrupted socket call.")
 
 	async def main(self):
 		looping = True
 		while looping:
-			self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
+			#self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
 			transaction.commit()
 			await asyncio.sleep(ROUTER_FREQUENCY)
 
@@ -426,12 +447,12 @@ async def main(args):
 	try:
 		if len(args) == 0 or args[0] == 'local':
 			m = Router(test=True)
-			print("Setting up local insecure server.")
+			logging.log("Setting up local insecure server.")
 			async with websockets.serve(m, "localhost", 443):
 				await m.main()
 		elif args[0] == 'networked':
 			m = Router()
-			print("Setting up networked secure server.")
+			logging.log("Setting up networked secure server.")
 			root = os.environ['SS_SSL_PATH']
 			s = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_SERVER)
 			s.load_cert_chain(
@@ -440,19 +461,9 @@ async def main(args):
 			async with websockets.serve(m, "0.0.0.0", 443, ssl=s):
 				await m.main()
 	except asyncio.CancelledError as ex:
-		print("Server shutting down: CancelledError")
+		logging.log("Server shutting down: CancelledError")
 
-def update_ip():
 
-	username = input("Username: ")
-	password = input("Password: ")
-	ip = "82.180.173.104"
-	subdomain = "shrimpsouls.distractioncrab.net"
-	URL = f"https://{username}:{password}@domains.google.com/nic/update?hostname={subdomain}&myip={ip}"
-
-	r = requests.post(URL)
-
-	print(r)
 
 def run(args):
 	asyncio.run(main(args))
