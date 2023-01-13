@@ -425,7 +425,7 @@ class Router:
 	async def main(self):
 		looping = True
 		while looping:
-			#self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
+			self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
 			transaction.commit()
 			await asyncio.sleep(ROUTER_FREQUENCY)
 
