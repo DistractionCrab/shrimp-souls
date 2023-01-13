@@ -28,7 +28,7 @@ class Arena(cps.BaseCampaign):
 	def campinfo(self):
 		if self.__combat is None:
 			return {
-				"name": "arena"
+				"name": "arena",
 				"party": list(p.json for p in self.players.values()),
 			}
 		else:

@@ -44,12 +44,14 @@ class Combat(cps.BaseCampaign):
 	def _campinfo(self):
 		if self.finished:
 			return {
+				"name": self.name,
 				"party": [],
 				"npcs": [],
 				"clearNPCs": True,
 			}
 		else:
 			return {
+				"name": self.name,
 				"party": [v.json for v in self.players.values()],
 				"npcs": [v.json for v in self.npcs.values()],
 				"clearNPCs": self.finished,
