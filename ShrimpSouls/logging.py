@@ -10,4 +10,4 @@ def log(msg):
 	OUT_FILE.write(msg)
 	OUT_FILE.flush()
 
-atexit.register(lambda: OUT_FILE.close())
+atexit.register(OUT_FILE.close)

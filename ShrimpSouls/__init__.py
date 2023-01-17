@@ -584,7 +584,7 @@ class GameManager(persistent.Persistent):
 		if isinstance(p, str):
 			p = self.get_player(p)
 
-		if self.__root.resting(p) or True:			
+		if self.__root.resting(p):
 			p.respec()
 			yield messages.Response(
 				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],

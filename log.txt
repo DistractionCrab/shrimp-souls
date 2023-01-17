@@ -272,3 +272,59 @@
 12/01/2023 21:39:04: sabashjon has disconnected. Reason: Standard disconnection: OK.
 12/01/2023 21:39:07: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
 12/01/2023 21:39:07: Server shutting down: CancelledError
+16/01/2023 18:08:57: Setting up local insecure server.
+16/01/2023 18:09:31: Connected received for c-id 265737932 from sabashjon
+16/01/2023 18:09:31: Connected received for c-id 265737932 from martrioss
+16/01/2023 18:09:31: Connected received for c-id 265737932 from trollfun4ever
+16/01/2023 18:09:31: Connected received for c-id 265737932 from esterifikace
+16/01/2023 18:09:31: Connected received for c-id 265737932 from angaarb
+16/01/2023 18:09:31: Connected received for c-id 265737932 from fishsticks12
+16/01/2023 18:09:31: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:09:31: Connected received for c-id 265737932 from chaddytone
+16/01/2023 18:09:31: Connected received for c-id 265737932 from endermint
+16/01/2023 18:09:31: Connected received for c-id 265737932 from rmorrin
+16/01/2023 18:11:08: fishsticks12 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: rmorrin has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: sabashjon has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: angaarb has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: esterifikace has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: chaddytone has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: endermint has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: trollfun4ever has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:08: martrioss has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:11:09: Server shutting down: CancelledError
+16/01/2023 18:13:33: Setting up local insecure server.
+16/01/2023 18:14:05: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:14:05: Connected received for c-id 265737932 from angaarb
+16/01/2023 18:14:05: Connected received for c-id 265737932 from trollfun4ever
+16/01/2023 18:14:05: Connected received for c-id 265737932 from esterifikace
+16/01/2023 18:14:05: Connected received for c-id 265737932 from chaddytone
+16/01/2023 18:14:05: Connected received for c-id 265737932 from endermint
+16/01/2023 18:14:05: Connected received for c-id 265737932 from martrioss
+16/01/2023 18:14:06: Connected received for c-id 265737932 from sabashjon
+16/01/2023 18:14:06: Connected received for c-id 265737932 from rmorrin
+16/01/2023 18:14:06: Connected received for c-id 265737932 from fishsticks12
+16/01/2023 18:14:09: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:14:09: 1recycle_bin1 has disconnected. Reason: ERROR in socket: 'Server' object has no attribute '_Server__idmap'
+16/01/2023 18:14:15: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:17:03: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:17:05: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:20:53: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:20:54: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:21:27: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:21:28: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:23:32: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:23:33: Connected received for c-id 265737932 from 1recycle_bin1
+16/01/2023 18:24:44: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:47: fishsticks12 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: rmorrin has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: sabashjon has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: martrioss has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: endermint has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: esterifikace has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: chaddytone has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: trollfun4ever has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: angaarb has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:48: 1recycle_bin1 has disconnected. Reason: Standard disconnection: OK.
+16/01/2023 18:24:49: Server shutting down: CancelledError

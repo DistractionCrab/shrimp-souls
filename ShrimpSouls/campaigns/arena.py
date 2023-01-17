@@ -23,7 +23,7 @@ class Arena(cps.BaseCampaign):
 
 
 	def resting(self, name):
-		return self.__combat is None
+		return True
 
 	def campinfo(self):
 		if self.__combat is None:
@@ -32,7 +32,7 @@ class Arena(cps.BaseCampaign):
 				"party": list(p.json for p in self.players.values()),
 			}
 		else:
-			return self.__combat._campinfo()
+			return self.__combat.campinfo()
 
 
 	def step(self):
