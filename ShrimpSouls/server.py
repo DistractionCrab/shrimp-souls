@@ -185,15 +185,6 @@ class Server:
 		self.__closed = False
 		self.__i_time = time.time()
 
-	async def close(self):
-		self.__closed = True
-
-		for s in self.__sockets.values():
-			try:
-				s.close()
-			except:
-				pass
-
 	@property
 	def client_id(self):
 		return self.__clientid
@@ -204,7 +195,7 @@ class Server:
 		return self.__closed
 	
 	async def __len__(self):
-		return len(self.__sockets)
+		return len(self.__unames)
 
 	async def message(self, msg):
 		await self.__msgs.put(msg)
@@ -283,12 +274,6 @@ class Server:
 				pass
 		logging.log(f"{s.uname} has disconnected. Reason: {r}")
 
-	async def __send_message(self, wsid, m):
-		s = self.__sockets[wsid]
-		try:
-			await s.send(json.dumps(m))
-		except:
-			pass
 
 	async def __handle_message(self, m):
 		for (uname, s) in self.__unames.items():
