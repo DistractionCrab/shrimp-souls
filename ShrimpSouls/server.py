@@ -296,7 +296,7 @@ class Server:
 
 	async def connect(self, ws):
 		if ws.uid in self.__idmaps:
-			self.__idmap[ws.uid].append(ws)
+			self.__idmaps[ws.uid].append(ws)
 		else:
 			self.__idmaps[ws.uid] = [ws]
 
