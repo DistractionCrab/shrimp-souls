@@ -71,7 +71,7 @@ class Paladin(ClassSpec):
 @dataclass
 class Action1(actions.Action):
 	def apply(self):
-		ss.StatusEnum.sealing(self.attacker, amt=3)
+		ss.StatusEnum.sealing.stack(self.attacker, amt=3)
 		self.msg += f"{self.attacker.name} casts a prayer on their blade to seal their foes."
 
 
