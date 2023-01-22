@@ -225,7 +225,11 @@ class Server:
 							await self.__respec(msg)
 			except KeyboardInterrupt as ex:
 				logging.log(f"Exiting server loop for {self.__clientid}...  (Interrupted)")
-				await self.close()
+				for ws in self.__unames.values():
+					try:
+						ws.close()
+					except:
+						pass
 							
 		logging.log(f"Exiting main loop for {self.__clientid}")
 
@@ -335,15 +339,6 @@ class Router:
 		(self.__dbroot, self.__db) = self.__init_db()
 
 		atexit.register(self.__close)
-
-		if self.__test:
-			global STEP_FREQUENCY
-			global DEACTIVE_TIME
-			global ROUTER_FREQUENCY
-			STEP_FREQUENCY = 30
-			DEACTIVE_TIME = 30
-			ROUTER_FREQUENCY = 30
-
 
 	def __close(self):
 		transaction.commit()
