@@ -1,8 +1,15 @@
 Next Steps:
-- leave arena to respec
-- new scores added
 - Fix parry stat checks
 - Look into scaling durations (decrease duration by 10% instead of 1 to compensate)
+- Enemy Scaling/Environmental scaling (including party) (scale off party and player)
+- Combat
+- puzzles
+- class based requirements
+- special environments to find things (default known stuff on map)
+- - use items from these environments to use in other rooms
+- Madness mechanic
+- Rogue-like dungeons (make it into a looter dungeon)
+- Equipment uses stats for different gear in the future
 
 IMPLEMENTATIONS
 - subclassing

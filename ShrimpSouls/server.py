@@ -246,7 +246,7 @@ class Server:
 		if len(self.__idmaps) == 0:			
 			if time.time() - self.__i_time > DEACTIVE_TIME:
 				logging.log(f"Shutting down a server for {self.__clientid}")
-				await self.close()
+				self.__closed = True
 		else:
 			self.__i_time = time.time()
 			now = time.time()

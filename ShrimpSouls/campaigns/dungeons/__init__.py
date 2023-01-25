@@ -104,7 +104,11 @@ class Dungeon(cps.BaseCampaign):
 				yield from self.__register_vote(src, f, c)
 
 	def __register_vote(self, player, field, choice):
-		return yield
+		cur = self.__polled_actions.setdefault(field, {})
+		cur.setdefault(player, choice)
+		yield messages.Response(
+			msg=[f"You have voted to {choice} for {field}."]
+			recv=(player,))
 
 
 class EmptyRoom:
