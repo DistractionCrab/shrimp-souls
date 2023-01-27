@@ -1,6 +1,8 @@
 import enum
 import random
 import math
+import sys
+import time
 import itertools as itools
 import persistent
 import persistent.list as plist
@@ -30,21 +32,19 @@ class Dungeon(cps.BaseCampaign):
 	def __init__(self):
 		super().__init__("Dungeon")
 		self.__map = None
-		self.__polled_actions = {}
 
-
+	@property
+	def map(self):
+		return self.__map
 
 	def resting(self, name):
 		return self.__map.restarea
 
 	def campinfo(self):
-		if self.__combat is None:
-			return {
-				"name": "dungeon",
-				"party": list(p.json for p in self.players.values()),
-			}
+		if self.__map is None:
+			return {}
 		else:
-			return self.__combat.campinfo()
+			return self.__map.campinfo(self)
 
 
 	def step(self):
@@ -56,24 +56,8 @@ class Dungeon(cps.BaseCampaign):
 				self.__map = None
 				yield self.broadcast(msg=['The dungeon has been completed already.'])
 			else:
-				pass
-
-	def action(self, src, msg):
-		if msg["action"] == "leave":
-			yield messages.Response(
-				msg=("You will leave the arena when combat has finished.",),
-				recv=(src,))
-
-
-
-	def _add_player(self, p):
-		if self.__combat is not None:
-			self.__combat.add_player(p)
-		yield self.broadcast(msg=[f"{p.name} has joined the arena!!!"])
-
-
-	def _add_npc(self, p):
-		yield self.broadcast(msg=[f"{p.name} has joined the arena!!!"])
+				yield from self.__map.step(self)
+				yield self.broadcast(campinfo=self.campinfo())
 
 
 	def find_valid_target(self, att, ally, alive, **kwds):
@@ -99,50 +83,164 @@ class Dungeon(cps.BaseCampaign):
 			yield from self.__combat.use_item(p, index, targets)
 
 	def action(self, src, msg):
-		match msg:
-			case {"type": "vote", "field": f, "choice": c}: 
-				yield from self.__register_vote(src, f, c)
+		yield from self.__map.action(src, msg, self)
 
-	def __register_vote(self, player, field, choice):
-		cur = self.__polled_actions.setdefault(field, {})
-		cur.setdefault(player, choice)
-		yield messages.Response(
-			msg=[f"You have voted to {choice} for {field}."]
-			recv=(player,))
+	def _add_player(self, p):
+		yield self.broadcast(msg=[f"{p.name} has joined the dungeon!!!"])
 
 
 class EmptyRoom:
 	def __init__(self):
-		self.visited = False
-		self.completed = False
+		self.__visited = False
+		self.__polls = mapping.PersistentMapping()
 
-ROOM_SET = list({
-	EmptyRoom,
-})
+	@property
+	def completed(self):
+		return self.__visited
+
+	@property
+	def json(self):
+		return {
+			"rtype": "empty"
+		}
+
+	@property
+	def visited(self):
+		return self.__visited
+	
+	def visit(self):
+		self.__visited = True
+	
+	def enter(self, camp):
+		self.visit()
+		return
+		yield
+
+	def exit(self, camp):
+		return 
+		yield
+
+	def step(self, camp):
+		if len(self.__polls) > 0:
+			info = self.campinfo(camp)["move_poll"]
+			d = max(info, key=lambda x: info[x])
+			yield from camp.map.move(Directions[d], camp)
+			self.__polls.clear()
+		else:
+			yield camp.broadcast(
+				msg=["No votes have been cast, no action will be taken."])
+
+	def campinfo(self, camp):
+		sum_n = 0
+		sum_s = 0
+		sum_e = 0
+		sum_w = 0
+
+		for v in self.__polls.values():
+			if v == Directions.North:
+				sum_n += 1
+			elif v == Directions.South:
+				sum_s += 1
+			elif v == Directions.East:
+				sum_s += 1
+			elif v == Directions.West:
+				sum_s += 1
+
+		return {
+			"move_poll": {
+				Directions.North.name: sum_n,
+				Directions.South.name: sum_s,
+				Directions.East.name: sum_e,
+				Directions.West.name: sum_w,
+			}
+		}
+
+
+	@property
+	def room_icon(self):
+		return '0'
+	
+
+
+	def action(self, src, msg, camp):
+		if "vote" in msg:
+			try:
+				d = Directions[msg['vote']]
+				self.__polls[src] = d
+				yield messages.Response(
+					msg=[f"You have voted to travel {d.name}"],
+					recv=(src.name,))
+			except:
+				yield messages.Response(
+					msg=[f"Invalid option to vote for: {msg['vote']}"],
+					recv=(src,))
+
 
 def get_random_room():
-	return random.choice(ROOM_SET)
+	return random.choice(ROOM_SET)()
+
+class Directions(enum.Enum):
+	North = (0, -1)
+	South = (0, 1)
+	East = (1, 0)
+	West = (-1, 0)
+
+def compute_dir(start, end):
+	x1, y1 = start
+	x2, y2 = end
+
+	if x2 - x1 == 0 and y2 - y1 == 1:
+		return Directions.North
+	elif x2 - x1 == 0 and y2 - y1 == -1:
+		return Directions.South
+	elif x2 - x1 == 1 and y2 - y1 == 0:
+		return Directions.East
+	elif x2 - x1 == 0 and y2 - y1 == 1:
+		return Directions.West
+
+class Edge(persistent.Persistent):
+	def __init__(self, dest, locked=False):
+		self.__dest = dest
+		self.locked = locked
+
+	@property
+	def dest(self):
+		return self.__dest
 
 class DungeonMap(persistent.Persistent):
-	class Edge(persistent.Persistent):
-		def __init__(self, dest, locked=False):
-			self.__dest = dest
-			self.locked = locked
-
-		@property
-		def dest(self):
-			return self.__dest
-		
-
 	def __init__(self, pcount):
 		self.__pcount = pcount
 		self.__map = {}
 		self.__rooms = {}
 		self.__loc = self.__generate()
+		self.__uid = int(time.time())
 
 	@property
+	def complete(self):
+		return all(r.completed for r in self.__rooms.values())
+	
+
+	@property
+	def moveable(self):
+		edges = self.__map[self.__loc].keys()
+		return [
+			compute_dir(self.__loc, e) for e in edges
+		]
+	
+
+	@property
+	def complete(self):
+		return all(r.completed for r in self.__rooms.values())
+	
+	@property
 	def location(self):
-		return self.__loc
+		return self.__rooms[self.__loc]
+
+	@property
+	def rooms(self):
+		return tuple(self.__rooms.keys())
+
+	
 	
 
 	def __generate(self):
@@ -153,7 +251,7 @@ class DungeonMap(persistent.Persistent):
 		max_rooms = math.ceil(prop*width**2)
 		self.__width = width
 
-		self.__rooms[start] = get_random_room()
+		self.__rooms[start] = EmptyRoom()
 
 		available = deque()
 
@@ -165,15 +263,14 @@ class DungeonMap(persistent.Persistent):
 			if c is not None:
 				r = get_random_room()
 				self.__rooms[c] = r
-				self.__map.setdefault(loc, []).append(DungeonMap.Edge(c))
-				self.__map.setdefault(c, []).append(DungeonMap.Edge(loc))
+				self.__map.setdefault(loc, []).append(Edge(c))
+				self.__map.setdefault(c, []).append(Edge(loc))
 
 
 			loc = random.choices(
 				self.rooms, 
 				weights=[1/len(self.__map[r])**3 for r in self.__rooms.keys()])[0]
 
-		
 		return start
 
 	def __get_random_direction(self, loc):
@@ -202,8 +299,6 @@ class DungeonMap(persistent.Persistent):
 		return False
 
 	def ascii_map(self):
-		print(f'rooms = {len(self.__rooms)}')
-		print(f"Rooms made: {list(self.__rooms.keys())}")
 		def resolve(row, col):
 			r = row // 2
 			c = col // 2
@@ -216,7 +311,7 @@ class DungeonMap(persistent.Persistent):
 				if col % 2 == 0:
 					return "|"
 				else:					
-					return "0" if (r, c) in self.__rooms else " "
+					return self.__rooms[(r, c)].room_icon if (r, c) in self.__rooms else " "
 
 		icons = [
 			[resolve(r, c) for r in range(2*self.__width+1)]
@@ -250,14 +345,76 @@ class DungeonMap(persistent.Persistent):
 				print(icons[c][r], end="")
 			print()
 
+	def step(self, camp):
+		yield from self.location.step(camp)
 
-	@property
-	def rooms(self):
-		return tuple(self.__rooms.keys())
+	def __map_info(self):
+		indices = [l for l in self.__rooms.keys()]
+		return {
+			"room_index": indices,
+			"rooms": {
+				i: self.__rooms[r].json for (i, r) in enumerate(self.__rooms)
+			},
+			"paths": {
+				i: [e.dest for e in self.__map[l]]
+				for (i, l) in enumerate(self.__rooms)
+			},
+			'location': self.__loc,
+			'uid': self.__uid,
+			'width': self.__width,
+		}
 
+
+	def campinfo(self, camp):
+		r = self.__rooms[self.__loc]
+		i = {
+			"inventory": [],
+			"map": self.__map_info(),
+			"party": [p.json for p in camp.players.values()]
+		}
+		return i | r.campinfo(camp)
+
+	def action(self, src, msg, camp):
+		yield from self.location.action(src, msg, camp)
+
+	def adjacent(self, p1, p2):
+		for a in self.__map[p1]:
+			if p2 == a.dest:
+				return True
+
+		return False
+
+	def move(self, dir, camp):
+		# Get the new location.
+		new_loc = tuple(sum(x) for x in zip(self.__loc, dir.value))
+		if new_loc in self.__rooms and self.adjacent(self.__loc, new_loc):
+			print(f"moving to {new_loc} from {self.__loc}")
+			old_room = self.location
+			yield from old_room.exit(camp)
+			self.__loc = new_loc
+			yield from self.location.enter(camp)
+
+			#yield camp.broadcast(msg=[f"You are now in room {self.__loc}"])
+
+
+
+	
+
+# Simple local class used to control how dungeons are generated. This will change
+# as search through good parameters.
 class GenParams:
 	# Probability of placing a key.
 	KEY_PLACE = 0.05
 
 class KeyItems(enum.Enum):
 	Key = enum.auto()
+
+import ShrimpSouls.campaigns.dungeons.combat as cmb
+ROOM_SET = list({
+	EmptyRoom,
+	cmb.CombatRoom
+})
+
+class RoomAction:
+	def step(self, camp):
+		pass

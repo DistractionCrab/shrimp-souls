@@ -15,6 +15,7 @@ import atexit
 import requests
 import persistent
 import persistent.mapping
+import traceback
 import ShrimpSouls as ss
 import ShrimpSouls.campaigns as cps
 import ShrimpSouls.messages as messages
@@ -95,6 +96,7 @@ class SocketWrapper:
 			self.__live = False
 			self.__dc_reason = "Standard disconnection: OK."
 		except Exception as ex:
+			raise ex
 			self.__dc_reason = f"Generic Connection Error: {ex}"
 			self.__live = False
 
@@ -117,6 +119,7 @@ class SocketWrapper:
 			self.__live = False
 			self.__dc_reason = "Standard disconnection: OK."
 		except Exception as ex:
+			raise ex
 			self.__dc_reason = f"Generic Connection Error: {ex}"
 			self.__live = False
 
@@ -136,6 +139,7 @@ class SocketWrapper:
 					await self.close()
 			except Exception as ex:
 				await self.close()
+				raise ex
 				self.__dc_reason = f"ERROR in socket: {ex}"
 
 
@@ -223,6 +227,8 @@ class Server:
 							await self.__join(msg)
 						elif msg['msg'] == "respec":
 							await self.__respec(msg)
+						elif msg['msg'] == "action":
+							await self.__act(msg)
 			except KeyboardInterrupt as ex:
 				logging.log(f"Exiting server loop for {self.__clientid}...  (Interrupted)")
 				for ws in self.__unames.values():
@@ -290,6 +296,9 @@ class Server:
 		for m in self.__game.join(msg["socket"].uname):
 			await self.__handle_message(m)
 
+	async def __act(self, msg):
+		for m in self.__game.action(msg['socket'].uname, msg['action']):
+			await self.__handle_message(m)
 
 	async def __respec(self, msg):
 		cl = msg['data']

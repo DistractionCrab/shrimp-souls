@@ -237,7 +237,6 @@ export class EntityManager {
 	
 
 	update(players) {
-		console.log(players);
 		for (const p of players) {
 			if (!(p.name in this.players)) {
 				this.players[p.name] = this.insert_row(p, true);

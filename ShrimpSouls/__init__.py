@@ -510,8 +510,8 @@ class Player(Entity):
 
 class GameManager(persistent.Persistent):
 	def __init__(self):
-		import ShrimpSouls.campaigns.arena as arena
-		self.__root = arena.Arena()
+		import ShrimpSouls.campaigns.dungeons as camp
+		self.__root = camp.Dungeon()
 		self.__players = persistent.mapping.PersistentMapping()
 
 	def step(self):

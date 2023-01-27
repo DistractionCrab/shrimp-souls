@@ -48,6 +48,17 @@ body {
 	font-size: var(--default-font-size);
 }
 
+.act-button {
+	width: 100%;
+	font-size: var(--default-font-size);
+}
+
+.draggable {
+	position: absolute;
+	z-index: -1;
+	text-align: center;
+}
+
 .tabcontent {
 	display: none;
 	padding: 6px 12px;
@@ -56,7 +67,7 @@ body {
 	height: 93vh;
 	padding: 0px;
 	margin: 0px;
-	overflow-y: auto;
+	overflow-y: hidden;
 	scroll-y: auto;
 }
 
@@ -671,4 +682,68 @@ body {
 	background-size:  cover;
 	background-color: rgba(0, 0, 0, 0.0);
 	border:  none;
+}
+
+
+.map-grid-cell {
+	width: 8vw;
+	height: 8vw;
+	background-color: rgba(100, 0, 0, 0);
+}
+
+.empty-room-cell {
+	border: 2vw solid transparent;
+	background-color: #545454;
+	border-image: url("../images/map/border.jpg") 30 round;
+}
+
+.combat-room-cell {
+	border: 2vw solid transparent;
+	border-image: url("../images/map/border.jpg") 30 round;
+	background-image: url("../images/map/combat-room.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+/* Just give the drag cell large enough size so the inside doesn't squish. */
+.map-drag-cell {
+	width: 2000px;
+	height: 2000px;
+}
+
+.horizontal_connector {
+	border: 2vw solid transparent;
+	background-image: url("../images/map/horizontal-path.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.vertical_connector {
+	border: 2vw solid transparent;
+	background-image: url("../images/map/vertical-path.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.current-location {
+	animation: pulse 1300ms infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 1vw rgba(255, 255, 255, 0.5);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 2vw rgba(255, 255, 255, 0);
+	}
 }

@@ -28,4 +28,10 @@ export const MESSAGES = {
 			data: cl,
 		}
 	},
+	action: (data) => {
+		return {
+			msg: "action",
+			action: data,
+		}
+	},
 };

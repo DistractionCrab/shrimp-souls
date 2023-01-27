@@ -264,7 +264,7 @@ class DamageTarget(Action):
 			self.on_hit()
 
 			if self.attacker.status.sealing > 0:
-				self.defender.stack_stun(1)
+				ss.StatusEnum.stun.stack(self.defender)
 			if self.defender.status.briar:
 				self.__handle_briars()			
 		else:
