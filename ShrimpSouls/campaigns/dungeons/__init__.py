@@ -269,7 +269,7 @@ class DungeonMap(persistent.Persistent):
 	def __generate(self):
 		# Proportion of tiles to use
 		prop = random.uniform(0.2, 0.4)
-		width = math.ceil(max(MIN_MAP_WIDTH, math.log(self.__pcount, 2)))
+		width = math.ceil(max(MIN_MAP_WIDTH, math.log(self.__pcount+1, 2)))
 		start = (random.randint(0, width-1), random.randint(0, width-1))
 		max_rooms = math.ceil(prop*width**2)
 		self.__width = width
