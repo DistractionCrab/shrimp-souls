@@ -524,7 +524,7 @@ class GameManager(persistent.Persistent):
 	
 	def __upgrade(self):
 		import ShrimpSouls.campaigns.dungeons as camp
-		if type(self.__roof) is not camp.Dungeon:
+		if type(self.__root) is not camp.Dungeon:
 			self.__root = camp.Dungeon()
 			yield messages.Message(
 				msg=["Resetting campaign to dungeon, arena is no longer valid."],
