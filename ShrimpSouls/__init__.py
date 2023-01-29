@@ -522,7 +522,7 @@ class GameManager(persistent.Persistent):
 	def players(self):
 		return self.__root.players
 	
-	def upgrade(self):
+	def __upgrade(self):
 		import ShrimpSouls.campaigns.dungeons as camp
 		if type(self.__roof) is not camp.Dungeon:
 			self.__root = camp.Dungeon()

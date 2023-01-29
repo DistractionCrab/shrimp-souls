@@ -154,3 +154,4 @@ cython_debug/
 
 ./log.txt
 log.txt
+Extensions/twitch/public/public.zip
