@@ -172,7 +172,7 @@ export class CombatLog {
 
 
 		const b = document.createElement("button");
-		const t1 = document.createTextNode("Click ");
+		const t1 = document.createTextNode("Choose a class then click ");
 		const t2 = document.createTextNode(" to join the campaign and other chat members!");
 		b.classList.add("joinbutton");
 		b.addEventListener("click", function() {

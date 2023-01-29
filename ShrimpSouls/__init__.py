@@ -515,12 +515,20 @@ class GameManager(persistent.Persistent):
 		self.__players = persistent.mapping.PersistentMapping()
 
 	def step(self):
+		yield from self.__upgrade()
 		yield from self.__root.step()
 
 	@property
 	def players(self):
 		return self.__root.players
 	
+	def upgrade(self):
+		import ShrimpSouls.campaigns.dungeons as camp
+		if type(self.__roof) is not camp.Dungeon:
+			self.__root = camp.Dungeon()
+			yield messages.Message(
+				msg=["Resetting campaign to dungeon, arena is no longer valid."],
+				recv=self.__players.key())
 
 	def add_player(self, name):
 		if name not in self.__players:
@@ -555,15 +563,20 @@ class GameManager(persistent.Persistent):
 			yield messages.Connected(recv=(p.name,))
 			
 
-	def join(self, p):	
-		p = self.get_player(p)
-
-		if p in self.__root:
-			yield messages.Message(
-				msg=["You have already joined the campaign."],
-				recv=(p.name,))
+	def join(self, p):
+		if type(p.myclass) == classes.ClassSpec:
+			yield messages.Response(
+				msg=["Please choose a class before joining the campaign."],
+				recv=(p,))
 		else:
-			yield from self.__root.add_player(p)
+			p = self.get_player(p)
+
+			if p in self.__root:
+				yield messages.Message(
+					msg=["You have already joined the campaign."],
+					recv=(p.name,))
+			else:
+				yield from self.__root.add_player(p)
 
 
 	def action(self, src, msg):

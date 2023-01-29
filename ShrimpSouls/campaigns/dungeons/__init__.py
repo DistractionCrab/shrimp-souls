@@ -38,7 +38,7 @@ class Dungeon(cps.BaseCampaign):
 		return self.__map
 
 	def resting(self, name):
-		return self.__map.restarea
+		return self.__map is None	
 
 	def campinfo(self):
 		if self.__map is None:
@@ -46,18 +46,41 @@ class Dungeon(cps.BaseCampaign):
 		else:
 			return self.__map.campinfo(self)
 
+	def resting(self, name):
+		return self.__map is None
 
 	def step(self):
 		if self.__map is None:
 			self.__map = DungeonMap(len(self.players))
-			yield self.broadcast(msg=["The dungeon is being prepared, please wait with the mimics."])
+			yield self.broadcast(
+				msg=["The dungeon is being prepared, please wait with the mimics."],
+				campinfo=self.campinfo())
 		else:
 			if self.__map.complete:
 				self.__map = None
-				yield self.broadcast(msg=['The dungeon has been completed already.'])
+				yield self.broadcast(
+					msg=['The dungeon has been completed already.'],
+					campinfo=self.campinfo())
 			else:
 				yield from self.__map.step(self)
-				yield self.broadcast(campinfo=self.campinfo())
+				if all(p.hp <= 0 for p in self.players.values()):
+					yield self.broadcast(
+						msg=[{"type": "stepend", "msg": "All players are dead, exiting the dungeon."}],
+						campinfo=self.campinfo())
+					self.__map = None
+					for p in self.players.values():
+						p.revive()
+						p.reset_status()
+				elif self.__map.complete:
+					yield self.broadcast(
+						msg=[{"type": "stepend", "msg": "The dungeon has been completed!."}],
+						campinfo=self.campinfo())
+					self.__map = None
+					for p in self.players.values():
+						p.revive()
+						p.reset_status()
+				else:
+					yield self.broadcast(campinfo=self.campinfo())
 
 
 	def find_valid_target(self, att, ally, alive, **kwds):
@@ -128,7 +151,7 @@ class EmptyRoom:
 			self.__polls.clear()
 		else:
 			yield camp.broadcast(
-				msg=["No votes have been cast, no action will be taken."])
+				msg=[{"type": "stepend", "msg": "No votes have been cast, no action will be taken."}])
 
 	def campinfo(self, camp):
 		sum_n = 0
@@ -142,9 +165,9 @@ class EmptyRoom:
 			elif v == Directions.South:
 				sum_s += 1
 			elif v == Directions.East:
-				sum_s += 1
+				sum_e += 1
 			elif v == Directions.West:
-				sum_s += 1
+				sum_w += 1
 
 		return {
 			"move_poll": {
@@ -387,14 +410,14 @@ class DungeonMap(persistent.Persistent):
 	def move(self, dir, camp):
 		# Get the new location.
 		new_loc = tuple(sum(x) for x in zip(self.__loc, dir.value))
+
 		if new_loc in self.__rooms and self.adjacent(self.__loc, new_loc):
-			print(f"moving to {new_loc} from {self.__loc}")
 			old_room = self.location
 			yield from old_room.exit(camp)
 			self.__loc = new_loc
 			yield from self.location.enter(camp)
 
-			#yield camp.broadcast(msg=[f"You are now in room {self.__loc}"])
+			yield camp.broadcast(msg=[{"type": "stepend", "msg":f"You are now in room {self.__loc}"}])
 
 
 

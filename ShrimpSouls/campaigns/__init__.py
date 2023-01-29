@@ -25,6 +25,10 @@ class BaseCampaign(persistent.Persistent):
 	def name(self):
 		return self.__name	
 
+	def clear(self):
+		self.__players.clear()
+		self.__npcs.clear()
+
 	def __contains__(self, p):
 		if isinstance(p, str):
 			return p in self.__players
