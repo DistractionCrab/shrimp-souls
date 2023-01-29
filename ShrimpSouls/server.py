@@ -159,7 +159,7 @@ class SocketWrapper:
 			await self.send({
 				"error": "Malformed JWT."
 			})
-			await self.__error("Malformed JWT.")
+			await self.__error(f"Malformed JWT: {msg['jwt']}")
 		else:
 			if 'user_id' in payload:
 				self.__uid = payload["user_id"]

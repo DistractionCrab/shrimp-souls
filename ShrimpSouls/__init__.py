@@ -528,7 +528,7 @@ class GameManager(persistent.Persistent):
 			self.__root = camp.Dungeon()
 			yield messages.Message(
 				msg=["Resetting campaign to dungeon, arena is no longer valid."],
-				recv=self.__players.key())
+				recv=self.__players.keys())
 
 	def add_player(self, name):
 		if name not in self.__players:
