@@ -564,13 +564,12 @@ class GameManager(persistent.Persistent):
 			
 
 	def join(self, p):
+		p = self.get_player(p)
 		if type(p.myclass) == classes.ClassSpec:
 			yield messages.Response(
 				msg=["Please choose a class before joining the campaign."],
 				recv=(p,))
 		else:
-			p = self.get_player(p)
-
 			if p in self.__root:
 				yield messages.Message(
 					msg=["You have already joined the campaign."],
