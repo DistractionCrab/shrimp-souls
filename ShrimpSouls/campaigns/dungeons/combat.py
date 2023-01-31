@@ -54,6 +54,12 @@ class CombatRoom(dng.EmptyRoom):
 		return
 		yield
 
+	def use_ability(self, p, abi, targets, camp):
+		yield from self.__combat.use_ability(p, abi, targets)
+
+	def use_item(self, p, index, targets, camp):
+		yield from self.__combat.use_item(p, index, targets)
+
 
 class DungeonCombat(combat.Combat):
 	def __init__(self):

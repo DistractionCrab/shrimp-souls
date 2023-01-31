@@ -90,20 +90,10 @@ class Dungeon(cps.BaseCampaign):
 			return self.__combat.find_valid_target(att, ally, alive, **kwds)
 
 	def use_ability(self, p, abi, targets):
-		if self.__combat is None:
-			yield messages.Message(
-				msg=(f"Cannot use abilities in while waiting on the arena...",),
-				recv=(p.name,))
-		else:
-			yield from self.__combat.use_ability(p, abi, targets)
+		self.__map.use_ability(p, abi, targets, self)
 
 	def use_item(self, p, index, targets):
-		if self.__combat is None:
-			yield messages.Message(
-				msg=(f"Cannot use items in while waiting on the arena...",),
-				recv=(p.name,))
-		else:
-			yield from self.__combat.use_item(p, index, targets)
+		self.__map.use_item(p, index, targets, self)
 
 	def action(self, src, msg):
 		yield from self.__map.action(src, msg, self)
@@ -197,6 +187,14 @@ class EmptyRoom:
 				yield messages.Response(
 					msg=[f"Invalid option to vote for: {msg['vote']}"],
 					recv=(src,))
+
+	def use_ability(self, p, abi, targets, camp):
+		return 
+		yield
+
+	def use_item(self, p, index, targets, camp):
+		return
+		yield
 
 
 def get_random_room():
@@ -419,6 +417,11 @@ class DungeonMap(persistent.Persistent):
 
 			yield camp.broadcast(msg=[{"type": "stepend", "msg":f"You are now in room {self.__loc}"}])
 
+	def use_ability(self, p, abi, targets, camp):
+		yield from self.location.use_ability(p, abi, targets, camp)
+
+	def use_item(self, p, index, targets, camp):
+		yield from self.location.use_item(p, index, targets, camp)
 
 
 	
