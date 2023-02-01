@@ -189,12 +189,32 @@ class EmptyRoom:
 					recv=(src,))
 
 	def use_ability(self, p, abi, targets, camp):
-		return 
-		yield
+		p = camp[p]
+		if p.acted:
+			yield messages.Response(
+				msg=["You have already acted this turn."],
+				src=(p.name,))
+			
+		else:
+			msgs = []
+			for a in p.use_ability(abi, targets, camp):
+				msgs.append(a.apply())
+			yield camp.broadcast(msg=msgs)
+			p.did_act()
 
 	def use_item(self, p, index, targets, camp):
-		return
-		yield
+		if index < len(p.inventory):
+			i = p.inventory[index]
+			msgs = []
+			for a in i.act(p, targets, camp):
+				msgs.append(a.apply())
+
+			yield camp.broadcast(msg=msgs)
+
+		else:
+			yield messages.Response(
+				msg=[f"You do not have an item in the {index} slot."],
+				recv=(p.name,))
 
 
 def get_random_room():
