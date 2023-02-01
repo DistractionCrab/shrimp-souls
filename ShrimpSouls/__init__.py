@@ -524,6 +524,7 @@ class GameManager(persistent.Persistent):
 	
 	def __upgrade(self):
 		import ShrimpSouls.campaigns.dungeons as camp
+		self.__root = camp.Dungeon()
 		if type(self.__root) is not camp.Dungeon:
 			self.__root = camp.Dungeon()
 			yield messages.Message(
