@@ -90,7 +90,7 @@ class Dungeon(cps.BaseCampaign):
 			return self.__combat.find_valid_target(att, ally, alive, **kwds)
 
 	def use_ability(self, p, abi, targets):
-		self.__map.use_ability(p, abi, targets, self)
+		yield from self.__map.use_ability(p, abi, targets, self)
 
 	def use_item(self, p, index, targets):
 		self.__map.use_item(p, index, targets, self)
