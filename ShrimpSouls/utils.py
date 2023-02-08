@@ -74,6 +74,7 @@ class DualScore:
 	m2: float = 1.0
 	b1: float = 0
 	b2: float = 0
+	mult: float = 1
 
 @dataclass(frozen=True)
 class ScoreHit(DualScore):

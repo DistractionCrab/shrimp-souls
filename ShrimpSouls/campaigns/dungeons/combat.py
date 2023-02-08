@@ -72,7 +72,3 @@ class DungeonCombat(combat.Combat):
 
 		for n in added:
 			self.add_npc(n)
-						
-		yield messages.Message(
-			msg=[f"{p.name} has joined the battle, and so do {', '.join(n.name for n in added)}"],
-			recv=tuple(p for p in self.players))

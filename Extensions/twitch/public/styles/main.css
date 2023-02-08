@@ -59,6 +59,10 @@ body {
 	text-align: center;
 }
 
+.scrollable {
+	overflow-y: auto;
+}
+
 .tabcontent {
 	display: none;
 	padding: 6px 12px;
@@ -68,7 +72,7 @@ body {
 	padding: 0px;
 	margin: 0px;
 	overflow-y: hidden;
-	scroll-y: auto;
+	overflow-x: hidden;
 }
 
 #csheettabsection {

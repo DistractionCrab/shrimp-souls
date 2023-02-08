@@ -411,6 +411,10 @@ class Router:
 		except KeyboardInterrupt:
 			logging.log(f"Keyboard interrupted socket call.")
 
+	async def close_server(self, i):
+		if i in self.__games:
+			del self.__games[i]
+
 	async def main(self):
 		looping = True
 		while looping:

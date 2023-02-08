@@ -83,8 +83,7 @@ class Combat(cps.BaseCampaign):
 				if p.name in self.__queued:					
 					actions = self.__queued[p.name].act(p, self)
 				else:
-					if p.status.invis == 0:
-						actions = p.random_action(self)
+					actions = p.random_action(self)
 
 				for a in actions:
 					a.apply()

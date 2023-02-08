@@ -1,4 +1,4 @@
-const TESTING = false;
+const TESTING = true;
 
 import { EVENTS } from "./events.js";
 import { set_text, TabManager } from "./utils.js";

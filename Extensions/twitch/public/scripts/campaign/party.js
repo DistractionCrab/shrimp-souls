@@ -10,6 +10,7 @@ function init_html(btext) {
 	const table = document.createElement("table");
 	party.appendChild(table);
 	party.classList.add("tabcontent");
+	party.classList.add("scrollable");
 	table.classList.add("spacedtable");
 
 	return [button, party, table];

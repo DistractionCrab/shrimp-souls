@@ -568,7 +568,7 @@ class GameManager(persistent.Persistent):
 		if type(p.myclass) == classes.ClassSpec:
 			yield messages.Response(
 				msg=["Please choose a class before joining the campaign."],
-				recv=(p,))
+				recv=(p.name,))
 		else:
 			if p in self.__root:
 				yield messages.Message(
@@ -596,8 +596,10 @@ class GameManager(persistent.Persistent):
 		if isinstance(p, str):
 			p = self.get_player(p)
 
-		if self.__root.resting(p):
+		if p not in self.__root or self.__root.resting(p):
 			p.respec()
+			p.revive()
+			p.reset_status()
 			yield messages.Response(
 				msg=[f"{p.name} has respecced! Their level is reset to 1 and their shrimp is refunded."],
 				recv=[p.name])

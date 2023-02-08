@@ -38,7 +38,7 @@ class Dungeon(cps.BaseCampaign):
 		return self.__map
 
 	def resting(self, name):
-		return self.__map is None	
+		return self.__map is None or (name not in self)
 
 	def campinfo(self):
 		if self.__map is None:
@@ -58,6 +58,7 @@ class Dungeon(cps.BaseCampaign):
 		else:
 			if self.__map.complete:
 				self.__map = None
+				self.__clear()
 				yield self.broadcast(
 					msg=['The dungeon has been completed already.'],
 					campinfo=self.campinfo())
@@ -71,6 +72,7 @@ class Dungeon(cps.BaseCampaign):
 					for p in self.players.values():
 						p.revive()
 						p.reset_status()
+					self.__clear()
 				elif self.__map.complete:
 					yield self.broadcast(
 						msg=[{"type": "stepend", "msg": "The dungeon has been completed!."}],
@@ -79,6 +81,7 @@ class Dungeon(cps.BaseCampaign):
 					for p in self.players.values():
 						p.revive()
 						p.reset_status()
+					self.__clear()
 				else:
 					yield self.broadcast(campinfo=self.campinfo())
 
@@ -99,7 +102,9 @@ class Dungeon(cps.BaseCampaign):
 		yield from self.__map.action(src, msg, self)
 
 	def _add_player(self, p):
-		yield self.broadcast(msg=[f"{p.name} has joined the dungeon!!!"])
+		yield self.broadcast(
+			msg=[f"{p.name} has joined the dungeon!!!"],
+			campinfo=self.campinfo())
 
 
 class EmptyRoom:
