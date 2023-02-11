@@ -17,9 +17,12 @@ class CombatRoom(dng.EmptyRoom):
 	
 	@property
 	def json(self):
-		return {
-			"rtype": "combat"
-		}
+		if self.completed:
+			return super().json
+		else:
+			return {
+				"rtype": "combat"
+			}
 
 	@property
 	def room_icon(self):
@@ -60,6 +63,9 @@ class CombatRoom(dng.EmptyRoom):
 	def use_item(self, p, index, targets, camp):
 		yield from self.__combat.use_item(p, index, targets)
 
+	def add_player(self, p):
+		yield from self.__combat.add_player(p)
+
 
 class DungeonCombat(combat.Combat):
 	def __init__(self):
@@ -72,3 +78,7 @@ class DungeonCombat(combat.Combat):
 
 		for n in added:
 			self.add_npc(n)
+
+		yield messages.Message(
+			msg=[f"{p.name} has joined the battle, and so do {', '.join(n.name for n in added)}"],
+			recv=tuple(p for p in self.players))

@@ -87,10 +87,10 @@ class Dungeon(cps.BaseCampaign):
 
 
 	def find_valid_target(self, att, ally, alive, **kwds):
-		if self.__combat is None:
+		if self.__map is None:
 			return tuple()
 		else:
-			return self.__combat.find_valid_target(att, ally, alive, **kwds)
+			return self.__map.find_valid_target(att, ally, alive, **kwds)
 
 	def use_ability(self, p, abi, targets):
 		yield from self.__map.use_ability(p, abi, targets, self)
@@ -105,6 +105,7 @@ class Dungeon(cps.BaseCampaign):
 		yield self.broadcast(
 			msg=[f"{p.name} has joined the dungeon!!!"],
 			campinfo=self.campinfo())
+		yield from self.__map.add_player(p)
 
 
 class EmptyRoom:
@@ -147,6 +148,10 @@ class EmptyRoom:
 		else:
 			yield camp.broadcast(
 				msg=[{"type": "stepend", "msg": "No votes have been cast, no action will be taken."}])
+
+	def add_player(self, p):
+		yield
+		return
 
 	def campinfo(self, camp):
 		sum_n = 0
@@ -447,6 +452,9 @@ class DungeonMap(persistent.Persistent):
 
 	def use_item(self, p, index, targets, camp):
 		yield from self.location.use_item(p, index, targets, camp)
+
+	def add_player(self, p):
+		yield from self.location.add_player(p)
 
 
 	

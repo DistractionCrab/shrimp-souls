@@ -63,6 +63,30 @@ body {
 	overflow-y: auto;
 }
 
+#entities-party {
+	height: 85vh;
+	display: none;
+	padding: 6px 12px;
+	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+	width: 100vw;
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#entities-npcs {
+	height: 85vh;
+	display: none;
+	padding: 6px 12px;
+	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+	width: 100vw;
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 .tabcontent {
 	display: none;
 	padding: 6px 12px;

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Viewer Page</title>
+	<link rel="stylesheet" type="text/css" href="../shared/styles/component.css">
+	<link rel="stylesheet" type="text/css" href="../shared/styles/main.css">
+	
+</head>
+<body>
+	<div id="mainsection">
+		<div id="tabsection" class="tabheader">
+			<button class="tablinks" id="charsheetheader" title="Character Sheet">Stats</button>
+			<button class="tablinks" id="printoutheader">Log</button>
+			<button class="tablinks" id="abilityheader">Skills</button>
+			<button class="tablinks" id="worldheader">World</button>
+		</div>
+		<div id="charsheet" class="tabcontent">
+			<div id="csheettabsection">
+				<button class="icontab" id="statusheader" title="Status"></button>
+				<button class="icontab" id="attriheader" title="Attributes"></button>
+				<button class="icontab" id=scoreheader title="Scores"></button>
+				<button class="icontab" id=inventheader title="Inventory"></button>
+				<button class="icontab" id="respecheader" title="Respec"></button>
+				
+			</div>
+			<div id="inventorypage" class="csheetcontent">
+				<table id="inventory" class="spacedtable">
+					
+				</table>
+			</div>
+			<div id="scorepage" class="csheetcontent">
+				<table id="scoretable" class="centeredtable">
+					<tr>
+						<td>Attack: </td><td name="att" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Defense: </td><td name="dfn" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Accuracy: </td><td name="acc" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Evasion: </td><td name="eva" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Willpower: </td><td name="will" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Fortitude: </td><td name="fort" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Charisma: </td><td name="char" class="statamt">?</td>
+					</tr>
+					<tr>
+						<td>Vitality: </td><td name="vit" class="statamt">?</td>
+					</tr>
+				</table>
+			</div>
+			<div id="classpage" class="csheetcontent">
+				<table id="classrespectable" class="spacedtable">
+					<tr class="spellrow">
+						<td id="assassinrespecicon" class="respecicon" name="assassin"></td>
+						<td class="spellname">Assassin</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="bardrespecicon" class="respecicon" name="bard"></td>
+						<td class="spellname">Bard</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="clericrespecicon" class="respecicon" name="cleric"></td>
+						<td class="spellname">Cleric</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="cryomancerrespecicon" class="respecicon" name="cryomancer"></td>
+						<td class="spellname">Cryomancer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="fencerrespecicon" class="respecicon" name="fencer"></td>
+						<td class="spellname">Fencer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="juggernautrespecicon" class="respecicon" name="juggernaut"></td>
+						<td class="spellname">Juggernaut</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="knightrespecicon" class="respecicon" name="knight"></td>
+						<td class="spellname">Knight</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="paladinrespecicon" class="respecicon" name="paladin"></td>
+						<td class="spellname">Paladin</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="priestrespecicon" class="respecicon" name="priest"></td>
+						<td class="spellname">Priest</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="pyromancerrespecicon" class="respecicon" name="pyromancer"></td>
+						<td class="spellname">Pyromancer</td>
+					</tr>					
+					<tr class="spellrow">
+						<td id="sorcererrespecicon" class="respecicon" name="sorcerer"></td>
+						<td class="spellname">Sorcerer</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="spellbladerespecicon" class="respecicon" name="spellblade"></td>
+						<td class="spellname">Spellblade</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="swordsmanrespecicon" class="respecicon" name="swordsman"></td>
+						<td class="spellname">Swordsman</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="thiefrespecicon" class="respecicon" name="thief"></td>
+						<td class="spellname">Thief</td>
+					</tr>
+					<tr class="spellrow">
+						<td id="warriorrespecicon" class="respecicon" name="warrior"></td>
+						<td class="spellname">Warrior</td>
+					</tr>
+				</table>				
+			</div>
+			<div id="status" class="csheetcontent">
+				<div id="class_value">????</div>
+				<table>
+					<tr>
+						<td>HP: </td>
+						<td id="hp_value">?/?</td>
+					</tr>			
+				</table>
+				<div id="player_healthbar"></div>
+				<table>
+					<tr>
+						<td>XP: </td>
+						<td id="xp_value">?/?</td>
+					</tr>	
+				</table>
+				<div id="player_xpbar"></div>
+				<table style="margin-top: 10px;" id="playerstatus">
+					<tr>
+						<td class="inactive-icon"></td>
+						<td class="inactive-icon"></td>
+					</tr>
+				</table>
+			</div>
+			<div id="attributes" class="csheetcontent">
+				<table id=stat-table class="centeredtable">
+					<tr>
+						<td>Vigor: </td>
+						<td id="vigor_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-vigor"></button></td>
+						
+					</tr>
+					<tr>
+						<td>Endurance: </td>
+						<td id="endurance_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-endurance"></button></td>
+						
+					</tr>
+					<tr>
+						<td>Strength: </td>
+						<td id="strength_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-strength"></button></td>
+						
+					</tr>
+					<tr>
+						<td>Dexterity: </td>
+						<td id="dexterity_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-dexterity"></button></td>
+						
+					</tr>
+					<tr>
+						<td>Intelligence: </td>
+						<td id="intelligence_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-intelligence"></button></td>
+					</tr>
+					<tr>
+						<td>Faith: </td>
+						<td id="faith_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-faith"></button></td>
+					</tr>
+					<tr>
+						<td>Luck: </td>
+						<td id="luck_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-luck"></button></td>
+					</tr>
+					<tr>
+						<td>Perception: </td>
+						<td id="perception_value" class="statamt">?</td>
+						<td><button class=lvlup id="lvlup-perception"></button></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div id="printouttab" class="tabcontent">
+			<button id="filterbutton">Filters</button>
+			<span id="timertext">TIMER TEXT</span>
+			<div id="printoutcontainer" class="scrollable">
+				<table id="printout" class="spacedtable">
+				</table>
+			</div>
+			<div id="filterpopup" class="hidden">
+				<button id="filterapplybutton" class="filterbutton"> Apply</button>	
+				<table id="filtertable">
+
+				</table>			
+			</div>
+		</div>
+
+		<div id="abilitytab" class="tabcontent">
+			<div class="scrollfit">
+				<table id="spelltable" class="spacedtable" >
+							<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+							<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+							<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+							<tr class="spellrow"><td><button class="default_abilityicon"></button></td><td class="spellname">Shatter</td></tr>
+				</table>
+				<h2>Targeted: </h2>
+				<table id="targetlist">
+					
+				</table>
+			</div>			
+		</div>
+
+		<div id="worldtab" class="tabcontent">
+			<div id="worldtabsections" class="tabheader"></div>
+		</div>
+	</div>
+
+	<div class="confirmpopup" id ="abilityconfirm">
+		<div class="centered">
+			<button id="abilityconfirmbutton" class=abiconfirmbuttons>CONFIRM</button>
+			<br>
+			<button id="abilitycancelbutton" class=abiconfirmbuttons>CANCEL</button>
+		</div>
+		<div class="padded">
+			<div>
+				Ability: <span id="abilitynamespan">NOTHING</span>
+			</div>
+			<h2>Targets:</h2>
+			<ul id="confirmtargetlist">
+				<li>a</li>
+				<li>a</li>
+				<li>a</li>
+				<li>a</li>
+			</ul>
+		</div>	
+	</div>
+
+	<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+	<script type="module" src="../../shared/scripts/main.js"></script>
+</body>
+</html>

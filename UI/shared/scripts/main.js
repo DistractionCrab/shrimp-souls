@@ -45,7 +45,6 @@ class PageManager {
 					this.websocket = new WebSocket(`wss://shrimpsouls.distractioncrab.net:443/${this.username["channelId"]}`);
 				}
 				
-				
 				this.websocket.addEventListener("open", () => this.opened());
 				this.websocket.addEventListener("message", ({data}) => this.receive(data));
 				this.websocket.addEventListener(

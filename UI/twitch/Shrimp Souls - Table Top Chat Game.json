@@ -231,7 +231,7 @@
     "authorName": "DistractionCrab",
     "bitsEnabled": false,
     "canInstall": true,
-    "configUrl": "https://localhost:8080/config.html",
+    "configUrl": "https://localhost:8080/twitch/public/config.html",
     "configurationLocation": "none",
     "description": "This extension is an RPG extension that allows one to play the Shrimp Souls RPG with other chat members and the streamer.",
     "eulaTosUrl": "",
@@ -244,7 +244,7 @@
     },
     "id": "ec767p01w3r37lrj9gfvcz9248ju9v",
     "installationCount": -42,
-    "liveConfigUrl": "https://localhost:8080/live_config.html",
+    "liveConfigUrl": "https://localhost:8080/twitch/public/live_config.html",
     "name": "Shrimp Souls - Table Top Chat Game",
     "panelHeight": 0,
     "privacyPolicyUrl": "",
@@ -263,15 +263,15 @@
     "viewerSummary": "Shrimp Souls is a Twitch Chat RPG designed for fun interaction and fun adventures.",
     "viewerUrl": "",
     "viewerUrls": {
-      "mobile": "https://localhost:8080/mobile.html",
-      "component": "https://localhost:8080/video_component.html"
+      "mobile": "https://localhost:8080/twitch/public/mobile.html",
+      "component": "https://localhost:8080/twitch/public/video_component.html"
     },
     "views": {
       "mobile": {
-        "viewerUrl": "https://localhost:8080/mobile.html"
+        "viewerUrl": "https://localhost:8080/twitch/public/mobile.html"
       },
       "component": {
-        "viewerUrl": "https://localhost:8080/video_component.html",
+        "viewerUrl": "https://localhost:8080/twitch/public/video_component.html",
         "aspectWidth": 0,
         "aspectHeight": 0,
         "aspectRatioX": 600,
@@ -285,11 +285,11 @@
         "autoScale": true
       },
       "config": {
-        "viewerUrl": "https://localhost:8080/config.html",
+        "viewerUrl": "https://localhost:8080/twitch/public/config.html",
         "canLinkExternalContent": false
       },
       "liveConfig": {
-        "viewerUrl": "https://localhost:8080/live_config.html",
+        "viewerUrl": "https://localhost:8080/twitch/public/live_config.html",
         "canLinkExternalContent": false
       }
     },
@@ -297,7 +297,7 @@
     "whitelistedPanelUrls": []
   },
   "frontendCommand": "",
-  "frontendFolderName": "public",
+  "frontendFolderName": "D:\\Documents\\Programming\\shrimp-souls\\UI",
   "name": "Shrimp Souls - Table Top Chat Game",
   "usingRandomFrontendHostingPort": false,
   "version": 3

@@ -9,9 +9,10 @@ function init_html(btext) {
 	const party = document.createElement("div");
 	const table = document.createElement("table");
 	party.appendChild(table);
-	party.classList.add("tabcontent");
+	//party.classList.add("tabcontent");
 	party.classList.add("scrollable");
 	table.classList.add("spacedtable");
+	party.id = `entities-${btext.toLowerCase()}`;
 
 	return [button, party, table];
 }

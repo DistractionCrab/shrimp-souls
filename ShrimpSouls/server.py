@@ -176,7 +176,7 @@ class SocketWrapper:
 				await self.send({"requestid": True})
 
 class Server:
-	def __init__(self, game, clientid, db):
+	def __init__(self, game, clientid, db, close):
 		self.__msgs = asyncio.Queue()
 		self.__clientid = clientid
 		self.__db = db
@@ -186,17 +186,12 @@ class Server:
 		# Maps from Uname to socket
 		self.__unames = {}
 		self.__game = game
-		self.__closed = False
 		self.__i_time = time.time()
+		self.__close = close
 
 	@property
 	def client_id(self):
 		return self.__clientid
-	
-
-	@property
-	def closed(self):
-		return self.__closed
 	
 	async def __len__(self):
 		return len(self.__unames)
@@ -204,8 +199,13 @@ class Server:
 	async def message(self, msg):
 		await self.__msgs.put(msg)
 
+	@property
+	def conn_ct(self):
+		return len(self.__unames)
+	
+
 	async def server_loop(self):
-		while not self.__closed:
+		while True:
 			try:
 				with self.__db.transaction():
 					msg = await self.__msgs.get()
@@ -237,11 +237,12 @@ class Server:
 					except:
 						pass
 							
+		self.__close()
 		logging.log(f"Exiting main loop for {self.__clientid}")
 
 	async def heartbeat(self):
 		try:
-			while not self.__closed:
+			while True:
 				await self.__msgs.put(Heartbeat)
 				await asyncio.sleep(10)
 		except KeyboardInterrupt:
@@ -249,25 +250,20 @@ class Server:
 		logging.log(f"Exiting heartbeat loop for {self.__clientid}")
 
 	async def __heartbeat(self):
-		if len(self.__idmaps) == 0:			
-			if time.time() - self.__i_time > DEACTIVE_TIME:
-				logging.log(f"Shutting down a server for {self.__clientid}")
-				self.__closed = True
-		else:
-			self.__i_time = time.time()
-			now = time.time()
-			if now - self.__last >= STEP_FREQUENCY:
+		self.__i_time = time.time()
+		now = time.time()
+		if now - self.__last >= STEP_FREQUENCY:
 
-				self.__last = now
-				for m in self.__game.step():
-					await self.__handle_message(m)
+			self.__last = now
+			for m in self.__game.step():
+				await self.__handle_message(m)
 
 
-				await self.__handle_message(
-						messages.TimeInfo(
-							now=self.__last, 
-							length=STEP_FREQUENCY,
-							recv=tuple(self.__game.players)))
+			await self.__handle_message(
+					messages.TimeInfo(
+						now=self.__last, 
+						length=STEP_FREQUENCY,
+						recv=tuple(self.__game.players)))
 
 
 	async def __disconnect(self, msg):
@@ -378,9 +374,16 @@ class Router:
 			self.__db.root.clients[i] = s
 			return s
 
+	def __remove(self, i):
+		logging.log(f"Clearing server for channel {i}")
+		del self.__games[i]
+
 	async def __init_server(self, i):
+		if i in self.__games:
+			return self.__games[i]
+
 		g = self.__get_game(i)
-		s = Server(g, i, self.__dbroot)
+		s = Server(g, i, self.__dbroot, lambda: self.__remove(i))
 		self.__games[i] = s
 
 		asyncio.create_task(s.heartbeat(), name=f"Server({i}) Heartbeat")
@@ -418,7 +421,6 @@ class Router:
 	async def main(self):
 		looping = True
 		while looping:
-			self.__games = {k: v for (k, v) in self.__games.items() if not v.closed}
 			transaction.commit()
 			await asyncio.sleep(ROUTER_FREQUENCY)
 
