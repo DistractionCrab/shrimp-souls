@@ -96,7 +96,7 @@ class Dungeon(cps.BaseCampaign):
 		yield from self.__map.use_ability(p, abi, targets, self)
 
 	def use_item(self, p, index, targets):
-		self.__map.use_item(p, index, targets, self)
+		yield from self.__map.use_item(p, index, targets, self)
 
 	def action(self, src, msg):
 		yield from self.__map.action(src, msg, self)
