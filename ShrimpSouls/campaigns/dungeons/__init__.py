@@ -203,7 +203,7 @@ class EmptyRoom:
 		if p.acted:
 			yield messages.Response(
 				msg=["You have already acted this turn."],
-				src=(p.name,))
+				recv=(p.name,))
 			
 		else:
 			msgs = []
