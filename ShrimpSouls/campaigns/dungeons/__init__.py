@@ -58,7 +58,7 @@ class Dungeon(cps.BaseCampaign):
 		else:
 			if self.__map.complete:
 				self.__map = None
-				self.__clear()
+				self.clear()
 				yield self.broadcast(
 					msg=['The dungeon has been completed already.'],
 					campinfo=self.campinfo())
@@ -72,7 +72,7 @@ class Dungeon(cps.BaseCampaign):
 					for p in self.players.values():
 						p.revive()
 						p.reset_status()
-					self.__clear()
+					self.clear()
 				elif self.__map.complete:
 					yield self.broadcast(
 						msg=[{"type": "stepend", "msg": "The dungeon has been completed!."}],
@@ -81,7 +81,7 @@ class Dungeon(cps.BaseCampaign):
 					for p in self.players.values():
 						p.revive()
 						p.reset_status()
-					self.__clear()
+					self.clear()
 				else:
 					yield self.broadcast(campinfo=self.campinfo())
 
