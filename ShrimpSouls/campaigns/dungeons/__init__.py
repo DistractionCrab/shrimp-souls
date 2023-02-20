@@ -150,7 +150,7 @@ class EmptyRoom:
 				msg=[{"type": "stepend", "msg": "No votes have been cast, no action will be taken."}])
 
 	def add_player(self, p):
-		yield
+		yield messages.Empty()
 		return
 
 	def campinfo(self, camp):

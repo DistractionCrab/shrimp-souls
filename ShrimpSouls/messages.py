@@ -5,6 +5,16 @@ import json
 class RootMessage:
 	recv: tuple[str]
 
+class Empty:
+	@property
+	def recv(self):
+		return tuple()
+
+	@property
+	def json(self):
+		return {}
+	
+	
 
 @dataclass
 class Connected(RootMessage):
