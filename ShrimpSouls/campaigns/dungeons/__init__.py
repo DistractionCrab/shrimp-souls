@@ -226,6 +226,9 @@ class EmptyRoom:
 				msg=[f"You do not have an item in the {index} slot."],
 				recv=(p.name,))
 
+	def find_valid_target(self, att, ally, alive, **kwds):
+		return None
+
 
 def get_random_room():
 	return random.choice(ROOM_SET)()
@@ -291,7 +294,8 @@ class DungeonMap(persistent.Persistent):
 	def rooms(self):
 		return tuple(self.__rooms.keys())
 
-	
+	def find_valid_target(self, att, ally, alive, **kwds):
+		return self.location.find_valid_target(att, ally, alive, **kwds)
 	
 
 	def __generate(self):
