@@ -99,7 +99,7 @@ class TwitchOAuth:
 					return json.loads(await r.text())
 				elif r.status == 401:
 					self.__fetch_token()
-					return await self.get_username()
+					return await self.get_username(i)
 				else:
 					logging.log(f"Failed to get username: {i} ({r.text})")
 					return None
