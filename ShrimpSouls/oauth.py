@@ -51,7 +51,7 @@ class TwitchOAuth:
 
 	async def __fetch_token(self):
 			# If the event isn't set, that means that some other task is attempting to fix OAuth.
-			if not self.__oauth_lock.is_set():
+			if self.__oauth_lock.is_set():
 				logging.log("Waiting on OAuth Update...")
 				self.__oauth_lock.wait()
 			else:
