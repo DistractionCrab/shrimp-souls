@@ -47,6 +47,7 @@ class TwitchOAuth:
 		self.__jwt_secret = SECRETS["jwt_secret"]
 		self.__oauth_token = SECRETS["oauth_token"]
 		self.__oauth_lock = asyncio.Event()
+		self.__oauth_lock.clear()
 
 	async def __fetch_token(self):
 			# If the event isn't set, that means that some other task is attempting to fix OAuth.
