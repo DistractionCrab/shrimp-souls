@@ -227,7 +227,7 @@ class EmptyRoom:
 				recv=(p.name,))
 
 	def find_valid_target(self, att, ally, alive, **kwds):
-		return None
+		return tuple()
 
 
 def get_random_room():
