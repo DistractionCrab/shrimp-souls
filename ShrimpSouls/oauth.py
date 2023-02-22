@@ -5,22 +5,25 @@ import json
 import jwt
 import base64
 import asyncio
+import traceback
 import ShrimpSouls.logging as logging
 
 CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
 
 class Secrets:
 	def __init__(self):
-		self.__f = open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r')
-		self.__secrets = json.loads(self.__f.read())
+		f = open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'r')
+		self.__secrets = json.loads(f.read())
 
 	def __getitem__(self, i):
 		return self.__secrets[i]
 
 	def update_oauth(self, oauth):
+		f = open(os.path.join(os.environ["SS_SSL_PATH"], "APP_SECRET.json"), 'w')
 		self.__secrets["oauth_token"] = oauth
-		self.__f.write(json.dumps(self.__secrets))
-		self.__f.flush()
+		f.write(json.dumps(self.__secrets, indent=4))
+		f.flush()
+		f.close()
 		logging.log("Updated OAuth Token.")
 
 SECRETS = Secrets()
@@ -46,53 +49,49 @@ class TwitchOAuth:
 		self.__app_secret = SECRETS["server_secret"]
 		self.__jwt_secret = SECRETS["jwt_secret"]
 		self.__oauth_token = SECRETS["oauth_token"]
-		self.__oauth_lock = asyncio.Event()
-		self.__oauth_lock.clear()
+		self.__oauth_lock = asyncio.Lock()
 
 	async def __fetch_token(self):
 			# If the event isn't set, that means that some other task is attempting to fix OAuth.
-			if self.__oauth_lock.is_set():
-				logging.log("Waiting on OAuth Update...")
-				self.__oauth_lock.wait()
+			if self.__oauth_lock.locked():
+				t = asyncio.current_task()
+				logging.log(f"Waiting on OAuth Update... {str(t.get_name())}")
+				await self.__oauth_lock.acquire()
+				self.__oauth_lock.release()
 			else:
-				# Attempt the get a new OAuth Token, may need multiple attempts if there are server issues.
-				logging.log("Attempting to renew OAuth Token.")
-				self.__oauth_lock.clear()
-				try:
-					async with aiohttp.ClientSession() as session:
-						resolved = False
-						while not resolved:
-							r = await session.post(
-								TOKEN_URL,
-								headers=HEADERS,
-								data=DATA.format(CLIENT_ID, self.__app_secret))
-							if v.status_code == 200:
-								v = json.loads(await r.text())
-								global SECRETS
-								SECRETS.update_oauth(v["access_token"])
-								self.__oauth_lock.set()
-								return v
-							elif v.status_code == 400:
-								logging.log(f"TwitchAPI request failed (Renewing Token): {v} ({v.status_code})")
-								self.__oauth_lock.set()
-							else:
-								logging.log(f"Error code for TwitchAPI request: {v} ({v.status_code})")
-								self.__oauth_lock.set()
-								return None
+				async with self.__oauth_lock:
+					# Attempt the get a new OAuth Token, may need multiple attempts if there are server issues.
+					logging.log("Attempting to renew OAuth Token.")
+					try:
+						async with aiohttp.ClientSession() as session:
+							resolved = False
+							while not resolved:
+								r = await session.post(
+									TOKEN_URL,
+									headers=HEADERS,
+									data=TOKEN_DATA.format(c_id=CLIENT_ID, app_secret=SECRETS["server_secret"]))
+								if r.status == 200:
+									v = json.loads(await r.text())
+									SECRETS.update_oauth(v["access_token"])
+									return v
+								elif r.status == 400:
+									logging.log(f"TwitchAPI request failed (Renewing Token): {v} ({v.status_code})")
+								else:
+									logging.log(f"Error code for TwitchAPI request: {v} ({v.status_code})")
+									return None
 
-							# Wait for 10 minutes before trying again, likely remote
-							# issues from Twitch.
-							asyncio.sleep(600)
-				except:
-					self.__oauth_lock.set()
-					return None
+								# Wait for 10 minutes before trying again, likely remote
+								# issues from Twitch.
+								asyncio.sleep(600)
+					except Exception as ex:						
+						return None
 
 	async def get_username(self, i):
 		try:
 			async with aiohttp.ClientSession() as session:
 				url = f'https://api.twitch.tv/helix/users?id={i}'
 				headers = {
-					"Authorization": "Bearer " + self.__oauth_token,
+					"Authorization": "Bearer " + SECRETS["oauth_token"],
 					"Client-ID": CLIENT_ID,
 				}
 				r = await session.get(url, headers=headers)
@@ -100,12 +99,14 @@ class TwitchOAuth:
 					return json.loads(await r.text())
 				elif r.status == 401:
 					await self.__fetch_token()
-					return await self.get_username(i)
+					#return await self.get_username(i)
+					return None
 				else:
 					logging.log(f"Failed to get username: {i} ({r.text})")
 					return None
 		except Exception as ex:
 			logging.log(f"Exception in fetching username: {ex}")
+			print(traceback.format_exc())
 			return None
 
 OAUTH = TwitchOAuth()
