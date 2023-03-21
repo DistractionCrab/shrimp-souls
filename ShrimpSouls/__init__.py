@@ -13,7 +13,7 @@ import persistent
 import persistent.mapping as mapping
 import persistent.list as plist
 import ShrimpSouls.messages as messages
-import ShrimpSouls.items as items
+
 
 from dataclasses import dataclass, fields, field
 
@@ -34,7 +34,7 @@ class Scores(enum.Enum):
 	Char = lambda x: x.char
 	Vit = lambda x: x.vit
 
-
+import ShrimpSouls.items as items
 
 class StatusEnum(enum.Enum):
 	block = enum.auto()
