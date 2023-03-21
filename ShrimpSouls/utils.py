@@ -93,6 +93,15 @@ class ScoreDamage(DualScore):
 
 		return math.ceil(self.scale * p * v)
 
+def score_num(a, d):
+	s1 = b1 + m1*s1(a)
+	s2 = b2 + m2*s2(a)
+	
+	r = (s1/s2 - 1)*((s1 + s2)/10)
+	p = expit(r)
+
+	return math.ceil(p * a)
+
 @dataclass(frozen=True)
 class RawScore:
 	s: ss.Scores = ss.Scores.Att

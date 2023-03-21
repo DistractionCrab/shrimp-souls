@@ -151,7 +151,6 @@ class EmptyRoom:
 
 	def add_player(self, p):
 		yield messages.Empty()
-		return
 
 	def campinfo(self, camp):
 		sum_n = 0

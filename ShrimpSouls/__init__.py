@@ -13,6 +13,7 @@ import persistent
 import persistent.mapping as mapping
 import persistent.list as plist
 import ShrimpSouls.messages as messages
+import ShrimpSouls.items as items
 
 from dataclasses import dataclass, fields, field
 
@@ -95,6 +96,7 @@ class Statuses:
 	lightwall: int = 0
 	briar: int = 0
 
+
 class AttriEnum(enum.Enum):
 	Vigor = "vigor"
 	Strength = 'strength'
@@ -133,7 +135,9 @@ class Entity(persistent.Persistent):
 	name: str
 	status: Statuses = field(default_factory=Statuses)
 	inventory: list = field(default_factory=list)
+	equipment: items.Equipment = items.Equipment()
 	acted: bool = False
+
 
 	
 	def add_item(self, i):

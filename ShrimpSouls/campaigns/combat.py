@@ -27,7 +27,8 @@ class Combat(cps.BaseCampaign):
 		return False
 
 	def _add_player(self, player):
-		pass	
+		return
+		yield
 
 
 	def step(self):

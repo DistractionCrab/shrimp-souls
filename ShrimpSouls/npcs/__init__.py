@@ -253,9 +253,9 @@ class Ogre(BaseNPC):
 @dataclass
 class Cockatrice(BaseNPC):
 	xp:  int = 12
-	hp:  int = 1000
-	max_hp: int = 1000
-	_acc: int = 120
+	hp:  int = 700
+	max_hp: int = 700
+	_acc: int = 110
 	_eva: int = 110
 	_att: int = 140
 	_dfn: int = 135
@@ -272,7 +272,7 @@ class Cockatrice(BaseNPC):
 			return [actions.DamageTarget(
 				attacker=self, 
 				defender=target[0],
-				statuses={ss.StatusEnum.stun: lambda: 1})]
+				statuses={ss.StatusEnum.stun: lambda: random.randint(0, 1)})]
 
 @dataclass
 class Troll(BaseNPC):

@@ -39,6 +39,14 @@ class DamageType(enum.Enum):
 	def is_weak(self, p):
 		return p.weak(self)
 
+	def apply_mult(self, p, dmg):
+		if p.weak(self):
+			return math.ceil(dmg*1.5)
+		elif p.resist(self):
+			return math.ceil(dmg*0.5)
+		else:
+			return dmg
+
 	
 
 class AbilityRange(enum.Enum):
@@ -214,6 +222,7 @@ class DamageTarget(Action):
 	msg: str = ""
 	applied: bool = False
 	statuses: dict = field(default_factory=dict)
+	use_weapon: bool = False
 
 
 	def apply(self):
@@ -252,21 +261,36 @@ class DamageTarget(Action):
 		hit = self.score_hit(self.attacker, self.defender)
 				
 		if hit:
+			total = 0
 			dmg = self.score_dmg(self.attacker, self.defender)
-			if self.defender.weak(self.dmgtype):
-				dmg = math.ceil(1.5 * dmg)
-			if self.defender.resist(self.dmgtype):
-				dmg = math.ceil(0.5 * dmg)
+			dmg = self.dmgtype.apply_mult(self.defender, dmg)
 
-			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {dmg} damage. "
-			self.defender.damage(dmg)
+			
+			total += dmg
 			self.__apply_status()
 			self.on_hit()
 
 			if self.attacker.status.sealing > 0:
 				ss.StatusEnum.stun.stack(self.defender)
 			if self.defender.status.briar:
-				self.__handle_briars()			
+				self.__handle_briars()	
+
+			if self.use_weapon:
+				for	(t, d) in self.attacker.equipment.lhand:
+					if d > 0:
+						dmg = utils.score_num(d, self.defender.dfn)
+						dmg = t.apply_mult(self.defender, dmg)
+						self.defender.damage(dmg)
+						total += dmg
+				for	(t, d) in self.attacker.equipment.rhand:
+					if d > 0:
+						dmg = utils.score_num(d, self.defender.dfn)
+						dmg = t.apply_mult(self.defender, dmg)
+						self.defender.damage(dmg)
+						total += dmg
+
+			self.defender.damage(total)
+			self.msg += f"{self.attacker.name} attacks {self.defender.name} for {total} damage. "
 		else:
 			self.msg += f"{self.attacker.name} missed {self.defender.name}."
 			
