@@ -113,7 +113,7 @@ import ShrimpSouls.items.armor as armor
 import ShrimpSouls.items.weapons as weapons
 
 @dataclass
-class Equipment
+class Equipment:
 	body: Armor = armor.ClothArmor
 	hands: Armor = armor.ClothGloves
 	legs: Armor = armor.ClothLegs
