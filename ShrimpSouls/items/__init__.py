@@ -44,6 +44,7 @@ class Weapon:
 	Nature: int = 0
 	Holy: int = 0
 
+	"""
 	def get_damage(self, t):
 		match t:
 			yield (actions.DamageType.Slash, self.Slash)
@@ -55,6 +56,7 @@ class Weapon:
 			yield (actions.DamageType.Dark, self.Dark)
 			yield (actions.DamageType.Nature, self.Nature)
 			yield (actions.DamageType.Holy, self.Holy)
+	"""
 
 
 @dataclass
