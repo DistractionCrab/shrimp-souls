@@ -8,7 +8,7 @@ import asyncio
 import traceback
 import ShrimpSouls.logging as logging
 
-CLIENT_ID = "ec767p01w3r37lrj9gfvcz9248ju9v"
+CLIENT_ID = "CLIENT_SECRET_FROM_TWITCH"
 
 class Secrets:
 	def __init__(self):
@@ -113,11 +113,14 @@ OAUTH = TwitchOAuth()
 
 
 def update_ip():
-	""" Used to update the domain mapping for our servers IP address. """
+	"""
+	Used to update the domain mapping for our servers IP address.
+	This uses Google's Domain services.
+	"""
 	username = input("Username: ")
 	password = input("Password: ")
-	ip = "82.180.173.104"
-	subdomain = "shrimpsouls.distractioncrab.net"
+	ip = "IP ADDRESS HERE"
+	subdomain = "DOMAIN ADDRESS HERE"
 	URL = f"https://{username}:{password}@domains.google.com/nic/update?hostname={subdomain}&myip={ip}"
 
 	r = requests.post(URL)
